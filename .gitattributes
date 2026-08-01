@@ -9,8 +9,9 @@
 04.references/literature/** filter=lfs diff=lfs merge=lfs -text
 
 # Source and documentation under 02.inputs must stay diffable text rather than
-# LFS pointers. These override the broad 02.inputs/** rules above.
-02.inputs/**/*.R  text
-02.inputs/**/*.md text
-02.inputs/climate/station-winter-minima.csv text
-02.inputs/climate/retrieval-log.txt text
+# LFS pointers. `text` alone is not enough: the broad rules above set
+# filter=lfs, so these must unset it with `!filter !diff !merge`.
+02.inputs/**/*.R   !filter !diff !merge text
+02.inputs/**/*.md  !filter !diff !merge text
+02.inputs/**/*.txt !filter !diff !merge text
+02.inputs/climate/station-winter-minima.csv !filter !diff !merge text
