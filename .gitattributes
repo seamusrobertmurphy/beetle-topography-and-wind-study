@@ -1,0 +1,9 @@
+02.inputs/vri/** filter=lfs diff=lfs merge=lfs -text
+02.inputs/tallo/** filter=lfs diff=lfs merge=lfs -text
+02.inputs/legacy-tree/** filter=lfs diff=lfs merge=lfs -text
+02.inputs/larch/** filter=lfs diff=lfs merge=lfs -text
+02.inputs/enfor/** filter=lfs diff=lfs merge=lfs -text
+02.inputs/archive/** filter=lfs diff=lfs merge=lfs -text
+02.inputs/aos/** filter=lfs diff=lfs merge=lfs -text
+04.references/grandfather-study/** filter=lfs diff=lfs merge=lfs -text
+04.references/literature/** filter=lfs diff=lfs merge=lfs -text
