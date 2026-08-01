@@ -7,3 +7,10 @@
 02.inputs/aos/** filter=lfs diff=lfs merge=lfs -text
 04.references/grandfather-study/** filter=lfs diff=lfs merge=lfs -text
 04.references/literature/** filter=lfs diff=lfs merge=lfs -text
+
+# Source and documentation under 02.inputs must stay diffable text rather than
+# LFS pointers. These override the broad 02.inputs/** rules above.
+02.inputs/**/*.R  text
+02.inputs/**/*.md text
+02.inputs/climate/station-winter-minima.csv text
+02.inputs/climate/retrieval-log.txt text

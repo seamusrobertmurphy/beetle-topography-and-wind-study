@@ -1,8 +1,8 @@
 # Progress log: topographic refugia from mountain pine beetle (Darkwoods spin-off)
 
 **Started:** 2026-07-30
-**Status:** Phase 4 complete. Severity modelled ordinally, grain tested, Elsevier declarations added.
-**Last updated:** 2026-07-31
+**Status:** Phase 6 complete. Aspect in the model, cold threshold checked against observation.
+**Last updated:** 2026-08-01
 **Current task request:** `TASK-REQUEST-2026-07-31.md`
 **Predecessor:** `Archive/writing_outputs/20260613_053044_rs_methods_spinoff/` (Phase 0)
 
@@ -109,6 +109,89 @@ Two entries were added, both verified from their own PDF text layer and confirme
 `work2011` (ZooKeys 147:623-639) and `smithmckenna2013` (Écoscience 20(3):215-229). `work2011` was
 cited by the new grain section and would otherwise have rendered as a broken reference.
 
+### Phase 5, aspect enters the model (1 August 2026)
+
+The predictor set had carried no aspect at all, so it could not distinguish a warm slope from a
+cold one at the same elevation. Two surfaces were added, both computed from the elevation model by
+trigonometry rather than draped over it:
+
+- **Heat load index** after McCune and Keon 2002, aspect folded about the southwest to northeast
+  axis.
+- **Shelter index** after Winstral et al. 2002, the maximum upwind slope within 500 m. The Global
+  Wind Atlas gives speed but no direction, so it is computed on all eight bearings and averaged
+  rather than assuming a prevailing wind.
+
+**The headline is an orthogonality result.** On the analysis frame, R² on elevation is 0.629 for
+the Global Wind Atlas surface, 0.000 for heat load and 0.002 for shelter. Being terrain-derived and
+being an elevation transform are not the same thing; the difference is downscaling versus
+trigonometry. New `@tbl-orthogonality` states it.
+
+Three findings from the extended model:
+
+1. **Heat load is positive and strengthens sharply with severity**, and is essentially unrelated to
+   elevation, so this is not the elevation gradient under another name. At a given elevation,
+   southwest-facing ground carries heavier mortality. That is the sign cold limitation predicts and
+   is the first evidence here that the thermal axis works independently of elevation. It constrains
+   the degree-day half of cold limitation only, not the overwinter minimum half.
+2. **The wind residual survives and strengthens** when heat load is controlled for, from -0.176 to
+   -0.214 at trace or worse and -0.390 to -0.505 at moderate or worse. It is not the warm-aspect
+   effect in disguise.
+3. **The two exposure measures disagree.** Shelter is negative, meaning exposed ground carries more
+   attack, opposite to the wind residual and to Krawchuk. They correlate only -0.22, so they are
+   measuring different things rather than disagreeing about one thing. Reported as a caution
+   against treating "wind exposure" as a single measurable quantity, and against our own result,
+   which the one geometric exposure predictor does not corroborate. **Do not quietly drop this.**
+
+**Numerical trap found and handled.** Ten terms with 1,522 severe-or-worse events drives the
+extended fit into quasi-separation, roughly 14,500 cells at numerically zero fitted probability, and
+produced a spurious heat load coefficient near +3.8. `tbl-aspect` now detects separation in code and
+drops the affected threshold rather than reporting it. **The eight-term model of `tbl-ordinal` was
+checked and is clean at all four cuts**, minimum fitted probability 6.0e-05 at severe or worse, so
+the committed -1.002 stands and needed no correction.
+
+The analysis frame was deliberately left unchanged: `MVARS` still defines it, the two new terms
+enter only the extended model, so every previously reported number and the grain assertion still
+hold.
+
+### Phase 6, the cold-threshold check (1 August 2026)
+
+Retrieved and screened the observational record that the cold explanation depends on. Script,
+cached CSV and provenance note are in `02.inputs/climate/`; the 107 MB of raw extracts is
+gitignored and regenerable. Rerun with
+`/usr/local/bin/Rscript 02.inputs/climate/fetch-station-minima.R`, about nine minutes, verified
+idempotent.
+
+**The answer is that it never gets cold enough.** Across 347 usable station-winters from stations
+spanning 435 to 2,423 m within 100 km, the coldest defensible winter minimum anywhere is **-28.7 °C**
+(Norns, 2,423 m, winter 2014). Zero station-winters reach -35 °C, zero reach -40 °C. Above 1,500 m
+the mean winter minimum is -19.4 °C. The conventionally cited lethal figures, near -40 °C in air and
+about -37 °C under bark, are roughly ten degrees colder than anything observed.
+
+**This combines with Phase 5.** If larvae are not being killed outright, the surviving cold
+mechanism is degree-day accumulation, and that is exactly the axis the heat load index addresses.
+The two phases therefore point the same way: the plausible thermal constraint is the one for which
+there is an elevation-independent proxy, and the proxy behaves as the constraint predicts.
+
+**Cold-air pooling is now evidenced, not asserted.** Grand Forks at 630 m reaches -28.2 °C, within
+0.5 °C of the alpine station 1,793 m higher. The manuscript previously asserted that temperature is
+not a linear function of elevation here; it can now show it.
+
+Two data traps, both handled in the saved script:
+
+1. **The -20.0 °C sensor floor.** 16 station-winters over 9 stations are censored at exactly that
+   value and are excluded. Concentrated as predicted: 15 of 89 station-winters before 2008, 1 of 93
+   after. A naive `min()` would have manufactured a threshold that is not in the data.
+2. **A spurious -40.0 °C.** Nelson NE, 570 m, 7 February 2014, with a same-day maximum of -4.5 °C
+   and no ECCC quality flag. This single value would have produced exactly the headline the record
+   does not support. The script now rejects isolated spikes, colder than both neighbours by more
+   than 15 °C, and prints every rejection. **Do not remove that rule.**
+
+**Limits, stated in the manuscript.** No station inside the study area reported during the outbreak
+window, and the reporting stations are spread over roughly 100 km of separate massifs. This bounds
+the regional cold climate; it is not a temperature surface and does not disturb the Phase 4
+conclusion that no such surface exists. It also cannot exclude local cold-air pooling events the
+network never sampled, which is the very structure the Grand Forks result shows is present.
+
 ## Key findings in the current draft
 
 1. **Attack is unimodal across 1,776 m of relief**, peaking near 1,430 m. The clip-based monotone
@@ -151,29 +234,26 @@ cited by the new grain section and would otherwise have rendered as a broken ref
 
 ## Next steps
 
-`TASK-REQUEST-2026-07-31.md` §4 is worked out. Items 2, 3 and 5 are done, item 1 is closed as
-infeasible, item 4 is done as far as Elsevier's bot protection permits. What is left:
+`TASK-REQUEST-2026-07-31.md` §4 is fully worked out, and the two analysis items that followed from
+it, aspect and the cold-threshold check, are done in Phases 5 and 6. What is left needs either a
+person or a decision:
 
-1. **Add aspect to the predictor set.** The model currently has none, so it cannot distinguish a
-   warm slope from a cold one at the same elevation. A Beers heat load index and a directional
-   shelter index relative to the prevailing wind are both derivable from the elevation model
-   already in hand, and because radiation load and shelter vary with aspect differently they are
-   the one route to partial identification that needs no temperature surface. Partial only: aspect
-   bears on degree-day accumulation, hardly at all on the overwinter minimum. The Limitations
-   section already names this as the next step, so the manuscript is consistent either way.
-2. **Run the cold-threshold plausibility check and check the code into the pipeline.** BC Wildfire
-   station records suggest winter minima on this landscape may not reach the classical lethal
-   threshold near -40 °C, which would narrow the confound from freeze mortality to degree-day
-   accumulation and so strengthen step 1. **The scoping memo's station diagnostics were ad hoc and
-   are not in the pipeline, so under the repo rule none of those numbers may be quoted in the
-   manuscript until the code is checked in.** Two traps found while scoping: a large share of BC
-   Wildfire sensors are censored at exactly -20.0 °C before about 2008, and the DARKWOODS station
-   was only installed in October 2014.
-3. **Get a human with a browser onto the RSE guide for authors.** Fourteen requirements remain
+1. **Get a human with a browser onto the RSE guide for authors.** Fourteen requirements remain
    unverified, above all the reference style and the abstract word limit. Only then format to the
-   `elsarticle` template.
-4. **Confirm the generative AI declaration wording**, which is an assertion about how the author
+   `elsarticle` template and swap `apa.csl`. This is the one item blocking submission.
+2. **Confirm the generative AI declaration wording**, which is an assertion about how the author
    produced the work and should not be left to a machine to settle.
+3. **The abstract is 341 words**, up from 282, because Phases 5 and 6 added two results to it. If
+   the unverified RSE limit turns out to be 250 it needs a hard cut, and the material to cut is
+   probably the shelter-index caveat, which the Discussion carries in full anyway.
+4. **A directional shelter index**, if a prevailing wind direction can be established for this
+   landscape. The current index is omnidirectional because the Global Wind Atlas supplies no
+   direction, and an omnidirectional index cannot represent a direction-dependent process. This is
+   the obvious way to resolve the shelter-versus-wind-residual disagreement in Phase 5, which is
+   currently the least settled thing in the paper.
+5. **Repository hygiene**, unchanged: `.gitignore` ignores both itself and `INDEX.md`, so a fresh
+   clone gets no ignore rules and no index. The allometry project's leftovers still sit in this
+   repo and are now in LFS.
 
 ## Notes
 
