@@ -1,0 +1,980 @@
+---
+title: "Topographic refugia from mountain pine beetle, and why terrain-derived wind surfaces cannot find them at small extents"
+subtitle: "A test of the Krawchuk refugia hypothesis across a 1,776 m relief gradient, Darkwoods Conservation Area, British Columbia"
+author:
+  - name: Seamus Murphy
+    orcid: 0000-0002-1792-0351
+    email: seamusrobertmurphy@gmail.com
+abstract: >
+  Krawchuk et al. hypothesised that refugia from mountain pine beetle (Dendroctonus ponderosae)
+  arise where host density is low enough for wind to disrupt the aggregation pheromone plume on
+  which mass attack depends. The mechanism has not been tested spatially. We test it across
+  168 km2 of inventoried forest and 1,776 m of relief in southeastern British Columbia, combining
+  the provincial Aerial Overview Survey record of beetle-caused mortality from 1999 to 2015 with
+  forest inventory host cover and Global Wind Atlas wind speed. Attack is strongly unimodal in
+  elevation, peaking near 1,430 m. Below 1,900 m that hump is host: conditioning on lodgepole
+  presence flattens it. Above 1,900 m it is not. There attack falls by half while pine cover is if
+  anything higher and stands are thinner, the conjunction the hypothesis requires. In host-bearing
+  stands the component of the wind surface orthogonal to elevation is the strongest negative term.
+  Coded as attacked or not, its interval reaches zero; modelled as the ordinal severity class the
+  survey records, it clears the interval test at every threshold above trace and strengthens
+  monotonically as attack gets heavier. Cold limitation predicts the same gradient, so the
+  ecological attribution stays open. The methodological results are firmer. Elevation explains
+  0.58 of the variance in the wind surface across the landscape but 0.82 inside a 2 by 4 km clip,
+  and refitting there reverses the coefficient's sign, whereas coarsening the grain from 25 m to
+  100 m barely moves it. Run at the extent disturbance ecology usually adopts, this study would
+  have reported the opposite answer; with severity collapsed to presence, no answer at all; and
+  without a host layer, it would have mapped absence of pine as refugia.
+keywords:
+  - disturbance refugia
+  - mountain pine beetle
+  - aerial overview survey
+  - Global Wind Atlas
+  - scale dependence
+  - collinearity
+
+date: today
+format:
+  docx:
+    prefer-html: true
+    reference-doc: ../04.references/style-formal.docx
+    highlight-style: pygments
+  html:
+    page-layout: full
+    toc: true
+    number-sections: true
+    embed-resources: true
+    toc-title: "**Table of Contents**"
+    toc-location: right
+    toc-depth: 3
+    theme:
+      - ../04.references/style.scss
+      - cosmo
+    code-fold: false
+    code-tools: true
+    code-link: true
+    grid:
+      body-width: 1100px
+      margin-width: 220px
+
+execute:
+  eval: true
+  echo: true
+  warning: false
+  message: false
+  error: true
+  comment: NA
+
+always_allow_html: true
+engine: knitr
+citeproc: true
+editor: visual
+bibliography: ../04.references/references-beetle.bib
+csl: ../04.references/apa.csl
+df-print: kable
+---
+
+```{r}
+#| label: setup
+#| echo: true
+#| output: false
+
+## Every quantity in this manuscript is computed here at render time.
+pkgs <- c("terra","knitr","kableExtra","ggplot2","dplyr","tidyr","patchwork","tibble")
+invisible(lapply(pkgs, function(p) library(p, character.only = TRUE)))
+## dpi 300 is the Elsevier minimum for a combination line/halftone figure.
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, error = TRUE,
+                      comment = NA, dpi = 300, fig.align = "center")
+options(scipen = 999)
+theme_set(theme_minimal(base_size = 10) +
+          theme(panel.grid.minor = element_blank(),
+                plot.title = element_text(face = "bold", size = 10)))
+
+B_BOOT   <- 150L    # spatial block bootstrap replicates
+BLOCK    <- 40L     # block side in cells (40 x 25.1 m ~= 1 km)
+OUTBREAK <- 1999:2015
+```
+
+```{r}
+#| label: paths
+#| echo: true
+
+DATA_ROOT <- Sys.getenv("DARKWOODS_DATA",
+  "/Users/seamus/repos/publications-pending/Darkwoods-Disturbance-Paper/3.SpatialData")
+dpath <- function(...) file.path(DATA_ROOT, ...)
+here  <- function(...) file.path("..", ...)     # repo-relative, from 01.manuscript/
+stopifnot(dir.exists(dpath("terrain_environment")))
+```
+
+# Introduction
+
+Disturbance refugia, defined by @krawchuk2020 as locations disturbed less severely or less
+frequently than the surrounding landscape, have become a organising concept for forest
+conservation under climate change. The concept is well developed for fire and much less so for
+insects. @krawchuk2020 note that few studies have explicitly identified refugia from insect
+outbreaks, and they propose a specific and testable mechanism for the most consequential insect
+disturbance in western North America. Refugia from mountain pine beetle (*Dendroctonus ponderosae*
+Hopkins), they suggest, could occur in areas of lower host density, where thinner stands allow
+greater wind penetration and so disrupt the aggregation pheromone communication on which mass
+attack depends.
+
+The hypothesis is attractive because it is mechanistic and because each of its parts is
+independently plausible. Mass attack requires beetles to overwhelm host defences in a coordinated
+pulse, and the coordination is chemical. Beetle dispersal above the canopy is a flight behaviour
+sensitive to ambient conditions [@gray1972; @jones2019]. Thinner stands admit more wind. What has
+been missing is a spatial test.
+
+@cartwright2018 came closest. Working at 30 m in lodgepole and whitebark pine in southern Oregon,
+she identified refugia from Landsat moisture anomalies during a 2009 drought and mountain pine
+beetle outbreak and modelled their landscape controls. Refugia were associated with topographically
+shaded slopes, convergent positions such as valleys, low soil bulk density, and thinner stands. The
+thinner-stand result is the host-density half of the hypothesis, confirmed. But she had no wind
+surface, so the mechanism itself went untested.
+
+Testing it requires a wind surface, and that is where the problem starts. Gridded wind products of
+the kind now trivially available, the Global Wind Atlas among them, are produced by downscaling
+coarse mesoscale fields over a digital elevation model [@badger2014; @globalwindatlas]. A wind
+surface built this way is in part a transform of the terrain it was draped over. Offered to a model
+alongside elevation it is not an independent measurement, and the severity of the dependence is a
+function of the analysis extent: a coarse driving field is nearly flat over a few kilometres, so at
+small extents almost all the variation in the product is terrain. An analyst working at the scale
+of a burn perimeter or a cluster of field plots, which is the scale at which most disturbance
+ecology is done, is in the worst position and has the least warning.
+
+A second and more elementary trap attends refugia work specifically. A cell that was not attacked
+may hold no host. Under the @krawchuk2020 framing this is the difference between asking what a
+place is a refugium *from* and what it is a refugium *for*, and it cannot be resolved without an
+independent map of host abundance. The precedent here is old and pointed: @hadley1994 predicted
+heavier beetle mortality on hot, dry, south-facing slopes and found the reverse, because host
+density rather than moisture stress governed where attack succeeded.
+
+We take these three problems to one landscape. We ask:
+
+1. Does terrain condition beetle-caused mortality once host abundance is accounted for, and where
+   along the elevation gradient does host stop explaining the pattern?
+2. Does the component of the wind surface that is independent of elevation predict reduced attack
+   where host is present, as @krawchuk2020 hypothesise?
+3. How much does the answer to question 2 depend on decisions the analyst makes freely: the extent
+   of the study area, the grain of the cells, and whether damage is coded as a binary or as the
+   ordinal severity class the survey records?
+
+The design is built to make the third question answerable rather than rhetorical. The same
+response, the same predictors and the same model are refitted across each of those three axes:
+once across the full landscape and once inside a 2 by 4 km clip drawn from it, at 25 m, 50 m and
+100 m, and at each severity threshold in turn. Two of the three change the answer, and they are not
+the two that get reported.
+
+# Materials
+
+## Study area
+
+The Darkwoods Conservation Area lies in the South Selkirk Mountains of southeastern British
+Columbia. The analysis area spans 16 by 17.5 km and, as reported in @tbl-relief, **1,776 m of
+relief**, from valley bottom to alpine. That range crosses the full biogeoclimatic sequence of the
+southern interior wet belt, from the dry warm Interior Cedar-Hemlock subzones through the moist
+warm subzones to the Engelmann Spruce-Subalpine Fir zone and its parkland variant
+[@ketcheson1991; @braumandl2005]. Lodgepole pine (*Pinus contorta* var. *latifolia*), the beetle's
+principal host here, occupies the middle of that sequence and is scarce at both ends.
+
+The site description and the terrain surfaces are inherited from a companion analysis of conifer
+regeneration on the same ground [@murphy2024], which used them to predict seedling intensity after
+a 2015 mixed-severity wildfire. Disturbance was a predictor in that study. Here it is the response.
+
+## Beetle-caused mortality
+
+```{r}
+#| label: read-response
+#| echo: true
+
+G <- rast(dpath("terrain_environment", "Elevation.utm.tif"))   # analysis grid
+
+aos_box <- ext(project(as.polygons(ext(G), crs = crs(G)), "EPSG:3005"))
+aos <- vect(here("02.inputs/aos/pest_infestation_poly.gdb"),
+            layer = "pest_infestation_poly", extent = aos_box)
+mpb <- project(aos[aos$PEST_SPECIES_CODE == "IBM", ], crs(G))   # IBM = mountain pine beetle
+m   <- mpb[mpb$CAPTURE_YEAR %in% OUTBREAK, ]
+
+## BC severity classes are ordinal: trace, light, moderate, severe, very severe
+sev_rank <- c(T = 1, L = 2, M = 3, S = 4, V = 5)
+m$sev <- unname(sev_rank[m$PEST_SEVERITY_CODE]); m$sev[is.na(m$sev)] <- 0
+
+severity  <- rasterize(m, G, field = "sev",          fun = "max", background = 0)
+first_yr  <- rasterize(m, G, field = "CAPTURE_YEAR", fun = "min", background = NA)
+
+c(polygons = nrow(m), years = length(unique(m$CAPTURE_YEAR)),
+  hectares = round(sum(m$AREA_HA)))
+```
+
+The response is the British Columbia Aerial Overview Survey, the operational provincial record of
+forest health, in which observers sketch-map damage annually from fixed-wing aircraft and label
+each polygon by year, causal agent, severity class and host species. We take polygons coded `IBM`,
+mountain pine beetle, for the outbreak window 1999 to 2015, and rasterise the maximum severity
+class reached by each cell.
+
+Using the survey rather than a spectral classification is a deliberate trade. Red attack has been
+mapped from Landsat with respectable and improving accuracy [@white2005; @meddens2013; @ye2021],
+but every such product is a model whose errors are spatially structured and not independent of
+terrain, because illumination, shadow and view angle all vary with slope and aspect. For a question
+about terrain, a response generated by a terrain-sensitive classifier risks recovering the
+classifier's own terrain sensitivity. Sketch-mapping has larger and cruder errors, but they are
+observer errors, not errors generated by the predictors under test.
+
+The severity scale is anchored to ground measurement. Twenty-eight field plots established in
+beetle-affected stands in 2020 recorded the basal area of pine killed, spanning 0.6 to 47.4 m2/ha,
+or 1.3 to 94.7 per cent of plot basal area, and these calibrated the spectral mapping used in the
+companion study [@murphy2024]. Plot coordinates were not recoverable from the project archive, so
+the plots calibrate the severity scale but cannot be used to check the spatial placement of
+individual survey polygons. We state that limit rather than implying a spatial validation we did
+not perform.
+
+## Host abundance
+
+```{r}
+#| label: read-host
+#| echo: true
+
+vri <- project(vect(here("02.inputs/vri/vri_darkwoods.geojson")), crs(G))
+vd  <- as.data.frame(vri)
+num <- function(x) suppressWarnings(as.numeric(x))
+
+## VRI records up to three species per polygon with percentage cover
+accumulate <- function(pattern) {
+  out <- rep(0, nrow(vd))
+  for (i in 1:3) {
+    cd <- vd[[paste0("SPECIES_CD_", i)]]
+    pc <- num(vd[[paste0("SPECIES_PCT_", i)]]); pc[is.na(pc)] <- 0
+    out <- out + ifelse(!is.na(cd) & grepl(pattern, cd), pc, 0)
+  }
+  out
+}
+vri$PinePct <- accumulate("^PL")               # lodgepole, the primary host
+vri$Basal   <- num(vd$BASAL_AREA)
+vri$Age     <- num(vd$PROJ_AGE_1)
+
+host <- rast(lapply(c("PinePct","Basal","Age"), function(f) rasterize(vri, G, field = f)))
+names(host) <- c("PinePct","Basal","Age")
+c(vri_polygons = nrow(vri), with_lodgepole = sum(vri$PinePct > 0))
+```
+
+Host abundance comes from the provincial Vegetation Resources Inventory, layer
+`VEG_COMP_LYR_R1_POLY`, retrieved from the British Columbia Data Catalogue web feature service for
+the study window. We accumulate the percentage cover of lodgepole pine across the three species
+slots each polygon records, and carry stand basal area and projected age alongside it.
+
+Without this layer the analysis cannot distinguish a refugium from an absence of pine, and
+@sec-host shows that the distinction accounts for most of the apparent terrain signal.
+
+## Terrain and wind
+
+```{r}
+#| label: read-terrain
+#| echo: true
+
+to_grid <- function(f) {
+  r <- rast(dpath("terrain_environment", f))
+  b <- project(as.polygons(ext(G), crs = crs(G)), crs(r))
+  project(crop(r, b, snap = "out"), G, method = "bilinear")
+}
+terr <- rast(list(Elevation = G,               Slope = to_grid("Slope.utm.tif"),
+                  TWI       = to_grid("TWI.utm.tif"),
+                  RIX       = to_grid("Rutm.tif"),
+                  Wind      = to_grid("Wind.utm.tif")))
+names(terr) <- c("Elevation","Slope","TWI","RIX","Wind")
+
+## Topographic position: mean deviation from a surrounding annulus.
+tpi <- function(r, w) {
+  k <- matrix(1, w, w); k[ceiling(w/2), ceiling(w/2)] <- 0
+  r - focal(r, k / sum(k), fun = sum, na.policy = "omit", na.rm = TRUE)
+}
+terr$TPI600 <- tpi(G, 25)     # ~625 m neighbourhood
+```
+
+Terrain surfaces are inherited unchanged from @murphy2024, which derived them from the 1 m Natural
+Resources Canada High Resolution Digital Elevation Model [@nrcan2017], smoothed, depression-filled
+by the algorithm of @wang2006 and aggregated to 25 m, with compound indices following
+@beers1973 and @parker1982. We add one surface of our own, a topographic position index at a 625 m
+neighbourhood, because @cartwright2018 found topographic position among the strongest controls on
+refugia and it was absent from the inherited set.
+
+The ruggedness surface carries a documentation gap we state rather than paper over. Its exact
+formulation is not recorded beyond the citations above, and its distribution is inconsistent with a
+vector ruggedness measure. We treat it as a reproducible but unnamed ruggedness surface and confine
+claims to its statistical behaviour.
+
+Ambient wind is Global Wind Atlas mean wind speed [@globalwindatlas], produced by generalising and
+downscaling mesoscale model output over terrain elevation and roughness [@badger2014]. That
+construction is why it cannot be assumed independent of elevation, and testing that assumption is
+the second half of this paper.
+
+```{r}
+#| label: assemble
+#| echo: true
+
+clip_src <- rast(dpath("beetle_stages", "Beetle.Oubteak.2005.tif"))
+in_clip  <- rasterize(project(as.polygons(ext(clip_src), crs = crs(clip_src)), crs(G)),
+                      G, field = 1, background = 0)
+
+X <- as.data.frame(c(terr, host, severity, first_yr, in_clip), na.rm = FALSE)
+names(X)[(ncol(X) - 2):ncol(X)] <- c("Severity","FirstYear","InClip")
+X$Attacked <- X$Severity > 0
+X$HasHost  <- !is.na(X$PinePct) & X$PinePct > 0
+
+## spatial blocks for resampling-based inference
+rc <- rowColFromCell(G, seq_len(ncell(G)))
+X$block <- paste(rc[,1] %/% BLOCK, rc[,2] %/% BLOCK, sep = "_")
+
+PRED  <- c("Elevation","Slope","TWI","RIX","Wind","TPI600")
+MVARS <- c(PRED, "PinePct", "Basal")
+
+## Cells lacking an inventory basal area are unmapped or non-productive and cannot
+## enter a model that conditions on stand structure. Dropping them is reported here
+## rather than left to silent na.action inside glm.
+n_before <- sum(complete.cases(X[, PRED]) & !is.na(X$PinePct))
+S <- X[complete.cases(X[, MVARS]), ]
+H <- S[S$HasHost, ]
+c(with_terrain_and_host = n_before, dropped_no_basal_area = n_before - nrow(S),
+  analysis_cells = nrow(S), km2 = round(nrow(S) * prod(res(G)) / 1e6, 1),
+  attacked = sum(S$Attacked), host_cells = nrow(H))
+```
+
+```{r}
+#| label: tbl-relief
+#| echo: true
+#| tbl-cap: "The analysis landscape, and the 2 by 4 km clip drawn from it that the companion study used. The clip samples a third of the relief and 3 per cent of the cells."
+
+tibble(
+  Extent = c("full landscape", "2 by 4 km clip"),
+  Cells  = c(nrow(S), sum(S$InClip == 1)),
+  `Area (km²)` = round(c(nrow(S), sum(S$InClip == 1)) * prod(res(G)) / 1e6, 1),
+  `Elevation (m)` = c(sprintf("%.0f to %.0f", min(S$Elevation), max(S$Elevation)),
+                      sprintf("%.0f to %.0f", min(S$Elevation[S$InClip==1]),
+                                              max(S$Elevation[S$InClip==1]))),
+  `Relief (m)` = round(c(diff(range(S$Elevation)), diff(range(S$Elevation[S$InClip==1])))),
+  `Attacked (%)` = round(100 * c(mean(S$Attacked), mean(S$Attacked[S$InClip==1])), 1)
+) |> kable(booktabs = TRUE, align = "lrrlrr", format.args = list(big.mark = ",")) |>
+  kable_styling(full_width = FALSE, font_size = 11)
+```
+
+# Methods
+
+## Inference
+
+The response is heavily clustered, so cell counts vastly overstate independent information. All
+coefficients are accompanied by percentile intervals from a spatial block bootstrap in which the
+landscape is partitioned into blocks of `r BLOCK` by `r BLOCK` cells, roughly 1 km on a side, and
+blocks are resampled with replacement `r B_BOOT` times. Blocks of this size are larger than any
+plausible correlation range of the survey polygons. We report the point estimate, the block
+interval, and the proportion of resamples reproducing the sign of the point estimate, and we treat
+a term as supported only when the interval excludes zero.
+
+```{r}
+#| label: fn-boot
+#| echo: true
+
+## The bootstrap refits several hundred times on >100,000 rows, so it works on a
+## model matrix built once and calls glm.fit directly. This is arithmetically
+## identical to glm() with the same formula, and roughly thirty times faster.
+MODEL_VARS <- c("Elevation","WindResid","PinePct","Basal","TPI600","Slope","TWI","RIX")
+
+design_matrix <- function(z, vars = MODEL_VARS)
+  cbind(`(Intercept)` = 1, as.matrix(z[, vars, drop = FALSE]))
+
+fit_fast <- function(Xm, y) glm.fit(Xm, y, family = binomial())
+
+block_boot <- function(z, vars = MODEL_VARS, B = B_BOOT, seed = 42) {
+  Xm <- design_matrix(z, vars); y <- z$y
+  idx_of <- split(seq_len(nrow(z)), z$block)
+  blocks <- names(idx_of)
+  set.seed(seed)
+  out <- matrix(NA_real_, B, ncol(Xm), dimnames = list(NULL, colnames(Xm)))
+  for (b in seq_len(B)) {
+    idx <- unlist(idx_of[sample(blocks, length(blocks), replace = TRUE)], use.names = FALSE)
+    f <- try(fit_fast(Xm[idx, , drop = FALSE], y[idx]), silent = TRUE)
+    if (!inherits(f, "try-error")) out[b, ] <- coef(f)
+  }
+  out
+}
+
+model_table <- function(z, vars = MODEL_VARS, seed = 42) {
+  Xm <- design_matrix(z, vars)
+  fit <- fit_fast(Xm, z$y)
+  cf  <- coef(fit)
+  se  <- sqrt(diag(chol2inv(fit$qr$qr[1:fit$rank, 1:fit$rank, drop = FALSE])))
+  bs  <- block_boot(z, vars, seed = seed)
+  tibble(term = names(cf), beta = as.numeric(cf), naive_z = as.numeric(cf / se),
+         lo = apply(bs, 2, quantile, .025, na.rm = TRUE),
+         hi = apply(bs, 2, quantile, .975, na.rm = TRUE),
+         sign_stab = sapply(names(cf), function(n)
+                       mean(sign(bs[, n]) == sign(cf[n]), na.rm = TRUE)))
+}
+
+fmt_model <- function(mt) {
+  mt |> filter(term != "(Intercept)") |>
+    transmute(Term = term, beta = sprintf("%+.3f", beta),
+              `naive z` = sprintf("%+.1f", naive_z),
+              `block 95% CI` = sprintf("[%+.3f, %+.3f]", lo, hi),
+              `sign stability` = sprintf("%.2f", sign_stab),
+              Supported = ifelse(lo * hi > 0, "yes", "no"))
+}
+```
+
+## Orthogonalisation
+
+Because the wind surface is built over the elevation surface, its coefficient in a model that also
+contains elevation is estimated from whatever small part of the joint distribution allows the two
+to vary separately, and it is not interpretable as an effect of wind. We therefore replace wind by
+the residual of wind regressed on elevation, rescaled to unit variance. This is a linear
+reparameterisation, so fitted values and deviance are unchanged; what changes is that the
+coefficient now refers to the part of the wind surface that elevation does not explain. That is the
+quantity the @krawchuk2020 hypothesis is about.
+
+```{r}
+#| label: design
+#| echo: true
+
+standardise <- function(dd) {
+  z <- as.data.frame(scale(dd[, c(PRED, "PinePct", "Basal")]))
+  z$y     <- as.integer(dd$Attacked)
+  z$block <- dd$block
+  z$Severity <- dd$Severity          # carried for the ordinal fits in @sec-ordinal
+  z$WindResid <- as.numeric(scale(residuals(lm(Wind ~ Elevation, data = z))))
+  z
+}
+Z  <- standardise(S)     # whole landscape
+ZH <- standardise(H)     # cells containing lodgepole
+ZC <- standardise(S[S$InClip == 1, ])   # the 2 by 4 km clip
+round(cor(Z[, c("Elevation","Wind","WindResid")]), 3)
+```
+
+## Response coding
+
+@krawchuk2020 warn specifically against coding refugia as a binary, on the grounds that a refugium
+is a matter of degree and that thresholding discards the part of the signal that distinguishes a
+lightly touched stand from a destroyed one. The survey carries an ordinal severity class, so we can
+follow that advice. We fit the binary attacked model above for comparability with the refugia
+literature, and alongside it a cumulative logit at each severity threshold: the probability that a
+cell reached trace or worse, light or worse, moderate or worse, and severe or worse. Fitting the
+thresholds separately rather than imposing a single proportional-odds slope is deliberate. It is
+also the standard diagnostic for whether proportional odds holds, and @sec-ordinal shows that here
+it does not.
+
+## Grain
+
+Extent is varied by design in @sec-extent, but grain is a separate axis and @work2011 show that
+terrain derivatives are sensitive to it, because the error in a digital elevation model propagates
+into slope and curvature differently at every resolution. A referee will ask. We therefore repeat
+the host-present model at 25 m, 50 m and 100 m, aggregating the predictors by mean and the severity
+class by maximum, holding the topographic position neighbourhood near-constant in metres rather
+than in cells so that it remains the same variable, and rescaling the bootstrap blocks so they stay
+near 1 km at every grain.
+
+# Results
+
+## Attack is unimodal, and below 1,900 m the hump is host {#sec-host}
+
+```{r}
+#| label: tbl-gradient
+#| echo: true
+#| tbl-cap: "Attack across the elevation gradient, before and after conditioning on lodgepole presence. Raw attack is strongly unimodal. Conditioning on host presence flattens the gradient below 1,900 m, but not above it, where attack halves while lodgepole cover rises and stands thin."
+
+S$band <- cut(S$Elevation, breaks = seq(500, 2400, 200), dig.lab = 5)
+grad <- S |> group_by(band) |>
+  summarise(Cells = n(),
+            `Pine cover (%)` = round(mean(PinePct), 1),
+            `Basal area` = round(mean(Basal, na.rm = TRUE), 1),
+            `Wind (m/s)` = round(mean(Wind), 2),
+            `Attacked, all cells (%)` = round(100 * mean(Attacked), 1),
+            `Attacked, host present (%)` =
+              ifelse(sum(HasHost) > 300, round(100 * mean(Attacked[HasHost]), 1), NA),
+            .groups = "drop") |>
+  filter(Cells > 500)
+grad |> kable(booktabs = TRUE, align = "lrrrrrr", format.args = list(big.mark = ",")) |>
+  kable_styling(full_width = FALSE, font_size = 10)
+```
+
+Across the full gradient, attack is strongly unimodal (@tbl-gradient, @fig-gradient). It rises from
+under three per cent in the valley to a peak near 1,430 m and falls away to zero above 2,100 m.
+
+Conditioning on host presence separates that curve into two different phenomena. Below roughly
+1,900 m the hump is host distribution: among cells that contain lodgepole, attack runs between
+roughly 23 and 37 per cent with no strong trend from the valley bottom upward, and the dramatic
+rise in the raw curve is the rise in pine cover. Attack is
+`r sprintf("%.1f", 100*mean(S$Attacked[S$HasHost]))` per cent where lodgepole is present against
+`r sprintf("%.1f", 100*mean(S$Attacked[!S$HasHost]))` per cent where it is absent.
+
+Above 1,900 m the conditioning does not remove the decline. Attack among host-bearing cells falls
+by about half, while mean lodgepole cover in those cells is
+`r sprintf("%.1f", mean(H$PinePct[H$Elevation>=1850]))` per cent against
+`r sprintf("%.1f", mean(H$PinePct[H$Elevation<1850]))` per cent lower down, and stand basal area
+falls from `r sprintf("%.1f", mean(H$Basal[H$Elevation<1850], na.rm=TRUE))` to
+`r sprintf("%.1f", mean(H$Basal[H$Elevation>=1850], na.rm=TRUE))`. Host is not scarcer at the top
+of the gradient; stands are thinner and attack is suppressed. That is the conjunction the
+@krawchuk2020 hypothesis requires.
+
+```{r}
+#| label: fig-gradient
+#| echo: true
+#| fig-width: 10.5
+#| fig-height: 4.2
+#| fig-cap: "(a) Attack across the gradient, raw and conditioned on lodgepole presence, with mean lodgepole cover. Conditioning flattens the curve below 1,900 m and does not above it. (b) The same data against wind speed: wind rises monotonically with elevation while attack turns over, so no monotone wind relationship can hold across the gradient. Shading marks the elevation range of the 2 by 4 km clip."
+
+fine <- S |> mutate(b = cut(Elevation, breaks = seq(500, 2350, 100))) |>
+  group_by(b) |>
+  summarise(el = mean(Elevation), raw = 100*mean(Attacked), pine = mean(PinePct),
+            wind = mean(Wind), n = n(),
+            cond = ifelse(sum(HasHost) > 150, 100*mean(Attacked[HasHost]), NA_real_),
+            .groups = "drop") |> filter(n > 300)
+crng <- range(S$Elevation[S$InClip == 1])
+
+pa <- ggplot(fine) +
+  annotate("rect", xmin = crng[1], xmax = crng[2], ymin = -Inf, ymax = Inf,
+           fill = "#b2182b", alpha = .10) +
+  geom_line(aes(el, raw,  colour = "all cells"), linewidth = .9) +
+  geom_line(aes(el, cond, colour = "host present"), linewidth = .9) +
+  geom_line(aes(el, pine, colour = "lodgepole cover (%)"), linetype = "22", linewidth = .8) +
+  scale_colour_manual(values = c("all cells" = "#2b4162", "host present" = "#b2182b",
+                                 "lodgepole cover (%)" = "#3f8f9b"), name = NULL) +
+  labs(x = "Elevation (m)", y = "Per cent", title = "(a) The hump is host, except at the top") +
+  theme(legend.position = "bottom")
+
+pb <- ggplot(fine, aes(wind, raw)) +
+  geom_path(colour = "#3f8f9b", linewidth = .8) +
+  geom_point(aes(colour = el), size = 1.8) +
+  scale_colour_gradientn(colours = c("#2b4162","#3f8f9b","#c6d8af","#e8c07d","#8c4b3c"),
+                         name = "Elev (m)") +
+  labs(x = "Mean wind speed (m/s)", y = "Attacked (%)",
+       title = "(b) Wind is monotone, attack is not")
+pa + pb
+```
+
+## The Krawchuk test {#sec-krawchuk}
+
+```{r}
+#| label: tbl-krawchuk
+#| echo: true
+#| tbl-cap: "The hypothesis test. Cells containing lodgepole pine only. Coefficients are per standard deviation; wind is entered as the component orthogonal to elevation. Intervals are percentile intervals from 200 resamples of 1 km spatial blocks. Only host cover clears the interval test; the orthogonalised wind term is the strongest negative coefficient and is directionally stable, but its interval reaches zero."
+
+mt_h <- model_table(ZH)
+fmt_model(mt_h) |> kable(booktabs = TRUE, align = "lrrrrc") |>
+  kable_styling(full_width = FALSE, font_size = 10)
+```
+
+```{r}
+#| label: krawchuk-numbers
+#| echo: true
+#| output: false
+wr <- mt_h[mt_h$term == "WindResid", ]
+pp <- mt_h[mt_h$term == "PinePct", ]
+```
+
+Restricted to cells that contain host, the orthogonalised wind term is the largest negative
+coefficient in the model, `r sprintf("%+.3f", wr$beta)` per standard deviation, comparable in
+magnitude to the positive effect of lodgepole cover itself at `r sprintf("%+.3f", pp$beta)`
+(@tbl-krawchuk). Its sign is reproduced in `r sprintf("%.0f", 100*wr$sign_stab)` per cent of
+spatial block resamples. Its 95 per cent block interval, however, runs
+`r sprintf("[%+.3f, %+.3f]", wr$lo, wr$hi)` and reaches zero.
+
+On this fit the hypothesis is supported in direction and unresolved in magnitude. The descriptive
+result in @sec-host is not in doubt: attack halves at the top of the gradient while host cover does
+not fall. What is in doubt is whether the wind surface is the right explanation for it, and with
+roughly `r length(unique(ZH$block))` independent 1 km blocks in this landscape the binary response
+cannot settle it. Host cover is the only term whose interval excludes zero, and it does so in the
+expected direction.
+
+That verdict is a property of the response coding rather than of the data, and @sec-ordinal
+revisits it. We report the binary model first because it is the form the refugia literature uses,
+and because the comparison between the two is itself a result.
+
+Note also that elevation, entered alongside the orthogonalised wind term, is itself negative and
+unsupported. Once host is in the model the remaining elevation signal is weak; the suppression at
+the top of the gradient is not simply an elevation effect.
+
+## Severity carries the signal the binary discards {#sec-ordinal}
+
+```{r}
+#| label: polr-fit
+#| echo: true
+#| output: false
+
+## Fitted only to show what a single proportional-odds summary conceals; the
+## threshold-specific fits in @tbl-ordinal are the result.
+zo <- ZH; zo$sev <- factor(pmin(zo$Severity, 4L), levels = 0:4, ordered = TRUE)
+polr_fit <- MASS::polr(sev ~ Elevation + WindResid + PinePct + Basal +
+                             TPI600 + Slope + TWI + RIX,
+                       data = zo, method = "logistic", Hess = FALSE)
+```
+
+```{r}
+#| label: tbl-ordinal
+#| echo: true
+#| tbl-cap: "Cumulative logits at each severity threshold, cells containing lodgepole pine only. Each row is the same model fitted to a harder threshold. The orthogonalised wind coefficient strengthens monotonically as the threshold rises and its block interval excludes zero at every threshold above trace, which the binary attacked model does not show."
+
+CUTS <- tibble(k = 1:4,
+               label = c("trace or worse", "light or worse",
+                         "moderate or worse", "severe or worse"))
+
+cum <- lapply(seq_len(nrow(CUTS)), function(i) {
+  z <- ZH; z$y <- as.integer(z$Severity >= CUTS$k[i])
+  fit <- fit_fast(design_matrix(z), z$y)
+  bs  <- block_boot(z)
+  q   <- quantile(bs[, "WindResid"], c(.025, .975), na.rm = TRUE)
+  tibble(Threshold = CUTS$label[i], Cells = sum(z$y),
+         `Wind residual beta` = coef(fit)[["WindResid"]],
+         lo = q[1], hi = q[2],
+         `sign stability` = mean(sign(bs[, "WindResid"]) ==
+                                 sign(coef(fit)[["WindResid"]]), na.rm = TRUE),
+         `Pine cover beta` = coef(fit)[["PinePct"]],
+         `Elevation beta`  = coef(fit)[["Elevation"]])
+}) |> bind_rows()
+
+cum |> transmute(Threshold, Cells,
+                 `Wind residual beta` = sprintf("%+.3f", `Wind residual beta`),
+                 `block 95% CI` = sprintf("[%+.3f, %+.3f]", lo, hi),
+                 `sign stability` = sprintf("%.2f", `sign stability`),
+                 `Pine cover beta` = sprintf("%+.3f", `Pine cover beta`),
+                 Supported = ifelse(lo * hi > 0, "yes", "no")) |>
+  kable(booktabs = TRUE, align = "lrrrrrc", format.args = list(big.mark = ",")) |>
+  kable_styling(full_width = FALSE, font_size = 10)
+```
+
+Collapsing the response to attacked or not costs the study its main result. Fitted at successively
+harder severity thresholds, the orthogonalised wind coefficient does not stay put: it strengthens
+monotonically from `r sprintf("%+.3f", cum$"Wind residual beta"[1])` at trace or worse to
+`r sprintf("%+.3f", cum$"Wind residual beta"[4])` at severe or worse, a
+`r sprintf("%.1f", cum$"Wind residual beta"[4] / cum$"Wind residual beta"[1])`-fold increase
+(@tbl-ordinal). At every threshold above trace the block interval excludes zero. The first row is
+the binary model of @sec-krawchuk restated, since a cell reaching trace or worse is exactly a cell
+recorded as attacked, so the table is a strict extension of that fit rather than a competing one.
+It is also the weakest of the four, and it is the one the refugia literature would conventionally
+have reported.
+
+This is a dose-response gradient of the shape the hypothesis predicts. Wherever the wind surface
+has a component independent of elevation, that component is associated with less attack, and the
+association is strongest where attack was heaviest. It also explains the binary result: a cell that
+reached trace severity is barely distinguishable from an unattacked cell, so a threshold drawn
+between them puts most of the noise in the response exactly where the model is asked to fit.
+
+The slopes differ by a factor of `r sprintf("%.1f", cum$"Wind residual beta"[4] / cum$"Wind residual beta"[1])`
+across the thresholds, so proportional odds does not hold and a single ordinal coefficient would be
+the wrong summary. Fitting one anyway returns `r sprintf("%+.3f", coef(polr_fit)[["WindResid"]])`,
+close to the trace-threshold estimate and concealing everything above it. Two other terms move with
+the threshold and are worth recording. Lodgepole cover, the only term that cleared the interval test
+in the binary model, weakens as the threshold rises and reverses at severe or worse
+(`r sprintf("%+.3f", cum$"Pine cover beta"[4])`): host abundance governs whether a stand is attacked
+at all, not how hard. Elevation turns positive at moderate or worse
+(`r sprintf("%+.3f", cum$"Elevation beta"[3])`), which is consistent with severe attack having been
+concentrated in the mid-elevation pine belt rather than at either end of the gradient.
+
+We are nonetheless not able to attribute the gradient to wind rather than to cold, and the
+Discussion explains why the ordinal result does not help with that. What has changed is the
+statistical support, not the identification.
+
+## Extent decides the sign {#sec-extent}
+
+```{r}
+#| label: tbl-extent
+#| echo: true
+#| tbl-cap: "The same model fitted at three extents. As the analysis area shrinks, the share of wind variance explained by elevation rises and the orthogonalised wind coefficient reverses sign. The 2 by 4 km clip is the extent at which the companion study was run and is typical of disturbance ecology generally."
+
+extent_row <- function(z, lab) {
+  r2  <- summary(lm(Wind ~ Elevation, data = z))$r.squared
+  fit <- fit_fast(design_matrix(z), z$y)
+  bs  <- block_boot(z)
+  q   <- quantile(bs[, "WindResid"], c(.025, .975), na.rm = TRUE)
+  tibble(Extent = lab, Cells = nrow(z),
+         `R² wind on elevation` = round(r2, 3),
+         `VIF` = round(1/(1-r2), 1),
+         `Wind residual beta` = sprintf("%+.3f", coef(fit)[["WindResid"]]),
+         `block 95% CI` = sprintf("[%+.3f, %+.3f]", q[1], q[2]))
+}
+bind_rows(
+  extent_row(Z,  sprintf("full landscape (%.0f km²)", nrow(S)*prod(res(G))/1e6)),
+  extent_row(ZH, "landscape, host present"),
+  extent_row(ZC, "2 by 4 km clip (8 km²)")
+) |> kable(booktabs = TRUE, align = "lrrrrr", format.args = list(big.mark = ",")) |>
+  kable_styling(full_width = FALSE, font_size = 10)
+```
+
+The confound is a function of extent, and so is the answer. Across the landscape elevation explains
+`r sprintf("%.0f", 100*summary(lm(Wind ~ Elevation, data = Z))$r.squared)` per cent of the variance
+in the wind surface; inside the 2 by 4 km clip it explains
+`r sprintf("%.0f", 100*summary(lm(Wind ~ Elevation, data = ZC))$r.squared)` per cent
+(@tbl-extent). The orthogonalised wind coefficient is negative at landscape extent and
+**positive** inside the clip.
+
+This is the paper's firmest result and it does not depend on resolving the Krawchuk hypothesis. The
+same response, the same predictors and the same model, fitted to a subset of the same landscape,
+return opposite signs on the term of interest. A study of this system conducted at the extent at
+which disturbance ecology is usually conducted would have concluded that beetle attack increases
+with wind exposure. At landscape extent the same data say the opposite.
+
+## Grain does not decide it {#sec-grain}
+
+```{r}
+#| label: tbl-grain
+#| echo: true
+#| tbl-cap: "The host-present model refitted at three grains. Predictors are aggregated by mean, severity class by maximum, the topographic position neighbourhood is held near-constant in metres, and the bootstrap blocks are rescaled to stay near 1 km. Unlike extent, grain changes nothing: the collinearity, the sign and the magnitude are all stable across a four-fold change in cell size."
+
+CONT <- c("Elevation","Slope","TWI","RIX","Wind","PinePct","Basal")
+base_stack <- c(terr[[c("Elevation","Slope","TWI","RIX","Wind")]],
+                host[[c("PinePct","Basal")]], severity, in_clip)
+names(base_stack) <- c(CONT, "Severity", "InClip")
+
+## fact is the aggregation factor from the native 25 m grid.
+build_grain <- function(fact) {
+  b <- if (fact == 1L) base_stack else
+       c(aggregate(base_stack[[CONT]], fact, fun = "mean", na.rm = TRUE),
+         aggregate(base_stack[[c("Severity","InClip")]], fact, fun = "max", na.rm = TRUE))
+  Gi <- b[["Elevation"]]; rs <- res(Gi)[1]
+  w  <- max(3L, as.integer(2 * floor(625 / rs / 2) + 1))   # odd window nearest 625 m
+  b$TPI600 <- tpi(Gi, w)
+  d <- as.data.frame(b, na.rm = FALSE)
+  d$Attacked <- d$Severity > 0
+  d$HasHost  <- !is.na(d$PinePct) & d$PinePct > 0
+  blk <- max(1L, as.integer(round(BLOCK / fact)))          # blocks stay near 1 km
+  rc  <- rowColFromCell(Gi, seq_len(ncell(Gi)))
+  d$block <- paste(rc[,1] %/% blk, rc[,2] %/% blk, sep = "_")
+  d <- d[complete.cases(d[, MVARS]), ]
+  structure(d, res = rs, win = w * rs)
+}
+
+grain_row <- function(fact) {
+  d  <- build_grain(fact); h <- d[d$HasHost, ]
+  z  <- standardise(h)
+  r2 <- summary(lm(Wind ~ Elevation, data = z))$r.squared
+  fit <- fit_fast(design_matrix(z), z$y); bs <- block_boot(z)
+  q  <- quantile(bs[, "WindResid"], c(.025, .975), na.rm = TRUE)
+  tibble(Grain = sprintf("%.0f m", attr(d, "res")),
+         `TPI window` = sprintf("%.0f m", attr(d, "win")),
+         `Host cells` = nrow(h), Blocks = length(unique(z$block)),
+         `R² wind on elevation` = round(r2, 3),
+         `Wind residual beta` = sprintf("%+.3f", coef(fit)[["WindResid"]]),
+         `block 95% CI` = sprintf("[%+.3f, %+.3f]", q[1], q[2]),
+         `sign stability` = sprintf("%.2f",
+           mean(sign(bs[, "WindResid"]) == sign(coef(fit)[["WindResid"]]), na.rm = TRUE)))
+}
+
+## The 25 m row must reproduce the analysis frame built in `assemble`; if this
+## assertion ever fails the two code paths have drifted apart.
+stopifnot(nrow(build_grain(1L)) == nrow(S))
+
+bind_rows(lapply(c(1L, 2L, 4L), grain_row)) |>
+  kable(booktabs = TRUE, align = "llrrrrrr", format.args = list(big.mark = ",")) |>
+  kable_styling(full_width = FALSE, font_size = 10)
+```
+
+@work2011, working on carabid beetles, found that the apparent importance of terrain derivatives
+changed with the resolution at which they were computed, because elevation error propagates into
+derived curvature differently at every grain. The concern transfers directly and is worth
+separating from extent, because the two are routinely confused.
+
+Here they behave quite differently (@tbl-grain). Aggregating the analysis from 25 m to 100 m, a
+sixteen-fold reduction in the number of cells, leaves the confound essentially untouched: elevation
+explains close to the same share of wind variance at every grain. The orthogonalised wind
+coefficient neither reverses nor decays, and its sign stability rises rather than falls. The
+suppression at the top of the gradient is a landscape-scale feature and it survives being looked at
+through a coarser lens.
+
+The contrast with @sec-extent is the point. Enlarging the cell by a factor of four changes almost
+nothing; shrinking the study area to 8 km2 changes the sign of the term the paper is about. Grain
+governs how finely a pattern is resolved, extent governs which part of the joint distribution of
+elevation and wind the model ever sees, and only the second is capable of reversing an inference.
+It follows that reporting the resolution of an analysis, which is near-universal practice, is not a
+substitute for reporting its extent, which is not.
+
+# Discussion
+
+## What can and cannot be concluded about refugia
+
+The high-elevation suppression is real and it is not host limitation. Among cells carrying
+lodgepole pine, attack above 1,850 m runs at
+`r sprintf("%.1f", 100*mean(H$Attacked[H$Elevation>=1850]))` per cent against
+`r sprintf("%.1f", 100*mean(H$Attacked[H$Elevation<1850]))` per cent below, while mean pine cover in
+those cells is slightly higher and basal area is roughly a fifth lower. Under the @krawchuk2020
+definition these are refugia: locations disturbed less severely than the surrounding landscape,
+with host present, and predictably located by an enduring topographic feature. They match
+@cartwright2018 in associating refugia with thinner stands.
+
+What we cannot do is attribute them to wind, and it is worth being precise about why, because the
+ordinal result in @sec-ordinal changes one half of the difficulty and leaves the other exactly
+where it was.
+
+The statistical half is much improved. Once severity is modelled as the ordinal variable it is, the
+orthogonalised wind term clears the interval test at every threshold above trace and strengthens
+monotonically with severity. Had we followed the convention of the refugia literature and reported
+the binary fit alone, we would have described the strongest and most orderly relationship in the
+study as a null result. @krawchuk2020 warn against binary refugia coding on conceptual grounds; the
+warning turns out to have a statistical edge as well.
+
+The identification half is untouched. The upper gradient is also where it is coldest, and cold
+limits this beetle through overwinter mortality and through the degree-day accumulation required
+for univoltine development [@carroll2003bionomics; @cooke2009mortality; @safranyik2006]. Crucially,
+cold predicts a dose-response in severity just as wind disruption does: fewer beetles surviving the
+winter means both fewer stands attacked and lighter attack in those that are. The monotone
+strengthening across thresholds is therefore fully consistent with cold limitation and does nothing
+to separate the two. Orthogonalising against elevation removes the linear elevation component of
+the wind surface, but it does not orthogonalise against temperature, which is not a linear function
+of elevation in a landscape with cold-air pooling.
+
+We looked for a way out and do not think one exists at this extent. Separating exposure from cold
+needs a temperature surface whose fine-scale structure is not itself a function of the elevation
+model, and any surface of the form intercept plus lapse rate times elevation is an affine rescaling
+of the elevation layer no matter whether the lapse rate came from a physical constant or from real
+thermometers. It is collinear by construction and contributes nothing the elevation term does not
+already carry. Only a residual departure from that form would identify anything, and mapping such a
+residual across this landscape would itself require terrain as the interpolator. The gridded
+products with genuine sub-kilometre temperature structure all obtain it by regression or lapse rate
+onto a digital elevation model, so they reproduce the problem rather than solve it, and satellite
+land surface temperature is a nighttime and cloud-limited observation whose topographic correction
+in rugged terrain takes a high-resolution elevation model as an input.
+
+The deeper obstacle is that the quantity governing overwinter survival is not air temperature at
+all but temperature under the bark, which is not observed at landscape scale anywhere.
+@goodsman2024, validating the standard Canadian Forest Service winter mortality model against
+observed mortality in Banff National Park, found its spatial predictions poor and attributed the
+failure to precisely this: mountainous terrain is a hard prediction problem when under-bark
+temperatures are not measured directly. That is peer-reviewed confirmation that the confound we
+report unresolved is unresolved in this terrain generally, and not an artefact of our data being
+thin.
+
+There is also a mechanism that would predict the opposite sign, and it should not be waved past.
+@smithmckenna2013, working on white pine blister rust in whitebark pine treeline communities,
+found infection concentrated in topographically sheltered positions and attributed it to exposed
+sites intercepting fewer wind-borne propagules: there, exposure protects by dispersal limitation
+rather than by disrupting a chemical signal. The agent is a fungus rather than an insect and the
+transport is passive rather than behavioural, so the analogy is not tight. But the two mechanisms
+are observationally identical in a static model, both predicting less damage on exposed convex
+ground for reasons that have nothing to do with pheromone plumes. Nothing in our design
+distinguishes them. Distinguishing them would need the dispersal process observed rather than
+inferred, through attack years, distance from the previous year's attack, or trapping.
+
+The honest summary is that we have located candidate refugia, confirmed the host-density half of
+the hypothesis, and found the wind half statistically well supported once severity is modelled
+properly, but still confounded with at least two alternative explanations on the same gradient.
+
+## The low-elevation trap
+
+The result that should travel furthest is the one at the bottom of the gradient. Attack there is
+near zero, and any refugia mapping exercise that lacked a host layer would have identified the
+valley as a large, spatially coherent, topographically predictable refugium. It is not a refugium.
+It is a place with almost no pine. Conditioning on host raises attack in the lowest band from
+`r sprintf("%.1f", grad$"Attacked, all cells (%)"[1])` per cent to
+`r sprintf("%.1f", grad$"Attacked, host present (%)"[1])` per cent, which is within the range
+observed at mid elevations.
+
+@krawchuk2020 anticipate this in framing, asking of any candidate refugium both what it is a
+refugium from and what it is a refugium for, but the framework does not force the check and the
+data required to perform it are not always at hand. On this landscape the difference between
+performing it and not is the difference between reporting a
+`r sprintf("%.0f", sum(S$Elevation < 900) * prod(res(G)) / 1e6)` km2 valley refugium and reporting
+none. We would put the requirement more strongly than the framework currently does: a refugium
+claim without an independent host or habitat layer is not interpretable.
+
+## Extent, and the transferability of terrain-derived predictors
+
+The sign reversal in @sec-extent generalises beyond wind. The mechanism is that a fine-resolution
+climate surface is produced by imposing terrain on a coarse field, so wherever the coarse field is
+nearly constant the product approaches a function of the terrain. That covers most gridded climate
+products used in landscape ecology. Three properties govern the severity and all three are
+checkable before any model is fitted: the ratio of analysis extent to the correlation length of the
+driving field, the relief of the study area, and which terrain variable does the work in the
+downscaling, which for wind is elevation and roughness but for radiation would be slope and aspect.
+
+The consequence for synthesis is uncomfortable. If the strength of a confound scales with study
+extent, effect sizes for derived climate predictors are not comparable across studies of different
+extents, and small studies will systematically report the strongest apparent effects. That is a
+pattern easily mistaken for publication bias.
+
+We would ask three things of any study entering such a surface into a disturbance model: report its
+regression on elevation, report the same diagnostic at more than one extent, and interpret only the
+orthogonalised coefficient. None requires new data. In this study each of them changed the answer.
+
+## Limitations
+
+The plot record calibrates severity but not location, because coordinates for the 28 ground plots
+were not recoverable from the project archive. The survey response is observer sketch-mapping with
+known positional and severity error, and rasterising polygons imposes a grain coarser than the
+25 m analysis cell; the severity classes in particular are assigned by eye from an aircraft, so the
+ordinal gradient in @sec-ordinal rests on an observer's judgement of proportion killed rather than
+on measurement. The inventory is a modelled operational product, not a census, and its species
+percentages are polygon-level attributes applied uniformly within polygons. The grain test in
+@sec-grain spans 25 m to 100 m, which brackets the resolutions in common use and the 900 m2 grain
+@krawchuk2020 propose as canonical for refugia, but it cannot speak to behaviour at the scale of
+the Landsat and Sentinel products a follow-up would likely use. Finally the analysis is
+correlational and the outbreak is one epidemic passage; frequency refugia in the sense of
+@krawchuk2020 cannot be addressed with a single outbreak window, and the static design cannot
+separate a wind effect on pheromone communication from a wind effect on dispersal itself.
+
+One omission is worth naming because it is remediable and we did not remedy it here. The predictor
+set carries no aspect information, so it has no term that distinguishes a warm slope from a cold
+one at the same elevation. A radiation heat load index after @beers1973 and a directional shelter
+index computed relative to the prevailing wind would both be derivable from the elevation model
+already in hand, and because radiation load and shelter vary with aspect in different ways they
+offer the one route to partial identification that does not require a temperature surface. It would
+be partial in a specific sense: aspect bears on the degree-day accumulation half of cold limitation
+and hardly at all on the overwinter minimum half, so the separation would rest on an assumed
+functional form rather than on an independent measurement. We flag it as the next step rather than
+claim it as a result.
+
+# Conclusions
+
+Beetle-caused mortality at Darkwoods is unimodal across 1,776 m of relief. Below 1,900 m that
+pattern is the distribution of lodgepole pine, and conditioning on host removes almost all of it.
+Above 1,900 m it is not: attack halves while host cover holds and stands thin, which is where the
+Krawchuk refugia hypothesis predicts refugia should be.
+
+The component of the Global Wind Atlas surface that is independent of elevation is the strongest
+negative predictor of attack in host-bearing stands. Coded as a binary its interval reaches zero;
+modelled as the ordinal severity class it is, it clears the interval test at every threshold above
+trace and strengthens monotonically as attack gets heavier. The statistical support is therefore
+good and the ecological attribution is still not settled, because cold limitation and simple
+dispersal interception both predict the same gradient and neither can be ruled out with a static
+model on one mountain.
+
+The methodological findings are firmer, and all three are failures of design rather than of data.
+Fitted inside a 2 by 4 km clip of the same landscape, the wind coefficient changes sign, while a
+four-fold change of grain moves it hardly at all: extent is the axis that decides inferences here,
+and it is the one studies routinely leave unreported. Collapsing severity to attacked or not
+converts the study's clearest relationship into a null. And without a host layer, the pine-poor
+valley floor would have been mapped as the largest refugium on the mountain.
+
+# Data and code availability
+
+Every quantity is computed by the chunks above at render time. Sources are the British Columbia
+Aerial Overview Survey pest infestation polygons and the Vegetation Resources Inventory, both from
+the British Columbia Data Catalogue under the Open Government Licence, and terrain surfaces derived
+from the Natural Resources Canada High Resolution Digital Elevation Model. Retrieval instructions
+are in `02.inputs/README-data.md`. Bulk downloads are not redistributed with this repository.
+
+```{r}
+#| label: session
+#| echo: true
+sessionInfo()
+```
+
+# CRediT authorship contribution statement
+
+**Seamus Murphy:** Conceptualization, Methodology, Software, Formal analysis, Investigation, Data
+Curation, Writing - Original Draft, Writing - Review & Editing, Visualization.
+
+# Declaration of competing interest
+
+The author declares no known competing financial interests or personal relationships that could
+have appeared to influence the work reported in this paper.
+
+# Funding
+
+This research received no specific grant from any funding agency in the public, commercial or
+not-for-profit sectors.
+
+# Declaration of Generative AI and AI-assisted technologies in the writing process
+
+During the preparation of this work the author used Anthropic Claude to assist with drafting
+prose, writing and refactoring the R analysis code contained in this document, and retrieving and
+checking bibliographic metadata. After using this tool the author reviewed and edited the content
+as needed and takes full responsibility for the content of the published article.
+
+# References
+
+::: {#refs}
+:::
