@@ -12,7 +12,7 @@ DATA_ROOT <- Sys.getenv("DARKWOODS_DATA",
 
 Set `DARKWOODS_DATA` to override without editing the manuscript. Everything else is repo-relative.
 
-## The three sources
+## The four sources
 
 ### 1. Response: BC Aerial Overview Survey, pest infestation polygons
 
@@ -76,6 +76,33 @@ topographic position index at a 625 m neighbourhood, computed in-document.
 | Mean wind speed | `terrain_environment/Wind.utm.tif` |
 | BEC subzones | `bec_zones/BEC.ecozones.shp` |
 
+### 4. Winter minimum air temperature, station observations
+
+| | |
+|---|---|
+| Networks | BC Wildfire Service hourly, Environment and Climate Change Canada daily |
+| Stations | `https://openmaps.gov.bc.ca/geo/pub/WHSE_LAND_AND_NATURAL_RESOURCE.PROT_WEATHER_STATIONS_SP/ows` (WFS 2.0.0) |
+| Hourly | `https://www.for.gov.bc.ca/ftp/HPR/external/!publish/BCWS_DATA_MART/<year>/<year>_BCWS_WX_OBS.csv` |
+| ECCC | `https://api.weather.gc.ca/collections/climate-daily/items` and `.../climate-stations/items` |
+| Licence | Open Government Licence, British Columbia; Open Government Licence, Canada |
+| Retrieved | 2026-08-01 |
+| Script | `02.inputs/climate/fetch-station-minima.R` |
+| Local path | `02.inputs/climate/station-winter-minima.csv` (363 station-winters, 58 KB) |
+| Full note | `02.inputs/climate/README-station-data.md` |
+
+Answers one question: do winter minima here reach the classical -40 °C lethal threshold for
+mountain pine beetle larvae? Across 347 station-winters surviving quality control, no. The
+coldest defensible minimum in the region is -28.7 °C, at Norns, 2,423 m, winter 2014, and
+across the 26 usable station-winters at or above 1,500 m the mean is -19.4 °C.
+
+The annual BCWS files are 100 to 210 MB, so the script streams each through `curl` into an
+`awk` filter and caches only the winter rows for the sixteen stations within 100 km. Those
+extracts live in `02.inputs/climate/raw/`, 107 MB, and are gitignored; the summary CSV is committed
+because it is what the manuscript cites. Quote `min_temp_c_usable`, never `min_temp_c`.
+
+Rerun with `/usr/local/bin/Rscript 02.inputs/climate/fetch-station-minima.R`. It is
+idempotent, reuses the cache, and reprints every number above.
+
 ## Ground plots, and what they can and cannot do
 
 `2.ExcelData/2.1.darkwoods_beetle_ground_plots.xlsx` in the companion archive holds 28 plots with
@@ -103,3 +130,7 @@ manuscript says so rather than implying a validation that was not performed.
 5. **The masterfile holds the lost `.dbf`.** `1.0.darkwoods_masterfile.xlsx`, sheet
    `dataset_beetle_bcgov`, is the attribute table for `MPB_BC_AerialSurveys.shp`, joinable by FID.
    Superseded by the provincial download but useful as a cross-check.
+6. **BCWS temperature is censored at exactly -20.0 °C before 2008**, and the ECCC daily archive
+   carries an unflagged -40.0 °C at Nelson NE on 7 February 2014 whose same-day maximum is
+   -4.5 °C. A bare `min()` over either archive produces a number that is not a measurement.
+   `fetch-station-minima.R` detects and flags both; use `min_temp_c_usable`.
