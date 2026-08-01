@@ -1,0 +1,81 @@
+=== GREY-STAGE UNION CHECK (AOS code 44, 2005-2011) ===
+  union cells      : 1541
+  attack-count dist: {0: 7369, 1: 786, 2: 320, 3: 196, 4: 111, 5: 128}
+    2005:   534 red-attack cells
+    2006:  1530 red-attack cells
+    2007:   573 red-attack cells
+    2008:     0 red-attack cells
+    2009:   324 red-attack cells
+    2010:     0 red-attack cells
+    2011:   137 red-attack cells
+
+  cells with complete terrain: 8910 of 8910
+
+=== TERRAIN AT ATTACKED vs UNATTACKED (union) ===
+  attacked n=1541   unattacked n=7369
+  var                  attacked         unattacked        MWU p  CliffDelta
+  Elevation    1541.79±171.73   1280.65±269.25    0.000e+00       0.572
+  Slope          16.29±  8.48     19.14±  6.58    3.818e-40      -0.214
+  RIX             0.51±  0.04      0.50±  0.04    1.154e-13       0.120
+  Wind            4.75±  0.69      4.17±  0.83    0.000e+00       0.409
+  TWI            -5.17±  1.05     -5.00±  1.30    5.071e-04      -0.056
+  Aspect         82.83± 77.35     90.35± 57.33    8.521e-40      -0.214
+
+=== TERRAIN vs REPEAT-ATTACK COUNT (Spearman, attacked cells only) ===
+  Elevation  rho=+0.297  p=8.778e-33
+  Slope      rho=-0.074  p=3.698e-03
+  RIX        rho=+0.038  p=1.384e-01
+  Wind       rho=+0.256  p=1.449e-24
+  TWI        rho=-0.070  p=6.281e-03
+  Aspect     rho=+0.072  p=4.587e-03
+
+=== TERRAIN vs ONSET YEAR (Spearman, attacked cells only) ===
+  Elevation  rho=-0.296  p=1.392e-32
+  Slope      rho=+0.201  p=1.505e-15
+  RIX        rho=-0.024  p=3.529e-01
+  Wind       rho=-0.272  p=1.236e-27
+  TWI        rho=-0.016  p=5.327e-01
+  Aspect     rho=-0.084  p=1.011e-03
+
+=== PREDICTOR CROSS-CORRELATION (Pearson, all cells) ===
+              Elevation      Slope        RIX       Wind        TWI
+  Elevation      +1.000     -0.181     +0.037     +0.905     -0.168
+  Slope          -0.181     +1.000     +0.000     -0.285     -0.272
+  RIX            +0.037     +0.000     +1.000     +0.035     -0.096
+  Wind           +0.905     -0.285     +0.035     +1.000     -0.141
+  TWI            -0.168     -0.272     -0.096     -0.141     +1.000
+
+=== MULTIVARIABLE LOGISTIC: P(red-attack) ~ standardised terrain ===
+  (naive SEs: spatial autocorrelation NOT accounted for)
+  term             beta    OR/sd        z
+  (int)          -2.651    0.071    -41.7
+  Elevation      +4.207   67.123    +28.2
+  Slope          -0.203    0.816     -5.1
+  RIX            +0.222    1.248     +7.1
+  Wind           -2.580    0.076    -21.8
+  TWI            -0.138    0.871     -3.8
+
+=== PARTIAL SPEARMAN: wind vs attack, controlling elevation ===
+  wind~attack | elevation : rho=-0.124 p=1.10e-31
+  RIX ~attack | elevation : rho=+0.070 p=4.25e-11
+  wind~elevation          : rho=+0.930
+
+=== SURVEY-YEAR AUDIT: what is in 2008 and 2010? ===
+  2005: {1: 169, 36: 236, 44: 534, 61: 146, 77: 23, 80: 3722, 94: 189, 105: 468, 128: 3423}
+  2006: {-128: 3423, 1: 76, 36: 113, 44: 1530, 61: 117, 77: 35, 80: 2955, 94: 159, 105: 502}
+  2007: {-128: 3423, 1: 279, 36: 409, 44: 573, 61: 151, 77: 48, 80: 3218, 94: 201, 105: 608}
+  2008: {80: 178, 105: 5309, 128: 3423}
+  2009: {-128: 3423, 1: 256, 36: 208, 44: 324, 61: 174, 77: 57, 80: 3281, 94: 277, 105: 910}
+  2010: {-128: 3423, 1: 383, 36: 808, 61: 606, 77: 57, 80: 1752, 94: 869, 105: 1012}
+  2011: {-128: 3423, 1: 270, 36: 921, 44: 137, 61: 280, 77: 34, 80: 2843, 94: 354, 105: 648}
+
+cells over full Darkwoods DEM extent: 388003
+  corr(wind, elevation) = +0.760
+  corr(RIX , elevation) = +0.082
+  corr(RIX , slope    ) = +0.052
+  corr(RIX , wind     ) = +0.053
+  wind = 0.00188*elev + 2.070   R2 = 0.577
+  residual wind sd = 0.837 m/s  (raw wind sd = 1.287)
+
+  Moran's I (rook lag-1) of red-attack union = 0.728
+  -> strong clustering; naive n=8910 is a large over-count of independent units
