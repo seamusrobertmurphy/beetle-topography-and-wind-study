@@ -944,7 +944,7 @@ Every quantity is computed by the chunks above at render time. Sources are the B
 Aerial Overview Survey pest infestation polygons and the Vegetation Resources Inventory, both from
 the British Columbia Data Catalogue under the Open Government Licence, and terrain surfaces derived
 from the Natural Resources Canada High Resolution Digital Elevation Model. Retrieval instructions
-are in `02.inputs/README-data.md`. Bulk downloads are not redistributed with this repository.
+are in `02.inputs/README-data.md`.
 
 ```{r}
 #| label: session
