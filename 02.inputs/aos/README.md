@@ -22,13 +22,13 @@ agent, severity class and host species.
 
 ## Contents
 
-| File | What it is |
-|---|---|
-| `pest_infestation_poly.gdb` | The unzipped File Geodatabase the manuscript reads |
-| `pest_infestation_poly.zip` | The download as retrieved, kept so the extract can be reproduced |
+| File | What it is | In version control |
+|---|---|---|
+| `pest_infestation_poly.gdb` | The unzipped File Geodatabase the manuscript reads | Yes, via Git LFS |
+| `pest_infestation_poly.zip` | The download as retrieved | No, `*.zip` is gitignored |
 
-Both are carried in Git LFS. Cloning without `git-lfs` installed will leave pointer files
-rather than data.
+Cloning without `git-lfs` installed leaves pointer files rather than data. The zip is kept
+locally for convenience only; re-download it from the link above if you need it.
 
 ## How the manuscript uses it
 

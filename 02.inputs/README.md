@@ -1,7 +1,10 @@
 # Input data: provenance and retrieval
 
-No bulk data is committed. `.gitignore` excludes `*.tif`, `*.zip` and `02.inputs/aos/`. The
-manuscript reads terrain from an external archive and the two provincial datasets from this folder.
+Bulk data is carried in **Git LFS** as of 1 August 2026. Cloning without `git-lfs` installed
+leaves pointer files rather than data. Three things stay out of version control entirely:
+`*.tif`, `*.zip` (the survey download is kept locally but the unzipped geodatabase is what is
+committed), and `climate/raw/`, which is a regenerable API cache. The manuscript reads terrain
+from an external archive and everything else from this folder.
 
 ## Where the manuscript looks
 

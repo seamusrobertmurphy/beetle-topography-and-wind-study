@@ -242,6 +242,37 @@ data, so new documentation was being committed as three-line LFS pointers. Setti
 undo that. The override needs `!filter !diff !merge`, which is now in `.gitattributes` and verified:
 documentation resolves to unspecified, data still resolves to `lfs`.
 
+### Phase 8, author's editing pass (1 August 2026, evening)
+
+The author edited the `.qmd` directly. Recorded here because two of the changes have consequences
+that are not obvious from the diff, which is dominated by a whole-file rewrap (maximum line length
+went from 422 to 1,236 characters, so most of the 546 deleted lines are reflow, not lost content).
+
+Deliberate and carried forward:
+
+- Subtitle changed from "A test of the Krawchuk refugia hypothesis" to "Testing refugia hypotheses
+  across a 1,776 m relief gradient in the Selkirk Mountains of British Columbia".
+- Abstract now opens "It is hypothesised" rather than naming Krawchuk et al. The 13 `@krawchuk2020`
+  citations in the body are untouched, so the attribution is intact; only the framing is less
+  personalised.
+
+**Needs a decision, and nothing has been restored pending it.** All six back-matter sections were
+removed: Data and code availability, CRediT, Declaration of competing interest, Funding,
+Declaration of Generative AI, and the `sessionInfo` chunk. The manuscript now runs Conclusions
+straight into References.
+
+Four of those were added on 31 July specifically because they were **verified from live
+elsevier.com pages** as Elsevier-wide requirements binding on every Elsevier journal:
+
+- The generative AI declaration is mandatory and must sit "at the end of the manuscript,
+  immediately above the references".
+- CRediT "should be provided during the submission process", single-author papers included.
+- Competing interests and funding statements are standard submission requirements.
+
+They are recoverable verbatim from commit `a4e78ba`. If the removal was deliberate, say so here and
+the note can go; if it was a casualty of the reformat, restore them before submission. See
+`RSE-GUIDELINES-VERIFIED-2026-07-31.md` for what was verified and from where.
+
 ## Key findings in the current draft
 
 1. **Attack is unimodal across 1,776 m of relief**, peaking near 1,430 m. The clip-based monotone

@@ -49,4 +49,4 @@ rasterised to the 25 m analysis grid.
 
 The extract was pulled by WFS bounding box. To reproduce it, request the layer above with a
 `BBOX` filter on the study extent and `outputFormat=application/json`. The full request is
-recorded in `../README-data.md`.
+recorded in `../README.md`.
