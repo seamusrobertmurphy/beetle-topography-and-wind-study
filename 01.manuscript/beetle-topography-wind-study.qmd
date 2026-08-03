@@ -84,7 +84,9 @@ df-print: kable
 #| output: false
 
 ## Every quantity in this manuscript is computed here at render time.
-pkgs <- c("terra","knitr","kableExtra","ggplot2","dplyr","tidyr","patchwork","tibble")
+## patchwork is loaded for its `+` operator on ggplots (@fig-gradient), which is
+## why no patchwork function appears by name anywhere below.
+pkgs <- c("terra","knitr","kableExtra","ggplot2","dplyr","patchwork","tibble")
 invisible(lapply(pkgs, function(p) library(p, character.only = TRUE)))
 ## dpi 300 is the Elsevier minimum for a combination line/halftone figure.
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, error = TRUE,
@@ -160,8 +162,7 @@ m   <- mpb[mpb$CAPTURE_YEAR %in% OUTBREAK, ]
 sev_rank <- c(T = 1, L = 2, M = 3, S = 4, V = 5)
 m$sev <- unname(sev_rank[m$PEST_SEVERITY_CODE]); m$sev[is.na(m$sev)] <- 0
 
-severity  <- rasterize(m, G, field = "sev",          fun = "max", background = 0)
-first_yr  <- rasterize(m, G, field = "CAPTURE_YEAR", fun = "min", background = NA)
+severity  <- rasterize(m, G, field = "sev", fun = "max", background = 0)
 
 c(polygons = nrow(m), years = length(unique(m$CAPTURE_YEAR)),
   hectares = round(sum(m$AREA_HA)))
@@ -195,14 +196,13 @@ accumulate <- function(pattern) {
 }
 vri$PinePct <- accumulate("^PL")               # lodgepole, the primary host
 vri$Basal   <- num(vd$BASAL_AREA)
-vri$Age     <- num(vd$PROJ_AGE_1)
 
-host <- rast(lapply(c("PinePct","Basal","Age"), function(f) rasterize(vri, G, field = f)))
-names(host) <- c("PinePct","Basal","Age")
+host <- rast(lapply(c("PinePct","Basal"), function(f) rasterize(vri, G, field = f)))
+names(host) <- c("PinePct","Basal")
 c(vri_polygons = nrow(vri), with_lodgepole = sum(vri$PinePct > 0))
 ```
 
-Host abundance comes from the provincial Vegetation Resources Inventory, layer `VEG_COMP_LYR_R1_POLY`, retrieved from the British Columbia Data Catalogue web feature service for the study window. We accumulate the percentage cover of lodgepole pine across the three species slots each polygon records, and carry stand basal area and projected age alongside it.
+Host abundance comes from the provincial Vegetation Resources Inventory, layer `VEG_COMP_LYR_R1_POLY`, retrieved from the British Columbia Data Catalogue web feature service for the study window. We accumulate the percentage cover of lodgepole pine across the three species slots each polygon records, and carry stand basal area alongside it.
 
 Without this layer the analysis cannot distinguish a refugium from an absence of pine, and @sec-host shows that the distinction accounts for most of the apparent terrain signal.
 
@@ -308,8 +308,8 @@ clip_src <- rast(dpath("beetle_stages", "Beetle.Oubteak.2005.tif"))
 in_clip  <- rasterize(project(as.polygons(ext(clip_src), crs = crs(clip_src)), crs(G)),
                       G, field = 1, background = 0)
 
-X <- as.data.frame(c(terr, host, severity, first_yr, in_clip), na.rm = FALSE)
-names(X)[(ncol(X) - 2):ncol(X)] <- c("Severity","FirstYear","InClip")
+X <- as.data.frame(c(terr, host, severity, in_clip), na.rm = FALSE)
+names(X)[(ncol(X) - 1):ncol(X)] <- c("Severity","InClip")
 X$Attacked <- X$Severity > 0
 X$HasHost  <- !is.na(X$PinePct) & X$PinePct > 0
 
