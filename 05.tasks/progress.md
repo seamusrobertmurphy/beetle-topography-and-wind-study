@@ -273,6 +273,40 @@ They are recoverable verbatim from commit `a4e78ba`. If the removal was delibera
 the note can go; if it was a casualty of the reformat, restore them before submission. See
 `RSE-GUIDELINES-VERIFIED-2026-07-31.md` for what was verified and from where.
 
+### Phase 9, dead-code sweep (3 August 2026)
+
+Static analysis of the manuscript's R chunks, using R's own parser rather than a grep. Every
+top-level assignment was cross-referenced against later chunks **and** against all 54 inline
+expressions, since an object used only inline would otherwise look dead.
+
+Result: no unused variables and no unused functions. Four genuinely dead things were found and
+removed, and the removal is numerically inert, verified by replaying the pipeline to the analysis
+frame: 266,650 analysis cells, 127,604 host cells, 168.2 km², all unchanged.
+
+1. **`first_yr`.** A full `rasterize()` of `CAPTURE_YEAR` over the survey polygons, stacked into `X`
+   and named `FirstYear`, then never read. Real compute cost for nothing. Removed.
+2. **`Age`.** `PROJ_AGE_1` was pulled from the inventory, rasterized into `host` and named, and
+   never entered a model or a table. Removed. **The prose claimed otherwise**, so the Host abundance
+   section no longer says the analysis carries projected age.
+3. **The `FirstYear` column naming**, which indexed the last three columns of `X`; now the last two.
+4. **`tidyr`.** Loaded and never used. Its only apparent hit was `tibble`, which it merely
+   re-exports from the tibble package. Zero tidyr-exclusive functions appear anywhere.
+
+**One false positive worth knowing about, because it will recur.** A symbol-level scan reports
+`patchwork` as unused: it contributes no named function, only the `+` operator that combines the two
+panels of `fig-gradient`. Removing it would break the figure. The setup chunk now carries a comment
+saying so, and it is in the traps list. The same scan surfaced that `patchwork::area` masks
+`terra::area`, harmless because nothing calls `area()`.
+
+**On tooling.** The `analyze-dead-code` skill was tried. It is built for application codebases and
+dispatches to `knip`, `ts-prune`, `vulture` or `deadcode`, none of which handle R, so it falls back
+to grep. Its *method* is sound and was followed: classify by confidence, screen for false positives,
+report before removing. The detection itself has to be done with R's parser.
+
+Not changed, and deliberately: the extent prose recomputes `lm(Wind ~ Elevation)` inline twice, which
+duplicates what `tbl-extent` already computes. That is redundancy, not dead code, and each inline
+expression standing on its own is the point of an executable manuscript.
+
 ## Key findings in the current draft
 
 1. **Attack is unimodal across 1,776 m of relief**, peaking near 1,430 m. The clip-based monotone
