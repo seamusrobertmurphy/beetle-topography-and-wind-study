@@ -1,8 +1,8 @@
 # Progress log: topographic refugia from mountain pine beetle (Darkwoods spin-off)
 
 **Started:** 2026-07-30
-**Status:** Phase 6 complete. Aspect in the model, cold threshold checked against observation.
-**Last updated:** 2026-08-01
+**Status:** Phase 10 complete. Full pre-submission review run; venue decision now required before further work.
+**Last updated:** 2026-08-04
 **Current task request:** `TASK-REQUEST-2026-07-31.md`
 **Predecessor:** `Archive/writing_outputs/20260613_053044_rs_methods_spinoff/` (Phase 0)
 
@@ -306,6 +306,85 @@ report before removing. The detection itself has to be done with R's parser.
 Not changed, and deliberately: the extent prose recomputes `lm(Wind ~ Elevation)` inline twice, which
 duplicates what `tbl-extent` already computes. That is redundancy, not dead code, and each inline
 expression standing on its own is the point of an executable manuscript.
+
+### Phase 10, full pre-submission review (3 to 4 August 2026)
+
+Ran the eight-stage review in `skills/drafts/manuscript-review-request.md`. Report at the repo
+root: `review-remote-sensing-of-environment.md`. Three things changed the project's direction.
+
+**The RSE guidelines are verified, and RSE is the wrong journal.** ScienceDirect still 403s every
+route, but the Internet Archive holds the Elsevier journal page and the guide came out of it
+(`RSE-GUIDELINES-VERIFIED-2026-08-03.md`; caveat, the capture is October 2023). Two sentences
+decide it. "The main contribution should be the remote sensing component, rather than
+investigation of an environmental problem in which remote sensing data or techniques do not play
+a major role", and "a statistically sound accuracy assessment or validation is a requirement of
+all research papers". This study analyses no sensor observation and validates nothing, and says
+so. **Open item 1 is closed as answered, not as done: stop formatting for RSE and pick a venue.**
+Landscape Ecology, Ecography or Forest Ecology and Management fit as written.
+
+Two good pieces of news from the same source: **no abstract word limit is stated**, so open item 3
+is dead and the 340-word abstract needs no cut; and the limit is 15,000 words, which is no
+constraint. Two bad: **highlights are mandatory** and did not exist (now
+`01.manuscript/highlights.docx`), and the reference style is Elsevier author-date, not APA
+(`elsevier-harvard.csl` fetched and in use).
+
+**The methodological headline is not novel.** Wiens 1989, the foundational paper, already states
+that correlations within a domain may change sign when extent is enlarged past it, and Dungan et
+al. 2002 already published the reporting recommendation. Worse, the sub-claim that resolution is
+reported near-universally while extent is not is contradicted by the only audit of it: Estes et
+al. 2018 found 63 against 60 per cent. McGarigal et al. 2016 argue the opposite priority. Section
+4.3 and the Conclusions were rewritten to concede all of it and to cite Wiens, Dungan, McGarigal,
+Sandel and Estes, all verified at CrossRef and added to the bib.
+
+The constructive route out came from the same search and converges with the referee and the
+statistician independently. **Sandel 2015: for a genuinely linear relationship the coefficient is
+extent-independent and only R² moves, so a sign flip diagnoses an unmodelled nonlinearity.** Which
+is almost certainly what this is, because `fig-gradient` shows attack unimodal in elevation while
+wind is monotone, and the clip lands on one limb. Elevation is fitted linearly everywhere
+(`MODEL_VARS`) and the orthogonalisation removes only the *linear* elevation component of wind, so
+the wind residual is the obvious absorber of the curvature. **The single highest-value next step is
+to refit with a quadratic or spline in elevation and orthogonalise against that basis.** If the
+wind residual survives, the paper is far stronger. If not, it was misspecification.
+
+**Two claims failed against the paper's own output.** The clip's wind interval is
+[-1.260, +0.921], which spans zero, so "extent decides the sign" never met the paper's own rule;
+`tbl-extent` now carries a `Blocks` column showing the clip rests on 15 blocks, and the section is
+retitled and rewritten to claim only what is there. And "host cover holds at the top of the
+gradient" held only against a denominator including the pine-poor valley: against the band
+immediately below, cover falls from 49.2 to 38.8 per cent. Section `sec-host` now computes and
+reports both comparisons and retreats to the weaker claim.
+
+**Caution, recorded because it nearly shipped.** Reconciling prose that said 1,900 m with code that
+compared at 1,850 m flipped that host result (41.6 vs 39.3 becomes 38.8 vs 39.7) while the prose
+still read "if anything higher". Fixing a prose/code mismatch without re-checking that the result
+survives the corrected threshold is a live hazard in an executable manuscript, and `error: false`
+does not catch it because nothing errors. A claim that turns on a 50 m change of an arbitrary
+breakpoint was never robust.
+
+**Five sources were cited for things they do not say**, one for the reverse. `smithmckenna2013`
+reports exposed positions favouring *interception* of wind-borne spores, not escaping it, and was
+carrying the whole counter-mechanism paragraph, now recast as the authors' own hypothesis. The
+lethal-temperature attribution was wrong in both halves (-40 °C is Safranyik's *under-bark* figure;
+-37 is Cooke's laboratory supercooling point, not an under-bark temperature). `cartwright2018`
+ranks TPI 7th of 10, not "among the strongest". `krawchuk2020` describe the 900 m² Landsat grain
+rather than proposing it. And `badger2014` is a KAMM paper: the Global Wind Atlas has never used
+KAMM, so `davis2023` was added and cited for the construction claim the whole paper rests on.
+Mechanically the bibliography is clean: 25 keys cited, all present, all 14 DOIs resolving.
+
+Also applied: back matter restored from `a4e78ba` (open item from Phase 8, resolved as "restore");
+`number-sections` added to docx; `error: true` to `false`; dpi 300 to 500, the Elsevier minimum for
+combination artwork; the "200 resamples" caption corrected against `B_BOOT` of 150.
+
+**Not applied, and these are the real work.** B_BOOT of 150 is too few for percentile intervals and
+the light-or-worse verdict flips on a different seed with probability ~0.16, though re-running at
+five seeds showed it holding; the block size is asserted and the polygon size distribution that
+would justify it is one line away; heat load's independence from elevation is computed on the full
+landscape (R² 0.000) while its coefficient is estimated on the host-present frame (R² 0.119), and
+it is more collinear with slope (0.141) than with elevation; the severe-threshold headline may rest
+on two to six survey polygons; and **the VRI was pulled live on 2026-07-30 with no reference year
+recorded anywhere**, so the host layer may postdate the 1999-2015 mortality by a decade, which
+would mechanically explain the pine-cover sign flip at severe+. Establish that reference year
+first; it is the cheapest of the outstanding items and potentially the most damaging.
 
 ## Key findings in the current draft
 

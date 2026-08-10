@@ -175,8 +175,6 @@ panel <- function(r, title, legend, pal = "viridis", dir = 1, q = c(.02, .98)) {
 }
 ```
 
-**Keywords:** beetle refugia; mountain pine beetle; aerial overview survey; Global Wind Atlas; scale dependence; collinearity
-
 # Introduction
 
 Disturbance refugia, defined by @krawchuk2020 as locations disturbed less severely or less frequently than the surrounding landscape, have become an organising concept for forest conservation under climate change. The concept is well developed for fire and much less so for insects. @krawchuk2020 note that few studies have explicitly identified refugia from insect outbreaks, and propose a testable mechanism for the most consequential insect disturbance in western North America: refugia from mountain pine beetle (*Dendroctonus ponderosae* Hopkins) could occur where host density is lower, thinner stands admitting more wind and so disrupting the aggregation pheromone communication mass attack depends on.
@@ -455,13 +453,14 @@ The ruggedness surface carries a documentation gap we state rather than paper ov
 
 Ambient wind is Global Wind Atlas mean wind speed at 10 m above ground level [@globalwindatlas]. The atlas is built by driving a mesoscale model from reanalysis, generalising the result by the method of @badger2014 to remove the local terrain and roughness signal, then downscaling it over a digital elevation model and a land-cover roughness map [@davis2023]. Elevation and roughness are inputs to the product, not covariates measured independently of it. That is why it cannot be assumed independent of elevation, and testing that assumption is the second half of this paper.
 
-Figure S1 maps the six derived surfaces. Their point is visual rather than statistical: slope, wetness, ruggedness and topographic position all trace the same drainage network and valley wall, whereas heat load and the shelter index divide the landscape by aspect, picking out southwest-facing ground the others do not distinguish. That is the difference @tbl-orthogonality quantifies.
+@fig-terrain maps the six derived surfaces. Their point is visual rather than statistical: slope, wetness, ruggedness and topographic position all trace the same drainage network and valley wall, whereas heat load and the shelter index divide the landscape by aspect, picking out southwest-facing ground the others do not distinguish. That is the difference @tbl-orthogonality quantifies.
 
 ```{r}
+#| label: fig-terrain
 #| echo: false
-#| output: false
 #| fig-width: 7.1
 #| fig-height: 4.6
+#| fig-cap: "The six derived terrain predictors, all computed from the same 25 m elevation model. (a) Slope. (b) Topographic wetness index. (c) Ruggedness. (d) Topographic position at a 625 m neighbourhood. (e) Heat load index after McCune and Keon. (f) Omnidirectional shelter index after Winstral, the maximum upwind slope angle within 500 m averaged over eight bearings. Ranges are clipped to the 2nd and 98th percentiles. Projection and scale as in @fig-site."
 
 fig_terrain <-
   (panel(terr$Slope,  "(a) Slope", "Degrees", "cividis") |
@@ -722,11 +721,12 @@ pa + pb
 ## The Krawchuk test {#sec-krawchuk}
 
 ```{r}
+#| label: tbl-krawchuk
 #| echo: false
-#| output: false
+#| tbl-cap: "The hypothesis test. Cells containing lodgepole pine only. Coefficients are per standard deviation; wind is entered as the component orthogonal to elevation. Intervals are percentile intervals from resampled 1 km spatial blocks. Only host cover clears the interval test; the orthogonalised wind term is the strongest negative coefficient but its interval reaches zero."
 
 mt_h <- model_table(ZH)
-SUPP_KRAWCHUK <- fmt_model(mt_h) |> kable(booktabs = TRUE, align = "llllll")
+fmt_model(mt_h) |> kable(booktabs = TRUE, align = "llllll")
 ```
 
 ```{r}
@@ -737,7 +737,7 @@ wr <- mt_h[mt_h$term == "WindResid", ]
 pp <- mt_h[mt_h$term == "PinePct", ]
 ```
 
-Restricted to cells containing host, the orthogonalised wind term is the largest negative coefficient in the model, `r sprintf("%+.3f", wr$beta)` per standard deviation, comparable to the positive effect of lodgepole cover at `r sprintf("%+.3f", pp$beta)` (Table S1). Its sign is reproduced in `r sprintf("%.0f", 100*wr$sign_stab)` per cent of block resamples, but its 95 per cent block interval runs `r sprintf("[%+.3f, %+.3f]", wr$lo, wr$hi)` and reaches zero.
+Restricted to cells containing host, the orthogonalised wind term is the largest negative coefficient in the model, `r sprintf("%+.3f", wr$beta)` per standard deviation, comparable to the positive effect of lodgepole cover at `r sprintf("%+.3f", pp$beta)` (@tbl-krawchuk). Its sign is reproduced in `r sprintf("%.0f", 100*wr$sign_stab)` per cent of block resamples, but its 95 per cent block interval runs `r sprintf("[%+.3f, %+.3f]", wr$lo, wr$hi)` and reaches zero.
 
 On this fit the hypothesis is supported in direction and unresolved in magnitude, and @sec-nonlinear later withdraws even the direction, so read this section as the conventional analysis whose specification we go on to test rather than a result we stand behind. The descriptive result in @sec-host is not in doubt: attack more than halves at the top of the gradient while host cover thins only slightly. What is in doubt is whether wind is the right explanation, and with roughly `r length(unique(ZH$block))` independent 1 km blocks the binary response cannot settle it. Host cover is the only term whose interval excludes zero.
 
@@ -900,11 +900,12 @@ The severe threshold is absent from @tbl-aspect because ten terms and `r sum(ZHx
 
 ## Winter temperature thresholds {#sec-cold}
 
-Table S2 summarises the record and Figure S2 maps the network. No station lies inside the analysis grid, and the stations reaching the coldest minima are not the highest ones, which is the point the next paragraph develops.
+@tbl-cold summarises the record and @fig-station maps the network. No station lies inside the analysis grid, and the stations reaching the coldest minima are not the highest ones, which is the point the next paragraph develops.
 
 ```{r}
+#| label: tbl-cold
 #| echo: false
-#| output: false
+#| tbl-cap: "Observed winter minimum air temperatures from stations within 100 km, by elevation band, after excluding station-winters censored at the -20.0 °C sensor floor. Nothing approaches the temperatures conventionally cited as lethal for this insect, and elevation orders the minima only weakly."
 
 st <- read.csv(here("02.inputs/climate/station-winter-minima.csv"), stringsAsFactors = FALSE)
 
@@ -930,9 +931,7 @@ use <- st[!st$censored & !is.na(st$min_temp_c_usable), ]
 
 use$band <- cut(use$elevation_m, c(0, 800, 1500, 2500),
                 labels = c("below 800 m", "800 to 1,500 m", "above 1,500 m"))
-## Held for the supplementary section rather than printed here, so the main
-## text keeps to the ten floats the guidelines allow.
-SUPP_COLD <- use |> group_by(band) |>
+use |> group_by(band) |>
   summarise(Stations = n_distinct(station_name), `Station-winters` = n(),
             `Coldest (°C)` = min(min_temp_c_usable),
             `Mean minimum (°C)` = round(mean(min_temp_c_usable), 1),
@@ -941,10 +940,11 @@ SUPP_COLD <- use |> group_by(band) |>
 ```
 
 ```{r}
+#| label: fig-station
 #| echo: false
-#| output: false
 #| fig-width: 5.9
 #| fig-height: 5.1
+#| fig-cap: "The weather station network behind the cold argument. All stations within 100 km reporting a usable winter minimum between 1999 and 2015, shaded by station elevation, with the analysis grid outlined. Only the two stations named in the text are labelled. The alpine station and the valley stations near the international boundary reach comparable minima, which is the cold-air pooling the text describes."
 
 stn <- aggregate(cbind(latitude, longitude, elevation_m) ~ station_name,
                  data = st, FUN = function(x) x[1])
@@ -1046,8 +1046,9 @@ The sign reversal is a comparison of two point estimates and is not, on this evi
 ## Grain effects on coefficients {#sec-grain}
 
 ```{r}
+#| label: tbl-grain
 #| echo: false
-#| output: false
+#| tbl-cap: "The host-present model refitted at three grains. Predictors are aggregated by mean, severity class by maximum, and the bootstrap blocks are rescaled to stay near 1 km. Unlike extent, grain changes nothing: collinearity, sign and magnitude are all stable across a four-fold change in cell size."
 
 CONT <- c("Elevation","Slope","TWI","RIX","Wind","PinePct","Basal")
 base_stack <- c(terr[[c("Elevation","Slope","TWI","RIX","Wind")]],
@@ -1092,13 +1093,13 @@ grain_row <- function(fact) {
 ## assertion ever fails the two code paths have drifted apart.
 stopifnot(nrow(build_grain(1L)) == nrow(S))
 
-SUPP_GRAIN <- bind_rows(lapply(c(1L, 2L, 4L), grain_row)) |>
+bind_rows(lapply(c(1L, 2L, 4L), grain_row)) |>
   kable(booktabs = TRUE, align = "llllllll", format.args = list(big.mark = ","))
 ```
 
 @work2011, working on carabid beetles, found the apparent importance of terrain derivatives changed with the resolution at which they were computed, because elevation error propagates into derived curvature differently at every grain. The concern transfers directly and is worth separating from extent, which is routinely confused with it.
 
-Here they behave quite differently (Table S3). Aggregating from 25 m to 100 m, a sixteen-fold reduction in cells, leaves the confound essentially untouched: elevation explains close to the same share of wind variance at every grain, and the orthogonalised wind coefficient neither reverses nor decays. The suppression at the top of the gradient is a landscape-scale feature and survives a coarser lens.
+Here they behave quite differently (@tbl-grain). Aggregating from 25 m to 100 m, a sixteen-fold reduction in cells, leaves the confound essentially untouched: elevation explains close to the same share of wind variance at every grain, and the orthogonalised wind coefficient neither reverses nor decays. The suppression at the top of the gradient is a landscape-scale feature and survives a coarser lens.
 
 The contrast with @sec-extent is the point, and one we should not overstate. Enlarging the cell fourfold changes almost nothing; shrinking the study area destroys the estimate. Grain governs how finely a pattern is resolved, extent governs which part of the joint distribution of elevation and wind the model ever sees, and here only the second mattered.
 
@@ -1176,68 +1177,7 @@ This research received no specific grant from any funding agency in the public, 
 
 All prose, writing, results in the analysis and reporting contained within this document was derived and verified by the author. No generative tool was used to create, alter or manipulate research data or results. The author is responsible for the accuracy of all content.
 
-# Data availability
-
-Every dataset used here is public and none was collected by the author. Beetle-caused mortality is the British Columbia Aerial Overview Survey pest infestation polygon layer, filtered to `IBM` for 1999 to 2015. Host cover and stand basal area are the provincial Vegetation Resources Inventory layer `VEG_COMP_LYR_R1_POLY`, retrieved from the British Columbia Data Catalogue web feature service. Ambient wind is Global Wind Atlas mean speed at 10 m [@globalwindatlas]. Terrain is derived from the Natural Resources Canada High Resolution Digital Elevation Model [@nrcan2017]. Winter minima are British Columbia Wildfire Service hourly and Environment and Climate Change Canada daily records for stations within 100 km, retrieved by the script named in the Materials section, which also writes the cached per-station-winter summary the manuscript reads.
-
-The analysis is the manuscript. Every table, figure and quoted number is produced by a code chunk in the source document, so rendering it re-runs the pipeline and regenerates the results. The source document and the retrieval scripts are available from the author on request.
-
-# Ethics declarations
-
-This study analysed publicly available spatial and meteorological records only. It involved no human participants, no animal subjects and no sampling of protected species, so ethics approval and informed consent were not required.
-
-# Word counts
-
-Total including references, {{WC_TOTAL}}. Total excluding references, {{WC_NOREFS}}. Abstract, {{WC_ABSTRACT}}. Supplementary information, {{WC_SUPP}}.
-
 # References
 
 ::: {#refs}
 :::
-
-# Supplementary information
-
-The five items below are cited in the main text as Tables S1 to S3 and Figures
-S1 and S2. They are supplied as supplementary material and are not counted
-toward the ten figures and tables the main text carries. Each is produced by
-code already run above, so the values are identical to those the main text
-quotes.
-
-**Table S1.** The binary hypothesis test, cells containing lodgepole pine only. Coefficients are per standard deviation; wind is entered as the component orthogonal to elevation. Intervals are percentile intervals from resampled 1 km spatial blocks. This is the same fit as the first row of the ordinal sweep in the main text, retained because it is the form the refugia literature conventionally reports.
-
-```{r}
-#| echo: true
-SUPP_KRAWCHUK
-```
-
-**Table S2.** Observed winter minimum air temperatures from stations within 100 km, by elevation band, after excluding station-winters censored at the -20.0 °C sensor floor. Nothing approaches the temperatures conventionally cited as lethal for this insect, and elevation orders the minima only weakly.
-
-```{r}
-#| echo: true
-SUPP_COLD
-```
-
-**Table S3.** The host-present model refitted at three grains. Predictors are aggregated by mean, severity class by maximum, and the bootstrap blocks are rescaled to stay near 1 km. Unlike extent, grain changes nothing: collinearity, sign and magnitude are all stable across a four-fold change in cell size.
-
-```{r}
-#| echo: true
-SUPP_GRAIN
-```
-
-**Figure S1.** The six derived terrain predictors, all computed from the same 25 m elevation model. (a) Slope. (b) Topographic wetness index. (c) Ruggedness. (d) Topographic position at a 625 m neighbourhood. (e) Heat load index after McCune and Keon. (f) Omnidirectional shelter index after Winstral, the maximum upwind slope angle within 500 m averaged over eight bearings. Ranges are clipped to the 2nd and 98th percentiles.
-
-```{r}
-#| echo: true
-#| fig-width: 7.1
-#| fig-height: 4.6
-fig_terrain
-```
-
-**Figure S2.** The weather station network behind the cold argument. All stations within 100 km reporting a usable winter minimum between 1999 and 2015, shaded by station elevation, with the analysis grid outlined. Only the two stations named in the text are labelled. The alpine station and the valley stations near the international boundary reach comparable minima, which is the cold-air pooling the text describes.
-
-```{r}
-#| echo: true
-#| fig-width: 5.9
-#| fig-height: 5.1
-fig_station
-```

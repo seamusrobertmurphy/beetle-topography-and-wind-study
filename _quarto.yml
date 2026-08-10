@@ -1,4 +1,12 @@
 project:
   type: default
   pre-render: "find . -name ._* -delete"
-  post-render: "find . -name ._* -delete"
+  post-render:
+    - "find . -name ._* -delete"
+    # Table geometry a reference doc cannot carry: 16.5 cm width, 1.1 cm
+    # header and 0.6 cm body rows, 8 pt, left justified. Without this every
+    # render would need the tables reformatted by hand in Word.
+    - "python3 05.tasks/scripts/format-tables.py"
+    # Fills the four {{WC_*}} placeholders with the rendered document's own
+    # counts, so the declared length cannot drift from the manuscript.
+    - "python3 05.tasks/scripts/stamp-wordcounts.py"

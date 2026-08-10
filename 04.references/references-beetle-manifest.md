@@ -22,7 +22,7 @@ the Discussion now cites for the finding that spatial prediction of beetle winte
 mortality fails in mountainous terrain. `work2011` was cited by the manuscript's
 new grain section and would otherwise have rendered a broken reference.
 
-83 entries.
+91 entries, of which 31 are cited by the manuscript.
 
 ## Entries
 
@@ -47,7 +47,7 @@ new grain section and would otherwise have rendered a broken reference.
 | janes2014 | Dendroctonus ponderosae/Janes et al 2014 How the Mountain Pine Beetle (Dendroctonus ponderosae).pdf | volume, issue. Pages taken from the PDF producer string `OP-MOLB140108 1803..1815` |
 | powell2014 | Dendroctonus ponderosae/powell & bentz2014 Phenology and density-dependent dispersal...pdf | none |
 | jones2019 | Dendroctonus ponderosae/Jones et al 2019 Factors-influencing-dispersal-by-flight-in-bark-beetles...pdf | issue |
-| gray1972 | Dendroctonus ponderosae/gray2009 On the Emergence and Initial Flight Behaviour of the Mountain pine beetle.pdf | pages. The journal line extracted as `Z. ang. Fnr. 71 (19723 30-259`, garbled; volume 71 and year 1972 are legible, the page range is not. The filename year 2009 is wrong |
+| gray1972 | Dendroctonus ponderosae/gray2009 On the Emergence and Initial Flight Behaviour of the Mountain pine beetle.pdf | **Resolved 2026-08-04.** The garbled journal line (`Z. ang. Fnr. 71 (19723 30-259`) is now settled: CrossRef gives volume 71, pages 250--259, DOI 10.1111/j.1439-0418.1972.tb01745.x, and the PDF's own last page prints the running head `On the Emergence and Initial Flight Behaviour 259` across ten pages, so 250--259 is confirmed from two independent sources. Pages and DOI added. Issue number still not established and so still omitted. The filename year 2009 remains wrong |
 | mccambridge1971 | Dendroctonus ponderosae/mccambridge1971 Temperature Limits of Flight of the the mountain pine beetle.pdf | pages. The running head gives `534 ... [Vol. 64, no. 2` so the note begins at 534; the PDF is two pages, so 534--535 is likely but was not printed |
 | kellner2014 | Beetles/Kellner et al Accounting for Imperfect Detection in Ecology- A Quantitative Review.pdf | none |
 | kery2008 | Beetles/Key 2008 Imperfect detection and its consequences for monitoring for conservation.pdf | **Resolved 2026-07-31.** Journal, volume, issue, pages and DOI verified against CrossRef `10.1556/ComEc.9.2008.2.10`: Community Ecology 9(2):207--216, 2008. The extracted footer page 216 matches the closing page. Nothing outstanding |
@@ -137,3 +137,78 @@ manuscript. They are:
 
 Any of these can be added later by rerunning the same first-two-pages extraction
 against a longer file list.
+
+## Audit of 2026-08-04
+
+Every citekey used in the manuscript was cross-checked against this file, and every
+cited entry carrying a DOI was compared field by field against the CrossRef record.
+Thirty-one keys are cited; all thirty-one resolve; there are no duplicate keys and no
+key cited but undefined. Sixty entries sit in the file uncited, which is harmless
+under citeproc since only cited entries reach the reference list.
+
+Of the twenty cited entries with a DOI, twenty matched CrossRef on year, journal,
+volume, issue, pages and author count. The only diffs were artefacts: CrossRef holds
+first-page-only records for `hadley1994` and `wiens1989`, and returns markup rather
+than plain text for the title and journal of `smithmckenna2013`. Nothing needed
+changing in any of the twenty.
+
+Changed in the bib on this date:
+
+1. `murphy2024` became `murphy2026`, and `@unpublished` became `@article`. The
+   companion study is published: Forest Ecology and Management 618, 123985,
+   doi:10.1016/j.foreco.2026.123985, October 2026, confirmed against CrossRef with
+   the lead author's ORCID 0000-0002-1792-0351 on the record. Three further errors
+   were corrected at the same time: the author order is Murphy, Leslie, Wilson,
+   Banks, not Murphy, Leslie, Banks, Wilson; the published title drops "and temporal"
+   and names "the southern Selkirk Mountains, British Columbia" rather than "the
+   Darkwoods Conservation Area"; and journal, volume, pages and DOI were absent
+   entirely. The old entry described the local draft in
+   `04.references/grandfather-study/Manuscript_2024-02-29.docx`, which is where the
+   2024 date came from. The key was renamed in both `.qmd` files.
+2. `gray1972` gained pages 250--259 and doi:10.1111/j.1439-0418.1972.tb01745.x.
+3. `wang2006` gained doi:10.1080/13658810500433453.
+4. `beers1966` gained doi:10.1093/jof/64.10.691. `beers1973` gained its place of
+   publication, West Lafayette, Indiana.
+5. `nrcan2017` and `globalwindatlas` became `@online` so the Elsevier style prints
+   their URLs, which it does not do for `@misc`. `nrcan2017` gained the open.canada.ca
+   permanent URL and the "-- CanElevation Series" half of its official title.
+   `globalwindatlas` lost the World Bank Group from its author field: DTU alone
+   develops, owns and operates the atlas, and the World Bank is a release partner.
+6. Corporate names in `braumandl2005`, `beers1973` and `wang2006` were wrapped in a
+   second pair of braces. Without them citeproc reads the "and" in "Ministry of
+   Forests and Range", "T and C Enterprises" and "Taylor and Francis" as a name
+   separator and renders "British Columbia Ministry of Forests; Range" and
+   "T; C Enterprises". The same second pair of braces was added to the title of
+   `ketcheson1991`, which the sentence-casing style was rendering as "Interior cedar
+   -- hemlock zone" rather than as the formal name of the biogeoclimatic zone.
+
+7. `carroll2003bionomics` became `carroll2004bionomics`. The symposium was held in October
+   2003 but the proceedings were published in 2004, per the NRCan OSTR record for
+   BC-X-399. The manifest had flagged this doubt since the file was built; it is now
+   settled. The proceedings editors (Shore, Brooks and Stone) and ISBN 0-662-38389-3 were
+   added, and the key was renamed in both `.qmd` files.
+8. Two chapter entries were added to the Safranyik and Wilson volume: `taylor2006`
+   (Chapter 2, pages 67--94), which is where the -40 degree complete-mortality figure
+   actually lives, and `safranyik2006chap1` (Chapter 1, pages 3--66). `safranyik2006`
+   gained ISBN 0-662-42623-1. Neither new entry is cited yet; see the task record.
+
+Checked and deliberately left alone: `cooke2009mortality` names Pacific Forestry
+Centre, Victoria as its institution. The title page gives Cooke's own affiliation as
+Northern Forestry Centre, Edmonton, which looks like an error until page 1's imprint
+and the Library and Archives Canada cataloguing on page 2 both name Pacific Forestry
+Centre as the issuing body. The entry is right as it stands.
+
+Still open, and needing a decision rather than a lookup:
+
+- `globalwindatlas` has no year and no version. The reference list prints "n.d.".
+  The raster was inherited unchanged from the companion study's archive, so its
+  vintage belongs to that download and is not recoverable from this repository.
+  Version matters more than usual here: Global Wind Atlas 4.0, June 2025, rebuilt the
+  microscale step on the Copernicus DEM30, so which version is in `Wind.utm.tif`
+  determines which elevation model is baked into the surface this paper argues is
+  largely an elevation transform.
+- `nrcan2017` carries a bare year for a continuously revised product. The 1 m tiles
+  entered HRDEM only at specification edition 1.1 in August 2017, and the product is
+  delivered at 1 m or 2 m depending on the acquisition project.
+- The Beers and Parker citations at manuscript line 302 describe compound indices
+  that are not in the inherited layer set. See the note in the task record.
