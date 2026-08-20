@@ -90,7 +90,7 @@ df-print: kable
 ## Every quantity in this manuscript is computed here at render time.
 ## patchwork is loaded for its `+` operator on ggplots (@fig-gradient), which is
 ## why no patchwork function appears by name anywhere below.
-pkgs <- c("terra","knitr","kableExtra","ggplot2","dplyr","patchwork","tibble",
+pkgs <- c("terra","knitr","kableExtra","ggplot2","dplyr","patchwork","tibble","kernlab",
           "sf","ggspatial","tidyterra","ggrepel","rnaturalearth","scales","parallel")
 invisible(lapply(pkgs, function(p) library(p, character.only = TRUE)))
 ## dpi 300 is the Elsevier minimum for a combination line/halftone figure.
@@ -479,6 +479,399 @@ fig_site
 ggsave("../03.outputs/PNG/fig-site-maps.png", fig_site,
        width = 180, height = 172, units = "mm", dpi = 500, bg = "white")
 ```
+
+## Red-stage classification
+
+The aerial overview survey resolves damage at the scale an observer can sketch
+from an aircraft, and the refugia question is about wind and terrain acting at
+tens of metres. So we also classified red-stage attack annually from Landsat
+across the whole grid, to see whether a finer response layer would support the
+test that the polygons cannot. The pipeline below is that classification. Its
+result is reported here rather than in Results because it decides which response
+layer the paper uses, and the answer is that it does not replace the survey.
+
+Every stage runs in Google Earth Engine through `rgee`. The code is gated on the
+exported rasters: where they are absent it builds and downloads them, which takes
+roughly half an hour, and where they are present the render reads them and needs
+no network. Function definitions sit outside the gate so they are readable
+whether or not they run.
+
+```{r}
+#| label: ee-pipeline-setup
+#| echo: true
+
+RED_DIR   <- here("02.inputs/beetle-classification/red-stage")
+BASE_YEAR <- 2003          # differencing baseline, see below
+CLASS_YRS <- 2005:2014
+dec_files <- file.path(RED_DIR, sprintf("dec_%d.tif", CLASS_YRS))
+
+## Sensor supplying each year, taken from Landsat scene metadata rather than
+## from the parent study's Table 2, which lists Landsat 5 for a 2013 acquisition.
+## Landsat 5 stopped acquiring in November 2011 and Landsat 8 did not begin until
+## 2013, so 2012 is the one year only Landsat 7 covers. The parent study omitted
+## 2012 for that reason and not for cloud: six Landsat 7 scenes met its own
+## selection rule of under 20 per cent cloud between 1 June and 30 August, the
+## cleanest at 1 per cent. Landsat 7 has flown scan-line-corrector-off since May
+## 2003, so that year alone carries striping. Inventory in
+## 02.inputs/beetle-classification/landsat-scene-inventory.csv.
+SENSOR <- c(`2003`="LT05",`2005`="LT05",`2006`="LT05",`2007`="LT05",`2008`="LT05",
+            `2009`="LT05",`2010`="LT05",`2011`="LT05",`2012`="LE07",
+            `2013`="LC08",`2014`="LC08")
+COLL   <- c(LT05="LANDSAT/LT05/C02/T1_L2", LE07="LANDSAT/LE07/C02/T1_L2",
+            LC08="LANDSAT/LC08/C02/T1_L2")
+SB     <- c("BLUE","GREEN","RED","NIR","SWIR1","SWIR2")
+BANDS  <- c(SB, "NDMI", "dNDMI")
+```
+
+```{r}
+#| label: ee-pipeline-functions
+#| echo: true
+
+## Stage 1, imagery. Collection 2 Level-2 surface reflectance, scaled by the
+## published factors, with cloud, cloud shadow, cirrus and snow masked from
+## QA_PIXEL bits 1 to 5. Thematic Mapper and Enhanced Thematic Mapper carry the
+## reflective bands as SR_B1-5 and SR_B7; the Operational Land Imager shifts them
+## to SR_B2-7 because it adds a coastal aerosol band. Both are renamed to common
+## names so nothing downstream has to know which sensor it is reading.
+ee_prep <- function(sensor) {
+  bn <- if (sensor == "LC08") paste0("SR_B", 2:7) else paste0("SR_B", c(1:5, 7))
+  rgee::ee_utils_pyfunc(function(im) {
+    qa   <- im$select("QA_PIXEL")
+    keep <- qa$bitwiseAnd(2L)$eq(0)$And(qa$bitwiseAnd(4L)$eq(0))$
+      And(qa$bitwiseAnd(8L)$eq(0))$And(qa$bitwiseAnd(16L)$eq(0))$
+      And(qa$bitwiseAnd(32L)$eq(0))
+    im$select(bn, SB)$multiply(0.0000275)$add(-0.2)$updateMask(keep)$
+      copyProperties(im, list("SUN_ELEVATION","SUN_AZIMUTH","system:time_start"))
+  })
+}
+
+ee_year <- function(y, AOI) {
+  s <- SENSOR[[as.character(y)]]
+  ee$ImageCollection(COLL[[s]])$filterBounds(AOI)$
+    filterDate(sprintf("%d-06-01", y), sprintf("%d-08-31", y))$
+    filter(ee$Filter$lt("CLOUD_COVER", 60))$map(ee_prep(s))
+}
+
+## Stage 2, terrain correction. Mandatory here and not at the 7.78 km2 extent the
+## parent study worked at. Across 1,776 m of relief, illumination varies enough
+## with slope and aspect to put a terrain signal into reflectance, and this study
+## tests terrain effects, so an uncorrected artefact would be indistinguishable
+## from the result. SCS+C after Soenen et al. 2005: the C term is the ratio of
+## intercept to slope in a regression of reflectance on the illumination term,
+## fitted per band per scene. Where a scene is wholly masked over the grid the
+## regression returns null; C is then set very large, which drives the correction
+## factor to one, so a scene with nothing to fit is passed through unchanged
+## rather than destroyed.
+ee_illum <- function(im, slope, asp) {
+  sz <- ee$Image$constant(90)$subtract(ee$Number(im$get("SUN_ELEVATION")))$multiply(pi/180)
+  sa <- ee$Image$constant(ee$Number(im$get("SUN_AZIMUTH")))$multiply(pi/180)
+  slope$cos()$multiply(sz$cos())$
+    add(slope$sin()$multiply(sz$sin())$multiply(sa$subtract(asp)$cos()))$rename("cos_i")
+}
+
+ee_scs_c <- function(im, slope, asp, AOI) {
+  ci <- ee_illum(im, slope, asp)
+  sz <- ee$Image$constant(90)$subtract(ee$Number(im$get("SUN_ELEVATION")))$multiply(pi/180)
+  n0 <- slope$cos()$multiply(sz$cos())
+  one <- function(b) {
+    f  <- ci$addBands(im$select(b))$reduceRegion(ee$Reducer$linearFit(), AOI, 90,
+                                                 maxPixels = 1e9, bestEffort = TRUE)
+    sc <- ee$Number(ee$Algorithms$If(f$get("scale"),  f$get("scale"),  0))
+    of <- ee$Number(ee$Algorithms$If(f$get("offset"), f$get("offset"), 0))
+    C  <- ee$Number(ee$Algorithms$If(sc$abs()$gt(1e-8), of$divide(sc), 1e6))$max(0)$min(1e6)
+    im$select(b)$multiply(n0$add(C))$divide(ci$add(C))$rename(b)
+  }
+  bs <- one(SB[1]); for (b in SB[-1]) bs <- bs$addBands(one(b))
+  bs$copyProperties(im, list("SUN_ELEVATION","SUN_AZIMUTH","system:time_start"))
+}
+
+## Stage 3, index and differencing. NDMI is (NIR - SWIR1) / (NIR + SWIR1) and each
+## annual composite is differenced against the pre-outbreak baseline. The baseline
+## is 2003, not the 2005 the parent study's text names twice. Its own Table 2
+## labels 2003 pre-outbreak and 2005 early-outbreak, and its 2005 raster carries
+## 534 cells coded red attack, 9.73 per cent of the cells it maps. A scene
+## differenced against itself is zero everywhere, so 2005 cannot be its own
+## baseline. See 02.inputs/beetle-classification/02-parent-raster-audit.R.
+ee_stack <- function(y, BASE, slope, asp, AOI) {
+  m  <- ee_year(y, AOI)$map(rgee::ee_utils_pyfunc(
+          function(im) ee$Image(ee_scs_c(im, slope, asp, AOI))))$median()
+  nd <- m$normalizedDifference(c("NIR","SWIR1"))$rename("NDMI")
+  m$addBands(nd)$addBands(nd$subtract(BASE)$rename("dNDMI"))
+}
+```
+
+The classifier is trained on the aerial overview survey itself. The parent
+study's 310-row spectral sample cannot be reused: every band column in the source
+workbook is prefixed 2020, the plots were established in July and August 2020,
+and the values sit inside the Collection 2 Level-1 range of the 2020 Landsat 8
+scene, reading as negative reflectance in four bands if taken as Level-2. A model
+built from one uncorrected 2020 scene was applied to map attack from 2005 to
+2014, eight of those years from a different satellite. The plot coordinates are
+also unrecoverable, so the spectra cannot be re-extracted on a matching footing.
+Training on the survey instead keeps labels and imagery in the same year and the
+same radiometry.
+
+```{r}
+#| label: ee-classify
+#| echo: true
+
+SAMP_FILE <- file.path(RED_DIR, "training-sample.csv")
+
+## Stage 4, labels. Positives are cells the survey mapped at moderate severity or
+## worse in that year, negatives cells it mapped as undamaged, 250 of each per
+## year with a quarter held out. 2014 takes the pooled model because the survey
+## records no cell above trace over this grid that year.
+##
+## The sample is written to disk and the classifier is then trained from the
+## table rather than from the sampling graph. That is not tidiness. An Earth
+## Engine classifier carries its training computation into every image it is
+## later applied to, so classifying an annual composite from a classifier trained
+## directly on nine years of sampled composites re-runs all of it and the
+## download fails with a 400. Trained from stored numbers, the same download
+## succeeds.
+if (!file.exists(SAMP_FILE)) {
+  library(rgee); ee_Initialize(project = "murphys-deforisk", quiet = TRUE)
+  dir.create(RED_DIR, recursive = TRUE, showWarnings = FALSE)
+  AOI   <- ee$Geometry$Rectangle(c(-116.7861, 49.0884, -116.5649, 49.2460))
+  DEM   <- ee$Image("USGS/SRTMGL1_003")
+  slope <- ee$Terrain$slope(DEM)$multiply(pi/180)
+  asp   <- ee$Terrain$aspect(DEM)$multiply(pi/180)
+  BASE  <- ee_year(BASE_YEAR, AOI)$map(rgee::ee_utils_pyfunc(
+             function(im) ee$Image(ee_scs_c(im, slope, asp, AOI))))$median()$
+             normalizedDifference(c("NIR","SWIR1"))$rename("NDMI")
+
+  set.seed(42); parts <- list()
+  for (y in 2005:2013) {
+    ry <- rasterize(m[m$CAPTURE_YEAR == y, ], G, field = "sev",
+                    fun = "max", background = 0)
+    if (global(ry >= 3, "sum", na.rm = TRUE)[[1]] < 30) next
+    pick <- function(mk, lab) {
+      p <- spatSample(mk, 250, "random", na.rm = TRUE, xy = TRUE, values = FALSE)
+      data.frame(x = p[,1], y = p[,2], lab = lab,
+                 elev = extract(G, p[,1:2])[,1], yr = y)
+    }
+    d <- rbind(pick(ifel(ry >= 3, 1, NA), 1L), pick(ifel(ry == 0, 1, NA), 0L))
+    d <- d[!is.na(d$elev), ]
+    d$split <- as.integer(runif(nrow(d)) < 0.25)
+    pts <- sf::st_transform(sf::st_as_sf(d, coords = c("x","y"), crs = crs(G)), 4326)
+    parts[[length(parts) + 1]] <- ee_stack(y, BASE, slope, asp, AOI)$sampleRegions(
+      collection = sf_as_ee(pts), properties = list("lab","elev","yr","split"),
+      scale = 30, tileScale = 4, geometries = TRUE)
+  }
+  got <- ee_as_sf(ee$FeatureCollection(parts)$flatten(), quiet = TRUE)
+  xy  <- sf::st_coordinates(got)
+  write.csv(cbind(sf::st_drop_geometry(got), lon = xy[,1], lat = xy[,2]),
+            SAMP_FILE, row.names = FALSE)
+}
+samp <- read.csv(SAMP_FILE)
+stopifnot(all(c(BANDS, "lab", "elev", "yr", "split", "lon", "lat") %in% names(samp)))
+
+## Stage 4b, the classifier. Fitted here rather than by ee$Classifier$libsvm,
+## for a mechanical reason. An Earth Engine classifier carries its training
+## features into every request that uses it, so each annual download embedded the
+## whole labelled table and returned HTTP 400; the same eight-band composite
+## downloads without complaint on its own. A linear kernel is a plane, so the
+## fitted model transfers exactly as a band expression and Earth Engine is left
+## doing arithmetic. The check below is that transfer, and it holds to machine
+## precision. Predictors are standardised on the training rows only.
+SVM_TR <- samp[samp$split == 0, ]; SVM_TE <- samp[samp$split == 1, ]
+SVM_MU <- sapply(SVM_TR[BANDS], mean); SVM_SD <- sapply(SVM_TR[BANDS], sd)
+zscore <- function(d) as.matrix(sweep(sweep(d[BANDS], 2, SVM_MU, "-"), 2, SVM_SD, "/"))
+set.seed(1)
+SVM_FIT <- kernlab::ksvm(zscore(SVM_TR), factor(SVM_TR$lab), type = "C-svc",
+                         kernel = "vanilladot", C = 1, scaled = FALSE)
+SVM_W <- colSums(kernlab::coef(SVM_FIT)[[1]] * kernlab::xmatrix(SVM_FIT)[[1]])
+SVM_B <- -SVM_FIT@b
+stopifnot(identical(
+  as.integer(as.vector(zscore(SVM_TE) %*% SVM_W + SVM_B) > 0),
+  as.integer(as.character(predict(SVM_FIT, zscore(SVM_TE))))))
+
+## Collapsed into raw reflectance units, which is the form Earth Engine applies.
+SVM_A <- SVM_W / SVM_SD
+SVM_C <- SVM_B - sum(SVM_W * SVM_MU / SVM_SD)
+stopifnot(max(abs((as.matrix(SVM_TE[BANDS]) %*% SVM_A + SVM_C) -
+                  (zscore(SVM_TE) %*% SVM_W + SVM_B))) < 1e-8)
+
+## Stage 5, validation. Computed here from the held-out quarter, so the agreement
+## table below and the exported rasters come from one fitted object.
+SVM_TE$pred <- as.integer(as.vector(as.matrix(SVM_TE[BANDS]) %*% SVM_A + SVM_C) > 0)
+
+if (!all(file.exists(dec_files))) {
+  library(rgee); ee_Initialize(project = "murphys-deforisk", quiet = TRUE)
+  AOI   <- ee$Geometry$Rectangle(c(-116.7861, 49.0884, -116.5649, 49.2460))
+  DEM   <- ee$Image("USGS/SRTMGL1_003")
+  slope <- ee$Terrain$slope(DEM)$multiply(pi/180)
+  asp   <- ee$Terrain$aspect(DEM)$multiply(pi/180)
+  BASE  <- ee_year(BASE_YEAR, AOI)$map(rgee::ee_utils_pyfunc(
+             function(im) ee$Image(ee_scs_c(im, slope, asp, AOI))))$median()$
+             normalizedDifference(c("NIR","SWIR1"))$rename("NDMI")
+
+  ## Stage 6, export. The decision plane is applied band by band, thresholded at
+  ## zero, classified at the 30 m native grid, then resampled onto the analysis
+  ## grid by nearest neighbour, which is the correct rule for a class raster and
+  ## makes the alignment exact rather than nearly so.
+  gbox <- ee$Geometry$Rectangle(c(xmin(G), ymin(G), xmax(G), ymax(G)),
+                                proj = "EPSG:32611", geodesic = FALSE)
+  for (y in CLASS_YRS) {
+    st <- ee_stack(y, BASE, slope, asp, AOI)
+    d  <- ee$Image$constant(SVM_C)
+    for (bn in BANDS) d <- d$add(st$select(bn)$multiply(unname(SVM_A[bn])))
+    ## The continuous decision value is exported, not a thresholded map, so the
+    ## threshold stays a visible choice made below rather than one baked into a
+    ## download. Scaled by 1,000 and offset by 10,000 because a GeoTIFF written
+    ## from an integer image takes zero as its nodata value: exporting a signed
+    ## surface directly would silently delete every cell sitting on the decision
+    ## boundary, and exporting a 0/1 map deleted every unattacked cell outright
+    ## on the first attempt, returning 100 per cent attacked in all ten years.
+    u <- d$multiply(1000)$add(10000)$round()$toInt16()$rename("dec")$
+      getDownloadURL(list(name = sprintf("dec_%d", y), crs = "EPSG:32611",
+                          scale = 30, region = gbox, format = "GEO_TIFF"))
+    tmp <- tempfile(fileext = ".tif"); download.file(u, tmp, mode = "wb", quiet = TRUE)
+    writeRaster(resample((rast(tmp) - 10000) / 1000, G, method = "bilinear"),
+                file.path(RED_DIR, sprintf("dec_%d.tif", y)), overwrite = TRUE)
+  }
+}
+
+dec <- rast(dec_files); names(dec) <- CLASS_YRS
+
+## The model's own threshold is zero, which is what a balanced training sample
+## implies. It is the wrong prior for this landscape. Training drew 250 attacked
+## and 250 unattacked cells per year, so the implied prevalence is one half,
+## while the survey maps attack on a few per cent of the grid. Thresholded at
+## zero the classification calls a third to two thirds of the landscape attacked.
+## Both maps are therefore carried: the model's own, and one whose threshold is
+## calibrated per year so the classified area matches the area the survey mapped.
+SURV_AREA <- sapply(CLASS_YRS, function(y) {
+  ry <- rasterize(m[m$CAPTURE_YEAR == y, ], G, field = "sev", fun = "max", background = 0)
+  global(ry >= 3, "mean", na.rm = TRUE)[[1]]
+})
+names(SURV_AREA) <- CLASS_YRS
+RAW_AREA <- sapply(CLASS_YRS, function(y)
+  global(dec[[as.character(y)]] > 0, "mean", na.rm = TRUE)[[1]])
+names(RAW_AREA) <- CLASS_YRS
+
+red <- rast(lapply(CLASS_YRS, function(y) {
+  d <- dec[[as.character(y)]]
+  thr <- if (SURV_AREA[[as.character(y)]] > 0)
+    global(d, function(v, ...) quantile(v, 1 - SURV_AREA[[as.character(y)]], na.rm = TRUE))[[1]]
+    else Inf
+  d > thr
+}))
+names(red) <- CLASS_YRS
+## A classification that is entirely one class, or entirely masked, is a
+## pipeline failure rather than a result, and must not reach the prose.
+stopifnot(nlyr(red) == length(CLASS_YRS),
+          all(dim(red)[1:2] == dim(G)[1:2]),
+          isTRUE(all.equal(as.vector(ext(red)), as.vector(ext(G)), tolerance = 1e-6)),
+          all(RAW_AREA > 0.001), all(RAW_AREA < 0.999),
+          all(global(!is.na(red), "mean")[[1]] > 0.5))
+```
+
+```{r}
+#| label: tbl-redstage
+#| echo: true
+#| tbl-cap: "Agreement between the Landsat red-stage classification and the aerial overview survey, by 300 m elevation band. The held-out quarter of the labelled sample, pooled over 2005 to 2013. This is agreement with the survey, not accuracy against ground truth: the survey is also the training source, and no independent reference exists at this extent."
+
+v <- SVM_TE
+v$classification <- v$pred
+v$band <- cut(v$elev, seq(500, 2400, by = 300), dig.lab = 5)
+
+kap <- function(o, p) {
+  cm <- table(factor(o, 0:1), factor(p, 0:1))
+  oa <- sum(diag(cm)) / sum(cm)
+  pe <- sum(rowSums(cm) * colSums(cm)) / sum(cm)^2
+  c(OA = oa, kappa = (oa - pe) / (1 - pe))
+}
+POOLED <- kap(v$lab, v$classification)
+
+RED_TBL <- do.call(rbind, lapply(levels(v$band), function(b) {
+  s <- v[!is.na(v$band) & v$band == b, ]
+  if (nrow(s) < 10)
+    return(data.frame(Band = b, n = nrow(s), Attacked = sum(s$lab == 1),
+                      Agreement = NA_real_, Kappa = NA_real_,
+                      Note = "too few reference points, uncertain"))
+  k <- kap(s$lab, s$classification)
+  data.frame(Band = b, n = nrow(s), Attacked = sum(s$lab == 1),
+             Agreement = round(k["OA"], 3), Kappa = round(k["kappa"], 3), Note = "")
+}))
+kable(RED_TBL, row.names = FALSE,
+      col.names = c("Elevation band (m)", "n", "Attacked", "Agreement", "Kappa", ""))
+```
+
+```{r}
+#| label: tbl-redstage-area
+#| echo: true
+#| tbl-cap: "Where the Landsat classification and the aerial overview survey disagree, by year. Survey area is the share of the grid the survey mapped at moderate severity or worse. Model area is what the classifier calls attacked at its own threshold of zero. Hit rate is the share of calibrated classified cells that fall inside a survey polygon, and lift is that rate divided by the survey's own prevalence, so 1.00 is chance."
+
+RED_CMP <- do.call(rbind, lapply(CLASS_YRS, function(y) {
+  yc <- as.character(y)
+  ry <- rasterize(m[m$CAPTURE_YEAR == y, ], G, field = "sev", fun = "max", background = 0)
+  S  <- ry >= 3
+  p  <- SURV_AREA[[yc]]
+  if (p == 0) return(data.frame(Year = y, Survey = 0, Model = round(100*RAW_AREA[[yc]], 1),
+                                Hit = NA_real_, Lift = NA_real_))
+  hits <- global(S & red[[yc]], "sum", na.rm = TRUE)[[1]]
+  nC   <- global(red[[yc]], "sum", na.rm = TRUE)[[1]]
+  data.frame(Year = y, Survey = round(100*p, 3), Model = round(100*RAW_AREA[[yc]], 1),
+             Hit = round(100*hits/nC, 2), Lift = round((hits/nC)/p, 2))
+}))
+kable(RED_CMP, row.names = FALSE,
+      col.names = c("Year", "Survey area (%)", "Model area (%)",
+                    "Hit rate (%)", "Lift"))
+```
+
+The classification does not replace the survey, and the reason is not a marginal
+shortfall in accuracy. Pooled over the held-out quarter it agrees with the survey
+on `r sprintf("%.1f", 100 * POOLED["OA"])` per cent of cells, kappa
+`r sprintf("%.2f", POOLED["kappa"])`, against the kappa of 0.750 and overall
+accuracy of 0.824 the parent study reports for its 7.78 km2 window. But
+@tbl-redstage-area shows that figure is flattered by how the sample was drawn.
+Training took 250 attacked and 250 unattacked cells per year, so the model's
+implied prior is one half, while the survey maps attack on
+`r sprintf("%.2f", 100 * min(SURV_AREA[SURV_AREA > 0]))` to
+`r sprintf("%.2f", 100 * max(SURV_AREA))` per cent of the grid. At its own
+threshold the classifier therefore calls
+`r sprintf("%.0f", 100 * min(RAW_AREA))` to `r sprintf("%.0f", 100 * max(RAW_AREA))`
+per cent of the landscape attacked, one to two orders of magnitude more ground
+than the survey maps.
+
+Matching the area does not rescue it. Calibrating the threshold each year so the
+classified area equals the surveyed area, the classification lands on
+`r sprintf("%.1f", min(RED_CMP$Hit, na.rm = TRUE))` to
+`r sprintf("%.1f", max(RED_CMP$Hit, na.rm = TRUE))` per cent of the cells the
+survey mapped. Expressed as lift against the survey's own prevalence, where 1.00
+is chance, the years run from `r sprintf("%.2f", min(RED_CMP$Lift, na.rm = TRUE))`
+to `r sprintf("%.2f", max(RED_CMP$Lift, na.rm = TRUE))`, and
+`r sum(RED_CMP$Lift == 0, na.rm = TRUE)` of `r sum(!is.na(RED_CMP$Lift))` years
+share no cells with the survey at all. Once area is held equal the map is close to
+uninformative about where attack was.
+
+The year that most exposes the mechanism is 2012. It is the only year covered by
+Landsat 7 alone, whose scan line corrector has been broken since May 2003, and it
+is the year the classifier calls the most attacked at
+`r sprintf("%.0f", 100 * RAW_AREA[["2012"]])` per cent while the survey maps the
+least at `r sprintf("%.2f", 100 * SURV_AREA[["2012"]])` per cent. The classifier
+is reading striping as change.
+
+Two readings of the pooled agreement figure were available before these tables
+existed. The classifier might have been wrong, or the polygons might have been,
+and a one-sided error towards mapping more attack than an observer drew is what a
+finer instrument would also produce. @tbl-redstage-area settles it against the
+classifier: an instrument genuinely resolving attack the surveyor missed would
+still overlap the attack the surveyor found, and this one does not. We cannot
+say the survey is right, only that the classification is not measuring the same
+thing.
+
+We therefore keep the aerial overview survey as the response and report the
+classification as a comparison layer. That preserves the argument the rest of the
+paper rests on, which is that a response whose errors are observer errors is
+safer here than one whose errors are generated by the predictors under test. A
+classification trained on terrain-corrected imagery does not escape that problem,
+because terrain correction is itself a model of the terrain whose effect is being
+tested. It also means the timing analysis a per-cell year of first detection would
+allow is not available: an annual series this weak cannot support a survival
+model, and fitting one would give the wind test a precision the response layer
+cannot justify.
 
 ## Host abundance
 
