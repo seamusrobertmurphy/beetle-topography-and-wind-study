@@ -1,0 +1,233 @@
+---
+title: "Testing the wind disruption hypothesis for beetle refugia"
+author:
+  - name: Seamus Murphy
+    orcid: 0000-0002-1792-0351
+    email: seamusrobertmurphy@gmail.com
+    affiliation: "Independent Researcher, Nelson, British Columbia, Canada"
+abstract: >
+  DRAFT PLACEHOLDER. Unstructured abstract, 300 words maximum, containing the
+  major keywords. Not yet written: see the Word budget chunk below before
+  drafting, and condense from the abstract of beetle-topography-wind-study.qmd.
+keywords:
+  - Dendroctonus ponderosae
+  - Pinus contorta
+  - elevational gradient
+  - aerial overview survey
+  - quadratic mean diameter
+  - scale dependence
+date: today
+format:
+  docx:
+    prefer-html: true
+    reference-doc: ../04.references/style-formal.docx
+    highlight-style: pygments
+    number-sections: false
+execute:
+  eval: true
+  echo: true
+  warning: false
+  message: false
+  error: false
+  comment: NA
+engine: knitr
+citeproc: true
+bibliography: ../04.references/references-beetle.bib
+csl: ../04.references/apa-6th-edition.csl
+---
+
+<!--
+TARGET VENUE: Journal of Applied Entomology (Wiley), Original Article.
+Rules this file is built to satisfy, all quoted from
+04.references/Submission Guidelines - Journal of Applied Entomology.pdf:
+
+  Word limit   "6000 limit (without references)"
+  Abstract     "an abstract of no more than 300 words containing the major keywords"
+  Keywords     "six keywords. These keywords should not include words in the title"
+  Structure    "Introduction, Materials and Methods, Results, Discussion (each
+               separately). A Conclusions section is optional."
+  Running head "A short running title of less than 40 characters"
+  References   "prepared according to the Publication Manual of the American
+               Psychological Association (6th edition)"
+  CRediT       "Please insert author contribution in the manuscript above references."
+  Data         "A link to your data must be included in your Data Availability
+               Statement." Data on request or as supplementary files is NOT accepted.
+  COI          "The Conflict of Interest statement should be included as part of the
+               main text file."
+  Footnotes    "Footnotes to the text are not allowed."
+  Species      Common name followed by scientific name on first use in title,
+               abstract and text.
+  Tables       "supplied as editable files, not pasted as images"; footnote symbols
+               in the order daggar, double-daggar, section, pilcrow; asterisks
+               reserved for P-values; SD or SEM identified in the headings.
+  Figures      "supplied as separate files"; colour free online, print colour
+               charged; line figures preferably black and white.
+  Fig legends  "supplied as a complete list in the text".
+  Files        Title page, main text, figures, tables and supporting information
+               are SEPARATE files. Provision of all of these is mandatory at
+               submission. Splitting this render into those files is a build step,
+               not something Quarto does on its own.
+  Charges      "There are no charges / fees for publishing pages except for printed
+               colour figures."
+
+STRUCTURAL DEVIATION, flagged deliberately: the standing project rule is that a
+manuscript carries a numbered literature review as its own section before the
+Introduction. JAE mandates the four-section body above and has no slot for one.
+The review therefore moves to Supporting Information as Appendix S1, keeps its
+numbered findings, and is cited by number from the Introduction. Substance kept,
+placement changed. Raise this if the trade is unacceptable.
+
+Running title (goes on the separate title page file, not here):
+  "Wind and beetle refugia in BC"  -- 29 characters, under the 40 allowed.
+-->
+
+```{r}
+#| label: setup
+#| echo: false
+#| output: false
+
+pkgs <- c("terra","knitr","kableExtra","ggplot2","dplyr","patchwork","tibble",
+          "sf","ggspatial","tidyterra","ggrepel","rnaturalearth","scales","parallel")
+invisible(lapply(pkgs, function(p) library(p, character.only = TRUE)))
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, error = FALSE,
+                      comment = NA, dpi = 500, fig.align = "center",
+                      cache.path = "_cache-short/", autodep = TRUE, cache.lazy = FALSE)
+knitr::dep_auto()
+options(scipen = 999)
+theme_set(theme_minimal(base_size = 10) +
+          theme(panel.grid.minor = element_blank(),
+                plot.title = element_text(face = "bold", size = 10)))
+
+B_BOOT   <- 150L    # spatial block bootstrap replicates
+BLOCK    <- 40L     # block side in cells (40 x 25.1 m ~= 1 km)
+OUTBREAK <- 1999:2015
+ALPINE   <- 1900
+```
+
+```{r}
+#| label: paths
+#| echo: false
+
+DATA_ROOT <- Sys.getenv("DARKWOODS_DATA",
+  "/Users/seamus/repos/publications-pending/Darkwoods-Disturbance-Paper/3.SpatialData")
+dpath <- function(...) file.path(DATA_ROOT, ...)
+here  <- function(...) file.path("..", ...)     # repo-relative, from 01.manuscript/
+stopifnot(dir.exists(dpath("terrain_environment")))
+
+G <- rast(dpath("terrain_environment", "Elevation.utm.tif"))
+GRID_RELIEF <- diff(as.vector(minmax(G)))
+```
+
+```{r}
+#| label: word-budget
+#| echo: true
+
+## The 6000-word limit is the one constraint this file exists to satisfy, so it is
+## measured at render time from this file's own source rather than trusted to a
+## word processor after the fact. The parent manuscript carried {{WC_TOTAL}}
+## placeholders that never substituted and silently reported nothing for months;
+## this chunk is the fix. It counts the four mandated body sections only, which is
+## what "without references" means here, and stops the render when the body is over
+## budget so an over-length draft cannot reach a submission package unnoticed.
+
+jae_wordcount <- function(path = "manuscript-short.qmd",
+                          from = "# Introduction",
+                          to   = "# Conflict of Interest") {
+  src <- paste(readLines(path, warn = FALSE), collapse = "\n")
+  src <- sub("^---.*?\n---\n", "", src)              # YAML
+  src <- gsub("<!--.*?-->", "", src)                 # HTML comments
+  src <- gsub("```\\{r[^\n]*\n.*?\n```", "", src)    # code chunks
+  src <- gsub("`r [^`]*`", "NUM", src)               # inline code -> one word
+  i <- regexpr(from, src, fixed = TRUE)
+  j <- regexpr(to,   src, fixed = TRUE)
+  if (i < 0) stop("word-budget: start marker not found: ", from)
+  body <- if (j > i) substr(src, i, j - 1) else substr(src, i, nchar(src))
+  body <- gsub("^#+ .*$", "", body)                  # headings are not body prose
+  length(strsplit(trimws(body), "\\s+")[[1]])
+}
+
+WC_BODY  <- jae_wordcount()
+WC_LIMIT <- 6000L
+cat(sprintf("Main text (Introduction to Discussion, references excluded): %d / %d words\n",
+            WC_BODY, WC_LIMIT))
+if (WC_BODY > WC_LIMIT)
+  stop(sprintf("Over the JAE Original Article limit by %d words.", WC_BODY - WC_LIMIT))
+```
+
+# Introduction
+
+DRAFT. Budget roughly 900 words. Condense from the parent manuscript's
+Introduction and fold in the numbered findings of the literature review, which
+now sits in Appendix S1 and is cited here by finding number. On first use the
+common name is followed by the scientific name: mountain pine beetle
+(*Dendroctonus ponderosae* Hopkins), lodgepole pine (*Pinus contorta* Douglas ex
+Loudon). State the objectives last.
+
+# Materials and Methods
+
+DRAFT. Budget roughly 1,500 words. Port from the parent's Materials and Methods,
+dropping the map furniture prose and keeping the study area, the response, the
+host attributes, the terrain and wind surfaces, the climate records, the
+orthogonalisation, and the block bootstrap.
+
+# Results
+
+DRAFT. Budget roughly 1,800 words. Retain the elevational distribution, the stem
+diameter effects, the wind disruption test, the nonlinear respecification that
+collapses the wind term, and the winter temperature comparison. The extent and
+grain sensitivity analyses move to Appendix S1 and are reported here in one
+sentence each.
+
+# Discussion
+
+DRAFT. Budget roughly 1,600 words. Keep the specification-artefact argument, the
+measurement mismatch between an annual mean at 10 m over open ground and
+instantaneous below-canopy speeds, the thermal alternative, and the
+host-absence confounding.
+
+# Conclusions
+
+DRAFT. Budget roughly 200 words. Optional under JAE rules; retained because the
+paper's claim is a negative result and a negative result needs a plain closing
+statement.
+
+# Conflict of Interest
+
+The author declares no conflict of interest.
+
+# Author Contribution
+
+**Seamus Murphy:** Conceptualization; Data curation; Formal analysis;
+Investigation; Methodology; Software; Validation; Visualization; Writing -
+original draft; Writing - review and editing.
+
+# Data Availability Statement
+
+PLACEHOLDER, BLOCKING. JAE requires a resolvable link with a DOI, and states that
+data on request or supplied as supplementary files is not accepted. A repository
+deposit must exist before submission. Dryad archiving charges are paid by Wiley
+for papers published in this journal, and a "Private for Peer Review" link should
+be quoted here while the paper is under review.
+
+# References
+
+::: {#refs}
+:::
+
+# Tables
+
+Tables are listed here complete with legend and footnotes, then exported as an
+editable file for submission. Footnote symbols run in the order dagger, double
+dagger, section, pilcrow; asterisks are reserved for P-values; SD and SEM are
+named in the column headings.
+
+# Figure Legends
+
+The complete list of legends belongs here in the main text file, while the
+figures themselves are uploaded as separate files.
+
+# Supporting Information
+
+Appendix S1 carries the literature review with its numbered findings and search
+protocol, the extent and grain sensitivity analyses, and the supporting tables
+and figures. Supplied as separate files, hosted without editing or typesetting.
