@@ -727,12 +727,18 @@ if (!all(file.exists(dec_files))) {
       getDownloadURL(list(name = sprintf("dec_%d", y), crs = "EPSG:32611",
                           scale = 30, region = gbox, format = "GEO_TIFF"))
     tmp <- tempfile(fileext = ".tif"); download.file(u, tmp, mode = "wb", quiet = TRUE)
-    writeRaster(resample((rast(tmp) - 10000) / 1000, G, method = "bilinear"),
-                file.path(RED_DIR, sprintf("dec_%d.tif", y)), overwrite = TRUE)
+    ## Kept in the scaled integer form Earth Engine sent, deflated, because the
+    ## same surface as 32-bit float is 2.2 MB a year and this is 0.2 MB. The
+    ## offset is removed at read time below, not here.
+    writeRaster(resample(rast(tmp), G, method = "bilinear"),
+                file.path(RED_DIR, sprintf("dec_%d.tif", y)),
+                overwrite = TRUE, datatype = "INT2S",
+                gdal = c("COMPRESS=DEFLATE", "PREDICTOR=2"))
   }
 }
 
-dec <- rast(dec_files); names(dec) <- CLASS_YRS
+dec <- (rast(dec_files) - 10000) / 1000     # undo the export scaling and offset
+names(dec) <- CLASS_YRS
 
 ## The model's own threshold is zero, which is what a balanced training sample
 ## implies. It is the wrong prior for this landscape. Training drew 250 attacked
