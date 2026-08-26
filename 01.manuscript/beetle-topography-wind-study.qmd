@@ -310,7 +310,65 @@ which makes them partly a transform of the terrain they are offered alongside. T
 hypothesis leans on, about 2 m s⁻¹, is itself an inference across species
 [@carroll2004bionomics; @jones2019]. Any test of objective 3 is therefore a test of a proxy, and the
 review's conclusion is that the proxy's dependence on elevation has to be measured before its
-coefficient can be read at all.
+coefficient can be read at all. R6 takes the same question along the time axis and reaches a
+harder answer: not only does no product report the right quantity, no study says over what
+interval the quantity should be reported.
+
+```{r}
+#| label: review-wind-temporal
+#| echo: true
+#| output: false
+
+## The temporal resolution at which each included study treats wind, extracted from
+## full text by 02.inputs/literature/extract-wind-temporal.py. Every wind sentence and
+## its classification is written to wind-temporal-sentences.csv so any count below can
+## be disputed against the sentence it came from. "window" and "windthrow" are excluded
+## from the match, as they are in the screening table: a first run without that
+## exclusion returned six wind mentions in @haukema2008movement that were all the
+## phrase "temporal window".
+wt <- read.csv(here("02.inputs/literature/wind-temporal-summary.csv"),
+               stringsAsFactors = FALSE)
+
+WT_N       <- nrow(wt)
+WT_SILENT  <- sum(wt$n_wind == 0)
+WT_SCALED  <- sum(nzchar(wt$finest))
+WT_UNSCALED<- WT_N - WT_SCALED
+WT_MENTION <- WT_N - WT_SILENT          # studies that use the word at all
+WT_M_UNSC  <- WT_MENTION - WT_SCALED    # of those, how many say nothing about time
+WT_KRAW    <- wt$n_wind[grepl("krawchuk", wt$study)]   # the study that states the hypothesis
+WT_WHO     <- wt$study[nzchar(wt$finest)]
+WT_MAX     <- wt$study[which.max(wt$n_wind)]
+WT_MAXN    <- max(wt$n_wind)
+stopifnot(WT_N == N_INC)
+## the single study carrying temporal vocabulary must be the companion paper; if a
+## future corpus adds another, R6's wording has to change rather than silently mislead
+stopifnot(WT_SCALED == 1, grepl("murphy", WT_MAX))
+```
+
+**R6. The literature specifies no temporal resolution for wind, so the choice cannot be
+deferred to it.** The analysis in this study has to decide what wind means in a model: a
+long-run climatology, a growing-season mean, a monthly mean, a flight-window statistic
+or an hourly series are five different covariates and they do not agree with each other.
+Reading every wind sentence in the full text of all `r WT_N` included studies settles
+where the literature stands, and the answer is that it does not stand anywhere.
+`r WT_SILENT` of the `r WT_N` do not contain the word at all once "window" and
+"windthrow" are excluded. Of the `r WT_MENTION` that do use it, `r WT_M_UNSC` attach no
+temporal vocabulary to it whatsoever: no averaging period, no season, no time of day.
+Across the whole included set that is `r WT_UNSCALED` of `r WT_N` studies silent on the
+question. The single exception is @murphy2026, with `r WT_MAXN` mentions carrying monthly and annual
+vocabulary, and that is the companion study on this same landscape, which took mean
+monthly speeds at 10 m for 2015 to 2020 from the Global Wind Atlas [@murphy2026] and so
+described a period five to fifteen years after the outbreak it was modelling.
+@krawchuk2020, who state the hypothesis, mention wind `r WT_KRAW` times and never once say over
+what interval it should be measured.
+
+The consequence for this study is a positive one and it is the reason R6 exists. Because
+no prior specification can be cited, the temporal resolution has to be argued from the
+mechanism rather than adopted from precedent, and the mechanism is explicit about it:
+dispersal and pheromone-mediated mass attack happen during a narrow midsummer flight
+period, and within it they depend on whether the air is still enough to hold a plume.
+That argues for the finest resolution the observations support, reduced only at the last
+step into the flight window itself. @sec-krawchuk reports what is used and what it costs.
 
 ## Limits of this review {#sec-review-limits}
 

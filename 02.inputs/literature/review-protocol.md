@@ -71,3 +71,31 @@ The corpus is one personal library, not a systematic search of an abstracting da
 therefore a review of what was read, made checkable, rather than a claim about the complete
 literature. A study that entered a wind predictor and is absent from the store would not have been
 found. The absence claim is stated with that scope attached wherever the manuscript makes it.
+
+## Wind temporal resolution
+
+Added 2026-08-25, after the analysis forced a choice the review had not addressed. R5
+establishes that no gridded wind product reports the quantity the hypothesis concerns,
+arguing it on height and on averaging over open ground. It says nothing about the time
+axis, and a long-run climatology, a growing-season mean, a monthly mean, a
+flight-window statistic and an hourly series are five different covariates that do not
+agree with one another.
+
+Extraction. `extract-wind-temporal.py` reads the full text of every study with
+`stage2_include == yes`, locates each occurrence of a wind term, captures 260 characters
+either side, and scans that context for temporal vocabulary across eight scales from
+instantaneous to climatology. "window" and "windthrow" are excluded from the match, as
+they are in `build-review-screening.py`: a first run without that exclusion returned six
+apparent wind mentions in Haukema 2008 that were all the phrase "temporal window", and
+one of them was classified as flight-window vocabulary from a sentence about mean August
+temperature. Every sentence and its classification is written to
+`wind-temporal-sentences.csv` so that any count in R6 can be disputed against the text it
+came from, and the per-study roll-up to `wind-temporal-summary.csv`, which the manuscript
+reads at render time.
+
+Result, run 2026-08-25 over 11 included studies. Four contain no wind term at all.
+Ten attach no temporal vocabulary of any kind. One does: Murphy et al. 2026, the
+companion study on this landscape, with 36 mentions carrying monthly and annual
+vocabulary, drawn from Global Wind Atlas monthly means at 10 m for 2015 to 2020.
+Krawchuk et al. 2020, who state the hypothesis, mention wind six times and specify no
+interval.
