@@ -26,10 +26,10 @@ suppressPackageStartupMessages({library(sf); library(terra); library(maptiles)})
 ROOT <- "02.inputs/beetle-classification"
 SA   <- file.path(ROOT, "study-area")
 
-RF          <- 250000      # the representative fraction every panel reports
+RF <- 150000      # the representative fraction every panel reports
 PANEL_MM    <- 66          # nominal printed panel width
-GROUND_M    <- RF * PANEL_MM / 1000        # 16,500 m
-ASPECT      <- 20190 / 15960               # height/width of the earlier page, kept
+GROUND_M    <- RF * PANEL_MM / 1000        # 9,900 m
+ASPECT      <- 1.45                        # matches MAP_ASPECT in map-academic.R
 
 per <- st_read(file.path(SA, "study_perimeter.gpkg"), quiet = TRUE) |> st_transform(3153)
 ctr <- st_coordinates(st_centroid(st_union(per)))

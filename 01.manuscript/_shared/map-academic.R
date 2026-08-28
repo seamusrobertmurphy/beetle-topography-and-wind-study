@@ -21,7 +21,7 @@ suppressPackageStartupMessages({
 })
 
 MAP_CRS   <- 3153      # NAD83(CSRS) / BC Albers, the parent study's grid
-MAP_RF    <- 250000    # the representative fraction every panel reports
+MAP_RF    <- 150000    # the representative fraction every panel reports
 MAP_PANEL <- 66        # nominal printed panel width, mm
 MAP_CONT  <- 200       # contour interval, metres
 
@@ -30,8 +30,12 @@ MAP_CONT  <- 200       # contour interval, metres
 ## the ratio printed on every panel is true rather than rounded to whatever the
 ## perimeter happened to span. 48-fetch-basemap-relief.R uses the same two constants and
 ## the two must agree.
-MAP_W     <- MAP_RF * MAP_PANEL / 1000     # 16,500 m
-MAP_ASPECT <- 20190 / 15960                # page height as a multiple of its width
+## At 1:150,000 on a 66 mm panel the ground width is 9.9 km. That is deliberately tight:
+## at 1:250,000 the page reached past the edge of the source elevation model and its
+## rotated footprint showed as a hard diagonal inside the map frame. The aspect gives
+## 14.4 km of height, enough for the 13.2 km perimeter with a margin.
+MAP_W      <- MAP_RF * MAP_PANEL / 1000    # 9,900 m
+MAP_ASPECT <- 1.45                         # page height as a multiple of its width
 
 map_context <- function(perimeter, burn, sa_dir) {
   per <- st_transform(perimeter, MAP_CRS)
@@ -79,8 +83,6 @@ academic_map <- function(r, title, ctx, palette = "viridis", base_size = 8,
   g <- ggplot() +
     ## The grey relief base map first, as RGB, so everything above it reads against it.
     geom_spatraster_rgb(data = ctx$relief, maxcell = 6e5)
-  if (contours)
-    g <- g + geom_sf(data = ctx$cont, colour = "grey45", linewidth = 0.07, alpha = 0.5)
   g <- g +
     ## No alpha on the data layer. geom_spatraster applies alpha to the whole layer
     ## including its NA cells, which paints a pale rectangle over the hillshade wherever
@@ -88,7 +90,13 @@ academic_map <- function(r, title, ctx, palette = "viridis", base_size = 8,
     ## shows through where it matters: the excluded summit, and the ground beyond the
     ## perimeter.
     geom_spatraster(data = r, maxcell = 6e5) +
-    scale_fill_viridis_c(option = palette, na.value = "transparent", name = NULL) +
+    scale_fill_viridis_c(option = palette, na.value = "transparent", name = NULL)
+  ## Contours go ABOVE the data, not below it. Drawn underneath they are covered by the
+  ## surface completely and the map appears to have none, which is what happened once the
+  ## surfaces were unclipped and began filling the page.
+  if (contours)
+    g <- g + geom_sf(data = ctx$cont, colour = "grey20", linewidth = 0.12, alpha = 0.55)
+  g <- g +
     ## Water goes OVER the data, not under it. The surfaces now fill the page, so drawn
     ## underneath the lakes simply disappear, and a stand basal area painted across
     ## Kootenay Lake is worse than no base map at all.

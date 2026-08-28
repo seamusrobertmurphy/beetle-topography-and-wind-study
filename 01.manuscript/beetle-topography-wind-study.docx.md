@@ -897,17 +897,11 @@ reaches the Kootenay Lake surface at 534 m, which is not a site elevation.
 
 ::: {.cell}
 ::: {.cell-output-display}
-![The study area over the British Columbia Freshwater Atlas, with Kootenay Lake and the Kootenay River to the east. (a) Elevation, with the 2015 Mt Midgeley burn that anchors the perimeter outlined in red. (b) Terrain ruggedness index. (c) Stand basal area from the Vegetation Resources Inventory, the density term the pheromone-disruption mechanism runs through. The study perimeter is the grey outline and contours are at 250 m. Surfaces are drawn across the whole page rather than clipped to the study area, over Esri World Shaded Relief desaturated to grey. The white outline is the study perimeter: it is the 2015 burn buffered 5 km and then cut to the 830 to 1744 m elevation band, so the ground it encloses excludes both the summit ridge, which reaches 2294 m here, and the valley floor. Contours are at 200 m. Every panel carries its own north arrow and the same numerical scale, 1:250,000, which holds at a printed panel width of 66 mm. Coordinates are EPSG:3153, NAD83(CSRS) / BC Albers.](beetle-topography-wind-study_files/figure-docx/fig-study-area-1.png){#fig-study-area}
+![Landscape, terrain and stand surfaces across the study area, all EPSG:3153 at 30 m over Esri World Shaded Relief. (a) elevation; (b) terrain ruggedness index; (c) windward-leeward index at the prevailing bearing; (d) flight-window direct radiation, the thermal gate on flight; (e) growing-season direct radiation, the shading pathway; (f) the MicroMet wind weighting factor at the prevailing bearing; (g) stand basal area; (h) quadratic mean diameter, whose 25 cm source-sink threshold falls near the midpoint of the scale; (i) live stems per hectare. The white outline is the study perimeter and the red outline the 2015 Mt Midgeley burn. Contours are at 200 m. Every panel carries its own north arrow and the same numerical scale, 1:150,000, which holds at a printed panel width of 66 mm.](beetle-topography-wind-study_files/figure-docx/fig-study-area-1.png){#fig-study-area}
 :::
 :::
 
 
-
-::: {.cell}
-::: {.cell-output-display}
-![The predictor surfaces, over the same base map and extent as Figure 1, with the 2015 burn outlined in red. (a) flight-window direct radiation, the thermal gate on flight; (b) growing-season direct radiation, the shading pathway; (c) the MicroMet wind weighting factor at the prevailing bearing; (d) terrain ruggedness; (e) stand basal area; (f) quadratic mean diameter, whose 25 cm source-sink threshold falls near the midpoint of the scale. Surfaces are drawn across the whole page with the study perimeter as the white outline, contours at 200 m, over Esri World Shaded Relief desaturated to grey. Coordinates are EPSG:3153, and every panel carries its own north arrow and the same numerical scale, 1:250,000.](beetle-topography-wind-study_files/figure-docx/fig-layers-1.png){#fig-layers}
-:::
-:::
 
 
 ## Beetle disturbance
