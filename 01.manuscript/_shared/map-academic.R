@@ -21,23 +21,35 @@ suppressPackageStartupMessages({
 })
 
 MAP_CRS   <- 3153      # NAD83(CSRS) / BC Albers, the parent study's grid
-MAP_PAD   <- 3500      # metres of context; matches PAD in 47-context-terrain.R
-MAP_PANEL <- 66        # nominal printed panel width in mm, for the representative fraction
+MAP_RF    <- 250000    # the representative fraction every panel reports
+MAP_PANEL <- 66        # nominal printed panel width, mm
 MAP_CONT  <- 200       # contour interval, metres
+
+## The extent follows from the scale rather than the scale from the extent. At 1:250,000
+## on a 66 mm panel the ground width is 16.5 km exactly, so the page is set to that and
+## the ratio printed on every panel is true rather than rounded to whatever the
+## perimeter happened to span. 48-fetch-basemap-relief.R uses the same two constants and
+## the two must agree.
+MAP_W     <- MAP_RF * MAP_PANEL / 1000     # 16,500 m
+MAP_ASPECT <- 20190 / 15960                # page height as a multiple of its width
 
 map_context <- function(perimeter, burn, sa_dir) {
   per <- st_transform(perimeter, MAP_CRS)
-  bb  <- st_bbox(per)
-  ## unname() is load-bearing. bb["xmin"] keeps its name, and c(xmin = <named>) yields
-  ## "xmin.xmin", which st_bbox rejects with a message naming no coordinate at all.
-  xl <- unname(c(bb["xmin"] - MAP_PAD, bb["xmax"] + MAP_PAD))
-  yl <- unname(c(bb["ymin"] - MAP_PAD, bb["ymax"] + MAP_PAD))
+  ## Centre the fixed-scale page on the perimeter. unname() is load-bearing: a named
+  ## coordinate here yields "xmin.xmin", which st_bbox rejects with a message naming no
+  ## coordinate at all.
+  ctr <- as.numeric(st_coordinates(st_centroid(st_union(per))))
+  xl <- unname(ctr[1] + c(-1, 1) * MAP_W / 2)
+  yl <- unname(ctr[2] + c(-1, 1) * MAP_W * MAP_ASPECT / 2)
   page <- st_as_sfc(st_bbox(c(xmin = xl[1], xmax = xl[2], ymin = yl[1], ymax = yl[2]),
                             crs = st_crs(MAP_CRS)))
 
-  ## Terrain across the whole page, unmasked, written by 47-context-terrain.R. This is
-  ## the layer that makes a mountain landscape look like one.
-  hs  <- rast(file.path(sa_dir, "hillshade.tif"))
+  ## A cached grey relief base map, Esri World Shaded Relief, downloaded once by
+  ## 48-fetch-basemap-relief.R. A hillshade computed from the project's own DEM was tried
+  ## first and rejected: that elevation model is a rotated rectangle in this projection,
+  ## so it cut a hard diagonal across every panel, and its narrow value range rendered
+  ## flat. The contours below still come from the project's own DEM.
+  relief <- rast(file.path(sa_dir, "basemap_relief.tif"))
   dem <- rast(file.path(sa_dir, "dem_context.tif"))
 
   ## Select the water features that reach the page rather than cropping them. Some
@@ -54,10 +66,9 @@ map_context <- function(perimeter, burn, sa_dir) {
   ## The representative fraction holds only at the nominal printed panel width, which
   ## the caption states. Journal of Applied Entomology asked for a numerical scale, so
   ## the ratio is printed and no scale bar is drawn.
-  rf <- signif(diff(xl) * 1000 / MAP_PANEL, 3)
-  list(xl = xl, yl = yl, water = w, cont = cont, hillshade = hs,
+  list(xl = xl, yl = yl, water = w, cont = cont, relief = relief,
        perimeter = per, burn = st_transform(burn, MAP_CRS),
-       rf_label = paste0("1:", formatC(rf, format = "d", big.mark = ",")))
+       rf_label = paste0("1:", formatC(MAP_RF, format = "d", big.mark = ",")))
 }
 
 ## One panel. Every panel carries its own north arrow and its own numerical scale,
@@ -66,13 +77,8 @@ academic_map <- function(r, title, ctx, palette = "viridis", base_size = 8,
                          contours = TRUE) {
   km <- function(x) sprintf("%.0f", x / 1000)
   g <- ggplot() +
-    ## Hillshade first, in grey, so the relief shows through everything above it.
-    geom_spatraster(data = ctx$hillshade, maxcell = 6e5, show.legend = FALSE) +
-    ## A narrow ramp: the hillshade's interquartile range is 0.45 to 0.66, so a full
-    ## black-to-white ramp puts almost the whole landscape in one flat mid-grey.
-    scale_fill_gradient(low = "grey30", high = "grey99", na.value = "transparent",
-                        limits = c(0.25, 0.85), oob = scales::squish, guide = "none") +
-    ggnewscale::new_scale_fill() +
+    ## The grey relief base map first, as RGB, so everything above it reads against it.
+    geom_spatraster_rgb(data = ctx$relief, maxcell = 6e5) +
     geom_sf(data = ctx$water, fill = "#b6d4ea", colour = "#8fbcda", linewidth = 0.15)
   if (contours)
     g <- g + geom_sf(data = ctx$cont, colour = "grey35", linewidth = 0.07, alpha = 0.4)
