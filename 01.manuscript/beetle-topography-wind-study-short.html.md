@@ -61,6 +61,18 @@ csl: ../04.references/springer-basic-author-date.csl
 df-print: kable
 ---
 
+<!-- SHARED COMPUTATIONAL PREAMBLE. Included by every live draft; do not edit it in a
+     draft, because a draft cannot include a copy it has edited.
+
+     This is the whole analysis: the data reads, the variable selection, every model fit,
+     the accessors the prose reads coefficients through, and the guards. It ran to about
+     600 lines and was duplicated in full across four manuscript files, so a change to a
+     model in one of them silently gave that draft different coefficients from its
+     siblings. On 2026-08-28 the drafts had already diverged on five separate additions.
+
+     Paths are relative to 01.manuscript/, which is where the including document sits. -->
+
+
 
 ::: {.cell}
 
@@ -189,7 +201,7 @@ df-print: kable
 |:--------------------------|:----------------------------------------------|:---------------------------------------------------------------|:---------------------------|:------------------------------|:---------------------------|---------------------:|
 |Beetle disturbance, annual |Landsat 5 and 8 Collection 2 Level-2           |Moderate-to-high disturbance, binary, from NDMI                 |30 m                        |1 year                         |2005-2014, excluding 2012   |               8 years|
 |Beetle disturbance, 16-day |Landsat 5 and 8 Collection 2 Level-2           |Moderate-to-high disturbance, binary, from NDMI                 |30 m                        |16 days, the sensor's repeat   |2006-2014                   |             60 epochs|
-|Stand structure            |VRI Historical, BC Data Catalogue              |Basal area, volume, stems, quadratic mean diameter, age, height |Polygon, rasterised to 30 m |1 year, projected to each year |2005-2013                   |           6 snapshots|
+|Stand structure            |VRI Historical, BC Data Catalogue              |Basal area, volume, stems, quadratic mean diameter, age, height |Polygon, rasterised to 30 m |1 year, projected to each year |2005-2014                   |           9 snapshots|
 |Terrain                    |NRCan High Resolution DEM, indices by SAGA GIS |29 geomorphometric surfaces incl. radiation, exposure, landform |30 m                        |Static                         |n/a                         |           29 surfaces|
 |Station wind               |Environment and Climate Change Canada          |Speed and direction                                             |4 to 7 valley stations      |1 hour                         |2005-2014, May to September | 236079 hourly records|
 |Terrain-resolved wind      |MicroMet over the DEM, driven by station wind  |Weighting factor, modified speed, diverted direction            |30 m                        |16 days, and 1 year            |2005-2014                   |     16 direction bins|
@@ -199,6 +211,7 @@ df-print: kable
 
 :::
 :::
+
 
 
 # Abstract {.unnumbered}
@@ -304,6 +317,19 @@ study where an Allee effect was demonstrated, investigators also identified at l
 extrinsic environmental factor (e.g., winter weather, summer drought, microclimatic effect)
 that was regulating its strength". A wind effect on mass attack is therefore expected as an
 interaction with host density, which is what this study fits, and not as a main effect.
+
+How far the insect travels decides what a wind variable can be measured over, and the
+distances are larger than a within-stand argument implies. @jackson2008 tracked mountain
+pine beetle on weather radar during the 2005 emergence in central British Columbia and
+confirmed the returns by towing a capture net behind an aircraft through the volume the
+radar was watching. They found beetles "at altitudes up to more than 800 m above the forest
+canopy", estimated that those in flight above the canopy "may move 30--110
+km$\cdot$day$^{-1}$", and put the instantaneous density at a mean of 4950 and a maximum of
+18\,600 beetles per hectare. @ainslie2010 reproduced that above-canopy dispersion with an
+atmospheric dispersion model driven by the same radar. An insect entrained in the boundary
+layer at those heights is exposed to the atmospheric regime of the period rather than to the
+breeze in a stand during the hours it happens to leave the bark, and the wind variable in
+this study is named and measured accordingly.
 
 No product reports the wind the hypothesis concerns, an instantaneous below-canopy speed at
 flight height during the flight period. Gridded climatologies report a long-run mean at 10 m

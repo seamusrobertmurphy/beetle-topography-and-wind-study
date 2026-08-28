@@ -77,71 +77,201 @@ csl: ../04.references/springer-basic-author-date.csl
 df-print: kable
 ---
 
-{{< include _sections/_preamble.qmd >}}
+<!-- SHARED COMPUTATIONAL PREAMBLE. Included by every live draft; do not edit it in a
+     draft, because a draft cannot include a copy it has edited.
 
-```{r}
-#| label: vri-refit
-#| echo: false
-#| output: false
+     This is the whole analysis: the data reads, the variable selection, every model fit,
+     the accessors the prose reads coefficients through, and the guards. It ran to about
+     600 lines and was duplicated in full across four manuscript files, so a change to a
+     model in one of them silently gave that draft different coefficients from its
+     siblings. On 2026-08-28 the drafts had already diverged on five separate additions.
 
-## The two comparisons this draft exists to report, read from the files the scripts wrote
-## rather than retyped. 55-build-vri-timeseries-table.R builds the year-matched tables and
-## 56-refit-vri-timeseries.R fits both models; 52- and 53- do the same for the wind window.
-VRIS <- read.csv(file.path(BC, "model-data", "vri_refit_comparison.csv"))
-VSRC <- read.csv(file.path(BC, "model-data", "vri_year_source.csv"))
-FWS  <- read.csv(file.path(BC, "model-data", "flight_window_sensitivity.csv"))
+     Paths are relative to 01.manuscript/, which is where the including document sits. -->
 
-vr <- function(m, col) VRIS[[col]][VRIS$model == m]
-b  <- function(x) sprintf("%+.4f", x)
-pp <- function(x) if (x < 0.001) "< 0.001" else sprintf("= %.3f", x)
 
-VRI_YEARS <- nrow(VSRC)
-VRI_SUB   <- VSRC$year[VSRC$substituted]
-VRI_SUBN  <- length(VRI_SUB)
-```
+
+::: {.cell}
+
+:::
+
+
+
+<!-- Computation runs here, in one block, because the Abstract below is computed
+     from the results and knitr evaluates inline expressions in document order.
+     Every chunk keeps its own label, code and comments; only its position moved. -->
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {#tbl-inventory .cell tbl-cap='The datasets this study combines, with the structure and resolution of each. Every count is read from the files at render time. Spatial resolution is the grid the variable is analysed on; temporal resolution is the interval at which it varies. Note that the response varies every 16 days, the inventory once a year and the terrain not at all, which is the asymmetry the wind analysis turns on.'}
+::: {.cell-output-display}
+
+
+|Dataset                    |Source                                         |Variables                                                       |Spatial resolution          |Temporal resolution            |Period                      |                     n|
+|:--------------------------|:----------------------------------------------|:---------------------------------------------------------------|:---------------------------|:------------------------------|:---------------------------|---------------------:|
+|Beetle disturbance, annual |Landsat 5 and 8 Collection 2 Level-2           |Moderate-to-high disturbance, binary, from NDMI                 |30 m                        |1 year                         |2005-2014, excluding 2012   |               8 years|
+|Beetle disturbance, 16-day |Landsat 5 and 8 Collection 2 Level-2           |Moderate-to-high disturbance, binary, from NDMI                 |30 m                        |16 days, the sensor's repeat   |2006-2014                   |             60 epochs|
+|Stand structure            |VRI Historical, BC Data Catalogue              |Basal area, volume, stems, quadratic mean diameter, age, height |Polygon, rasterised to 30 m |1 year, projected to each year |2005-2014                   |           9 snapshots|
+|Terrain                    |NRCan High Resolution DEM, indices by SAGA GIS |29 geomorphometric surfaces incl. radiation, exposure, landform |30 m                        |Static                         |n/a                         |           29 surfaces|
+|Station wind               |Environment and Climate Change Canada          |Speed and direction                                             |4 to 7 valley stations      |1 hour                         |2005-2014, May to September | 236079 hourly records|
+|Terrain-resolved wind      |MicroMet over the DEM, driven by station wind  |Weighting factor, modified speed, diverted direction            |30 m                        |16 days, and 1 year            |2005-2014                   |     16 direction bins|
+|Modelling table, annual    |Assembled by 38-assemble-model-data.R          |Response and every covariate, one row per cell-year             |30 m                        |1 year                         |2005-2014, excluding 2012   |     122700 cell-years|
+|Modelling table, 16-day    |Assembled by 45-epoch-model-data.R             |Response and every covariate, one row per cell-epoch            |30 m                        |16 days                        |2006-2014                   |     71127 cell-epochs|
+
+
+:::
+:::
+
+
+
+
+::: {.cell}
+
+:::
+
 
 # Abstract {.unnumbered}
 
-```{r}
-#| label: abstract-wordcount
-#| echo: false
-#| output: false
 
-## The abstract is the last thing measured, because Journal of Applied Entomology
-## caps it at 300 words and an abstract over the cap is a desk rejection. The count
-## is taken from the rendered text, not from the source, so inline expressions are
-## counted as the words they become.
-ABS_LIMIT <- 300
-```
+::: {.cell}
+
+:::
+
 
 Refugia from mountain pine beetle (*Dendroctonus ponderosae* Hopkins) are hypothesised to
 form where stands are thin enough for wind to disrupt the pheromone plume coordinating mass
 attack. The hypothesis names topographic shading, low host density and few large-diameter
-hosts, and none has been fitted. We tested all three over `r fmt(AREA_HA)` ha of the Selkirk
-Mountains, British Columbia, at 30 m across `r fmt(diff(ELEV_R))` m of relief, using Landsat
-at its 16-day repeat: `r EP_EPOCHS` epochs across `r EP_YEARS` outbreak years,
-`r fmt(EP_N)` cell-epochs. Predictors were inventory stand structure,
-`r length(GEO_V)` geomorphometric surfaces, solar radiation computed separately for the
+hosts, and none has been fitted. We tested all three over 5,573 ha of the Selkirk
+Mountains, British Columbia, at 30 m across 914 m of relief, using Landsat
+at its 16-day repeat: 59 epochs across 8 outbreak years,
+71,127 cell-epochs. Predictors were inventory stand structure,
+29 geomorphometric surfaces, solar radiation computed separately for the
 flight window and the growing season, and a terrain-resolved wind field from the MicroMet
 model driven by hourly station data for each epoch's own sixteen days.
 
 The wind-disruption mechanism was supported. Stand density interacted negatively with wind,
-`r be1(EINT[1])` for stem density (p `r pe1t(EINT[1])`) and `r be1(EINT[2])` for standing
-volume (p `r pe1t(EINT[2])`), and both survived a within-season spread term carrying
-`r be2("ep_lag_nbr90")`. Host held through standing volume, `r b3("LIVE_STAND_VOLUME_125")`,
+-0.094 for stem density (p < 0.001) and -0.041 for standing
+volume (p < 0.001), and both survived a within-season spread term carrying
++0.672. Host held through standing volume, +0.381,
 and attack peaked at
-`r sprintf("%.1f", 100*qmd_bin$attack[qmd_bin$bin == "25-30"])` per cent at 25 to 30 cm
+45.9 per cent at 25 to 30 cm
 diameter, the source-sink threshold. Topographic shading failed on its surrogate: growing-season
 radiation did not survive selection, and northness, which correlates
-`r cc("solar_season_direct", "northness")` with it, is `r b3("northness")`, so shaded ground
+-0.834 with it, is +0.382, so shaded ground
 carries more attack.
 
 Temporal resolution decided the outcome. With one map a year, the same wind field, covariates
-and threshold gave `r b5(INT_MM)` (p `r p5t(INT_MM)`), the opposite sign. Two further
+and threshold gave +0.031 (p = 0.036), the opposite sign. Two further
 specification tests showed why proxies mislead here: flight-window radiation cut the density
-by terrain-exposure interaction from `r bnr(I_GEO)` to `r b3(I_GEO)` without changing its
-sign, and previous-year pressure left valley depth at `r ret("valley_depth")` of its value
-while mid-slope position moved to `r ret("midslope_position")`. A wind test aggregated to the year answers a different question from the one
+by terrain-exposure interaction from +0.311 to +0.221 without changing its
+sign, and previous-year pressure left valley depth at 0.50 of its value
+while mid-slope position moved to 1.32. A wind test aggregated to the year answers a different question from the one
 the mechanism poses, and answers it wrongly.
 
 # Introduction
@@ -225,91 +355,61 @@ and adaptive-seasonality arguments, whether terrain shape predicts it independen
 and radiation, whether the density effect is conditional on wind, and how much the answer
 depends on temporal resolution.
 
-```{r}
-#| label: tbl-hypotheses
-#| echo: false
-#| tbl-cap: "Landscape attributes entered in this study, the direction expected of each, and the reasoning behind that expectation."
 
-tibble::tribble(
-  ~Attribute, ~Expected, ~Rationale,
-  "Stand basal area, volume, crown closure, stems", "positive",
-  "Denser canopy holds the pheromone plume together; thinner stands admit wind that disperses it [@krawchuk2020; @cartwright2018; @powell2014].",
-  "Quadratic mean diameter", "positive above 25 cm",
-  "Trees under 25 cm are beetle sinks, over 25 cm are sources [@carroll2004bionomics].",
-  "Lodgepole pine cover and basal area", "positive",
-  "Attack cannot occur where the host is absent; a cell without pine is not a refugium [@cartwright2018].",
-  "Flight-period direct radiation", "positive",
-  "Flight is gated between 19 and 41 degrees C and peaks on bright afternoons, so sunlit slopes are reachable [@safranyik2006chap1; @mccambridge1971].",
-  "Growing-season direct radiation", "negative",
-  "Shading cools, relieving water stress and funding defence, and cool sites also push the beetle toward a two-year cycle [@krawchuk2020; @sambaraju2021].",
-  "Terrain exposure to wind", "negative",
-  "Wind disrupts the pheromone plume, so exposed ground should carry less attack [@krawchuk2020].",
-  "Terrain ruggedness", "uncertain",
-  "The strongest terrain term in the companion study on this landscape, but fitted there against regeneration rather than attack [@murphy2026].",
-  "Convergence, wetness, valley depth, slope position", "positive in convergent terrain",
-  "Infested groups gather in draws and gullies, and deep snow insulates overwintering brood [@safranyik2006chap1].",
-  "Flight-period wind speed", "negative",
-  "The mechanism acts during dispersal, and no study specifies the interval, so it is taken at the flight period [@krawchuk2020; @jones2019].",
-  "Elevation", "uncertain",
-  "A composite of temperature, snowpack, season length and host distribution that this design cannot separate [@sambaraju2021]."
-) |>
-  save_tbl("table-1-hypotheses") |>
-  kable(booktabs = TRUE, align = "lll", row.names = FALSE)
-```
+::: {#tbl-hypotheses .cell tbl-cap='Landscape attributes entered in this study, the direction expected of each, and the reasoning behind that expectation.'}
+::: {.cell-output-display}
+
+
+|Attribute                                          |Expected                       |Rationale                                                                                                                                               |
+|:--------------------------------------------------|:------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------|
+|Stand basal area, volume, crown closure, stems     |positive                       |Denser canopy holds the pheromone plume together; thinner stands admit wind that disperses it [@krawchuk2020; @cartwright2018; @powell2014].            |
+|Quadratic mean diameter                            |positive above 25 cm           |Trees under 25 cm are beetle sinks, over 25 cm are sources [@carroll2004bionomics].                                                                     |
+|Lodgepole pine cover and basal area                |positive                       |Attack cannot occur where the host is absent; a cell without pine is not a refugium [@cartwright2018].                                                  |
+|Flight-period direct radiation                     |positive                       |Flight is gated between 19 and 41 degrees C and peaks on bright afternoons, so sunlit slopes are reachable [@safranyik2006chap1; @mccambridge1971].     |
+|Growing-season direct radiation                    |negative                       |Shading cools, relieving water stress and funding defence, and cool sites also push the beetle toward a two-year cycle [@krawchuk2020; @sambaraju2021]. |
+|Terrain exposure to wind                           |negative                       |Wind disrupts the pheromone plume, so exposed ground should carry less attack [@krawchuk2020].                                                          |
+|Terrain ruggedness                                 |uncertain                      |The strongest terrain term in the companion study on this landscape, but fitted there against regeneration rather than attack [@murphy2026].            |
+|Convergence, wetness, valley depth, slope position |positive in convergent terrain |Infested groups gather in draws and gullies, and deep snow insulates overwintering brood [@safranyik2006chap1].                                         |
+|Flight-period wind speed                           |negative                       |The mechanism acts during dispersal, and no study specifies the interval, so it is taken at the flight period [@krawchuk2020; @jones2019].              |
+|Elevation                                          |uncertain                      |A composite of temperature, snowpack, season length and host distribution that this design cannot separate [@sambaraju2021].                            |
+
+
+:::
+:::
+
 
 # Materials
 
 ## Study area
 
 
-The study area is `r fmt(AREA_HA)` ha of the Selkirk Mountains in southeastern British
-Columbia, `r fmt(N_CELL)` cells at 30 m, spanning `r fmt(ELEV_R[1])` to
-`r fmt(ELEV_R[2])` m and `r fmt(diff(ELEV_R))` m of relief.
+The study area is 5,573 ha of the Selkirk Mountains in southeastern British
+Columbia, 61,923 cells at 30 m, spanning 830 to
+1,744 m and 914 m of relief.
 
-The coordinate reference system is EPSG:`r EPSG`, `r CRSNAME`. This is the parent study's
+The coordinate reference system is EPSG:3153, NAD83(CSRS) / BC Albers. This is the parent study's
 grid, adopted so that results are directly comparable to it: "All disturbance and covariate
 rasters were aligned to a common 30 m grid in EPSG:3153, the native resolution of the
 Landsat-derived dNBR and dNDMI products", and "The plot anchor was georeferenced with a
 handheld GPS receiver in EPSG:3153" [@murphy2026].
 
-The perimeter is anchored on the 2015 Mt Midgeley fire, `r fmt(BURN_HA)` ha, which is the
+The perimeter is anchored on the 2015 Mt Midgeley fire, 480 ha, which is the
 parent study's site. That study reports its site as spanning "elevations from 830 to 1744 m
-a.s.l."; the digital elevation model used here returns `r fmt(burn_e[1])` to
-`r fmt(burn_e[2])` m inside the same perimeter, which reproduces the statement. The present
+a.s.l."; the digital elevation model used here returns 856 to
+1,744 m inside the same perimeter, which reproduces the statement. The present
 study expands beyond that hard boundary, because 480 ha cannot carry the stand-density
 contrast the pheromone mechanism runs on. It does not expand arbitrarily: the perimeter is the
 burn buffered 5 km and then cut to the elevation band the parent's site occupies, so the
 added ground is ecologically the same kind of ground. Without that cut a 1 km buffer already
 reaches the Kootenay Lake surface at 534 m, which is not a site elevation.
 
-```{r}
-#| label: fig-study-area
-#| echo: false
-#| fig-cap: "Landscape, terrain and stand surfaces across the study area, all EPSG:3153 at 30 m over Esri World Shaded Relief. (a) elevation; (b) terrain ruggedness index; (c) windward-leeward index at the prevailing bearing; (d) flight-window direct radiation, the thermal gate on flight; (e) growing-season direct radiation, the shading pathway; (f) the MicroMet wind weighting factor at the prevailing bearing; (g) stand basal area; (h) quadratic mean diameter, whose 25 cm source-sink threshold falls near the midpoint of the scale; (i) live stems per hectare. The white outline is the study perimeter and the red outline the 2015 Mt Midgeley burn. Contours are at 200 m. Every panel carries its own north arrow and the same numerical scale, 1:150,000, which holds at a printed panel width of 66 mm."
-#| fig-height: 8.4
-#| fig-width: 7.5
 
-geo   <- rast(file.path(SA, "geomorphometry_context.tif"))
-vri   <- rast(file.path(SA, "vri_context.tif"))
-elevc <- rast(file.path(SA, "dem_context.tif"))
-ctx   <- map_context(per, burn, SA)
-## The unmasked weighting from 49-context-covariates.R, not the stored per-bin stack,
-## which is masked to the perimeter and would leave this the one panel with a hole in it.
-mmb   <- rast(file.path(SA, "micromet_weight_context.tif"))
+::: {.cell}
+::: {.cell-output-display}
+![Landscape, terrain and stand surfaces across the study area, all EPSG:3153 at 30 m over Esri World Shaded Relief. (a) elevation; (b) terrain ruggedness index; (c) windward-leeward index at the prevailing bearing; (d) flight-window direct radiation, the thermal gate on flight; (e) growing-season direct radiation, the shading pathway; (f) the MicroMet wind weighting factor at the prevailing bearing; (g) stand basal area; (h) quadratic mean diameter, whose 25 cm source-sink threshold falls near the midpoint of the scale; (i) live stems per hectare. The white outline is the study perimeter and the red outline the 2015 Mt Midgeley burn. Contours are at 200 m. Every panel carries its own north arrow and the same numerical scale, 1:150,000, which holds at a printed panel width of 66 mm.](beetle-topography-wind-study-vri-timeseries_files/figure-docx/fig-study-area-1.png){#fig-study-area}
+:::
+:::
 
-m <- function(r, title, pal = "viridis")
-  academic_map(r, title, ctx, pal, base_size = 7)
-
-(m(elevc, "(a) Elevation (m)") |
- m(geo[["tri"]], "(b) Terrain ruggedness index", "magma") |
- m(geo[["wind_effect"]], "(c) Windward-leeward index", "cividis")) /
-(m(geo[["solar_flight_direct"]], "(d) Flight-window radiation (kWh/m2)", "inferno") |
- m(geo[["solar_season_direct"]], "(e) Growing-season radiation (kWh/m2)", "inferno") |
- m(mmb, "(f) MicroMet wind weighting", "mako")) /
-(m(vri[["BASAL_AREA"]], "(g) Stand basal area (m2/ha)", "mako") |
- m(vri[["QUAD_DIAM_125"]], "(h) Quadratic mean diameter (cm)", "viridis") |
- m(vri[["VRI_LIVE_STEMS_PER_HA"]], "(i) Live stems per hectare", "viridis"))
-```
 
 
 
@@ -318,11 +418,11 @@ m <- function(r, title, pal = "viridis")
 
 The response is annual moderate-to-high beetle disturbance, classified from Landsat
 normalised difference moisture index by the method of the parent study and rebuilt for this
-project. It covers `r length(YRS)` outbreak years, `r paste(range(YRS), collapse = " to ")`,
+project. It covers 8 outbreak years, 2006 to 2014,
 excluding 2012, the one year covered only by Landsat 7, which has flown with its scan-line
 corrector off since May 2003. Annual prevalence inside the perimeter runs
-`r sprintf("%.1f", 100*min(prev_yr$prev))` to `r sprintf("%.1f", 100*max(prev_yr$prev))` per
-cent, pooled `r sprintf("%.1f", 100*PREV)` per cent over `r fmt(N_ROWS)` cell-years.
+4.5 to 20.2 per
+cent, pooled 12.5 per cent over 122,700 cell-years.
 
 Years are never unioned. Unioning destroys the year-to-year spread this study measures, and
 the union layer over the wider grid reached 73 per cent of the landscape, which is not
@@ -331,17 +431,26 @@ credible for a beetle outbreak.
 The provincial aerial overview survey is not used as a response and supplies no training
 label. It is retained only as a visual check.
 
-```{r}
-#| label: tbl-prevalence
-#| echo: false
-#| tbl-cap: "Moderate-to-high beetle disturbance by year inside the study perimeter."
 
-prev_yr |>
-  transmute(Year = year, Cells = fmt(n),
-            `Moderate-to-high (%)` = sprintf("%.1f", 100*prev)) |>
-  save_tbl("table-2-prevalence") |>
-  kable(booktabs = TRUE, align = "lrr", row.names = FALSE)
-```
+::: {#tbl-prevalence .cell tbl-cap='Moderate-to-high beetle disturbance by year inside the study perimeter.'}
+::: {.cell-output-display}
+
+
+|Year |  Cells| Moderate-to-high (%)|
+|:----|------:|--------------------:|
+|2006 | 15,339|                  4.5|
+|2007 | 15,340|                  5.6|
+|2008 | 15,340|                 20.2|
+|2009 | 15,340|                 11.5|
+|2010 | 15,322|                 15.5|
+|2011 | 15,340|                 13.3|
+|2013 | 15,339|                 14.2|
+|2014 | 15,340|                 15.1|
+
+
+:::
+:::
+
 
 ## Stand structure
 
@@ -352,19 +461,30 @@ carry the mechanism and the stem-size threshold: total basal area, crown closure
 hectare, quadratic mean diameter over stems 12.5 cm and up, stand age, and susceptible pine
 basal area formed as total basal area times the pine share of cover.
 
-`r sprintf("%.1f", PCT_ABOVE_QMD)` per cent of cell-years sit at or above the
-`r QMD_THRESH` cm source-sink threshold.
+78.3 per cent of cell-years sit at or above the
+25 cm source-sink threshold.
 
-```{r}
-#| label: tbl-vri
-#| echo: false
-#| tbl-cap: "Stand structure across the study perimeter, from the Vegetation Resources Inventory. n is cell-years. SD is the standard deviation of the landscape; SE is the standard error of the mean and is small by construction at this n, so it should not be read as precision about any one cell. Skewness and kurtosis are the bias-corrected third and fourth standardised moments; kurtosis is excess, so 0 is Gaussian and positive is heavy-tailed."
 
-describe_vars(d, VRI_V, VRI_LABELS) |>
-  describe_table() |>
-  save_tbl("table-3-stand-structure") |>
-  kable(booktabs = TRUE, align = "lrrrrrrrrr", row.names = FALSE)
-```
+::: {#tbl-vri .cell tbl-cap='Stand structure across the study perimeter, from the Vegetation Resources Inventory. n is cell-years. SD is the standard deviation of the landscape; SE is the standard error of the mean and is small by construction at this n, so it should not be read as precision about any one cell. Skewness and kurtosis are the bias-corrected third and fourth standardised moments; kurtosis is excess, so 0 is Gaussian and positive is heavy-tailed.'}
+::: {.cell-output-display}
+
+
+|Attribute                           |       n|   Mean|     SD|    SE| Median|   Min|     Max| Skewness| Kurtosis|
+|:-----------------------------------|-------:|------:|------:|-----:|------:|-----:|-------:|--------:|--------:|
+|Stand basal area (m2/ha)            | 122,700|  35.18|  11.84| 0.034|  37.06|  2.08|   64.26|    -0.77|    +0.49|
+|Crown closure (%)                   | 122,700|  45.32|  13.55| 0.039|  48.00|  4.00|   60.00|    -1.31|    +1.29|
+|Live stems (n/ha)                   | 122,700| 670.00| 256.78| 0.733| 686.00| 64.00| 1614.00|    +0.33|    +1.22|
+|Quadratic mean diameter (cm)        | 122,700|  30.13|   7.19| 0.021|  30.32| 13.48|   62.35|    +0.54|    +1.39|
+|Stand age (years)                   | 122,700| 125.22|  26.47| 0.076| 124.00| 20.00|  184.00|    -1.39|    +3.48|
+|Stand height (m)                    | 122,700|  28.07|   6.05| 0.017|  29.00|  7.70|   41.60|    -0.70|    +1.79|
+|Standing volume (m3/ha)             | 122,700| 283.40| 129.22| 0.369| 292.90|  0.90|  620.32|    +0.00|    -0.02|
+|Lodgepole pine cover (%)            | 122,700|  17.36|  22.82| 0.065|  10.00|  0.00|  100.00|    +1.63|    +2.09|
+|Susceptible pine basal area (m2/ha) | 122,700|   5.45|   7.03| 0.020|   3.24|  0.00|   31.67|    +1.52|    +1.86|
+
+
+:::
+:::
+
 
 The inventory is a projected operational product, not a census, and its polygons here carry
 reference years spanning several decades. A polygon interpreted from late-outbreak
@@ -374,7 +494,7 @@ reported rather than corrected, and @sec-limits returns to it.
 
 ## Geomorphometry
 
-Terrain is described by `r length(GEO_V)` geomorphometric surfaces computed with SAGA GIS
+Terrain is described by 29 geomorphometric surfaces computed with SAGA GIS
 over the full reprojected elevation model and clipped afterwards, so a search radius near the
 boundary sees real ground.
 
@@ -383,8 +503,8 @@ and diffuse radiation over 1 July to 15 August restricted to 12:00 to 17:00, the
 @safranyik2006chap1 identify as the flight peak; growing-season insolation is the whole-day
 total from 1 May to 30 September, the shading quantity @krawchuk2020's first mechanism
 concerns. A single annual heat index cannot separate them: flight-window direct radiation
-spans a `r sprintf("%.0f", max(d$solar_flight_direct)/min(d$solar_flight_direct))`-fold range
-here against `r sprintf("%.1f", max(d$solar_season_total)/min(d$solar_season_total))`-fold for
+spans a 7-fold range
+here against 2.6-fold for
 the season total.
 
 Exposure enters as the windward-leeward index and effective air flow height at the prevailing
@@ -402,15 +522,11 @@ Nothing here tests them.
 
 ## Terrain-resolved wind {#sec-micromet}
 
-```{r}
-#| label: micromet-load
-#| echo: false
-#| output: false
 
-mmsum <- read.csv(file.path(BC, "covariates", "wind-micromet", "micromet_summary.csv"))
-mmW   <- rast(file.path(BC, "covariates", "wind-micromet", "wind_weight_by_direction.tif"))
-MM_WW <- range(as.vector(minmax(mmW)))
-```
+::: {.cell}
+
+:::
+
 
 Station wind interpolated from four to seven valley stations is nearly flat within a year, so
 wind is also computed as a field varying in space, using the MicroMet model of @liston2006.
@@ -441,15 +557,15 @@ $$\theta_d = -\tfrac{1}{2}\, \Omega_s \sin\!\left[2(\xi - \theta)\right].$$ {#eq
 
 By @eq-weight, $W_w$ depends on direction and not on speed, so it is computed once for each of 16 direction bins
 and each hourly observation multiplied by the surface for its own bin; nothing is averaged
-before the terrain acts on it. Over all bins $W_w$ runs `r sprintf("%.2f", MM_WW[1])` to
-`r sprintf("%.2f", MM_WW[2])`. Speed and direction combine as components because averaging
+before the terrain acts on it. Over all bins $W_w$ runs 0.60 to
+1.38. Speed and direction combine as components because averaging
 degrees across the 360/0 line is meaningless. The field varies
-`r sprintf("%.1f", min(mmsum$spatial_range))` to
-`r sprintf("%.1f", max(mmsum$spatial_range))` km/h across the grid within a year, and is not a
-repackaged terrain index: it correlates `r cc("mm_flight_mean", "wind_effect")` with the
-windward-leeward index and `r cc("mm_flight_mean", "solar_flight_direct")` with flight
+1.9 to
+2.8 km/h across the grid within a year, and is not a
+repackaged terrain index: it correlates +0.153 with the
+windward-leeward index and +0.124 with flight
 radiation. Its strongest association is with elevation,
-`r cc("mm_flight_mean", "elevation")`.
++0.326.
 
 ## Flight-window wind
 
@@ -459,15 +575,15 @@ this region; the hours follow their "peak flight is in the early to mid afternoo
 @gray1972's 11:00 to 14:00 emergence peak, taken here to the later side because emergence
 precedes the flight it initiates. Because the window is fixed a priori it can be checked
 against the landscape's own climate, and @fig-flight-window does that. Across
-`r fmt(CLIM_N)` hourly station records from May to September of the nine study years,
-`r sprintf("%.1f", 100*CLIM_IN)` per cent of afternoon hours inside the window fall within
-the 19 to 41 degrees C flight gate, against `r sprintf("%.1f", 100*CLIM_OUT)` per cent
-outside it, and the afternoon mean is `r sprintf("%.1f", CLIM_T_IN)` against
-`r sprintf("%.1f", CLIM_T_OUT)` degrees C. The window therefore roughly doubles the share
+236,079 hourly station records from May to September of the nine study years,
+89.5 per cent of afternoon hours inside the window fall within
+the 19 to 41 degrees C flight gate, against 51.4 per cent
+outside it, and the afternoon mean is 26.0 against
+19.2 degrees C. The window therefore roughly doubles the share
 of hours in which flight is thermally possible. It is worth noting what the same figure
 shows about wind: mean speed peaks in the same hours as temperature, at
-`r sprintf("%.1f", CLIM_W_MAX)` km/h in mid-afternoon against
-`r sprintf("%.1f", CLIM_W_MIN)` km/h at dawn, so the hours the beetle can fly are also the
+10.4 km/h in mid-afternoon against
+4.6 km/h at dawn, so the hours the beetle can fly are also the
 windiest of the day. That is a coincidence of timing the mechanism depends on and no
 annual summary can express.
 
@@ -477,75 +593,33 @@ last step into monthly means for June, July and August and four flight-window me
 5 km h and above 15 km h.
 
 Hourly resolution buys metrics, not observations. With an annual response every hourly
-reading collapses into one of `r length(YRS)` values per metric, so a wind main effect is
+reading collapses into one of 8 values per metric, so a wind main effect is
 identified only across years and its standard error should not be believed alone. Stand
 density varies cell to cell; a season's wind does not. That asymmetry is why the annual
 models report an interaction rather than a main effect, and why the response was rebuilt at
 16 days.
 
-```{r}
-#| label: fig-flight-window
-#| echo: false
-#| fig-cap: "The flight window against the landscape's own climate, from hourly Environment and Climate Change Canada station records for May to September of the nine study years. The window, 1 July to 15 August, is the shaded band; it is taken from the bionomics and is not fitted to these data. (a) Mean afternoon temperature by day of year, with the 19 to 41 degrees C flight gate and the 22 to 32 degrees C peak band marked. (b) The share of afternoon hours falling inside the flight gate, day by day. (c) The diurnal curve: mean temperature and the share of all hours inside the gate, by hour, with the 12:00 to 17:00 restriction shaded. (d) Mean wind speed by hour, on the same axis, showing that the hours the beetle can fly are also the windiest of the day."
-#| fig-height: 6.2
-#| fig-width: 7.5
 
-wd <- range(unlist(lapply(unique(clim_d$year), win_doy)))
-band <- annotate("rect", xmin = wd[1], xmax = wd[2], ymin = -Inf, ymax = Inf,
-                 fill = "#fdae61", alpha = 0.18)
-th <- theme_bw(base_size = 8) + theme(panel.grid.minor = element_blank())
+::: {.cell}
+::: {.cell-output-display}
+![The flight window against the landscape's own climate, from hourly Environment and Climate Change Canada station records for May to September of the nine study years. The window, 1 July to 15 August, is the shaded band; it is taken from the bionomics and is not fitted to these data. (a) Mean afternoon temperature by day of year, with the 19 to 41 degrees C flight gate and the 22 to 32 degrees C peak band marked. (b) The share of afternoon hours falling inside the flight gate, day by day. (c) The diurnal curve: mean temperature and the share of all hours inside the gate, by hour, with the 12:00 to 17:00 restriction shaded. (d) Mean wind speed by hour, on the same axis, showing that the hours the beetle can fly are also the windiest of the day.](beetle-topography-wind-study-vri-timeseries_files/figure-docx/fig-flight-window-1.png){#fig-flight-window}
+:::
+:::
 
-pa <- ggplot(clim_d, aes(doy, pm_temp)) + band +
-  annotate("rect", xmin = -Inf, xmax = Inf, ymin = T_GATE[1], ymax = T_GATE[2],
-           fill = "#4575b4", alpha = 0.10) +
-  annotate("rect", xmin = -Inf, xmax = Inf, ymin = T_PEAK[1], ymax = T_PEAK[2],
-           fill = "#4575b4", alpha = 0.14) +
-  geom_point(aes(colour = factor(year)), size = 0.5, alpha = 0.55) +
-  geom_smooth(se = FALSE, colour = "black", linewidth = 0.5, method = "loess", span = 0.3) +
-  scale_colour_viridis_d(name = "Year", option = "turbo") +
-  labs(x = "Day of year", y = "Afternoon temperature (C)",
-       title = "(a) Afternoon temperature and the flight gate") + th
-
-pb <- ggplot(clim_d, aes(doy, 100 * pm_in_gate)) + band +
-  geom_point(aes(colour = factor(year)), size = 0.5, alpha = 0.55, show.legend = FALSE) +
-  geom_smooth(se = FALSE, colour = "black", linewidth = 0.5, method = "loess", span = 0.3) +
-  scale_colour_viridis_d(option = "turbo") +
-  labs(x = "Day of year", y = "Afternoon hours in gate (%)",
-       title = "(b) Share of afternoon hours flight is possible") + th
-
-pc <- ggplot(clim_x, aes(hour)) +
-  annotate("rect", xmin = FW_HR[1], xmax = FW_HR[2], ymin = -Inf, ymax = Inf,
-           fill = "#fdae61", alpha = 0.22) +
-  geom_hline(yintercept = T_GATE[1], linetype = 2, linewidth = 0.3, colour = "grey40") +
-  geom_line(aes(y = temp), linewidth = 0.7, colour = "#d73027") +
-  geom_line(aes(y = 100 * in_gate / 3), linewidth = 0.6, colour = "#4575b4") +
-  scale_y_continuous("Temperature (C)",
-    sec.axis = sec_axis(~ . * 3, name = "Hours in gate (%)")) +
-  labs(x = "Hour of day", title = "(c) Diurnal cycle: temperature and the gate") + th
-
-pd <- ggplot(clim_x, aes(hour, wind)) +
-  annotate("rect", xmin = FW_HR[1], xmax = FW_HR[2], ymin = -Inf, ymax = Inf,
-           fill = "#fdae61", alpha = 0.22) +
-  geom_line(linewidth = 0.7, colour = "#1a9850") +
-  labs(x = "Hour of day", y = "Wind speed (km/h)",
-       title = "(d) Wind peaks in the same hours") + th
-
-(pa | pb) / (pc | pd)
-```
 
 # Methods
 
 ## Variable selection {#sec-selection}
 
 
-The candidate set is `r N_CAND` variables in six groups, one group per pathway the review
+The candidate set is 45 variables in six groups, one group per pathway the review
 names: stand density, host quality, terrain exposure to wind, terrain shape, landscape
 context, and flight-window wind. Selection proceeds in four
 stages and is required to retain at least one variable from each pathway, so that a
 collinearity filter cannot silently delete a hypothesis the review established.
 
-Fitting uses a class-balanced sample of `r fmt(N_BAL)` cell-years, `r fmt(4000)` of each
-class per year. Landscape prevalence is about `r sprintf("%.0f", 100*PREV)` per cent, and an
+Fitting uses a class-balanced sample of 47,328 cell-years, 4,000 of each
+class per year. Landscape prevalence is about 12 per cent, and an
 unbalanced fit at that prevalence reports the intercept rather than the covariates.
 
 ## Models
@@ -572,156 +646,140 @@ radiation, and by flight-window wind.
 # Results {#sec-results}
 
 
-```{r}
-#| label: tbl-aic
-#| echo: false
-#| tbl-cap: "Model comparison, panel A of the model table. Each model adds one pathway to the previous. AIC ranks on likelihood and a parameter penalty; the remaining columns are predictive error on the fitted probabilities. RMSE is the root mean squared error and is the square root of the Brier score; RMSE (%) expresses it against the prevalence of the response. Brier skill is the improvement over predicting the prevalence for every cell, where 0 is no better than the base rate. MAPE and Theil's U are not reported: both divide by the observed value, which is zero for the majority class of a binary response, so both are undefined without discarding that class."
 
-fit_metrics_table(
-  fit_metrics(M0, "M0 host size + shading + landform"),
-  fit_metrics(M1, "M1 + stand density"),
-  fit_metrics(M2, "M2 + terrain and flight radiation"),
-  fit_metrics(M3, "M3 + interactions")) |>
-  save_tbl("table-4-model-comparison") |>
-  kable(booktabs = TRUE, align = "lrrrrrrrr", row.names = FALSE)
-```
+::: {#tbl-aic .cell tbl-cap='Model comparison, panel A of the model table. Each model adds one pathway to the previous. AIC ranks on likelihood and a parameter penalty; the remaining columns are predictive error on the fitted probabilities. RMSE is the root mean squared error and is the square root of the Brier score; RMSE (%) expresses it against the prevalence of the response. Brier skill is the improvement over predicting the prevalence for every cell, where 0 is no better than the base rate. MAPE and Theil\'s U are not reported: both divide by the observed value, which is zero for the majority class of a binary response, so both are undefined without discarding that class.'}
+::: {.cell-output-display}
 
-```{r}
-#| label: tbl-m3
-#| echo: false
-#| tbl-cap: "Full model M3, panel B of the model table: continuous terms, ordered by absolute effect. Coefficients are log-odds per standard deviation on a class-balanced sample, so the intercept is not landscape prevalence. SE is the standard error of the coefficient. The geomorphon landform classes are also in this model and are not reported here."
 
-co3 |>
-  filter(term != "(Intercept)", !grepl("^geomorphon", term)) |>
-  arrange(desc(abs(beta))) |>
-  transmute(Term = pretty_terms(term), Beta = sprintf("%+.3f", beta),
-            SE = sprintf("%.3f", se), z = sprintf("%.2f", z), p = sapply(p, pv)) |>
-  save_tbl("table-5-full-model") |>
-  kable(booktabs = TRUE, align = "lrrrr", row.names = FALSE)
-```
+|Model                             |    AIC|  ΔAIC|  RMSE| RMSE (%)|   MAE| Brier| Log loss|   AUC|Brier skill |
+|:---------------------------------|------:|-----:|-----:|--------:|-----:|-----:|--------:|-----:|:-----------|
+|M0 host size + shading + landform | 49,547| 2,307| 0.416|    128.3| 0.346| 0.173|    0.523| 0.771|0.211       |
+|M1 + stand density                | 49,049| 1,809| 0.412|    127.3| 0.342| 0.170|    0.518| 0.775|0.223       |
+|M2 + terrain and flight radiation | 48,305| 1,065| 0.409|    126.2| 0.336| 0.167|    0.510| 0.784|0.237       |
+|M3 + interactions                 | 47,240|     0| 0.404|    124.7| 0.327| 0.163|    0.498| 0.798|0.256       |
 
-Every pathway earns its place: AIC falls `r fmt(aic$AIC[1] - aic$AIC[2])` when stand density
-enters, `r fmt(aic$AIC[2] - aic$AIC[3])` more with terrain and flight radiation, and
-`r fmt(aic$AIC[3] - aic$AIC[4])` more with the interactions (@tbl-aic).
+
+:::
+:::
+
+
+
+::: {#tbl-m3 .cell tbl-cap='Full model M3, panel B of the model table: continuous terms, ordered by absolute effect. Coefficients are log-odds per standard deviation on a class-balanced sample, so the intercept is not landscape prevalence. SE is the standard error of the coefficient. The geomorphon landform classes are also in this model and are not reported here.'}
+::: {.cell-output-display}
+
+
+|Term                                        |   Beta|    SE|      z|       p|
+|:-------------------------------------------|------:|-----:|------:|-------:|
+|Flight-window direct radiation (kWh/m2)     | +0.487| 0.028|  17.21| < 0.001|
+|Susceptible pine basal area (m2/ha)         | +0.459| 0.014|  32.40| < 0.001|
+|Quadratic mean diameter (cm)                | -0.422| 0.023| -18.35| < 0.001|
+|Northness                                   | +0.382| 0.016|  23.19| < 0.001|
+|Standing volume (m3/ha)                     | +0.381| 0.024|  15.61| < 0.001|
+|Windward-leeward index                      | +0.358| 0.029|  12.37| < 0.001|
+|Elevation (m)                               | +0.329| 0.018|  18.20| < 0.001|
+|Live stems x Windward-leeward index         | +0.221| 0.021|  10.63| < 0.001|
+|Stand age (years)                           | +0.218| 0.018|  11.89| < 0.001|
+|July mean wind (km/h)                       | +0.215| 0.012|  17.84| < 0.001|
+|Valley depth (m)                            | -0.193| 0.022|  -8.70| < 0.001|
+|Crown closure (%)                           | -0.183| 0.020|  -9.02| < 0.001|
+|Live stems x Flight-window direct radiation | -0.144| 0.017|  -8.58| < 0.001|
+|June mean wind (km/h)                       | +0.107| 0.012|   8.66| < 0.001|
+|Live stems (n/ha)                           | -0.099| 0.018|  -5.36| < 0.001|
+|Topographic wetness index                   | +0.073| 0.019|   3.74| < 0.001|
+|Mid-slope position                          | +0.063| 0.013|   4.69| < 0.001|
+|Vector ruggedness measure                   | -0.043| 0.019|  -2.21|   0.027|
+|Topographic position index                  | +0.040| 0.023|   1.77|   0.076|
+|Profile curvature                           | -0.038| 0.012|  -3.04|   0.002|
+|Terrain ruggedness index                    | -0.036| 0.023|  -1.54|   0.124|
+|Convergence index                           | -0.029| 0.014|  -2.07|   0.038|
+|Live stems x June mean wind                 | -0.001| 0.013|  -0.12|   0.905|
+
+
+:::
+:::
+
+
+Every pathway earns its place: AIC falls 498 when stand density
+enters, 744 more with terrain and flight radiation, and
+1,065 more with the interactions (@tbl-aic).
 
 Stand density is supported in one of its three measures. Standing volume carries
-`r b3("LIVE_STAND_VOLUME_125")` log-odds per standard deviation, stem count
-`r b3("VRI_LIVE_STEMS_PER_HA")`, and crown closure `r b3("CROWN_CLOSURE")`
-(p `r p3t("CROWN_CLOSURE")`). The last two are negative, so as main effects the three
++0.381 log-odds per standard deviation, stem count
+-0.099, and crown closure -0.183
+(p < 0.001). The last two are negative, so as main effects the three
 density measures disagree in sign and only standing volume points the way the mechanism
 predicts.
 Total basal area did not survive selection, its univariate discrimination being
-`r sprintf("%.3f", uni$auc[uni$term == "BASAL_AREA"])`. What predicts attack is standing wood
+0.516. What predicts attack is standing wood
 in large stems, not how many stems there are.
 
-Radiation enters once. Flight-window direct radiation carries `r b3("solar_flight_direct")`,
+Radiation enters once. Flight-window direct radiation carries +0.487,
 which is the thermal gate on flight. Growing-season radiation did not survive selection, so
 the shading pathway is carried by northness, with which it correlates
-`r cc("solar_season_direct", "northness")`. Northness is `r b3("northness")`: shaded,
+-0.834. Northness is +0.382: shaded,
 north-facing ground carries more attack, against the prediction.
 
 Terrain predicts attack independently of both. The windward-leeward index is
-`r b3("wind_effect")` and elevation `r b3("elevation")`, while ruggedness is `r b3("tri")`
-and not distinguishable from zero (p `r p3t("tri")`), the vector ruggedness measure agreeing
-in sign at `r b3("vrm")`.
++0.358 and elevation +0.329, while ruggedness is -0.036
+and not distinguishable from zero (p = 0.124), the vector ruggedness measure agreeing
+in sign at -0.043.
 Ruggedness takes the opposite sign to the parent study's, whose response is seedling
 establishment rather than attack [@murphy2026].
 
 Fitted without flight-window radiation, stand density interacts with terrain exposure at
-`r bnr(I_GEO)`, which reads as a wind result pointing the wrong way. With radiation in the
-model that interaction is `r b3(I_GEO)` (p `r p3t(I_GEO)`) and density interacts with
-radiation at `r b3(paste0(DENS[1], ":", FSUN[1]))`. On a range whose prevailing bearing is
-`r sprintf("%.0f", WDIR)` degrees the windward slopes face west, which are also the slopes
++0.311, which reads as a wind result pointing the wrong way. With radiation in the
+model that interaction is +0.221 (p < 0.001) and density interacts with
+radiation at -0.144. On a range whose prevailing bearing is
+258 degrees the windward slopes face west, which are also the slopes
 taking afternoon sun, so part of the apparent exposure effect was the sun. Not all of it:
 the interaction stays positive and far from zero, which is the wrong sign for pheromone
 disruption.
 
-```{r}
-#| label: fig-interaction
-#| echo: false
-#| fig-cap: "The refugia mechanism as fitted. (a) Predicted probability of moderate-to-high disturbance against terrain-resolved epoch wind, at the 10th and 90th percentiles of stem density, all other terms held at their means; the lines cross, so wind raises attack in thin stands and lowers it in dense ones, which is the interaction. (b) The same for standing volume. (c) Coefficients of the 16-day model, with and without the within-season spread term. (d) Epoch prevalence against epoch mean wind, one point per epoch."
-#| fig-height: 6
 
-nd_base <- be[1, , drop = FALSE]
-for (v in EV) nd_base[[v]] <- 0
-pred_panel <- function(dv, lab) {
-  qs <- quantile(be[[dv]], c(0.1, 0.9))
-  gr <- expand.grid(w = seq(min(be$ep_wind_mean), max(be$ep_wind_mean), length.out = 60),
-                    d = qs)
-  nd <- nd_base[rep(1, nrow(gr)), ]
-  nd$ep_wind_mean <- gr$w; nd[[dv]] <- gr$d
-  nd$geomorphon <- factor(levels(be$geomorphon)[1], levels = levels(be$geomorphon))
-  gr$p <- predict(E1, newdata = nd, type = "response")
-  gr$Density <- factor(gr$d, labels = c("low (10th pct)", "high (90th pct)"))
-  ggplot(gr, aes(w, p, colour = Density)) + geom_line(linewidth = 0.8) +
-    scale_colour_manual(values = c("#2c7fb8", "#d95f02")) +
-    labs(x = "Epoch wind (SD units)", y = "P(moderate-to-high)", title = lab) +
-    theme_minimal(base_size = 9)
-}
-pa <- pred_panel("VRI_LIVE_STEMS_PER_HA", "(a) Stem density")
-pb <- pred_panel("LIVE_STAND_VOLUME_125", "(b) Standing volume")
+::: {.cell}
+::: {.cell-output-display}
+![The refugia mechanism as fitted. (a) Predicted probability of moderate-to-high disturbance against terrain-resolved epoch wind, at the 10th and 90th percentiles of stem density, all other terms held at their means; the lines cross, so wind raises attack in thin stands and lowers it in dense ones, which is the interaction. (b) The same for standing volume. (c) Coefficients of the 16-day model, with and without the within-season spread term. (d) Epoch prevalence against epoch mean wind, one point per epoch.](beetle-topography-wind-study-vri-timeseries_files/figure-docx/fig-interaction-1.png){#fig-interaction}
+:::
+:::
 
-cf <- bind_rows(
-  ce1 |> mutate(model = "E1 all epochs"),
-  ce2 |> mutate(model = "E2 with lag")) |>
-  filter(!grepl("^geomorphon|Intercept", term)) |>
-  group_by(term) |> filter(any(abs(beta) > 0.05)) |> ungroup()
-pc <- ggplot(cf, aes(reorder(term, beta), beta, colour = model)) +
-  geom_hline(yintercept = 0, linewidth = 0.3, colour = "grey60") +
-  geom_pointrange(aes(ymin = beta - 1.96*se, ymax = beta + 1.96*se),
-                  position = position_dodge(width = 0.5), size = 0.25) +
-  coord_flip() + scale_colour_manual(values = c("#1b9e77", "#7570b3")) +
-  labs(x = NULL, y = "Log-odds per SD", title = "(c) 16-day model coefficients") +
-  theme_minimal(base_size = 8) + theme(legend.position = "bottom")
-
-pd <- epsum |>
-  inner_join(epwind, by = c("year","epoch")) |>
-  ggplot(aes(mean_kmh, prevalence)) +
-  geom_point(aes(colour = factor(year)), size = 1.6) +
-  geom_smooth(method = "lm", se = TRUE, colour = "black", linewidth = 0.5) +
-  labs(x = "Epoch mean wind (km/h)", y = "Epoch prevalence",
-       colour = "Year", title = "(d) Epochs") +
-  theme_minimal(base_size = 8)
-
-(pa | pb) / (pc | pd)
-```
 
 ## Wind as a measurement {#sec-micromet-result}
 
-```{r}
-#| label: tbl-micromet-model
-#| echo: false
-#| tbl-cap: "The wind terms under two specifications, both with previous-year pressure in the model. M4 carries station wind, which is flat within a year and identified only across years. M5 carries the terrain-resolved MicroMet field, which varies within the year and is identified in space."
 
-data.frame(
-  Model = c("M4 station wind", "M4 station wind",
-            "M5 terrain-resolved wind", "M5 terrain-resolved wind"),
-  Term = pretty_terms(c(WTMP_V, I_TMP, WMM, INT_MM)),
-  Beta = c(b4(WTMP_V), b4(I_TMP), b5(WMM), b5(INT_MM)),
-  z = c(z4(WTMP_V), z4(I_TMP), z5(WMM), z5(INT_MM)),
-  p = c(p4(WTMP_V), p4(I_TMP), p5(WMM), p5(INT_MM))) |>
-  save_tbl("table-6-wind-terms") |>
-  kable(booktabs = TRUE, align = "lllrr", row.names = FALSE)
-```
+::: {#tbl-micromet-model .cell tbl-cap='The wind terms under two specifications, both with previous-year pressure in the model. M4 carries station wind, which is flat within a year and identified only across years. M5 carries the terrain-resolved MicroMet field, which varies within the year and is identified in space.'}
+::: {.cell-output-display}
+
+
+|Model                    |Term                                     |Beta   |     z|       p|
+|:------------------------|:----------------------------------------|:------|-----:|-------:|
+|M4 station wind          |June mean wind (km/h)                    |-0.002 | -0.09|   0.926|
+|M4 station wind          |Live stems x June mean wind              |+0.020 |  1.16|   0.247|
+|M5 terrain-resolved wind |MicroMet flight-window wind (km/h)       |+0.467 | 28.44| < 0.001|
+|M5 terrain-resolved wind |Live stems x MicroMet flight-window wind |+0.031 |  2.09|   0.036|
+
+
+:::
+:::
+
 
 This section reports the same wind field at the annual resolution the study first used, and
 it is retained because the contrast with the 16-day models is the paper's methodological
 result.
 
-The terrain-resolved field carries `r b5(WMM)` log-odds per standard deviation
-(z = `r z5(WMM)`, p `r p5t(WMM)`) when the response is one map per year. Windier ground
+The terrain-resolved field carries +0.467 log-odds per standard deviation
+(z = 28.44, p < 0.001) when the response is one map per year. Windier ground
 carries more moderate-to-high disturbance. The interaction the mechanism turns on is
-`r b5(INT_MM)` (z = `r z5(INT_MM)`, p `r p5t(INT_MM)`), positive where the
++0.031 (z = 2.09, p = 0.036), positive where the
 pheromone-disruption mechanism requires negative.
 
 At 16 days the same wind field, the same covariates and the same classification threshold
-give `r be1(EINT[1])` and `r be1(EINT[2])`. Nothing about the landscape or the
+give -0.094 and -0.041. Nothing about the landscape or the
 wind product changed between the two. What changed is that an annual response can only ask
 whether windy summers carry less attack than calm ones, and a summer contains both windy and
 calm weeks. Averaging across them destroys exactly the contrast the mechanism operates on.
 
 The station terms behave the same way and for the same reason. In this specification they
-collapse to `r WTMP_V` at `r b4(WTMP_V)`, which carries no flight-window information at all.
+collapse to jun at -0.002, which carries no flight-window information at all.
 
 The lesson generalises past this dataset. The mechanism concerns a plume that persists for
 minutes, acting on a flight period of weeks. A test that aggregates the response to a year is
@@ -732,63 +790,71 @@ in the opposite direction.
 
 Attack recurs where it was, by a margin that changes how every other coefficient reads. A cell
 attacked one year is between
-`r sprintf("%.0f", min(read.csv(file.path(BC, "model-data", "lag1_persistence.csv"))$odds_ratio))`
+16
 and
-`r sprintf("%.0f", max(read.csv(file.path(BC, "model-data", "lag1_persistence.csv"))$odds_ratio))`
+139
 times more likely to be attacked the next. Entering persistence and 90 m spread separately,
-after the autologistic design used for this province, gives `r b4("lag_self")` and
-`r b4("lag_nbr90")`, raising discrimination from `r sprintf("%.3f", AUC3l)` to
-`r sprintf("%.3f", AUC4)`.
+after the autologistic design used for this province, gives +0.873 and
++0.950, raising discrimination from 0.799 to
+0.888.
 
-Which environmental terms survive is the informative part. Ruggedness keeps `r ret("tri")`
+Which environmental terms survive is the informative part. Ruggedness keeps 0.61
 of its value, a term describing a condition a cell has whether or not the beetle was there.
-The landform terms are not stable: valley depth keeps `r ret("valley_depth")` while mid-slope
-position moves to `r ret("midslope_position")`, growing rather than shrinking. Part of what
+The landform terms are not stable: valley depth keeps 0.50 while mid-slope
+position moves to 1.32, growing rather than shrinking. Part of what
 the landform terms measured was where the outbreak had already been, which is the same
 failure the terrain-wind index showed against radiation, one level up.
 
 ## Host as diameter {#sec-diameter}
 
 
-```{r}
-#| label: tbl-qmd
-#| echo: false
-#| tbl-cap: "Moderate-to-high beetle disturbance by quadratic mean diameter class, on the balanced sample. The 25 cm boundary is the source-sink threshold of the species' bionomics. Intervals are Wilson score intervals on the class proportion, which is why they are asymmetric in the smallest class. Note that 30 m cells in a spreading outbreak are not independent, so the tests reported beneath this table are anti-conservative."
 
-qmd_bin |>
-  diameter_table() |>
-  save_tbl("table-7-diameter-class") |>
-  kable(booktabs = TRUE, align = "lrrrr", row.names = FALSE)
-```
+::: {#tbl-qmd .cell tbl-cap='Moderate-to-high beetle disturbance by quadratic mean diameter class, on the balanced sample. The 25 cm boundary is the source-sink threshold of the species\' bionomics. Intervals are Wilson score intervals on the class proportion, which is why they are asymmetric in the smallest class. Note that 30 m cells in a spreading outbreak are not independent, so the tests reported beneath this table are anti-conservative.'}
+::: {.cell-output-display}
+
+
+|QMD class (cm) |      n| Attacked| Attacked (%)| 95% CI (%)|
+|:--------------|------:|--------:|------------:|----------:|
+|<15            |    736|      232|         31.5|  28.3-35.0|
+|15-20          |  2,371|      564|         23.8|  22.1-25.5|
+|20-25          |  7,058|    2,559|         36.3|  35.1-37.4|
+|25-30          | 14,634|    6,717|         45.9|  45.1-46.7|
+|30-40          | 18,902|    4,639|         24.5|  23.9-25.2|
+|>40            |  3,627|      617|         17.0|  15.8-18.3|
+
+
+:::
+:::
+
 
 Coding host as diameter changes the picture cover alone gives. Attack peaks in the
 25 to 30 cm class at
-`r sprintf("%.1f", 100*qmd_bin$attack[qmd_bin$bin == "25-30"])` per cent and falls away
-above it, to `r sprintf("%.1f", 100*qmd_bin$attack[qmd_bin$bin == "30-40"])` per cent at 30
-to 40 cm and `r sprintf("%.1f", 100*qmd_bin$attack[qmd_bin$bin == ">40"])` per cent above 40
+45.9 per cent and falls away
+above it, to 24.5 per cent at 30
+to 40 cm and 17.0 per cent above 40
 (@tbl-qmd). The step across the 25 cm source-sink boundary is from
-`r sprintf("%.1f", 100*qmd_bin$attack[qmd_bin$bin == "20-25"])` to
-`r sprintf("%.1f", 100*qmd_bin$attack[qmd_bin$bin == "25-30"])` per cent.
+36.3 to
+45.9 per cent.
 
-In the full model diameter carries `r b3("QUAD_DIAM_125")` per standard deviation
-(z = `r z3("QUAD_DIAM_125")`). It is negative because the relationship is not monotone: a
+In the full model diameter carries -0.422 per standard deviation
+(z = -18.35). It is negative because the relationship is not monotone: a
 linear term fitted through a humped response returns the slope of its falling limb, which
 is the larger part of the range. The class table, not the coefficient, is the result here,
 and the point stands, because a stand's cover says nothing about whether its stems can
 produce brood.
 
 The pattern is not an artefact of the class boundaries. Across all six classes attack
-depends on diameter class, $\chi^2$ = `r sprintf("%.1f", QT$X2)` on `r QT$df` degrees of
-freedom, p `r pt(QT$chi$p.value)`, with Cramer's V = `r sprintf("%.3f", QT$V)`. The step
+depends on diameter class, $\chi^2$ = 2271.7 on 5 degrees of
+freedom, p < 0.001, with Cramer's V = 0.219. The step
 across the 25 cm source-sink boundary specifically, from the 20 to 25 class to the 25 to 30
-class, is `r sprintf("%+.1f", QT$step_diff)` percentage points, 95 per cent confidence
-interval `r sprintf("%.1f to %.1f", -QT$step_ci[2], -QT$step_ci[1])`, p
-`r pt(QT$step$p.value)`. With `r fmt(sum(qmd_bin$n))` cells a chi-square is significant on
+class, is +9.6 percentage points, 95 per cent confidence
+interval 8.3 to 11.0, p
+< 0.001. With 47,328 cells a chi-square is significant on
 trivial differences, which is why the effect size is quoted beside it, and 30 m cells in a
 spreading outbreak are not independent, so both p-values are anti-conservative.
 
-The smallest class is not evidence. It holds `r fmt(qmd_bin$n[qmd_bin$bin == "<15"])` cells
-against `r fmt(qmd_bin$n[qmd_bin$bin == "25-30"])` in the modal class, and a stand below
+The smallest class is not evidence. It holds 736 cells
+against 14,634 in the modal class, and a stand below
 15 cm quadratic mean diameter in an inventory whose vintage postdates the outbreak is more
 likely a stand the beetle already stripped of large stems than a stand attacked at that
 size.
@@ -801,28 +867,28 @@ projected for growth to it. The alternative, and what earlier drafts of this stu
 the single composite the web feature service serves, projected to 2025. Under that composite
 every year of a cell carries the same basal area, volume, stems and diameter, so the host
 terms have no variation in time at all and their values have been grown forward through and
-past the outbreak they are meant to predict. Across the `r VRI_YEARS` study years the
+past the outbreak they are meant to predict. Across the 9 study years the
 between-year standard deviation of mean standing volume rises from
-`r sprintf("%.2f", vr("static 2025 composite","host_vol_sd"))` to
-`r sprintf("%.2f", vr("year-matched VRI","host_vol_sd"))` m^3^ ha^-1^ when the snapshots are
+7.95 to
+13.68 m^3^ ha^-1^ when the snapshots are
 matched to their years, so the change is not cosmetic.
 
 It costs the result about half its size. The interaction between stem density and wind falls
-from `r b(vr("static 2025 composite","stems_x_wind"))` (p
-`r pp(vr("static 2025 composite","stems_p"))`) to
-`r b(vr("year-matched VRI","stems_x_wind"))` (p `r pp(vr("year-matched VRI","stems_p"))`),
+from -0.0941 (p
+< 0.001) to
+-0.0491 (p < 0.001),
 and the interaction with standing volume from
-`r b(vr("static 2025 composite","volume_x_wind"))` (p
-`r pp(vr("static 2025 composite","volume_p"))`) to
-`r b(vr("year-matched VRI","volume_x_wind"))` (p
-`r pp(vr("year-matched VRI","volume_p"))`). Both keep the sign the mechanism requires and
+-0.0410 (p
+< 0.001) to
+-0.0169 (p
+= 0.038). Both keep the sign the mechanism requires and
 both remain distinguishable from zero, but roughly half of the effect the composite reported
 was an artefact of holding host structure constant. The model that reports the smaller
 effect is the better one: discrimination rises from
-`r sprintf("%.4f", vr("static 2025 composite","AUC"))` to
-`r sprintf("%.4f", vr("year-matched VRI","AUC"))`.
+0.6685 to
+0.6730.
 
-`r if (VRI_SUBN) sprintf("One year is substituted. The %d delivery carries basal area and live stems as columns and fills neither, 0 and 3 per cent of polygons against 70 to 97 per cent in every other year, so the preceding year is carried forward rather than averaged: the inventory is itself a projection, and carrying forward reproduces a stand structure the province published where averaging would invent one it did not.", VRI_SUB[1])`
+One year is substituted. The 2007 delivery carries basal area and live stems as columns and fills neither, 0 and 3 per cent of polygons against 70 to 97 per cent in every other year, so the preceding year is carried forward rather than averaged: the inventory is itself a projection, and carrying forward reproduces a stand structure the province published where averaging would invent one it did not.
 
 ## The wind window {#sec-window}
 
@@ -846,25 +912,22 @@ gate itself. The stem-density interaction is negative and distinguishable from z
 all four, so the mechanism does not depend on the choice. It is largest over the full
 regime, and the standing-volume interaction is the term that depends on it.
 
-```{r}
-#| label: tbl-window
-#| echo: false
-#| tbl-cap: "The 16-day model refitted under four definitions of the wind window. The epoch wind regime, every hour, is the definition used throughout this paper. Coefficients are log-odds per standard deviation. The thermal-gate row is fitted on fewer cell-epochs because two epochs carried too few qualifying hours, so its AIC is not comparable with the other three."
 
-FWS |>
-  transmute(
-    Definition = c("Epoch wind regime (all hours)", "12:00-17:00", "11:00-18:00",
-                   "Inside the 19-41 C gate")[match(definition,
-                   c("all24","h12_17","h11_18","gate"))],
-    `Cell-epochs` = formatC(n, format = "d", big.mark = ","),
-    `Wind (km/h)` = sprintf("%.2f", wind_mean),
-    `Stems x wind` = sprintf("%+.4f", stems_x_wind),
-    `p` = sapply(stems_p, function(x) if (x < 0.001) "< 0.001" else sprintf("%.3f", x)),
-    `Volume x wind` = sprintf("%+.4f", volume_x_wind),
-    `p ` = sapply(volume_p, function(x) if (x < 0.001) "< 0.001" else sprintf("%.3f", x)),
-    AUC = sprintf("%.3f", AUC)) |>
-  kable(booktabs = TRUE, align = "lrrrrrrr", row.names = FALSE)
-```
+::: {#tbl-window .cell tbl-cap='The 16-day model refitted under four definitions of the wind window. The epoch wind regime, every hour, is the definition used throughout this paper. Coefficients are log-odds per standard deviation. The thermal-gate row is fitted on fewer cell-epochs because two epochs carried too few qualifying hours, so its AIC is not comparable with the other three.'}
+::: {.cell-output-display}
+
+
+|Definition                    | Cell-epochs| Wind (km/h)| Stems x wind|       p| Volume x wind|      p |   AUC|
+|:-----------------------------|-----------:|-----------:|------------:|-------:|-------------:|-------:|-----:|
+|Epoch wind regime (all hours) |      71,127|        5.04|      -0.0941| < 0.001|       -0.0410| < 0.001| 0.668|
+|12:00-17:00                   |      71,127|        6.45|      -0.0565| < 0.001|       -0.0082|   0.325| 0.667|
+|11:00-18:00                   |      71,127|        6.32|      -0.0623| < 0.001|       -0.0161|   0.054| 0.667|
+|Inside the 19-41 C gate       |      69,711|        5.67|      -0.0596| < 0.001|       -0.0325| < 0.001| 0.666|
+
+
+:::
+:::
+
 
 # Discussion
 
@@ -874,15 +937,15 @@ The clearest result of this study is methodological, and it changes what a terra
 in this literature is allowed to be taken for.
 
 Fitted with a terrain-wind index and no radiation, stand density interacts with terrain
-exposure at `r bnr(I_GEO)`, and the natural reading is a wind effect. Add flight-window
-radiation and that interaction becomes `r b3(I_GEO)`, p `r p3t(I_GEO)`, while density by
-radiation appears at `r b3(paste0(DENS[1], ":", FSUN[1]))`. About a third of the apparent
+exposure at +0.311, and the natural reading is a wind effect. Add flight-window
+radiation and that interaction becomes +0.221, p < 0.001, while density by
+radiation appears at -0.144. About a third of the apparent
 exposure effect was the sun. The rest was not, and what survives keeps the sign the
 mechanism forbids.
 
 That is not a peculiarity of this dataset. A windward-leeward index and an afternoon
 radiation surface are both functions of slope and aspect, and on a range whose prevailing
-flight-window bearing is `r sprintf("%.0f", WDIR)` degrees the windward slopes are the
+flight-window bearing is 258 degrees the windward slopes are the
 west-facing ones, which are also the slopes that take afternoon sun during the flight peak.
 Any study that enters a terrain-derived wind index without a radiation term on the same
 clock will attribute radiation to wind.
@@ -893,20 +956,20 @@ clock will attribute radiation to wind.
 of the three hold and the third does not.
 
 Host density holds, and it holds in the way the mechanism specifies rather than as a bare
-main effect. Standing volume predicts disturbance at `r b3("LIVE_STAND_VOLUME_125")`, and
-its interaction with wind is `r be1(EINT[2])` while stem density's is `r be1(EINT[1])`. The
+main effect. Standing volume predicts disturbance at +0.381, and
+its interaction with wind is -0.041 while stem density's is -0.094. The
 claim was never that dense stands are attacked more; it was that a dense canopy holds a
 plume together, and that what a dense canopy buys should shrink as the wind rises. Both
 halves are present.
 
 Large-diameter host holds as a threshold rather than a slope. Attack peaks at
-`r sprintf("%.1f", 100*qmd_bin$attack[qmd_bin$bin == "25-30"])` per cent in the 25 to 30 cm
+45.9 per cent in the 25 to 30 cm
 class, at the source-sink boundary of @carroll2004bionomics, and falls away on both sides.
 
 Topographic shading does not hold, and it fails on a surrogate rather than on the surface
 the mechanism names. Growing-season radiation did not survive variable selection, so the
-pathway is carried by northness, which correlates `r cc("solar_season_direct", "northness")`
-with it. Northness is `r b3("northness")`, so shaded ground carries more attack where the
+pathway is carried by northness, which correlates -0.834
+with it. Northness is +0.382, so shaded ground carries more attack where the
 mechanism requires less. Northness tests aspect, and aspect carries more than shade, so this
 is the least secure of the three verdicts; the water-stress pathway @krawchuk2020 describe is
 not measured here at all.
@@ -917,16 +980,16 @@ The mechanism holds, and the reason earlier specifications rejected it is tempor
 resolution rather than anything about the landscape.
 
 At Landsat's own 16-day cadence, stand density interacts with terrain-resolved wind at
-`r be1(EINT[1])` for stem density and `r be1(EINT[2])` for standing volume, both negative,
-at p `r pe1t(EINT[1])` and p `r pe1t(EINT[2])` respectively. A dense stand is worth
+-0.094 for stem density and -0.041 for standing volume, both negative,
+at p < 0.001 and p < 0.001 respectively. A dense stand is worth
 less where and when the wind blows harder, which is what @krawchuk2020 predict. The result
 survives entering the previous epoch of the same season, so it is not the outbreak's own
 spread wearing a wind coefficient.
 
 Every coarser specification in this study rejected the same mechanism. With one map a year
-and station wind, the interaction was `r b4(I_TMP)` on eight annual values, right sign and
+and station wind, the interaction was +0.020 on eight annual values, right sign and
 weak identification. With one map a year and the terrain-resolved field it was
-`r b5(INT_MM)`, wrong sign. The difference is not the wind product and not the covariate
++0.031, wrong sign. The difference is not the wind product and not the covariate
 set, both of which are shared: it is that a single annual map forces the comparison to be
 made between summers, and a summer is not the unit the insect flies in.
 
@@ -945,7 +1008,7 @@ is that the modelled wind field behaves as the mechanism requires, not that the 
 ## Ruggedness and regeneration
 
 The two papers now share a grid, a landscape and a terrain covariate set, and they disagree
-on the sign of ruggedness: `r b3("tri")` for beetle attack here against a positive
+on the sign of ruggedness: -0.036 for beetle attack here against a positive
 coefficient for conifer regeneration there [@murphy2026]. Read together they describe a
 landscape in which rugged ground both resists the disturbance and shelters the recovery from
 it. That is a coherent picture, not a contradiction, and it is only visible because the two
@@ -953,7 +1016,7 @@ studies were fitted on the same grid in EPSG:3153.
 
 ## What stays confounded
 
-Elevation is among the largest terms in the model, `r b3("elevation")`, and elevation is not
+Elevation is among the largest terms in the model, +0.329, and elevation is not
 one thing. It carries temperature, snowpack, growing-season length and the distribution of
 lodgepole pine, and this design cannot take them apart. Reporting the elevation coefficient
 as a result would be reporting a composite.
@@ -965,9 +1028,9 @@ environmental surface would not take the rest, or another.
 # Conclusions
 
 The wind-disruption mechanism proposed by @krawchuk2020 holds on this landscape, at the
-resolution the sensor and the insect share. Across `r EP_EPOCHS` sixteen-day epochs, stand
-density interacts negatively with terrain-resolved wind, `r be1(EINT[1])` for stem density
-and `r be1(EINT[2])` for standing volume, and both survive a within-season spread term. A
+resolution the sensor and the insect share. Across 59 sixteen-day epochs, stand
+density interacts negatively with terrain-resolved wind, -0.094 for stem density
+and -0.041 for standing volume, and both survive a within-season spread term. A
 dense canopy is worth less to the beetle where and when the wind blows harder, which is what
 a plume-disruption mechanism requires.
 
@@ -976,18 +1039,18 @@ volume rather than crown closure or stem count, which run the other way as main 
 large-diameter host holds as a threshold at 25 to 30 cm rather than as a slope, at the
 source-sink boundary of @carroll2004bionomics. Topographic shading does not hold, and it
 fails on a surrogate: growing-season radiation did not survive selection, so the pathway is
-carried by northness, `r b3("northness")`, which correlates
-`r cc("solar_season_direct", "northness")` with it.
+carried by northness, +0.382, which correlates
+-0.834 with it.
 
 The methodological finding is the more transferable one, and it has three parts. A terrain
 index is partly an insolation measurement: entering flight-window radiation cut the density
-by terrain-exposure interaction from `r bnr(I_GEO)` to `r b3(I_GEO)`, leaving the sign
+by terrain-exposure interaction from +0.311 to +0.221, leaving the sign
 unchanged. A landform variable in a spreading outbreak records the outbreak's own history:
-entering previous-year pressure left valley depth at `r ret("valley_depth")` of its value
-while mid-slope position moved to `r ret("midslope_position")`, against `r ret("tri")` for
+entering previous-year pressure left valley depth at 0.50 of its value
+while mid-slope position moved to 1.32, against 0.61 for
 ruggedness. And an annual response cannot test a mechanism that operates over weeks: the
-same wind field, covariates and threshold gave `r b5(INT_MM)` at annual resolution against
-`r be1(EINT[1])` at sixteen days.
+same wind field, covariates and threshold gave +0.031 at annual resolution against
+-0.094 at sixteen days.
 
 Since no previous study has fitted a wind term at all [@krawchuk2020; @cartwright2018], there
 is no precedent establishing the resolution at which one should be fitted. This study's answer
@@ -997,17 +1060,17 @@ will reject a mechanism that is there.
 # Limitations {#sec-limits}
 
 **Radiation and exposure are not separable in the flight window.** The prevailing bearing is
-`r sprintf("%.0f", WDIR)` degrees, so windward slopes face west and take afternoon sun.
-Flight-window radiation correlates `r cc("solar_flight_direct", "wind_effect")` with the
+258 degrees, so windward slopes face west and take afternoon sun.
+Flight-window radiation correlates -0.599 with the
 windward-leeward index. Its positive coefficient is consistent with the thermal gate and with
 exposure raising attack, and this design cannot choose between them.
 
 **The shading mechanism is tested on a surrogate.** Growing-season direct radiation did not
 survive variable selection, so the pathway is carried by northness, which correlates
-`r cc("solar_season_direct", "northness")` with it. Northness tests aspect, aspect carries
+-0.834 with it. Northness tests aspect, aspect carries
 more than shade, and the water-stress pathway @krawchuk2020 describe is not measured here.
 Growing-season radiation is at least separable from wind exposure,
-`r cc("solar_season_direct", "wind_effect")`, which is the one thing it establishes.
+-0.015, which is the one thing it establishes.
 
 **The wind field is modelled, not measured.** MicroMet modifies station observations over the
 terrain. What is established is that the modelled field behaves as the mechanism requires,
@@ -1015,14 +1078,14 @@ not that the air did.
 
 **The inventory postdates part of the outbreak.** Polygons interpreted after the beetle
 passed describe the stand it left. Total basal area discriminates below chance,
-`r sprintf("%.3f", uni$auc[uni$term == "BASAL_AREA"])`, most likely for this reason.
+0.516, most likely for this reason.
 
 **The response is classified, not observed.** Disturbance is inferred from Landsat moisture
 indices trained on plots cut from those indices, so reported accuracy measures separability
 rather than agreement with ground mortality.
 
 **One landscape, one outbreak.** Every conclusion is conditioned on a single mountain range
-over `r EP_YEARS` years and `r EP_EPOCHS` epochs.
+over 8 years and 59 epochs.
 
 # Acknowledgements
 
@@ -1090,11 +1153,57 @@ percentiles of stem density, all other terms held at their means. (b) The same f
 standing volume. (c) Coefficients of the 16-day model, with and without the within-season
 spread term. (d) Epoch prevalence against epoch mean wind, one point per epoch.
 
-```{r}
-#| label: session
-#| echo: false
 
-sessionInfo()
+::: {.cell}
+::: {.cell-output .cell-output-stdout}
+
 ```
+R version 4.4.1 (2024-06-14)
+Platform: aarch64-apple-darwin20
+Running under: macOS 15.7.7
+
+Matrix products: default
+BLAS:   /opt/local/Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /opt/local/Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+
+locale:
+[1] en_CA.UTF-8/en_CA.UTF-8/en_CA.UTF-8/C/en_CA.UTF-8/en_CA.UTF-8
+
+time zone: America/Vancouver
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] ggnewscale_0.5.2 e1071_1.7-17     ggspatial_1.1.10 tidyterra_1.1.0 
+ [5] patchwork_1.3.2  ranger_0.18.0    car_3.1-5        carData_3.0-6   
+ [9] mgcv_1.9-4       nlme_3.1-168     knitr_1.51       ggplot2_4.0.2   
+[13] tidyr_1.3.2      dplyr_1.2.0      sf_1.1-0         terra_1.9-1     
+
+loaded via a namespace (and not attached):
+ [1] s2_1.1.9            generics_0.1.4      class_7.3-23       
+ [4] KernSmooth_2.23-26  lattice_0.22-9      pROC_1.19.0.1      
+ [7] digest_0.6.39       magrittr_2.0.4      evaluate_1.0.5     
+[10] grid_4.4.1          RColorBrewer_1.1-3  fastmap_1.2.0      
+[13] jsonlite_2.0.0      Matrix_1.7-5        Formula_1.2-5      
+[16] DBI_1.3.0           purrr_1.2.1         viridisLite_0.4.3  
+[19] scales_1.4.0        codetools_0.2-20    abind_1.4-8        
+[22] cli_3.6.5           rlang_1.1.7         units_1.0-1        
+[25] splines_4.4.1       withr_3.0.2         yaml_2.3.12        
+[28] otel_0.2.0          tools_4.4.1         vctrs_0.7.2        
+[31] R6_2.6.1            proxy_0.4-29        lifecycle_1.0.5    
+[34] classInt_0.4-11     pkgconfig_2.0.3     pillar_1.11.1      
+[37] gtable_0.3.6        data.table_1.18.2.1 glue_1.8.0         
+[40] Rcpp_1.1.1          xfun_0.57           tibble_3.3.1       
+[43] tidyselect_1.2.1    farver_2.1.2        htmltools_0.5.9    
+[46] labeling_0.4.3      rmarkdown_2.30      wk_0.9.5           
+[49] compiler_4.4.1      S7_0.2.1           
+```
+
+
+:::
+:::
+
 
 # References

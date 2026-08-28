@@ -193,9 +193,41 @@ Three traps, all of which cost time:
     as a corrupt download and is not one; and the layer is `VEG_COMP_LYR_R1_POLY_FINALV4`
     in 2005 and 2006 but `VEG_COMP_LYR_R1_POLY` from 2007. The script discovers all three.
 
-**Status.** 2005, 2006, 2008 and 2010 are extracted and verified. 2007, 2009, 2011, 2013
-and 2014 are not: 2009 will not resolve, and concurrent runs corrupted the others. The
-series is not yet usable and no model has been refitted on it.
+**Status: complete.** All nine study years are extracted and verified, and every model in
+`beetle-topography-wind-study-vri-timeseries.qmd` is fitted on them.
+
+Every year that first looked like a data gap was a renamed column. Three schema generations
+appear in the series and the field map in `50-fetch-vri-timeseries.R` covers all of them:
+
+| Attribute | 2007 and earlier | 2008 | 2009 onward |
+|---|---|---|---|
+| Crown closure | `CR_CLOSURE` | `CROWN_CLOSURE` | `CROWN_CLOSURE` |
+| Live stems | `LIVE_STEMS` | `VRI_LIVE_STEMS_PER_HA` | `VRI_LIVE_STEMS_PER_HA` |
+| Quadratic mean diameter | `Q_DIAM_125` | `QUAD_DIAM_125` | `QUAD_DIAM_125` |
+| Stand height | `PROJ_HT_1` | `PROJ_HEIGHT_1` | `PROJ_HEIGHT_1` |
+| Species code | `SPEC_CD_1` | `SPECIES_CD_1` | `SPECIES_CD_1` |
+| Standing volume | `VOLSP1_125`..`VOLSP6_125`, summed | `VOL_PER_HA_SPP1_125`..`SPP6`, summed | `LIVE_STAND_VOLUME_125` |
+
+**One genuine gap.** The 2007 delivery carries `BASAL_AREA` and `VRI_LIVE_STEMS_PER_HA` as
+columns and fills neither: 0 and 3 per cent of polygons respectively, against 70 to 97 per
+cent in every other year. `55-build-vri-timeseries-table.R` therefore requires a field to be
+at least 20 per cent populated before a year counts as usable, and carries 2006 forward for
+2007. Carried forward, never averaged: the inventory is itself a projection, so carrying
+forward reproduces a stand structure the province published where averaging would invent one
+it did not. The substitution is recorded in `model-data/vri_year_source.csv`.
+
+**Two traps that cost hours.**
+
+4.  **The resolver was timing out, not failing.** 2009 and 2011 reported "could not resolve
+    archive or layer" three times each. Both archives open fine. Probing candidate inner
+    paths with `ogrinfo` costs minutes per attempt against a 3.9 GB remote zip, so the loop
+    never reached the right one. Extracting directly with the confirmed inner names,
+    `veg_comp_lyr_r1_poly.gdb` for 2009 and `veg_comp_lyr_r1.gdb` for 2011, worked first
+    time.
+5.  **Concurrent writes corrupt these GeoPackages silently.** A retry loop restarted the
+    fetch while a direct extraction was writing the same file; 2011 and 2013 were destroyed
+    that way earlier the same day. The corrupted file exists at a plausible size and fails
+    only when read. Only one process may write `vri-timeseries/` at a time.
 
 ### 8. Response: Landsat Collection 2 Level-2 surface reflectance
 

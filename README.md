@@ -20,7 +20,7 @@ Every figure and table below is reproduced from the current render, in the order
 | :--- | :--- | :--- | :--- | :--- | :--- | ---: |
 | Beetle disturbance, annual | Landsat 5 and 8 Collection 2 Level-2 | Moderate-to-high disturbance, binary, from NDMI | 30 m | 1 year | 2005-2014, excluding 2012 | 8 years |
 | Beetle disturbance, 16-day | Landsat 5 and 8 Collection 2 Level-2 | Moderate-to-high disturbance, binary, from NDMI | 30 m | 16 days, the sensor’s repeat | 2006-2014 | 60 epochs |
-| Stand structure | VRI Historical, BC Data Catalogue | Basal area, volume, stems, quadratic mean diameter, age, height | Polygon, rasterised to 30 m | 1 year, projected to each year | 2005-2013 | 6 snapshots |
+| Stand structure | VRI Historical, BC Data Catalogue | Basal area, volume, stems, quadratic mean diameter, age, height | Polygon, rasterised to 30 m | 1 year, projected to each year | 2005-2014 | 9 snapshots |
 | Terrain | NRCan High Resolution DEM, indices by SAGA GIS | 29 geomorphometric surfaces incl. radiation, exposure, landform | 30 m | Static | n/a | 29 surfaces |
 | Station wind | Environment and Climate Change Canada | Speed and direction | 4 to 7 valley stations | 1 hour | 2005-2014, May to September | 236079 hourly records |
 | Terrain-resolved wind | MicroMet over the DEM, driven by station wind | Weighting factor, modified speed, diverted direction | 30 m | 16 days, and 1 year | 2005-2014 | 16 direction bins |
