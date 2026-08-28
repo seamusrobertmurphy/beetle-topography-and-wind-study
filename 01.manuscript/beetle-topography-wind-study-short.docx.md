@@ -174,6 +174,33 @@ df-print: kable
 :::
 
 
+
+::: {.cell}
+
+:::
+
+
+
+::: {#tbl-inventory .cell tbl-cap='The datasets this study combines, with the structure and resolution of each. Every count is read from the files at render time. Spatial resolution is the grid the variable is analysed on; temporal resolution is the interval at which it varies. Note that the response varies every 16 days, the inventory once a year and the terrain not at all, which is the asymmetry the wind analysis turns on.'}
+::: {.cell-output-display}
+
+
+|Dataset                    |Source                                         |Variables                                                       |Spatial resolution          |Temporal resolution            |Period                      |                     n|
+|:--------------------------|:----------------------------------------------|:---------------------------------------------------------------|:---------------------------|:------------------------------|:---------------------------|---------------------:|
+|Beetle disturbance, annual |Landsat 5 and 8 Collection 2 Level-2           |Moderate-to-high disturbance, binary, from NDMI                 |30 m                        |1 year                         |2005-2020                   |              13 years|
+|Beetle disturbance, 16-day |Landsat 5 and 8 Collection 2 Level-2           |Moderate-to-high disturbance, binary, from NDMI                 |30 m                        |16 days, the sensor's repeat   |not built                   |             60 epochs|
+|Stand structure            |VRI Historical, BC Data Catalogue              |Basal area, volume, stems, quadratic mean diameter, age, height |Polygon, rasterised to 30 m |1 year, projected to each year |2005-2013                   |           6 snapshots|
+|Terrain                    |NRCan High Resolution DEM, indices by SAGA GIS |29 geomorphometric surfaces incl. radiation, exposure, landform |30 m                        |Static                         |n/a                         |           29 surfaces|
+|Station wind               |Environment and Climate Change Canada          |Speed and direction                                             |4 to 7 valley stations      |1 hour                         |2005-2014, May to September | 236079 hourly records|
+|Terrain-resolved wind      |MicroMet over the DEM, driven by station wind  |Weighting factor, modified speed, diverted direction            |30 m                        |16 days, and 1 year            |2005-2014                   |     16 direction bins|
+|Modelling table, annual    |Assembled by 38-assemble-model-data.R          |Response and every covariate, one row per cell-year             |30 m                        |1 year                         |2005-2020                   |     122700 cell-years|
+|Modelling table, 16-day    |Assembled by 45-epoch-model-data.R             |Response and every covariate, one row per cell-epoch            |30 m                        |16 days                        |not built                   |     71127 cell-epochs|
+
+
+:::
+:::
+
+
 # Abstract {.unnumbered}
 
 
@@ -249,6 +276,34 @@ microclimate, which in turn influence success of bark beetle dispersal, host sel
 or brood development" [@safranyik2006chap1], an argument @bartos1989 put in their title as
 microclimate against tree vigour. Cool sites also push the beetle toward a two-year cycle
 [@sambaraju2021], so shading and vigour predict the same sign by independent routes.
+
+Two further constraints decide what a wind term can be measured over, and both are
+temporal rather than spatial. The first is the day. @gray1972 recorded emergence in
+*D. ponderosae* against ambient temperature and found that on days whose maximum stayed
+within optimal limits, emergence "began when temperatures rose above 20' C, then increased
+in the morning hours with increasing temperatures, and ceased in the afternoon at about the
+same threshold temperature", with "Peak emergence occurred between 11 a. m. and 2 p. m.
+when 61 percent (232 out of 379) of the beetles were collected". They also record "the
+sharp decline in activity which occurred when ambient temperatures exceeded 30' C". Flight
+is therefore gated at both ends and confined to a few hours, and a daily or monthly mean
+wind speed averages across hours in which no beetle is flying.
+
+The second is the season, and it is a population constraint rather than an individual one.
+Mass attack is a threshold phenomenon: @howe2022 conclude that "a combination of
+stand-level spatial aggregation, behavioral shifts, and higher quality of attainable hosts
+defines a critical threshold beyond which continual population growth becomes
+self-driving", and @cooke2025 define the irruption threshold as "the population density at
+which endemic populations may transition towards the epidemic state". @carroll2004bionomics
+place the same argument on the thermal side, requiring "thermal environments conducive to
+overwintering survival and with sufficient heat accumulation to maintain a synchronous
+univoltine life cycle". Two things follow for this design. Attack in one year is not
+independent of attack in the year before, which is why previous-year and neighbourhood
+pressure enter the models. And an environmental variable that acts on this system acts by
+regulating that threshold rather than by adding to attack: @cooke2025 report that "in every
+study where an Allee effect was demonstrated, investigators also identified at least one
+extrinsic environmental factor (e.g., winter weather, summer drought, microclimatic effect)
+that was regulating its strength". A wind effect on mass attack is therefore expected as an
+interaction with host density, which is what this study fits, and not as a main effect.
 
 No product reports the wind the hypothesis concerns, an instantaneous below-canopy speed at
 flight height during the flight period. Gridded climatologies report a long-run mean at 10 m
@@ -479,6 +534,24 @@ radiation. Its strongest association is with elevation,
 
 ## Flight-window wind
 
+The flight window is 1 July to 15 August and the hours 12:00 to 17:00, and neither bound
+was chosen from these data. The dates are the flight period @safranyik2006chap1 give for
+this region; the hours follow their "peak flight is in the early to mid afternoon" and
+@gray1972's 11:00 to 14:00 emergence peak, taken here to the later side because emergence
+precedes the flight it initiates. Because the window is fixed a priori it can be checked
+against the landscape's own climate, and @fig-flight-window does that. Across
+236,079 hourly station records from May to September of the nine study years,
+89.5 per cent of afternoon hours inside the window fall within
+the 19 to 41 degrees C flight gate, against 51.4 per cent
+outside it, and the afternoon mean is 26.0 against
+19.2 degrees C. The window therefore roughly doubles the share
+of hours in which flight is thermally possible. It is worth noting what the same figure
+shows about wind: mean speed peaks in the same hours as temperature, at
+10.4 km/h in mid-afternoon against
+4.6 km/h at dawn, so the hours the beetle can fly are also the
+windiest of the day. That is a coincidence of timing the mechanism depends on and no
+annual summary can express.
+
 Station wind is Environment and Climate Change Canada hourly records, reduced only at the
 last step into monthly means for June, July and August and four flight-window metrics for
 1 July to 15 August: mean speed, the 95th percentile, and the fractions of hours below
@@ -490,6 +563,14 @@ identified only across years and its standard error should not be believed alone
 density varies cell to cell; a season's wind does not. That asymmetry is why the annual
 models report an interaction rather than a main effect, and why the response was rebuilt at
 16 days.
+
+
+::: {.cell}
+::: {.cell-output-display}
+![The flight window against the landscape's own climate, from hourly Environment and Climate Change Canada station records for May to September of the nine study years. The window, 1 July to 15 August, is the shaded band; it is taken from the bionomics and is not fitted to these data. (a) Mean afternoon temperature by day of year, with the 19 to 41 degrees C flight gate and the 22 to 32 degrees C peak band marked. (b) The share of afternoon hours falling inside the flight gate, day by day. (c) The diurnal curve: mean temperature and the share of all hours inside the gate, by hour, with the 12:00 to 17:00 restriction shaded. (d) Mean wind speed by hour, on the same axis, showing that the hours the beetle can fly are also the windiest of the day.](beetle-topography-wind-study-short_files/figure-docx/fig-flight-window-1.png){#fig-flight-window}
+:::
+:::
+
 
 # Methods
 

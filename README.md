@@ -14,6 +14,21 @@ Every figure and table below is reproduced from the current render, in the order
 
 ### Table 1
 
+*The datasets this study combines, with the structure and resolution of each. Every count is read from the files at render time. Spatial resolution is the grid the variable is analysed on; temporal resolution is the interval at which it varies. Note that the response varies every 16 days, the inventory once a year and the terrain not at all, which is the asymmetry the wind analysis turns on.*
+
+| Dataset | Source | Variables | Spatial resolution | Temporal resolution | Period | n |
+| :--- | :--- | :--- | :--- | :--- | :--- | ---: |
+| Beetle disturbance, annual | Landsat 5 and 8 Collection 2 Level-2 | Moderate-to-high disturbance, binary, from NDMI | 30 m | 1 year | 2005-2014, excluding 2012 | 8 years |
+| Beetle disturbance, 16-day | Landsat 5 and 8 Collection 2 Level-2 | Moderate-to-high disturbance, binary, from NDMI | 30 m | 16 days, the sensor’s repeat | 2006-2014 | 60 epochs |
+| Stand structure | VRI Historical, BC Data Catalogue | Basal area, volume, stems, quadratic mean diameter, age, height | Polygon, rasterised to 30 m | 1 year, projected to each year | 2005-2013 | 6 snapshots |
+| Terrain | NRCan High Resolution DEM, indices by SAGA GIS | 29 geomorphometric surfaces incl. radiation, exposure, landform | 30 m | Static | n/a | 29 surfaces |
+| Station wind | Environment and Climate Change Canada | Speed and direction | 4 to 7 valley stations | 1 hour | 2005-2014, May to September | 236079 hourly records |
+| Terrain-resolved wind | MicroMet over the DEM, driven by station wind | Weighting factor, modified speed, diverted direction | 30 m | 16 days, and 1 year | 2005-2014 | 16 direction bins |
+| Modelling table, annual | Assembled by 38-assemble-model-data.R | Response and every covariate, one row per cell-year | 30 m | 1 year | 2005-2014, excluding 2012 | 122700 cell-years |
+| Modelling table, 16-day | Assembled by 45-epoch-model-data.R | Response and every covariate, one row per cell-epoch | 30 m | 16 days | 2006-2014 | 71127 cell-epochs |
+
+### Table 2
+
 *Landscape attributes entered in this study, the direction expected of each, and the reasoning behind that expectation.*
 
 | Attribute | Expected | Rationale |
@@ -33,15 +48,9 @@ Every figure and table below is reproduced from the current render, in the order
 
 ![Figure 1](03.outputs/PNG/fig-study-area.png)
 
-*The study area over the British Columbia Freshwater Atlas, with Kootenay Lake and the Kootenay River to the east. (a) Elevation, with the 2015 Mt Midgeley burn that anchors the perimeter outlined in red. (b) Terrain ruggedness index. (c) Stand basal area from the Vegetation Resources Inventory, the density term the pheromone-disruption mechanism runs through. The study perimeter is the grey outline and contours are at 250 m. All panels share one extent, projection and scale, so the north arrow, scale bar and representative fraction are drawn once, on (a); the representative fraction holds at a printed panel width of 66 mm. Coordinates are EPSG:3153, NAD83(CSRS) / BC Albers.*
+*Landscape, terrain and stand surfaces across the study area, all EPSG:3153 at 30 m over Esri World Shaded Relief. (a) elevation; (b) terrain ruggedness index; (c) windward-leeward index at the prevailing bearing; (d) flight-window direct radiation, the thermal gate on flight; (e) growing-season direct radiation, the shading pathway; (f) the MicroMet wind weighting factor at the prevailing bearing; (g) stand basal area; (h) quadratic mean diameter, whose 25 cm source-sink threshold falls near the midpoint of the scale; (i) live stems per hectare. The white outline is the study perimeter and the red outline the 2015 Mt Midgeley burn. Contours are at 200 m. Every panel carries its own north arrow and the same numerical scale, 1:150,000, which holds at a printed panel width of 66 mm.*
 
-### Figure 2
-
-![Figure 2](03.outputs/PNG/fig-layers.png)
-
-*The predictor surfaces, over the same base map and extent as Figure 1, with the 2015 burn outlined in red. (a) flight-window direct radiation, the thermal gate on flight; (b) growing-season direct radiation, the shading pathway; (c) the MicroMet wind weighting factor at the prevailing bearing; (d) terrain ruggedness; (e) stand basal area; (f) quadratic mean diameter, whose 25 cm source-sink threshold falls near the midpoint of the scale. Contours are omitted so the surfaces read cleanly. Coordinates are EPSG:3153; scale and orientation are as Figure 1.*
-
-### Table 2
+### Table 3
 
 *Moderate-to-high beetle disturbance by year inside the study perimeter.*
 
@@ -56,7 +65,7 @@ Every figure and table below is reproduced from the current render, in the order
 | 2013 | 15,339 | 14.2 |
 | 2014 | 15,340 | 15.1 |
 
-### Table 3
+### Table 4
 
 *Stand structure across the study perimeter, from the Vegetation Resources Inventory. n is cell-years. SD is the standard deviation of the landscape; SE is the standard error of the mean and is small by construction at this n, so it should not be read as precision about any one cell. Skewness and kurtosis are the bias-corrected third and fourth standardised moments; kurtosis is excess, so 0 is Gaussian and positive is heavy-tailed.*
 
@@ -72,7 +81,13 @@ Every figure and table below is reproduced from the current render, in the order
 | Lodgepole pine cover (%) | 122,700 | 17.36 | 22.82 | 0.065 | 10.00 | 0.00 | 100.00 | +1.63 | +2.09 |
 | Susceptible pine basal area (m2/ha) | 122,700 | 5.45 | 7.03 | 0.020 | 3.24 | 0.00 | 31.67 | +1.52 | +1.86 |
 
-### Table 4
+### Figure 2
+
+![Figure 2](03.outputs/PNG/fig-flight-window.png)
+
+*The flight window against the landscape’s own climate, from hourly Environment and Climate Change Canada station records for May to September of the nine study years. The window, 1 July to 15 August, is the shaded band; it is taken from the bionomics and is not fitted to these data. (a) Mean afternoon temperature by day of year, with the 19 to 41 degrees C flight gate and the 22 to 32 degrees C peak band marked. (b) The share of afternoon hours falling inside the flight gate, day by day. (c) The diurnal curve: mean temperature and the share of all hours inside the gate, by hour, with the 12:00 to 17:00 restriction shaded. (d) Mean wind speed by hour, on the same axis, showing that the hours the beetle can fly are also the windiest of the day.*
+
+### Table 5
 
 *Model comparison, panel A of the model table. Each model adds one pathway to the previous. AIC ranks on likelihood and a parameter penalty; the remaining columns are predictive error on the fitted probabilities. RMSE is the root mean squared error and is the square root of the Brier score; RMSE (%) expresses it against the prevalence of the response. Brier skill is the improvement over predicting the prevalence for every cell, where 0 is no better than the base rate. MAPE and Theil’s U are not reported: both divide by the observed value, which is zero for the majority class of a binary response, so both are undefined without discarding that class.*
 
@@ -83,7 +98,7 @@ Every figure and table below is reproduced from the current render, in the order
 | M2 + terrain and flight radiation | 48,305 | 1,065 | 0.409 | 126.2 | 0.336 | 0.167 | 0.510 | 0.784 | 0.237 |
 | M3 + interactions | 47,240 | 0 | 0.404 | 124.7 | 0.327 | 0.163 | 0.498 | 0.798 | 0.256 |
 
-### Table 5
+### Table 6
 
 *Full model M3, panel B of the model table: continuous terms, ordered by absolute effect. Coefficients are log-odds per standard deviation on a class-balanced sample, so the intercept is not landscape prevalence. SE is the standard error of the coefficient. The geomorphon landform classes are also in this model and are not reported here.*
 
@@ -119,7 +134,7 @@ Every figure and table below is reproduced from the current render, in the order
 
 *The refugia mechanism as fitted. (a) Predicted probability of moderate-to-high disturbance against terrain-resolved epoch wind, at the 10th and 90th percentiles of stem density, all other terms held at their means; the lines cross, so wind raises attack in thin stands and lowers it in dense ones, which is the interaction. (b) The same for standing volume. (c) Coefficients of the 16-day model, with and without the within-season spread term. (d) Epoch prevalence against epoch mean wind, one point per epoch.*
 
-### Table 6
+### Table 7
 
 *The wind terms under two specifications, both with previous-year pressure in the model. M4 carries station wind, which is flat within a year and identified only across years. M5 carries the terrain-resolved MicroMet field, which varies within the year and is identified in space.*
 
@@ -130,7 +145,7 @@ Every figure and table below is reproduced from the current render, in the order
 | M5 terrain-resolved wind | MicroMet flight-window wind (km/h) | +0.467 | 28.44 | < 0.001 |
 | M5 terrain-resolved wind | Live stems x MicroMet flight-window wind | +0.031 | 2.09 | 0.036 |
 
-### Table 7
+### Table 8
 
 *Moderate-to-high beetle disturbance by quadratic mean diameter class, on the balanced sample. The 25 cm boundary is the source-sink threshold of the species’ bionomics. Intervals are Wilson score intervals on the class proportion, which is why they are asymmetric in the smallest class. Note that 30 m cells in a spreading outbreak are not independent, so the tests reported beneath this table are anti-conservative.*
 

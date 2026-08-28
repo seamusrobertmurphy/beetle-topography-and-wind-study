@@ -1,4 +1,20 @@
 ---
+# A COPY, forked 2026-08-28 from beetle-topography-wind-study-short.qmd.
+#
+# The Journal of Applied Entomology draft that this was copied from is the version of
+# record and must not be edited here: it took substantial work to reach the result it
+# reports, and that result stands on the stand structure it was fitted with.
+#
+# This copy exists to refit the same models on a year-matched inventory. Until
+# 2026-08-28 the host terms came from the live WFS composite projected to 2025, so a
+# cell carried the SAME basal area, volume, stems and diameter in every one of the eight
+# years, and those attributes had been grown forward through and past the outbreak they
+# were meant to predict. The province publishes an annual series instead, one snapshot
+# per year depleted for harvest and projected for growth to that year, and
+# 50-fetch-vri-timeseries.R pulls it.
+#
+# Expect the coefficients to move. The density terms change from constant to time-varying,
+# and the wind interaction multiplies exactly those terms.
 title: "Testing the wind disruption hypothesis for beetle refugia"
 subtitle: "Stand density, terrain shape and flight-window wind as competing controls on mountain pine beetle attack (Dendroctonus ponderosae) in the Selkirk Mountains of British Columbia"
 author:

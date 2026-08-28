@@ -28,9 +28,9 @@ Liston and Elder (2006), implemented in `beetle-classification/41-micromet-wind.
 The **grid is EPSG:3153 at 30 m**, the parent study's grid, not the inherited UTM
 terrain archive described under source 3 below.
 
-Sources 5, 6 and 7 were added after that rewrite.
+Sources 5 to 9 were added after that rewrite. Source 7, the annual VRI series, supersedes source 2 for any model.
 
-## The seven sources
+## The nine sources
 
 ### 1. Visual check only: BC Aerial Overview Survey, pest infestation polygons
 
@@ -138,7 +138,66 @@ tool, ships no macOS binary. `wind_weight_by_direction.tif` holds one surface pe
 direction bins; each hourly observation is multiplied by the surface for its own bin, so
 nothing is averaged before the terrain acts on it.
 
-### 6. Response: Landsat Collection 2 Level-2 surface reflectance
+### 6. Flight-season climate, hourly station records
+
+|  |  |
+|------------------------------------|------------------------------------|
+| Network | Environment and Climate Change Canada, hourly, via `weathercan` |
+| Period | 1 May to 30 September, 2005 to 2014 excluding 2012 |
+| Retrieved | 2026-08-28 |
+| Script | `beetle-classification/51-flight-window-climate.R` |
+| Local path | `covariates/flight-window/` (236,079 hourly records) |
+
+The flight window, 1 July to 15 August and the hours 12:00 to 17:00, is taken from the
+bionomics and is not fitted to these data. This is what checks it: inside the window 89.5
+per cent of afternoon hours fall within the 19 to 41 degrees C flight gate against 51.4 per
+cent outside it, and the afternoon mean is 26.0 against 19.2 degrees C. Mean wind speed
+peaks in the same hours as temperature, 10.4 km/h at 14:00 to 15:00 against 6.5 at 09:00,
+so the hours the beetle can fly are the windiest of the day.
+
+`30-wind-hourly-metrics.R` fetches June to August and keeps only nine summary rows, so
+nothing else on disk carries the shape within a season.
+
+### 7. Stand structure over time: VRI Historical, annual snapshots
+
+|  |  |
+|------------------------------------|------------------------------------|
+| Dataset | VRI - HISTORICAL Vegetation Resource Inventory (2002 - 2024) |
+| Catalogue id | `02dba161-fdb7-48ae-a4bb-bd6ef017c36d` |
+| Portal | https://catalogue.data.gov.bc.ca/dataset/vri-historical-vegetation-resource-inventory-2002-2024- |
+| Licence | Open Government Licence, British Columbia |
+| Script | `beetle-classification/50-fetch-vri-timeseries.R` |
+| Local path | `study-area/vri-timeseries/vri_<year>.gpkg` |
+| Status | **incomplete as of 2026-08-28**; see below |
+
+**This supersedes source 2 for any model.** Source 2 is the live WFS composite, a single
+layer projected to 2025: every annual observation of a cell carried the same basal area,
+volume, stems and diameter, and those attributes had been grown forward through and past
+the outbreak they were meant to predict. On this perimeter that layer gives a mean basal
+area of 35.18 m2/ha; the year-matched 2014 snapshot gives 30.0, with 787 stems per hectare
+against 670 and a quadratic mean diameter of 26.74 cm against 30.13.
+
+Each annual file is "updated for depletions, such as harvesting, and projected annually for
+growth", and its `PROJECTED_DATE` is 31 December of the year before its label, so the 2014
+file is the stand entering 2014.
+
+Three traps, all of which cost time:
+
+1.  The archives are about 3.9 GB each, so all nine would be 35 GB. GDAL reads them in
+    place over HTTP and pulls only the byte ranges the spatial filter needs.
+2.  **The server answers `HEAD` with 404**, which breaks vsicurl's size probe and makes the
+    dataset look unopenable. `CPL_VSIL_CURL_USE_HEAD=NO` is required, not optional.
+3.  Nothing about the archives is uniform. The zip name changes after 2006; the folder
+    inside the zip does not always match the zip stem, and where it does not GDAL reports
+    the whole archive as "not recognized as being in a supported file format", which reads
+    as a corrupt download and is not one; and the layer is `VEG_COMP_LYR_R1_POLY_FINALV4`
+    in 2005 and 2006 but `VEG_COMP_LYR_R1_POLY` from 2007. The script discovers all three.
+
+**Status.** 2005, 2006, 2008 and 2010 are extracted and verified. 2007, 2009, 2011, 2013
+and 2014 are not: 2009 will not resolve, and concurrent runs corrupted the others. The
+series is not yet usable and no model has been refitted on it.
+
+### 8. Response: Landsat Collection 2 Level-2 surface reflectance
 
 |  |  |
 |------------------------------------|------------------------------------|
@@ -152,7 +211,7 @@ nothing is averaged before the terrain acts on it.
 `22-harmonise-landsat8.R` before anything downstream. Skipping it put 52 per cent of the
 landscape in the attacked class for 2013 and 2014.
 
-### 7. Base map: BC Freshwater Atlas
+### 9. Base map: BC Freshwater Atlas
 
 |  |  |
 |------------------------------------|------------------------------------|
