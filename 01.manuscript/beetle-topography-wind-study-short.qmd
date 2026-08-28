@@ -833,14 +833,14 @@ reaches the Kootenay Lake surface at 534 m, which is not a site elevation.
 ```{r}
 #| label: fig-study-area
 #| echo: false
-#| fig-cap: "The study area over the British Columbia Freshwater Atlas, with Kootenay Lake and the Kootenay River to the east. (a) Elevation, with the 2015 Mt Midgeley burn that anchors the perimeter outlined in red. (b) Terrain ruggedness index. (c) Stand basal area from the Vegetation Resources Inventory, the density term the pheromone-disruption mechanism runs through. The study perimeter is the grey outline and contours are at 250 m. All panels share one extent, projection and scale, so the north arrow, scale bar and representative fraction are drawn once, on (a); the representative fraction holds at a printed panel width of 66 mm. Coordinates are EPSG:3153, NAD83(CSRS) / BC Albers."
+#| fig-cap: "The study area over the British Columbia Freshwater Atlas, with Kootenay Lake and the Kootenay River to the east. (a) Elevation, with the 2015 Mt Midgeley burn that anchors the perimeter outlined in red. (b) Terrain ruggedness index. (c) Stand basal area from the Vegetation Resources Inventory, the density term the pheromone-disruption mechanism runs through. The study perimeter is the grey outline and contours are at 250 m. Terrain is a hillshade of the unclipped elevation model, so the ground the analysis excludes is still visible: the hole inside the perimeter is the summit ridge above the 1744 m ceiling and the ragged outer edge is the valley floor below the 830 m floor. Every panel carries its own north arrow and numerical scale; the ratio holds at a printed panel width of 66 mm. Coordinates are EPSG:3153, NAD83(CSRS) / BC Albers."
 #| fig-height: 4.6
 
 geo <- rast(file.path(BC, "geomorphometry", "geomorphometry.tif"))
 vri <- rast(file.path(SA, "vri_covariates.tif"))
-ctx <- map_context(per, elev, file.path(SA, "basemap_water.geojson"))
+ctx <- map_context(per, burn, SA)
 
-academic_map(elev, "(a) Elevation (m)", ctx, "viridis", burn = burn, first = TRUE) +
+academic_map(elev, "(a) Elevation (m)", ctx, "viridis") +
   academic_map(geo[["tri"]], "(b) Terrain ruggedness index", ctx, "magma") +
   academic_map(vri[["BASAL_AREA"]], "(c) Stand basal area (m2/ha)", ctx, "mako")
 ```
@@ -848,17 +848,16 @@ academic_map(elev, "(a) Elevation (m)", ctx, "viridis", burn = burn, first = TRU
 ```{r}
 #| label: fig-layers
 #| echo: false
-#| fig-cap: "The predictor surfaces, over the same base map and extent as Figure 1, with the 2015 burn outlined in red. (a) flight-window direct radiation, the thermal gate on flight; (b) growing-season direct radiation, the shading pathway; (c) the MicroMet wind weighting factor at the prevailing bearing; (d) terrain ruggedness; (e) stand basal area; (f) quadratic mean diameter, whose 25 cm source-sink threshold falls near the midpoint of the scale. Contours are omitted so the surfaces read cleanly. Coordinates are EPSG:3153; scale and orientation are as Figure 1."
+#| fig-cap: "The predictor surfaces, over the same base map and extent as Figure 1, with the 2015 burn outlined in red. (a) flight-window direct radiation, the thermal gate on flight; (b) growing-season direct radiation, the shading pathway; (c) the MicroMet wind weighting factor at the prevailing bearing; (d) terrain ruggedness; (e) stand basal area; (f) quadratic mean diameter, whose 25 cm source-sink threshold falls near the midpoint of the scale. Contours are at 200 m over a hillshade of the unclipped elevation model. Coordinates are EPSG:3153, and every panel carries its own north arrow and numerical scale."
 #| fig-height: 6.2
 
 mmw <- rast(file.path(BC, "covariates", "wind-micromet", "wind_weight_by_direction.tif"))
 mmb <- mmw[[which.min(abs(as.numeric(sub("bin_", "", names(mmw))) - WDIR))]]
 
-lay <- function(r, title, pal = "viridis", first = FALSE)
-  academic_map(r, title, ctx, pal, burn = burn, first = first,
-               base_size = 7, contours = FALSE)
+lay <- function(r, title, pal = "viridis")
+  academic_map(r, title, ctx, pal, base_size = 7, contours = TRUE)
 
-(lay(geo[["solar_flight_direct"]], "(a) Flight-window radiation (kWh/m2)", "inferno", TRUE) |
+(lay(geo[["solar_flight_direct"]], "(a) Flight-window radiation (kWh/m2)", "inferno") |
  lay(geo[["solar_season_direct"]], "(b) Growing-season radiation (kWh/m2)", "inferno") |
  lay(mmb, "(c) MicroMet wind weighting", "mako")) /
 (lay(geo[["tri"]], "(d) Terrain ruggedness", "magma") |

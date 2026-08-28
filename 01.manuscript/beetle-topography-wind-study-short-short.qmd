@@ -973,14 +973,14 @@ deposited in Dryad on acceptance, and are available to reviewers on request.
 ```{r}
 #| label: figure-1
 #| echo: false
-#| fig-cap: "The study area over the British Columbia Freshwater Atlas, with Kootenay Lake and the Kootenay River to the east. (a) Elevation, with the 2015 Mt Midgeley burn that anchors the perimeter outlined in red. (b) Terrain ruggedness index. (c) Stand basal area from the Vegetation Resources Inventory, the density term the pheromone-disruption mechanism runs through. The study perimeter is the grey outline and contours are at 250 m. All panels share one extent, projection and scale, so the north arrow, scale bar and representative fraction are drawn once, on (a); the representative fraction holds at a printed panel width of 66 mm. Coordinates are EPSG:3153, NAD83(CSRS) / BC Albers."
+#| fig-cap: "The study area over the British Columbia Freshwater Atlas, with Kootenay Lake and the Kootenay River to the east. (a) Elevation, with the 2015 Mt Midgeley burn that anchors the perimeter outlined in red. (b) Terrain ruggedness index. (c) Stand basal area from the Vegetation Resources Inventory, the density term the pheromone-disruption mechanism runs through. The study perimeter is the grey outline and contours are at 250 m. Terrain is a hillshade of the unclipped elevation model, so the ground the analysis excludes is still visible: the hole inside the perimeter is the summit ridge above the 1744 m ceiling and the ragged outer edge is the valley floor below the 830 m floor. Every panel carries its own north arrow and numerical scale; the ratio holds at a printed panel width of 66 mm. Coordinates are EPSG:3153, NAD83(CSRS) / BC Albers."
 #| fig-height: 4.6
 
 geo <- rast(file.path(BC, "geomorphometry", "geomorphometry.tif"))
 vri <- rast(file.path(SA, "vri_covariates.tif"))
-ctx <- map_context(per, elev, file.path(SA, "basemap_water.geojson"))
+ctx <- map_context(per, burn, SA)
 
-academic_map(elev, "(a) Elevation (m)", ctx, "viridis", burn = burn, first = TRUE) +
+academic_map(elev, "(a) Elevation (m)", ctx, "viridis") +
   academic_map(geo[["tri"]], "(b) Terrain ruggedness index", ctx, "magma") +
   academic_map(vri[["BASAL_AREA"]], "(c) Stand basal area (m2/ha)", ctx, "mako")
 ```

@@ -897,7 +897,7 @@ reaches the Kootenay Lake surface at 534 m, which is not a site elevation.
 
 ::: {.cell}
 ::: {.cell-output-display}
-![The study area over the British Columbia Freshwater Atlas, with Kootenay Lake and the Kootenay River to the east. (a) Elevation, with the 2015 Mt Midgeley burn that anchors the perimeter outlined in red. (b) Terrain ruggedness index. (c) Stand basal area from the Vegetation Resources Inventory, the density term the pheromone-disruption mechanism runs through. The study perimeter is the grey outline and contours are at 250 m. All panels share one extent, projection and scale, so the north arrow, scale bar and representative fraction are drawn once, on (a); the representative fraction holds at a printed panel width of 66 mm. Coordinates are EPSG:3153, NAD83(CSRS) / BC Albers.](beetle-topography-wind-study_files/figure-docx/fig-study-area-1.png){#fig-study-area}
+![The study area over the British Columbia Freshwater Atlas, with Kootenay Lake and the Kootenay River to the east. (a) Elevation, with the 2015 Mt Midgeley burn that anchors the perimeter outlined in red. (b) Terrain ruggedness index. (c) Stand basal area from the Vegetation Resources Inventory, the density term the pheromone-disruption mechanism runs through. The study perimeter is the grey outline and contours are at 250 m. Terrain is a hillshade of the unclipped elevation model, so the ground the analysis excludes is still visible: the hole inside the perimeter is the summit ridge above the 1744 m ceiling and the ragged outer edge is the valley floor below the 830 m floor. Every panel carries its own north arrow and numerical scale; the ratio holds at a printed panel width of 66 mm. Coordinates are EPSG:3153, NAD83(CSRS) / BC Albers.](beetle-topography-wind-study_files/figure-docx/fig-study-area-1.png){#fig-study-area}
 :::
 :::
 
@@ -905,7 +905,7 @@ reaches the Kootenay Lake surface at 534 m, which is not a site elevation.
 
 ::: {.cell}
 ::: {.cell-output-display}
-![The predictor surfaces, over the same base map and extent as Figure 1, with the 2015 burn outlined in red. (a) flight-window direct radiation, the thermal gate on flight; (b) growing-season direct radiation, the shading pathway; (c) the MicroMet wind weighting factor at the prevailing bearing; (d) terrain ruggedness; (e) stand basal area; (f) quadratic mean diameter, whose 25 cm source-sink threshold falls near the midpoint of the scale. Contours are omitted so the surfaces read cleanly. Coordinates are EPSG:3153; scale and orientation are as Figure 1.](beetle-topography-wind-study_files/figure-docx/fig-layers-1.png){#fig-layers}
+![The predictor surfaces, over the same base map and extent as Figure 1, with the 2015 burn outlined in red. (a) flight-window direct radiation, the thermal gate on flight; (b) growing-season direct radiation, the shading pathway; (c) the MicroMet wind weighting factor at the prevailing bearing; (d) terrain ruggedness; (e) stand basal area; (f) quadratic mean diameter, whose 25 cm source-sink threshold falls near the midpoint of the scale. Contours are at 200 m over a hillshade of the unclipped elevation model. Coordinates are EPSG:3153, and every panel carries its own north arrow and numerical scale.](beetle-topography-wind-study_files/figure-docx/fig-layers-1.png){#fig-layers}
 :::
 :::
 
@@ -2358,10 +2358,10 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] e1071_1.7-17     ggspatial_1.1.10 tidyterra_1.1.0  patchwork_1.3.2 
- [5] ranger_0.18.0    car_3.1-5        carData_3.0-6    mgcv_1.9-4      
- [9] nlme_3.1-168     knitr_1.51       ggplot2_4.0.2    tidyr_1.3.2     
-[13] dplyr_1.2.0      sf_1.1-0         terra_1.9-1     
+ [1] ggnewscale_0.5.2 e1071_1.7-17     ggspatial_1.1.10 tidyterra_1.1.0 
+ [5] patchwork_1.3.2  ranger_0.18.0    car_3.1-5        carData_3.0-6   
+ [9] mgcv_1.9-4       nlme_3.1-168     knitr_1.51       ggplot2_4.0.2   
+[13] tidyr_1.3.2      dplyr_1.2.0      sf_1.1-0         terra_1.9-1     
 
 loaded via a namespace (and not attached):
  [1] s2_1.1.9            generics_0.1.4      class_7.3-23       
