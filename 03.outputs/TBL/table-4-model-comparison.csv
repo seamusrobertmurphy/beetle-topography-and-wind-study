@@ -1,0 +1,5 @@
+"Model","Parameters","AIC","dAIC"
+"M0 host size + shading + landform",15,"49,547","2,307"
+"M1 + stand density",18,"49,049","1,809"
+"M2 + terrain and flight radiation",25,"48,305","1,065"
+"M3 + interactions",30,"47,240","0"

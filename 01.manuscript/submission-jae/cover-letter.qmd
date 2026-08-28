@@ -1,0 +1,71 @@
+---
+title: "Cover letter"
+format:
+  docx:
+    reference-doc: ../../04.references/style-formal.docx
+    number-sections: false
+execute:
+  echo: false
+---
+
+<!-- Journal of Applied Entomology states that a cover letter "is not mandatory;
+     however, it may be supplied at the author's discretion". This one is supplied.
+     The editor's name is deliberately left as a placeholder: it must be checked
+     against the journal's current masthead on the day of submission rather than
+     recalled, and the previous cover letter in this repository was still addressed to
+     the Editor-in-Chief of Forest Science. -->
+
+Seamus Murphy\
+ORCID 0000-0002-1792-0351\
+Forest Carbon Verification, TÜV SÜD\
+Comox, British Columbia, Canada\
+seamusrobertmurphy@gmail.com
+
+Dear Editor,
+
+I am submitting "Testing the wind disruption hypothesis for beetle refugia" for
+consideration as an Original Article in *Journal of Applied Entomology*.
+
+Krawchuk et al. (2020) proposed that refugia from mountain pine beetle (*Dendroctonus
+ponderosae* Hopkins) could arise through three mechanisms: topographic shading that
+relieves water stress, low host density that admits wind and so disrupts the aggregation
+pheromone plume on which mass attack depends, and a scarcity of large-diameter hosts.
+That proposal is now widely cited and, so far as a search of the author's full corpus can
+establish, it has never been fitted. This paper fits all three on one landscape.
+
+The central result is that the wind mechanism holds, but only when the response is
+measured at a resolution the insect can be said to experience. Across 59 sixteen-day
+Landsat epochs, stand density interacts negatively with a terrain-resolved wind field:
+a dense canopy is worth less to the beetle where and when the wind blows harder, which is
+what plume disruption requires. The interaction survives a within-season spread term, so
+it is not the outbreak's own contagion wearing a wind coefficient.
+
+The finding I expect to be most useful to your readers is the negative one attached to
+it. Collapse the same wind field, the same covariates and the same classification
+threshold to one map per year, and the interaction reverses sign. Nothing about the
+landscape or the wind product changes. What changes is that an annual response can only
+ask whether windy summers carry less attack than calm ones, and a summer contains both
+windy and calm weeks. The mechanism concerns a plume that persists for minutes acting over
+a flight period of weeks; a test aggregated to the year is not a weaker version of the
+right test but a different question, and it answers in the opposite direction. Since no
+prior study has fitted a wind term at all, nothing in the literature establishes the
+resolution at which one should be fitted. This paper's answer is that it must be no
+coarser than the flight period.
+
+Two further specification results support the same caution. Entering flight-window
+radiation cuts the apparent density-by-terrain-exposure interaction by about a third, so a
+terrain wind index is partly an insolation measurement. Entering previous-year attack
+destabilises the landform terms, so a landform variable in a spreading outbreak partly
+records where the outbreak has already been.
+
+The manuscript is an executable Quarto document. Every number, table and figure in it is
+computed at render time from the archived data, and no value is typed into the prose. The
+complete pipeline is public.
+
+This work is original, has not been published elsewhere and is not under consideration by
+another journal. I am the sole author. I declare no conflict of interest, and the work
+received no external funding.
+
+Yours sincerely,
+
+Seamus Murphy

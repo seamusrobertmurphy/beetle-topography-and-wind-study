@@ -1,0 +1,5 @@
+"Model","Term","Beta","z","p"
+"M4 station wind","jun","-0.002","-0.09","0.926"
+"M4 station wind","VRI_LIVE_STEMS_PER_HA:jun","+0.020","1.16","0.247"
+"M5 terrain-resolved wind","mm_flight_mean","+0.467","28.44","< 0.001"
+"M5 terrain-resolved wind","VRI_LIVE_STEMS_PER_HA:mm_flight_mean","+0.031","2.09","0.036"

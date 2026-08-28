@@ -1,0 +1,97 @@
+---
+title: "Tables"
+format:
+  docx:
+    reference-doc: ../../04.references/style-formal.docx
+    number-sections: false
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r}
+#| label: setup
+#| echo: false
+#| output: false
+
+## Journal of Applied Entomology asks for tables as a separate, editable file. These are
+## read back from the CSVs the manuscript wrote as it rendered, not recomputed, so this
+## file cannot report a different number from the article it accompanies. If a CSV is
+## missing, render the manuscript first.
+library(knitr)
+TBL <- file.path("..", "..", "03.outputs", "TBL")
+get <- function(n) {
+  f <- file.path(TBL, paste0(n, ".csv"))
+  if (!file.exists(f))
+    stop("missing ", f, ". Render beetle-topography-wind-study-short.qmd first.")
+  read.csv(f, check.names = FALSE)
+}
+```
+
+<!-- Footnote symbols follow the journal's rule: dagger, double dagger, section and
+     pilcrow in that order, with asterisks reserved for P-values. Statistical measures
+     are named in the column headings, as the guidelines require. -->
+
+# Table 1
+
+Landscape attributes entered in this study, the direction expected of each, and the
+reasoning behind that expectation.
+
+```{r}
+kable(get("table-1-hypotheses"), booktabs = TRUE, align = "lll")
+```
+
+# Table 2
+
+Moderate-to-high beetle disturbance by year inside the study perimeter.
+
+```{r}
+kable(get("table-2-prevalence"), booktabs = TRUE, align = "lrr")
+```
+
+# Table 3
+
+Stand structure across the study perimeter, from the Vegetation Resources Inventory.
+
+```{r}
+kable(get("table-3-stand-structure"), booktabs = TRUE, align = "lrrrr")
+```
+
+# Table 4
+
+Model comparison. Each model adds one pathway to the previous.
+
+```{r}
+kable(get("table-4-model-comparison"), booktabs = TRUE, align = "lrrr")
+```
+
+# Table 5
+
+Full model, continuous terms. Coefficients are log-odds per standard deviation on a
+class-balanced sample, so the intercept is not landscape prevalence. SE is the standard
+error of the coefficient.
+
+```{r}
+kable(get("table-5-full-model"), booktabs = TRUE, align = "lrrrr")
+```
+
+# Table 6
+
+The wind terms under two specifications, both with previous-year pressure in the model.
+M4 carries station wind, which is flat within a year and identified only across years.
+M5 carries the terrain-resolved MicroMet field, which varies within the year and is
+identified in space.
+
+```{r}
+kable(get("table-6-wind-terms"), booktabs = TRUE, align = "lllrr")
+```
+
+# Table 7
+
+Moderate-to-high beetle disturbance by quadratic mean diameter class, on the balanced
+sample. The 25 cm boundary is the source-sink threshold of the species' bionomics.
+
+```{r}
+kable(get("table-7-diameter-class"), booktabs = TRUE, align = "lrr")
+```

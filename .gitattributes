@@ -8,6 +8,17 @@
 04.references/grandfather-study/** filter=lfs diff=lfs merge=lfs -text
 04.references/literature/** filter=lfs diff=lfs merge=lfs -text
 
+# The Darkwoods classification data, added 2026-08-27. Same treatment as the other
+# data folders above: rasters and the large model tables go to LFS, because
+# 02.inputs/beetle-classification/model-data/model_table.csv alone is 98 MB and
+# GitHub rejects any single blob over 100 MB. The unset rules below this block keep
+# scripts and documentation diffable, and they must stay after these lines to win.
+02.inputs/beetle-classification/**/*.tif  filter=lfs diff=lfs merge=lfs -text
+02.inputs/beetle-classification/**/*.gpkg filter=lfs diff=lfs merge=lfs -text
+02.inputs/beetle-classification/**/*.rds  filter=lfs diff=lfs merge=lfs -text
+02.inputs/beetle-classification/model-data/*.csv filter=lfs diff=lfs merge=lfs -text
+02.inputs/beetle-task/** filter=lfs diff=lfs merge=lfs -text
+
 # Source and documentation under 02.inputs must stay diffable text rather than
 # LFS pointers. `text` alone is not enough: the broad rules above set
 # filter=lfs, so these must unset it with `!filter !diff !merge`.

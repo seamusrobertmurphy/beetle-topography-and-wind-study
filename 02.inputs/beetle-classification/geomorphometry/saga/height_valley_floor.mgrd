@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SAGA_METADATA>
+  <DATABASE></DATABASE>
+  <SOURCE></SOURCE>
+  <HISTORY saga-version="9.12.4">
+    <TOOL library="ta_morphometry" id="14" name="Relative Heights and Slope Positions">
+      <OPTION type="grid_system" id="PARAMETERS_GRID_SYSTEM" name="Grid System">
+        <CELLSIZE>30</CELLSIZE>
+        <XMIN>1669678.329240592</XMIN>
+        <YMIN>496323.4529954964</YMIN>
+        <XMAX>1687798.329240592</XMAX>
+        <YMAX>515643.4529954964</YMAX>
+      </OPTION>
+      <OPTION type="double" id="W" name="w">0.5</OPTION>
+      <OPTION type="double" id="T" name="t">10</OPTION>
+      <OPTION type="double" id="E" name="e">2</OPTION>
+      <INPUT type="grid" id="DEM" name="Elevation" system="PARAMETERS_GRID_SYSTEM">
+        <TOOL library="io_gdal" id="0" name="Import Raster">
+          <OPTION type="file" id="FILES" name="Files">"02.inputs/beetle-classification/geomorphometry/saga/dem.tif"</OPTION>
+          <OPTION type="choice" id="MULTIPLE" name="Multiple Bands Output" index="2">automatic</OPTION>
+          <OPTION type="text" id="SUBSETS" name="Subsets"/>
+          <OPTION type="text" id="SELECTION" name="Select from Multiple Bands"/>
+          <OPTION type="boolean" id="TRANSFORM" name="Transformation">true</OPTION>
+          <OPTION type="choice" id="RESAMPLING" name="Resampling" index="0">Nearest Neighbour</OPTION>
+          <OPTION type="choice" id="EXTENT" name="Extent" index="0">original</OPTION>
+          <OUTPUT type="grid_list" id="GRIDS" name="Grids">dem</OUTPUT>
+        </TOOL>
+      </INPUT>
+      <OUTPUT type="grid" id="HU" name="Valley Depth">Valley Depth</OUTPUT>
+    </TOOL>
+  </HISTORY>
+  <FILE></FILE>
+  <DESCRIPTION></DESCRIPTION>
+  <PROJECTION>
+    <WKT2>PROJCRS["NAD83(CSRS) / BC Albers",BASEGEODCRS["NAD83(CSRS)",DATUM["NAD83 Canadian Spatial Reference System",ELLIPSOID["GRS 1980",6378137,298.257222101,LENGTHUNIT["metre",1]]],PRIMEM["Greenwich",0,ANGLEUNIT["degree",0.0174532925199433]]],CONVERSION["unnamed",METHOD["Albers Equal Area",ID["EPSG",9822]],PARAMETER["Latitude of false origin",45,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8821]],PARAMETER["Longitude of false origin",-126,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8822]],PARAMETER["Latitude of 1st standard parallel",50,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8823]],PARAMETER["Latitude of 2nd standard parallel",58.5,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8824]],PARAMETER["Easting at false origin",1000000,LENGTHUNIT["metre",1],ID["EPSG",8826]],PARAMETER["Northing at false origin",0,LENGTHUNIT["metre",1],ID["EPSG",8827]]],CS[Cartesian,2],AXIS["easting",east,ORDER[1],LENGTHUNIT["metre",1]],AXIS["northing",north,ORDER[2],LENGTHUNIT["metre",1]],ID["EPSG",3153]]</WKT2>
+    <PROJ>+proj=aea +lat_0=45 +lon_0=-126 +lat_1=50 +lat_2=58.5 +x_0=1000000 +y_0=0 +ellps=GRS80 +units=m +no_defs +type=crs</PROJ>
+    <CODE authority="EPSG">3153</CODE>
+  </PROJECTION>
+</SAGA_METADATA>
