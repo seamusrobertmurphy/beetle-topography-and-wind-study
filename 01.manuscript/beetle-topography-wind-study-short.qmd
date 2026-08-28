@@ -75,8 +75,13 @@ df-print: kable
 suppressPackageStartupMessages({
   library(terra); library(sf); library(dplyr); library(tidyr); library(ggplot2)
   library(knitr); library(mgcv); library(car); library(ranger); library(patchwork)
-  library(tidyterra)
+  library(tidyterra); library(ggspatial); library(e1071)
 })
+
+## Shared with every draft of this study, so the three cannot show different maps of the
+## same landscape or different metrics for the same model. Edit those files, not this one.
+for (.f in c("map-academic", "fit-metrics", "describe", "diameter-test"))
+  source(file.path("_shared", paste0(.f, ".R")))
 set.seed(42)
 knitr::opts_chunk$set(dpi = 300, fig.width = 9, fig.height = 6)
 
@@ -579,6 +584,10 @@ qmd_bin <- bal |>
   mutate(bin = cut(QUAD_DIAM_125, breaks = c(0, 15, 20, 25, 30, 40, Inf),
                    labels = c("<15","15-20","20-25","25-30","30-40",">40"))) |>
   group_by(bin) |> summarise(n = n(), attack = mean(modhigh))
+
+## The tests the diameter table needs, computed here so the prose reads them rather than
+## restating a difference by eye. See _shared/diameter-test.R for what each one asks.
+QT <- diameter_tests(qmd_bin)
 ```
 
 ```{r}
@@ -793,7 +802,7 @@ tibble::tribble(
   "A composite of temperature, snowpack, season length and host distribution that this design cannot separate [@sambaraju2021]."
 ) |>
   save_tbl("table-1-hypotheses") |>
-  kable(booktabs = TRUE, align = "lll")
+  kable(booktabs = TRUE, align = "lll", row.names = FALSE)
 ```
 
 # Materials
@@ -824,47 +833,32 @@ reaches the Kootenay Lake surface at 534 m, which is not a site elevation.
 ```{r}
 #| label: fig-study-area
 #| echo: false
-#| fig-cap: "The study area. (a) The perimeter, the 2015 Mt Midgeley burn that anchors it, and elevation. (b) Terrain ruggedness index, the strongest terrain predictor in the parent study. (c) Stand basal area from the Vegetation Resources Inventory, the density term the pheromone-disruption mechanism runs through. All panels are EPSG:3153 at 30 m; ticks are kilometres."
-#| fig-height: 5
+#| fig-cap: "The study area over the British Columbia Freshwater Atlas, with Kootenay Lake and the Kootenay River to the east. (a) Elevation, with the 2015 Mt Midgeley burn that anchors the perimeter outlined in red. (b) Terrain ruggedness index. (c) Stand basal area from the Vegetation Resources Inventory, the density term the pheromone-disruption mechanism runs through. The study perimeter is the grey outline and contours are at 250 m. All panels share one extent, projection and scale, so the north arrow, scale bar and representative fraction are drawn once, on (a); the representative fraction holds at a printed panel width of 66 mm. Coordinates are EPSG:3153, NAD83(CSRS) / BC Albers."
+#| fig-height: 4.6
 
 geo <- rast(file.path(BC, "geomorphometry", "geomorphometry.tif"))
 vri <- rast(file.path(SA, "vri_covariates.tif"))
+ctx <- map_context(per, elev, file.path(SA, "basemap_water.geojson"))
 
-base_map <- function(r, title, pal) {
-  ggplot() +
-    geom_spatraster(data = r) +
-    geom_sf(data = burn, fill = NA, colour = "red", linewidth = 0.4) +
-    scale_fill_viridis_c(option = pal, na.value = "transparent", name = NULL) +
-    labs(title = title, subtitle = sprintf("EPSG:%s; ticks in km", EPSG)) +
-    scale_x_continuous(labels = function(x) round(x/1000)) +
-    scale_y_continuous(labels = function(x) round(x/1000)) +
-    theme_minimal(base_size = 9) +
-    theme(legend.key.width = unit(0.3, "cm"), axis.title = element_blank())
-}
-
-base_map(elev, "(a) Elevation (m)", "viridis") +
-  base_map(geo[["tri"]], "(b) Terrain ruggedness index", "magma") +
-  base_map(vri[["BASAL_AREA"]], "(c) Stand basal area (m2/ha)", "mako")
+academic_map(elev, "(a) Elevation (m)", ctx, "viridis", burn = burn, first = TRUE) +
+  academic_map(geo[["tri"]], "(b) Terrain ruggedness index", ctx, "magma") +
+  academic_map(vri[["BASAL_AREA"]], "(c) Stand basal area (m2/ha)", ctx, "mako")
 ```
 
 ```{r}
 #| label: fig-layers
 #| echo: false
-#| fig-cap: "The predictor surfaces, all EPSG:3153 at 30 m inside the study perimeter, with the 2015 burn outlined in red. (a) flight-window direct radiation, the thermal gate on flight; (b) growing-season direct radiation, the shading pathway; (c) the MicroMet wind weighting factor at the prevailing bearing; (d) terrain ruggedness; (e) stand basal area; (f) quadratic mean diameter, with the 25 cm source-sink threshold at the midpoint of the scale."
-#| fig-height: 6.5
+#| fig-cap: "The predictor surfaces, over the same base map and extent as Figure 1, with the 2015 burn outlined in red. (a) flight-window direct radiation, the thermal gate on flight; (b) growing-season direct radiation, the shading pathway; (c) the MicroMet wind weighting factor at the prevailing bearing; (d) terrain ruggedness; (e) stand basal area; (f) quadratic mean diameter, whose 25 cm source-sink threshold falls near the midpoint of the scale. Contours are omitted so the surfaces read cleanly. Coordinates are EPSG:3153; scale and orientation are as Figure 1."
+#| fig-height: 6.2
 
-lay <- function(r, title, pal = "viridis") {
-  ggplot() + geom_spatraster(data = r) +
-    geom_sf(data = burn, fill = NA, colour = "red", linewidth = 0.3) +
-    scale_fill_viridis_c(option = pal, na.value = "transparent", name = NULL) +
-    labs(title = title) + theme_minimal(base_size = 8) +
-    theme(axis.text = element_blank(), axis.ticks = element_blank(),
-          panel.grid = element_blank(), legend.key.width = unit(0.25, "cm"))
-}
 mmw <- rast(file.path(BC, "covariates", "wind-micromet", "wind_weight_by_direction.tif"))
 mmb <- mmw[[which.min(abs(as.numeric(sub("bin_", "", names(mmw))) - WDIR))]]
 
-(lay(geo[["solar_flight_direct"]], "(a) Flight-window radiation (kWh/m2)", "inferno") |
+lay <- function(r, title, pal = "viridis", first = FALSE)
+  academic_map(r, title, ctx, pal, burn = burn, first = first,
+               base_size = 7, contours = FALSE)
+
+(lay(geo[["solar_flight_direct"]], "(a) Flight-window radiation (kWh/m2)", "inferno", TRUE) |
  lay(geo[["solar_season_direct"]], "(b) Growing-season radiation (kWh/m2)", "inferno") |
  lay(mmb, "(c) MicroMet wind weighting", "mako")) /
 (lay(geo[["tri"]], "(d) Terrain ruggedness", "magma") |
@@ -899,7 +893,7 @@ prev_yr |>
   transmute(Year = year, Cells = fmt(n),
             `Moderate-to-high (%)` = sprintf("%.1f", 100*prev)) |>
   save_tbl("table-2-prevalence") |>
-  kable(booktabs = TRUE, align = "lrr")
+  kable(booktabs = TRUE, align = "lrr", row.names = FALSE)
 ```
 
 ## Stand structure
@@ -917,16 +911,12 @@ basal area formed as total basal area times the pine share of cover.
 ```{r}
 #| label: tbl-vri
 #| echo: false
-#| tbl-cap: "Stand structure across the study perimeter, from the Vegetation Resources Inventory."
+#| tbl-cap: "Stand structure across the study perimeter, from the Vegetation Resources Inventory. n is cell-years. SD is the standard deviation of the landscape; SE is the standard error of the mean and is small by construction at this n, so it should not be read as precision about any one cell. Skewness and kurtosis are the bias-corrected third and fourth standardised moments; kurtosis is excess, so 0 is Gaussian and positive is heavy-tailed."
 
-d |>
-  select(all_of(VRI_V)) |>
-  pivot_longer(everything()) |>
-  group_by(Attribute = name) |>
-  summarise(Min = sprintf("%.1f", min(value)), Median = sprintf("%.1f", median(value)),
-            Mean = sprintf("%.1f", mean(value)), Max = sprintf("%.1f", max(value))) |>
+describe_vars(d, VRI_V, VRI_LABELS) |>
+  describe_table() |>
   save_tbl("table-3-stand-structure") |>
-  kable(booktabs = TRUE, align = "lrrrr")
+  kable(booktabs = TRUE, align = "lrrrrrrrrr", row.names = FALSE)
 ```
 
 The inventory is a projected operational product, not a census, and its polygons here carry
@@ -980,16 +970,29 @@ wind is also computed as a field varying in space, using the MicroMet model of @
 WindNinja, the usual tool, ships no macOS binary. MicroMet's wind component is seven equations
 rather than a program, implemented directly with the paper's equation numbers against each.
 
-Terrain slope and slope azimuth come from the elevation model (equations 12, 13). Curvature is
-a cell's elevation minus the mean of the two opposite cells one curvature length scale away,
-on four direction lines and averaged (equation 14); the length scale is estimated as the first
-lag at which elevation autocorrelation falls below 0.5, 600 m here. Slope in the wind direction
-is $\Omega_s = \beta\cos(\theta-\xi)$ (equation 15), both scaled to $[-0.5, 0.5]$. The
-weighting factor is $W_w = 1 + \gamma_s\Omega_s + \gamma_c\Omega_c$ with
-$\gamma_s=\gamma_c=0.5$ (equation 16), the modified speed $W_t = W_wW$ (equation 17), and
-direction is diverted by $\theta_d = -0.5\,\Omega_s\sin[2(\xi-\theta)]$ (equation 18).
+Terrain slope $\beta$ and slope azimuth $\xi$ come from the elevation model (@liston2006,
+their equations 12 and 13). Curvature $\Omega_c$ is a cell's elevation minus the mean of the
+two opposite cells one curvature length scale away, taken on four direction lines and
+averaged (their equation 14); the length scale is estimated as the first lag at which
+elevation autocorrelation falls below 0.5, which is 600 m here. Writing $\theta$ for the
+wind bearing, the slope in the wind direction is
 
-$W_w$ depends on direction and not speed, so it is computed once for each of 16 direction bins
+$$\Omega_s = \beta \cos(\theta - \xi)$$ {#eq-slope}
+
+with $\Omega_s$ and $\Omega_c$ each scaled to $[-0.5,\,0.5]$. The terrain weighting factor
+applied to the observed speed $W$ is
+
+$$W_w = 1 + \gamma_s \Omega_s + \gamma_c \Omega_c, \qquad \gamma_s = \gamma_c = 0.5$$ {#eq-weight}
+
+giving the terrain-modified speed
+
+$$W_t = W_w W$$ {#eq-speed}
+
+and a diversion of the wind direction of
+
+$$\theta_d = -\tfrac{1}{2}\, \Omega_s \sin\!\left[2(\xi - \theta)\right].$$ {#eq-divert}
+
+By @eq-weight, $W_w$ depends on direction and not on speed, so it is computed once for each of 16 direction bins
 and each hourly observation multiplied by the surface for its own bin; nothing is averaged
 before the terrain acts on it. Over all bins $W_w$ runs `r sprintf("%.2f", MM_WW[1])` to
 `r sprintf("%.2f", MM_WW[2])`. Speed and direction combine as components because averaging
@@ -1033,7 +1036,15 @@ unbalanced fit at that prevalence reports the intercept rather than the covariat
 ## Models
 
 
-Four models are fitted, each adding one claim to the last, so that every term's
+Every model is a logistic regression of moderate-to-high disturbance $y_{it}$ in cell $i$
+and year $t$ on standardised covariates,
+
+$$\operatorname{logit}\Pr(y_{it}=1) = \alpha + \mathbf{x}_{it}^{\top}\boldsymbol{\beta}
++ \gamma_{g(i)} + \sum_{k} \delta_k\, z_{k,it}$$ {#eq-model}
+
+where $\gamma_{g(i)}$ is the effect of the geomorphon landform class $g$ of cell $i$ and the
+$z_{k,it}$ are the interaction terms. Coefficients are therefore log-odds per standard
+deviation. Four models are fitted, each adding one claim to the last, so that every term's
 contribution is visible as a change in fit rather than asserted.
 
 M0 carries Krawchuk's first and third mechanisms together with landform context: host size,
@@ -1049,26 +1060,29 @@ radiation, and by flight-window wind.
 ```{r}
 #| label: tbl-aic
 #| echo: false
-#| tbl-cap: "Model comparison. Each model adds one pathway to the previous."
+#| tbl-cap: "Model comparison, panel A of the model table. Each model adds one pathway to the previous. AIC ranks on likelihood and a parameter penalty; the remaining columns are predictive error on the fitted probabilities. RMSE is the root mean squared error and is the square root of the Brier score; RMSE (%) expresses it against the prevalence of the response. Brier skill is the improvement over predicting the prevalence for every cell, where 0 is no better than the base rate. MAPE and Theil's U are not reported: both divide by the observed value, which is zero for the majority class of a binary response, so both are undefined without discarding that class."
 
-aic |>
-  transmute(Model, `Parameters` = df, AIC = fmt(AIC), `dAIC` = fmt(dAIC)) |>
+fit_metrics_table(
+  fit_metrics(M0, "M0 host size + shading + landform"),
+  fit_metrics(M1, "M1 + stand density"),
+  fit_metrics(M2, "M2 + terrain and flight radiation"),
+  fit_metrics(M3, "M3 + interactions")) |>
   save_tbl("table-4-model-comparison") |>
-  kable(booktabs = TRUE, align = "lrrr")
+  kable(booktabs = TRUE, align = "lrrrrrrrr", row.names = FALSE)
 ```
 
 ```{r}
 #| label: tbl-m3
 #| echo: false
-#| tbl-cap: "Full model, continuous terms. Coefficients are per standard deviation on a class-balanced sample, so the intercept is not landscape prevalence. The geomorphon landform classes are also in this model and are not reported here."
+#| tbl-cap: "Full model M3, panel B of the model table: continuous terms, ordered by absolute effect. Coefficients are log-odds per standard deviation on a class-balanced sample, so the intercept is not landscape prevalence. SE is the standard error of the coefficient. The geomorphon landform classes are also in this model and are not reported here."
 
 co3 |>
   filter(term != "(Intercept)", !grepl("^geomorphon", term)) |>
   arrange(desc(abs(beta))) |>
-  transmute(Term = term, Beta = sprintf("%+.3f", beta), SE = sprintf("%.3f", se),
-            z = sprintf("%.2f", z), p = sapply(p, pv)) |>
+  transmute(Term = pretty_terms(term), Beta = sprintf("%+.3f", beta),
+            SE = sprintf("%.3f", se), z = sprintf("%.2f", z), p = sapply(p, pv)) |>
   save_tbl("table-5-full-model") |>
-  kable(booktabs = TRUE, align = "lrrrr")
+  kable(booktabs = TRUE, align = "lrrrr", row.names = FALSE)
 ```
 
 Every pathway earns its place: AIC falls `r fmt(aic$AIC[1] - aic$AIC[2])` when stand density
@@ -1167,12 +1181,12 @@ pd <- epsum |>
 data.frame(
   Model = c("M4 station wind", "M4 station wind",
             "M5 terrain-resolved wind", "M5 terrain-resolved wind"),
-  Term = c(WTMP_V, I_TMP, WMM, INT_MM),
+  Term = pretty_terms(c(WTMP_V, I_TMP, WMM, INT_MM)),
   Beta = c(b4(WTMP_V), b4(I_TMP), b5(WMM), b5(INT_MM)),
   z = c(z4(WTMP_V), z4(I_TMP), z5(WMM), z5(INT_MM)),
   p = c(p4(WTMP_V), p4(I_TMP), p5(WMM), p5(INT_MM))) |>
   save_tbl("table-6-wind-terms") |>
-  kable(booktabs = TRUE, align = "lllrr")
+  kable(booktabs = TRUE, align = "lllrr", row.names = FALSE)
 ```
 
 This section reports the same wind field at the annual resolution the study first used, and
@@ -1224,13 +1238,12 @@ failure the terrain-wind index showed against radiation, one level up.
 ```{r}
 #| label: tbl-qmd
 #| echo: false
-#| tbl-cap: "Moderate-to-high beetle disturbance by quadratic mean diameter class, on the balanced sample. The 25 cm boundary is the source-sink threshold of the species' bionomics."
+#| tbl-cap: "Moderate-to-high beetle disturbance by quadratic mean diameter class, on the balanced sample. The 25 cm boundary is the source-sink threshold of the species' bionomics. Intervals are Wilson score intervals on the class proportion, which is why they are asymmetric in the smallest class. Note that 30 m cells in a spreading outbreak are not independent, so the tests reported beneath this table are anti-conservative."
 
 qmd_bin |>
-  transmute(`QMD class (cm)` = bin, Cells = fmt(n),
-            `Attacked (%)` = sprintf("%.1f", 100*attack)) |>
+  diameter_table() |>
   save_tbl("table-7-diameter-class") |>
-  kable(booktabs = TRUE, align = "lrr")
+  kable(booktabs = TRUE, align = "lrrrr", row.names = FALSE)
 ```
 
 Coding host as diameter changes the picture cover alone gives. Attack peaks in the
@@ -1248,6 +1261,16 @@ linear term fitted through a humped response returns the slope of its falling li
 is the larger part of the range. The class table, not the coefficient, is the result here,
 and the point stands, because a stand's cover says nothing about whether its stems can
 produce brood.
+
+The pattern is not an artefact of the class boundaries. Across all six classes attack
+depends on diameter class, $\chi^2$ = `r sprintf("%.1f", QT$X2)` on `r QT$df` degrees of
+freedom, p `r pt(QT$chi$p.value)`, with Cramer's V = `r sprintf("%.3f", QT$V)`. The step
+across the 25 cm source-sink boundary specifically, from the 20 to 25 class to the 25 to 30
+class, is `r sprintf("%+.1f", QT$step_diff)` percentage points, 95 per cent confidence
+interval `r sprintf("%.1f to %.1f", -QT$step_ci[2], -QT$step_ci[1])`, p
+`r pt(QT$step$p.value)`. With `r fmt(sum(qmd_bin$n))` cells a chi-square is significant on
+trivial differences, which is why the effect size is quoted beside it, and 30 m cells in a
+spreading outbreak are not independent, so both p-values are anti-conservative.
 
 The smallest class is not evidence. It holds `r fmt(qmd_bin$n[qmd_bin$bin == "<15"])` cells
 against `r fmt(qmd_bin$n[qmd_bin$bin == "25-30"])` in the modal class, and a stand below

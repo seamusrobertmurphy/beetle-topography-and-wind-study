@@ -1,7 +1,12 @@
 ---
-# Frontiers in Ecology and the Environment caps the title at 95 characters
-# including spaces and asks for it to be punchy and free of acronyms. This is 82.
-title: "Wind disrupts beetle attack in thin stands, but only at the insect's own timescale"
+# The manuscript's own title, unchanged. It is 57 characters, inside the 95-character
+# cap Frontiers in Ecology and the Environment sets in its "Titles and Abstracts"
+# section, so nothing in the guidelines requires it to be rewritten.
+#
+# The subtitle is dropped, and only the subtitle. The guidelines make no provision for
+# one, and title plus subtitle is 233 characters against the 95-character cap. The
+# subtitle's content is carried by the abstract's first two sentences instead.
+title: "Testing the wind disruption hypothesis for beetle refugia"
 author:
   - name: Seamus Murphy
     orcid: 0000-0002-1792-0351
@@ -271,7 +276,8 @@ attributes carry the mechanism and the stem-size threshold: basal area, crown cl
 stems per hectare, quadratic mean diameter over stems 12.5 cm and up, stand age, and
 susceptible pine basal area. Terrain is 29 geomorphometric surfaces computed
 with SAGA GIS over the full elevation model and clipped afterwards, so a search radius near
-the boundary sees real ground. Radiation is computed twice, because two mechanisms need it:
+the boundary sees real ground. They cover exposure, shape, landform and aspect, the last
+entering as northward and eastward components and as the heat load index of @mccune2002. Radiation is computed twice, because two mechanisms need it:
 flight-window insolation over 1 July to 15 August restricted to 12:00 to 17:00, the hours
 @safranyik2006chap1 identify as the flight peak, and growing-season insolation as the
 whole-day total from 1 May to 30 September. A single annual index cannot separate them, the
@@ -424,7 +430,7 @@ deposited in Dryad on acceptance, and are available to reviewers on request.
 
 ::: {.cell}
 ::: {.cell-output-display}
-![**Figure 1.** The study area, all panels EPSG:3153 at 30 m with the 2015 Mt Midgeley burn outlined in red and ticks in kilometres. (a) elevation; (b) stand basal area from the Vegetation Resources Inventory, the density term the pheromone-disruption mechanism runs through; (c) the MicroMet wind weighting factor at the prevailing bearing, the terrain-resolved wind field.](beetle-topography-wind-study-short-short_files/figure-docx/figure-1-1.png)
+![The study area over the British Columbia Freshwater Atlas, with Kootenay Lake and the Kootenay River to the east. (a) Elevation, with the 2015 Mt Midgeley burn that anchors the perimeter outlined in red. (b) Terrain ruggedness index. (c) Stand basal area from the Vegetation Resources Inventory, the density term the pheromone-disruption mechanism runs through. The study perimeter is the grey outline and contours are at 250 m. All panels share one extent, projection and scale, so the north arrow, scale bar and representative fraction are drawn once, on (a); the representative fraction holds at a printed panel width of 66 mm. Coordinates are EPSG:3153, NAD83(CSRS) / BC Albers.](beetle-topography-wind-study-short-short_files/figure-docx/figure-1-1.png)
 :::
 :::
 
@@ -499,16 +505,16 @@ submission. They are reproduced below for review.
 ## Appendix S2
 
 
-::: {.cell tbl-cap='**Appendix S2.** Annual model comparison. Each model adds one pathway to the previous.'}
+::: {.cell tbl-cap='Model comparison. Each model adds one pathway to the previous. AIC ranks on likelihood and a parameter penalty; the remaining columns are predictive error on the fitted probabilities. RMSE is the root mean squared error and is the square root of the Brier score; RMSE (%) expresses it against the prevalence of the response. Brier skill is the improvement over predicting the prevalence for every cell, where 0 is no better than the base rate. MAPE and Theil\'s U are not reported: both divide by the observed value, which is zero for the majority class of a binary response, so both are undefined without discarding that class.'}
 ::: {.cell-output-display}
 
 
-|Model                             | Parameters|    AIC|  dAIC|
-|:---------------------------------|----------:|------:|-----:|
-|M0 host size + shading + landform |         15| 49,547| 2,307|
-|M1 + stand density                |         18| 49,049| 1,809|
-|M2 + terrain and flight radiation |         25| 48,305| 1,065|
-|M3 + interactions                 |         30| 47,240|     0|
+|Model                             |    AIC|  ΔAIC|  RMSE| RMSE (%)|   MAE| Brier| Log loss|   AUC|Brier skill |
+|:---------------------------------|------:|-----:|-----:|--------:|-----:|-----:|--------:|-----:|:-----------|
+|M0 host size + shading + landform | 49,547| 2,307| 0.416|    128.3| 0.346| 0.173|    0.523| 0.771|0.211       |
+|M1 + stand density                | 49,049| 1,809| 0.412|    127.3| 0.342| 0.170|    0.518| 0.775|0.223       |
+|M2 + terrain and flight radiation | 48,305| 1,065| 0.409|    126.2| 0.336| 0.167|    0.510| 0.784|0.237       |
+|M3 + interactions                 | 47,240|     0| 0.404|    124.7| 0.327| 0.163|    0.498| 0.798|0.256       |
 
 
 :::
@@ -541,21 +547,21 @@ submission. They are reproduced below for review.
 ## Appendix S4
 
 
-::: {.cell tbl-cap='**Appendix S4.** Stand structure across the study perimeter, from the Vegetation Resources Inventory.'}
+::: {.cell tbl-cap='Stand structure across the study perimeter, from the Vegetation Resources Inventory. n is cell-years. SD is the standard deviation of the landscape; SE is the standard error of the mean and is small by construction at this n, so it is not precision about any one cell. Skewness and kurtosis are the bias-corrected third and fourth standardised moments; kurtosis is excess, so 0 is Gaussian.'}
 ::: {.cell-output-display}
 
 
-|Attribute             |  Min| Median|  Mean|    Max|
-|:---------------------|----:|------:|-----:|------:|
-|BASAL_AREA            |  2.1|   37.1|  35.2|   64.3|
-|CROWN_CLOSURE         |  4.0|   48.0|  45.3|   60.0|
-|LIVE_STAND_VOLUME_125 |  0.9|  292.9| 283.4|  620.3|
-|PINE_BA               |  0.0|    3.2|   5.4|   31.7|
-|PROJ_AGE_1            | 20.0|  124.0| 125.2|  184.0|
-|PROJ_HEIGHT_1         |  7.7|   29.0|  28.1|   41.6|
-|PinePct               |  0.0|   10.0|  17.4|  100.0|
-|QUAD_DIAM_125         | 13.5|   30.3|  30.1|   62.3|
-|VRI_LIVE_STEMS_PER_HA | 64.0|  686.0| 670.0| 1614.0|
+|Attribute                           |       n|   Mean|     SD|    SE| Median|   Min|     Max| Skewness| Kurtosis|
+|:-----------------------------------|-------:|------:|------:|-----:|------:|-----:|-------:|--------:|--------:|
+|Stand basal area (m2/ha)            | 122,700|  35.18|  11.84| 0.034|  37.06|  2.08|   64.26|    -0.77|    +0.49|
+|Crown closure (%)                   | 122,700|  45.32|  13.55| 0.039|  48.00|  4.00|   60.00|    -1.31|    +1.29|
+|Live stems (n/ha)                   | 122,700| 670.00| 256.78| 0.733| 686.00| 64.00| 1614.00|    +0.33|    +1.22|
+|Quadratic mean diameter (cm)        | 122,700|  30.13|   7.19| 0.021|  30.32| 13.48|   62.35|    +0.54|    +1.39|
+|Stand age (years)                   | 122,700| 125.22|  26.47| 0.076| 124.00| 20.00|  184.00|    -1.39|    +3.48|
+|Stand height (m)                    | 122,700|  28.07|   6.05| 0.017|  29.00|  7.70|   41.60|    -0.70|    +1.79|
+|Standing volume (m3/ha)             | 122,700| 283.40| 129.22| 0.369| 292.90|  0.90|  620.32|    +0.00|    -0.02|
+|Lodgepole pine cover (%)            | 122,700|  17.36|  22.82| 0.065|  10.00|  0.00|  100.00|    +1.63|    +2.09|
+|Susceptible pine basal area (m2/ha) | 122,700|   5.45|   7.03| 0.020|   3.24|  0.00|   31.67|    +1.52|    +1.86|
 
 
 :::
@@ -565,18 +571,18 @@ submission. They are reproduced below for review.
 ## Appendix S5
 
 
-::: {.cell tbl-cap='**Appendix S5.** Moderate-to-high beetle disturbance by quadratic mean diameter class, on the balanced sample. The 25 cm boundary is the source-sink threshold of the species\' bionomics.'}
+::: {.cell tbl-cap='Moderate-to-high beetle disturbance by quadratic mean diameter class, on the balanced sample. The 25 cm boundary is the source-sink threshold of the species\' bionomics. Intervals are Wilson score intervals on the class proportion. Note that 30 m cells in a spreading outbreak are not independent, so the accompanying tests are anti-conservative.'}
 ::: {.cell-output-display}
 
 
-|QMD class (cm) |  Cells| Attacked (%)|
-|:--------------|------:|------------:|
-|<15            |    736|         31.5|
-|15-20          |  2,371|         23.8|
-|20-25          |  7,058|         36.3|
-|25-30          | 14,634|         45.9|
-|30-40          | 18,902|         24.5|
-|>40            |  3,627|         17.0|
+|QMD class (cm) |      n| Attacked| Attacked (%)| 95% CI (%)|
+|:--------------|------:|--------:|------------:|----------:|
+|<15            |    736|      232|         31.5|  28.3-35.0|
+|15-20          |  2,371|      564|         23.8|  22.1-25.5|
+|20-25          |  7,058|    2,559|         36.3|  35.1-37.4|
+|25-30          | 14,634|    6,717|         45.9|  45.1-46.7|
+|30-40          | 18,902|    4,639|         24.5|  23.9-25.2|
+|>40            |  3,627|      617|         17.0|  15.8-18.3|
 
 
 :::

@@ -77,8 +77,13 @@ df-print: kable
 suppressPackageStartupMessages({
   library(terra); library(sf); library(dplyr); library(tidyr); library(ggplot2)
   library(knitr); library(mgcv); library(car); library(ranger); library(patchwork)
-  library(tidyterra)
+  library(tidyterra); library(ggspatial); library(e1071)
 })
+
+## Shared with every draft of this study, so the three cannot show different maps of the
+## same landscape or different metrics for the same model. Edit those files, not this one.
+for (.f in c("map-academic", "fit-metrics", "describe", "diameter-test"))
+  source(file.path("_shared", paste0(.f, ".R")))
 set.seed(42)
 knitr::opts_chunk$set(dpi = 300, fig.width = 9, fig.height = 6)
 
@@ -563,6 +568,10 @@ qmd_bin <- bal |>
   mutate(bin = cut(QUAD_DIAM_125, breaks = c(0, 15, 20, 25, 30, 40, Inf),
                    labels = c("<15","15-20","20-25","25-30","30-40",">40"))) |>
   group_by(bin) |> summarise(n = n(), attack = mean(modhigh))
+
+## The tests the diameter table needs, computed here so the prose reads them rather than
+## restating a difference by eye. See _shared/diameter-test.R for what each one asks.
+QT <- diameter_tests(qmd_bin)
 ```
 
 ```{r}
@@ -964,29 +973,16 @@ deposited in Dryad on acceptance, and are available to reviewers on request.
 ```{r}
 #| label: figure-1
 #| echo: false
-#| fig-cap: "**Figure 1.** The study area, all panels EPSG:3153 at 30 m with the 2015 Mt Midgeley burn outlined in red and ticks in kilometres. (a) elevation; (b) stand basal area from the Vegetation Resources Inventory, the density term the pheromone-disruption mechanism runs through; (c) the MicroMet wind weighting factor at the prevailing bearing, the terrain-resolved wind field."
-#| fig-height: 4.2
+#| fig-cap: "The study area over the British Columbia Freshwater Atlas, with Kootenay Lake and the Kootenay River to the east. (a) Elevation, with the 2015 Mt Midgeley burn that anchors the perimeter outlined in red. (b) Terrain ruggedness index. (c) Stand basal area from the Vegetation Resources Inventory, the density term the pheromone-disruption mechanism runs through. The study perimeter is the grey outline and contours are at 250 m. All panels share one extent, projection and scale, so the north arrow, scale bar and representative fraction are drawn once, on (a); the representative fraction holds at a printed panel width of 66 mm. Coordinates are EPSG:3153, NAD83(CSRS) / BC Albers."
+#| fig-height: 4.6
 
 geo <- rast(file.path(BC, "geomorphometry", "geomorphometry.tif"))
 vri <- rast(file.path(SA, "vri_covariates.tif"))
-mmw <- rast(file.path(BC, "covariates", "wind-micromet", "wind_weight_by_direction.tif"))
-mmb <- mmw[[which.min(abs(as.numeric(sub("bin_", "", names(mmw))) - WDIR))]]
+ctx <- map_context(per, elev, file.path(SA, "basemap_water.geojson"))
 
-base_map <- function(r, title, pal) {
-  ggplot() +
-    geom_spatraster(data = r) +
-    geom_sf(data = burn, fill = NA, colour = "red", linewidth = 0.4) +
-    scale_fill_viridis_c(option = pal, na.value = "transparent", name = NULL) +
-    labs(title = title) +
-    scale_x_continuous(labels = function(x) round(x/1000)) +
-    scale_y_continuous(labels = function(x) round(x/1000)) +
-    theme_minimal(base_size = 8) +
-    theme(legend.key.width = unit(0.25, "cm"), axis.title = element_blank())
-}
-
-base_map(elev, "(a) Elevation (m)", "viridis") +
-  base_map(vri[["BASAL_AREA"]], "(b) Basal area (m2/ha)", "mako") +
-  base_map(mmb, "(c) MicroMet wind weighting", "cividis")
+academic_map(elev, "(a) Elevation (m)", ctx, "viridis", burn = burn, first = TRUE) +
+  academic_map(geo[["tri"]], "(b) Terrain ruggedness index", ctx, "magma") +
+  academic_map(vri[["BASAL_AREA"]], "(c) Stand basal area (m2/ha)", ctx, "mako")
 ```
 
 ```{r}
@@ -1132,7 +1128,7 @@ tibble::tribble(
   "Elevation", "uncertain",
   "A composite of temperature, snowpack, season length and host distribution that this design cannot separate [@sambaraju2021]."
 ) |>
-  kable(booktabs = TRUE, align = "lll")
+  kable(booktabs = TRUE, align = "lll", row.names = FALSE)
 ```
 
 ## Appendix S2
@@ -1140,11 +1136,14 @@ tibble::tribble(
 ```{r}
 #| label: appendix-s2
 #| echo: false
-#| tbl-cap: "**Appendix S2.** Annual model comparison. Each model adds one pathway to the previous."
+#| tbl-cap: "Model comparison. Each model adds one pathway to the previous. AIC ranks on likelihood and a parameter penalty; the remaining columns are predictive error on the fitted probabilities. RMSE is the root mean squared error and is the square root of the Brier score; RMSE (%) expresses it against the prevalence of the response. Brier skill is the improvement over predicting the prevalence for every cell, where 0 is no better than the base rate. MAPE and Theil's U are not reported: both divide by the observed value, which is zero for the majority class of a binary response, so both are undefined without discarding that class."
 
-aic |>
-  transmute(Model, Parameters = df, AIC = fmt(AIC), dAIC = fmt(dAIC)) |>
-  kable(booktabs = TRUE, align = "lrrr")
+fit_metrics_table(
+  fit_metrics(M0, "M0 host size + shading + landform"),
+  fit_metrics(M1, "M1 + stand density"),
+  fit_metrics(M2, "M2 + terrain and flight radiation"),
+  fit_metrics(M3, "M3 + interactions")) |>
+  kable(booktabs = TRUE, align = "lrrrrrrrr", row.names = FALSE)
 ```
 
 ## Appendix S3
@@ -1157,7 +1156,7 @@ aic |>
 prev_yr |>
   transmute(Year = year, Cells = fmt(n),
             `Moderate-to-high (%)` = sprintf("%.1f", 100*prev)) |>
-  kable(booktabs = TRUE, align = "lrr")
+  kable(booktabs = TRUE, align = "lrr", row.names = FALSE)
 ```
 
 ## Appendix S4
@@ -1165,15 +1164,11 @@ prev_yr |>
 ```{r}
 #| label: appendix-s4
 #| echo: false
-#| tbl-cap: "**Appendix S4.** Stand structure across the study perimeter, from the Vegetation Resources Inventory."
+#| tbl-cap: "Stand structure across the study perimeter, from the Vegetation Resources Inventory. n is cell-years. SD is the standard deviation of the landscape; SE is the standard error of the mean and is small by construction at this n, so it is not precision about any one cell. Skewness and kurtosis are the bias-corrected third and fourth standardised moments; kurtosis is excess, so 0 is Gaussian."
 
-d |>
-  select(all_of(VRI_V)) |>
-  pivot_longer(everything()) |>
-  group_by(Attribute = name) |>
-  summarise(Min = sprintf("%.1f", min(value)), Median = sprintf("%.1f", median(value)),
-            Mean = sprintf("%.1f", mean(value)), Max = sprintf("%.1f", max(value))) |>
-  kable(booktabs = TRUE, align = "lrrrr")
+describe_vars(d, VRI_V, VRI_LABELS) |>
+  describe_table() |>
+  kable(booktabs = TRUE, align = "lrrrrrrrrr", row.names = FALSE)
 ```
 
 ## Appendix S5
@@ -1181,12 +1176,11 @@ d |>
 ```{r}
 #| label: appendix-s5
 #| echo: false
-#| tbl-cap: "**Appendix S5.** Moderate-to-high beetle disturbance by quadratic mean diameter class, on the balanced sample. The 25 cm boundary is the source-sink threshold of the species' bionomics."
+#| tbl-cap: "Moderate-to-high beetle disturbance by quadratic mean diameter class, on the balanced sample. The 25 cm boundary is the source-sink threshold of the species' bionomics. Intervals are Wilson score intervals on the class proportion. Note that 30 m cells in a spreading outbreak are not independent, so the accompanying tests are anti-conservative."
 
 qmd_bin |>
-  transmute(`QMD class (cm)` = bin, Cells = fmt(n),
-            `Attacked (%)` = sprintf("%.1f", 100*attack)) |>
-  kable(booktabs = TRUE, align = "lrr")
+  diameter_table() |>
+  kable(booktabs = TRUE, align = "lrrrr", row.names = FALSE)
 ```
 
 # References

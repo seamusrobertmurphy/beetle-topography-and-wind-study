@@ -33,13 +33,13 @@ Every figure and table below is reproduced from the current render, in the order
 
 ![Figure 1](03.outputs/PNG/fig-study-area.png)
 
-*The study area. (a) The perimeter, the 2015 Mt Midgeley burn that anchors it, and elevation. (b) Terrain ruggedness index, the strongest terrain predictor in the parent study. (c) Stand basal area from the Vegetation Resources Inventory, the density term the pheromone-disruption mechanism runs through. All panels are EPSG:3153 at 30 m; ticks are kilometres.*
+*The study area over the British Columbia Freshwater Atlas, with Kootenay Lake and the Kootenay River to the east. (a) Elevation, with the 2015 Mt Midgeley burn that anchors the perimeter outlined in red. (b) Terrain ruggedness index. (c) Stand basal area from the Vegetation Resources Inventory, the density term the pheromone-disruption mechanism runs through. The study perimeter is the grey outline and contours are at 250 m. All panels share one extent, projection and scale, so the north arrow, scale bar and representative fraction are drawn once, on (a); the representative fraction holds at a printed panel width of 66 mm. Coordinates are EPSG:3153, NAD83(CSRS) / BC Albers.*
 
 ### Figure 2
 
 ![Figure 2](03.outputs/PNG/fig-layers.png)
 
-*The predictor surfaces, all EPSG:3153 at 30 m inside the study perimeter, with the 2015 burn outlined in red. (a) flight-window direct radiation, the thermal gate on flight; (b) growing-season direct radiation, the shading pathway; (c) the MicroMet wind weighting factor at the prevailing bearing; (d) terrain ruggedness; (e) stand basal area; (f) quadratic mean diameter, with the 25 cm source-sink threshold at the midpoint of the scale.*
+*The predictor surfaces, over the same base map and extent as Figure 1, with the 2015 burn outlined in red. (a) flight-window direct radiation, the thermal gate on flight; (b) growing-season direct radiation, the shading pathway; (c) the MicroMet wind weighting factor at the prevailing bearing; (d) terrain ruggedness; (e) stand basal area; (f) quadratic mean diameter, whose 25 cm source-sink threshold falls near the midpoint of the scale. Contours are omitted so the surfaces read cleanly. Coordinates are EPSG:3153; scale and orientation are as Figure 1.*
 
 ### Table 2
 
@@ -58,60 +58,60 @@ Every figure and table below is reproduced from the current render, in the order
 
 ### Table 3
 
-*Stand structure across the study perimeter, from the Vegetation Resources Inventory.*
+*Stand structure across the study perimeter, from the Vegetation Resources Inventory. n is cell-years. SD is the standard deviation of the landscape; SE is the standard error of the mean and is small by construction at this n, so it should not be read as precision about any one cell. Skewness and kurtosis are the bias-corrected third and fourth standardised moments; kurtosis is excess, so 0 is Gaussian and positive is heavy-tailed.*
 
-| Attribute | Min | Median | Mean | Max |
-| :--- | ---: | ---: | ---: | ---: |
-| BASAL_AREA | 2.1 | 37.1 | 35.2 | 64.3 |
-| CROWN_CLOSURE | 4.0 | 48.0 | 45.3 | 60.0 |
-| LIVE_STAND_VOLUME_125 | 0.9 | 292.9 | 283.4 | 620.3 |
-| PINE_BA | 0.0 | 3.2 | 5.4 | 31.7 |
-| PROJ_AGE_1 | 20.0 | 124.0 | 125.2 | 184.0 |
-| PROJ_HEIGHT_1 | 7.7 | 29.0 | 28.1 | 41.6 |
-| PinePct | 0.0 | 10.0 | 17.4 | 100.0 |
-| QUAD_DIAM_125 | 13.5 | 30.3 | 30.1 | 62.3 |
-| VRI_LIVE_STEMS_PER_HA | 64.0 | 686.0 | 670.0 | 1614.0 |
+| Attribute | n | Mean | SD | SE | Median | Min | Max | Skewness | Kurtosis |
+| :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Stand basal area (m2/ha) | 122,700 | 35.18 | 11.84 | 0.034 | 37.06 | 2.08 | 64.26 | -0.77 | +0.49 |
+| Crown closure (%) | 122,700 | 45.32 | 13.55 | 0.039 | 48.00 | 4.00 | 60.00 | -1.31 | +1.29 |
+| Live stems (n/ha) | 122,700 | 670.00 | 256.78 | 0.733 | 686.00 | 64.00 | 1614.00 | +0.33 | +1.22 |
+| Quadratic mean diameter (cm) | 122,700 | 30.13 | 7.19 | 0.021 | 30.32 | 13.48 | 62.35 | +0.54 | +1.39 |
+| Stand age (years) | 122,700 | 125.22 | 26.47 | 0.076 | 124.00 | 20.00 | 184.00 | -1.39 | +3.48 |
+| Stand height (m) | 122,700 | 28.07 | 6.05 | 0.017 | 29.00 | 7.70 | 41.60 | -0.70 | +1.79 |
+| Standing volume (m3/ha) | 122,700 | 283.40 | 129.22 | 0.369 | 292.90 | 0.90 | 620.32 | +0.00 | -0.02 |
+| Lodgepole pine cover (%) | 122,700 | 17.36 | 22.82 | 0.065 | 10.00 | 0.00 | 100.00 | +1.63 | +2.09 |
+| Susceptible pine basal area (m2/ha) | 122,700 | 5.45 | 7.03 | 0.020 | 3.24 | 0.00 | 31.67 | +1.52 | +1.86 |
 
 ### Table 4
 
-*Model comparison. Each model adds one pathway to the previous.*
+*Model comparison, panel A of the model table. Each model adds one pathway to the previous. AIC ranks on likelihood and a parameter penalty; the remaining columns are predictive error on the fitted probabilities. RMSE is the root mean squared error and is the square root of the Brier score; RMSE (%) expresses it against the prevalence of the response. Brier skill is the improvement over predicting the prevalence for every cell, where 0 is no better than the base rate. MAPE and Theil’s U are not reported: both divide by the observed value, which is zero for the majority class of a binary response, so both are undefined without discarding that class.*
 
-| Model | Parameters | AIC | dAIC |
-| :--- | ---: | ---: | ---: |
-| M0 host size + shading + landform | 15 | 49,547 | 2,307 |
-| M1 + stand density | 18 | 49,049 | 1,809 |
-| M2 + terrain and flight radiation | 25 | 48,305 | 1,065 |
-| M3 + interactions | 30 | 47,240 | 0 |
+| Model | AIC | ΔAIC | RMSE | RMSE (%) | MAE | Brier | Log loss | AUC | Brier skill |
+| :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | :--- |
+| M0 host size + shading + landform | 49,547 | 2,307 | 0.416 | 128.3 | 0.346 | 0.173 | 0.523 | 0.771 | 0.211 |
+| M1 + stand density | 49,049 | 1,809 | 0.412 | 127.3 | 0.342 | 0.170 | 0.518 | 0.775 | 0.223 |
+| M2 + terrain and flight radiation | 48,305 | 1,065 | 0.409 | 126.2 | 0.336 | 0.167 | 0.510 | 0.784 | 0.237 |
+| M3 + interactions | 47,240 | 0 | 0.404 | 124.7 | 0.327 | 0.163 | 0.498 | 0.798 | 0.256 |
 
 ### Table 5
 
-*Full model, continuous terms. Coefficients are per standard deviation on a class-balanced sample, so the intercept is not landscape prevalence. The geomorphon landform classes are also in this model and are not reported here.*
+*Full model M3, panel B of the model table: continuous terms, ordered by absolute effect. Coefficients are log-odds per standard deviation on a class-balanced sample, so the intercept is not landscape prevalence. SE is the standard error of the coefficient. The geomorphon landform classes are also in this model and are not reported here.*
 
-|  | Term | Beta | SE | z | p |
-| :--- | :--- | ---: | ---: | ---: | ---: |
-| solar_flight_direct | solar_flight_direct | +0.487 | 0.028 | 17.21 | < 0.001 |
-| PINE_BA | PINE_BA | +0.459 | 0.014 | 32.40 | < 0.001 |
-| QUAD_DIAM_125 | QUAD_DIAM_125 | -0.422 | 0.023 | -18.35 | < 0.001 |
-| northness | northness | +0.382 | 0.016 | 23.19 | < 0.001 |
-| LIVE_STAND_VOLUME_125 | LIVE_STAND_VOLUME_125 | +0.381 | 0.024 | 15.61 | < 0.001 |
-| wind_effect | wind_effect | +0.358 | 0.029 | 12.37 | < 0.001 |
-| elevation | elevation | +0.329 | 0.018 | 18.20 | < 0.001 |
-| VRI_LIVE_STEMS_PER_HA:wind_effect | VRI_LIVE_STEMS_PER_HA:wind_effect | +0.221 | 0.021 | 10.63 | < 0.001 |
-| PROJ_AGE_1 | PROJ_AGE_1 | +0.218 | 0.018 | 11.89 | < 0.001 |
-| jul | jul | +0.215 | 0.012 | 17.84 | < 0.001 |
-| valley_depth | valley_depth | -0.193 | 0.022 | -8.70 | < 0.001 |
-| CROWN_CLOSURE | CROWN_CLOSURE | -0.183 | 0.020 | -9.02 | < 0.001 |
-| VRI_LIVE_STEMS_PER_HA:solar_flight_direct | VRI_LIVE_STEMS_PER_HA:solar_flight_direct | -0.144 | 0.017 | -8.58 | < 0.001 |
-| jun | jun | +0.107 | 0.012 | 8.66 | < 0.001 |
-| VRI_LIVE_STEMS_PER_HA | VRI_LIVE_STEMS_PER_HA | -0.099 | 0.018 | -5.36 | < 0.001 |
-| twi | twi | +0.073 | 0.019 | 3.74 | < 0.001 |
-| midslope_position | midslope_position | +0.063 | 0.013 | 4.69 | < 0.001 |
-| vrm | vrm | -0.043 | 0.019 | -2.21 | 0.027 |
-| tpi | tpi | +0.040 | 0.023 | 1.77 | 0.076 |
-| curv_prof | curv_prof | -0.038 | 0.012 | -3.04 | 0.002 |
-| tri | tri | -0.036 | 0.023 | -1.54 | 0.124 |
-| convergence | convergence | -0.029 | 0.014 | -2.07 | 0.038 |
-| VRI_LIVE_STEMS_PER_HA:jun | VRI_LIVE_STEMS_PER_HA:jun | -0.001 | 0.013 | -0.12 | 0.905 |
+| Term | Beta | SE | z | p |
+| :--- | ---: | ---: | ---: | ---: |
+| Flight-window direct radiation (kWh/m2) | +0.487 | 0.028 | 17.21 | < 0.001 |
+| Susceptible pine basal area (m2/ha) | +0.459 | 0.014 | 32.40 | < 0.001 |
+| Quadratic mean diameter (cm) | -0.422 | 0.023 | -18.35 | < 0.001 |
+| Northness | +0.382 | 0.016 | 23.19 | < 0.001 |
+| Standing volume (m3/ha) | +0.381 | 0.024 | 15.61 | < 0.001 |
+| Windward-leeward index | +0.358 | 0.029 | 12.37 | < 0.001 |
+| Elevation (m) | +0.329 | 0.018 | 18.20 | < 0.001 |
+| Live stems x Windward-leeward index | +0.221 | 0.021 | 10.63 | < 0.001 |
+| Stand age (years) | +0.218 | 0.018 | 11.89 | < 0.001 |
+| July mean wind (km/h) | +0.215 | 0.012 | 17.84 | < 0.001 |
+| Valley depth (m) | -0.193 | 0.022 | -8.70 | < 0.001 |
+| Crown closure (%) | -0.183 | 0.020 | -9.02 | < 0.001 |
+| Live stems x Flight-window direct radiation | -0.144 | 0.017 | -8.58 | < 0.001 |
+| June mean wind (km/h) | +0.107 | 0.012 | 8.66 | < 0.001 |
+| Live stems (n/ha) | -0.099 | 0.018 | -5.36 | < 0.001 |
+| Topographic wetness index | +0.073 | 0.019 | 3.74 | < 0.001 |
+| Mid-slope position | +0.063 | 0.013 | 4.69 | < 0.001 |
+| Vector ruggedness measure | -0.043 | 0.019 | -2.21 | 0.027 |
+| Topographic position index | +0.040 | 0.023 | 1.77 | 0.076 |
+| Profile curvature | -0.038 | 0.012 | -3.04 | 0.002 |
+| Terrain ruggedness index | -0.036 | 0.023 | -1.54 | 0.124 |
+| Convergence index | -0.029 | 0.014 | -2.07 | 0.038 |
+| Live stems x June mean wind | -0.001 | 0.013 | -0.12 | 0.905 |
 
 ### Figure 3
 
@@ -125,20 +125,20 @@ Every figure and table below is reproduced from the current render, in the order
 
 | Model | Term | Beta | z | p |
 | :--- | :--- | :--- | ---: | ---: |
-| M4 station wind | jun | -0.002 | -0.09 | 0.926 |
-| M4 station wind | VRI_LIVE_STEMS_PER_HA:jun | +0.020 | 1.16 | 0.247 |
-| M5 terrain-resolved wind | mm_flight_mean | +0.467 | 28.44 | < 0.001 |
-| M5 terrain-resolved wind | VRI_LIVE_STEMS_PER_HA:mm_flight_mean | +0.031 | 2.09 | 0.036 |
+| M4 station wind | June mean wind (km/h) | -0.002 | -0.09 | 0.926 |
+| M4 station wind | Live stems x June mean wind | +0.020 | 1.16 | 0.247 |
+| M5 terrain-resolved wind | MicroMet flight-window wind (km/h) | +0.467 | 28.44 | < 0.001 |
+| M5 terrain-resolved wind | Live stems x MicroMet flight-window wind | +0.031 | 2.09 | 0.036 |
 
 ### Table 7
 
-*Moderate-to-high beetle disturbance by quadratic mean diameter class, on the balanced sample. The 25 cm boundary is the source-sink threshold of the species’ bionomics.*
+*Moderate-to-high beetle disturbance by quadratic mean diameter class, on the balanced sample. The 25 cm boundary is the source-sink threshold of the species’ bionomics. Intervals are Wilson score intervals on the class proportion, which is why they are asymmetric in the smallest class. Note that 30 m cells in a spreading outbreak are not independent, so the tests reported beneath this table are anti-conservative.*
 
-| QMD class (cm) | Cells | Attacked (%) |
-| :--- | ---: | ---: |
-| <15 | 736 | 31.5 |
-| 15-20 | 2,371 | 23.8 |
-| 20-25 | 7,058 | 36.3 |
-| 25-30 | 14,634 | 45.9 |
-| 30-40 | 18,902 | 24.5 |
-| >40 | 3,627 | 17.0 |
+| QMD class (cm) | n | Attacked | Attacked (%) | 95% CI (%) |
+| :--- | ---: | ---: | ---: | ---: |
+| <15 | 736 | 232 | 31.5 | 28.3-35.0 |
+| 15-20 | 2,371 | 564 | 23.8 | 22.1-25.5 |
+| 20-25 | 7,058 | 2,559 | 36.3 | 35.1-37.4 |
+| 25-30 | 14,634 | 6,717 | 45.9 | 45.1-46.7 |
+| 30-40 | 18,902 | 4,639 | 24.5 | 23.9-25.2 |
+| >40 | 3,627 | 617 | 17.0 | 15.8-18.3 |

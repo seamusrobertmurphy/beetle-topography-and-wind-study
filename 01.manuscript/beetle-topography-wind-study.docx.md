@@ -70,8 +70,13 @@ df-print: kable
 suppressPackageStartupMessages({
   library(terra); library(sf); library(dplyr); library(tidyr); library(ggplot2)
   library(knitr); library(mgcv); library(car); library(ranger); library(patchwork)
-  library(tidyterra)
+  library(tidyterra); library(ggspatial); library(e1071)
 })
+
+## Shared with every draft of this study, so the three cannot show different maps of the
+## same landscape or different metrics for the same model. Edit those files, not this one.
+for (.f in c("map-academic", "fit-metrics", "describe", "diameter-test"))
+  source(file.path("_shared", paste0(.f, ".R")))
 set.seed(42)
 knitr::opts_chunk$set(dpi = 300, fig.width = 9, fig.height = 6)
 
@@ -568,6 +573,10 @@ qmd_bin <- bal |>
   mutate(bin = cut(QUAD_DIAM_125, breaks = c(0, 15, 20, 25, 30, 40, Inf),
                    labels = c("<15","15-20","20-25","25-30","30-40",">40"))) |>
   group_by(bin) |> summarise(n = n(), attack = mean(modhigh))
+
+## The tests the diameter table needs, computed here so the prose reads them rather than
+## restating a difference by eye. See _shared/diameter-test.R for what each one asks.
+QT <- diameter_tests(qmd_bin)
 ```
 :::
 
@@ -795,7 +804,7 @@ tibble::tribble(
   "Elevation", "uncertain",
   "A composite of temperature, snowpack, season length and host distribution that this design cannot separate [@sambaraju2021]."
 ) |>
-  kable(booktabs = TRUE, align = "lll")
+  kable(booktabs = TRUE, align = "lll", row.names = FALSE)
 ```
 
 ::: {.cell-output-display}
@@ -887,59 +896,16 @@ reaches the Kootenay Lake surface at 534 m, which is not a site elevation.
 
 
 ::: {.cell}
-
-```{.r .cell-code}
-geo <- rast(file.path(BC, "geomorphometry", "geomorphometry.tif"))
-vri <- rast(file.path(SA, "vri_covariates.tif"))
-
-base_map <- function(r, title, pal) {
-  ggplot() +
-    geom_spatraster(data = r) +
-    geom_sf(data = burn, fill = NA, colour = "red", linewidth = 0.4) +
-    scale_fill_viridis_c(option = pal, na.value = "transparent", name = NULL) +
-    labs(title = title, subtitle = sprintf("EPSG:%s; ticks in km", EPSG)) +
-    scale_x_continuous(labels = function(x) round(x/1000)) +
-    scale_y_continuous(labels = function(x) round(x/1000)) +
-    theme_minimal(base_size = 9) +
-    theme(legend.key.width = unit(0.3, "cm"), axis.title = element_blank())
-}
-
-base_map(elev, "(a) Elevation (m)", "viridis") +
-  base_map(geo[["tri"]], "(b) Terrain ruggedness index", "magma") +
-  base_map(vri[["BASAL_AREA"]], "(c) Stand basal area (m2/ha)", "mako")
-```
-
 ::: {.cell-output-display}
-![The study area. (a) The perimeter, the 2015 Mt Midgeley burn that anchors it, and elevation. (b) Terrain ruggedness index, the strongest terrain predictor in the parent study. (c) Stand basal area from the Vegetation Resources Inventory, the density term the pheromone-disruption mechanism runs through. All panels are EPSG:3153 at 30 m; ticks are kilometres.](beetle-topography-wind-study_files/figure-docx/fig-study-area-1.png){#fig-study-area}
+![The study area over the British Columbia Freshwater Atlas, with Kootenay Lake and the Kootenay River to the east. (a) Elevation, with the 2015 Mt Midgeley burn that anchors the perimeter outlined in red. (b) Terrain ruggedness index. (c) Stand basal area from the Vegetation Resources Inventory, the density term the pheromone-disruption mechanism runs through. The study perimeter is the grey outline and contours are at 250 m. All panels share one extent, projection and scale, so the north arrow, scale bar and representative fraction are drawn once, on (a); the representative fraction holds at a printed panel width of 66 mm. Coordinates are EPSG:3153, NAD83(CSRS) / BC Albers.](beetle-topography-wind-study_files/figure-docx/fig-study-area-1.png){#fig-study-area}
 :::
 :::
 
 
 
 ::: {.cell}
-
-```{.r .cell-code}
-lay <- function(r, title, pal = "viridis") {
-  ggplot() + geom_spatraster(data = r) +
-    geom_sf(data = burn, fill = NA, colour = "red", linewidth = 0.3) +
-    scale_fill_viridis_c(option = pal, na.value = "transparent", name = NULL) +
-    labs(title = title) + theme_minimal(base_size = 8) +
-    theme(axis.text = element_blank(), axis.ticks = element_blank(),
-          panel.grid = element_blank(), legend.key.width = unit(0.25, "cm"))
-}
-mmw <- rast(file.path(BC, "covariates", "wind-micromet", "wind_weight_by_direction.tif"))
-mmb <- mmw[[which.min(abs(as.numeric(sub("bin_", "", names(mmw))) - WDIR))]]
-
-(lay(geo[["solar_flight_direct"]], "(a) Flight-window radiation (kWh/m2)", "inferno") |
- lay(geo[["solar_season_direct"]], "(b) Growing-season radiation (kWh/m2)", "inferno") |
- lay(mmb, "(c) MicroMet wind weighting", "mako")) /
-(lay(geo[["tri"]], "(d) Terrain ruggedness", "magma") |
- lay(vri[["BASAL_AREA"]], "(e) Basal area (m2/ha)") |
- lay(vri[["QUAD_DIAM_125"]], "(f) Quadratic mean diameter (cm)"))
-```
-
 ::: {.cell-output-display}
-![The predictor surfaces, all EPSG:3153 at 30 m inside the study perimeter, with the 2015 burn outlined in red. (a) flight-window direct radiation, the thermal gate on flight; (b) growing-season direct radiation, the shading pathway; (c) the MicroMet wind weighting factor at the prevailing bearing; (d) terrain ruggedness; (e) stand basal area; (f) quadratic mean diameter, with the 25 cm source-sink threshold at the midpoint of the scale.](beetle-topography-wind-study_files/figure-docx/fig-layers-1.png){#fig-layers}
+![The predictor surfaces, over the same base map and extent as Figure 1, with the 2015 burn outlined in red. (a) flight-window direct radiation, the thermal gate on flight; (b) growing-season direct radiation, the shading pathway; (c) the MicroMet wind weighting factor at the prevailing bearing; (d) terrain ruggedness; (e) stand basal area; (f) quadratic mean diameter, whose 25 cm source-sink threshold falls near the midpoint of the scale. Contours are omitted so the surfaces read cleanly. Coordinates are EPSG:3153; scale and orientation are as Figure 1.](beetle-topography-wind-study_files/figure-docx/fig-layers-1.png){#fig-layers}
 :::
 :::
 
@@ -969,7 +935,7 @@ label. It is retained only as a visual check.
 prev_yr |>
   transmute(Year = year, Cells = fmt(n),
             `Moderate-to-high (%)` = sprintf("%.1f", 100*prev)) |>
-  kable(booktabs = TRUE, align = "lrr")
+  kable(booktabs = TRUE, align = "lrr", row.names = FALSE)
 ```
 
 ::: {.cell-output-display}
@@ -1004,32 +970,21 @@ basal area formed as total basal area times the pine share of cover.
 25 cm source-sink threshold.
 
 
-::: {#tbl-vri .cell tbl-cap='Stand structure across the study perimeter, from the Vegetation Resources Inventory.'}
-
-```{.r .cell-code}
-d |>
-  select(all_of(VRI_V)) |>
-  pivot_longer(everything()) |>
-  group_by(Attribute = name) |>
-  summarise(Min = sprintf("%.1f", min(value)), Median = sprintf("%.1f", median(value)),
-            Mean = sprintf("%.1f", mean(value)), Max = sprintf("%.1f", max(value))) |>
-  kable(booktabs = TRUE, align = "lrrrr")
-```
-
+::: {#tbl-vri .cell tbl-cap='Stand structure across the study perimeter, from the Vegetation Resources Inventory. n is cell-years. SD is the standard deviation of the landscape; SE is the standard error of the mean and is small by construction at this n, so it is not precision about any one cell. Skewness and kurtosis are the bias-corrected third and fourth standardised moments; kurtosis is excess, so 0 is Gaussian.'}
 ::: {.cell-output-display}
 
 
-|Attribute             |  Min| Median|  Mean|    Max|
-|:---------------------|----:|------:|-----:|------:|
-|BASAL_AREA            |  2.1|   37.1|  35.2|   64.3|
-|CROWN_CLOSURE         |  4.0|   48.0|  45.3|   60.0|
-|LIVE_STAND_VOLUME_125 |  0.9|  292.9| 283.4|  620.3|
-|PINE_BA               |  0.0|    3.2|   5.4|   31.7|
-|PROJ_AGE_1            | 20.0|  124.0| 125.2|  184.0|
-|PROJ_HEIGHT_1         |  7.7|   29.0|  28.1|   41.6|
-|PinePct               |  0.0|   10.0|  17.4|  100.0|
-|QUAD_DIAM_125         | 13.5|   30.3|  30.1|   62.3|
-|VRI_LIVE_STEMS_PER_HA | 64.0|  686.0| 670.0| 1614.0|
+|Attribute                           |       n|   Mean|     SD|    SE| Median|   Min|     Max| Skewness| Kurtosis|
+|:-----------------------------------|-------:|------:|------:|-----:|------:|-----:|-------:|--------:|--------:|
+|Stand basal area (m2/ha)            | 122,700|  35.18|  11.84| 0.034|  37.06|  2.08|   64.26|    -0.77|    +0.49|
+|Crown closure (%)                   | 122,700|  45.32|  13.55| 0.039|  48.00|  4.00|   60.00|    -1.31|    +1.29|
+|Live stems (n/ha)                   | 122,700| 670.00| 256.78| 0.733| 686.00| 64.00| 1614.00|    +0.33|    +1.22|
+|Quadratic mean diameter (cm)        | 122,700|  30.13|   7.19| 0.021|  30.32| 13.48|   62.35|    +0.54|    +1.39|
+|Stand age (years)                   | 122,700| 125.22|  26.47| 0.076| 124.00| 20.00|  184.00|    -1.39|    +3.48|
+|Stand height (m)                    | 122,700|  28.07|   6.05| 0.017|  29.00|  7.70|   41.60|    -0.70|    +1.79|
+|Standing volume (m3/ha)             | 122,700| 283.40| 129.22| 0.369| 292.90|  0.90|  620.32|    +0.00|    -0.02|
+|Lodgepole pine cover (%)            | 122,700|  17.36|  22.82| 0.065|  10.00|  0.00|  100.00|    +1.63|    +2.09|
+|Susceptible pine basal area (m2/ha) | 122,700|   5.45|   7.03| 0.020|   3.24|  0.00|   31.67|    +1.52|    +1.86|
 
 
 :::
@@ -1260,7 +1215,7 @@ wind_yr |>
             `95th pct` = sprintf("%.2f", flight_p95),
             `Calm fraction` = sprintf("%.3f", flight_calm),
             `Windy fraction` = sprintf("%.3f", flight_windy)) |>
-  kable(booktabs = TRUE, align = "lrrrr")
+  kable(booktabs = TRUE, align = "lrrrr", row.names = FALSE)
 ```
 
 ::: {.cell-output-display}
@@ -1525,23 +1480,16 @@ radiation, and by flight-window wind.
 
 
 
-::: {#tbl-aic .cell tbl-cap='Model comparison. Each model adds one pathway to the previous.'}
-
-```{.r .cell-code}
-aic |>
-  transmute(Model, `Parameters` = df, AIC = fmt(AIC), `dAIC` = fmt(dAIC)) |>
-  kable(booktabs = TRUE, align = "lrrr")
-```
-
+::: {#tbl-aic .cell tbl-cap='Model comparison. Each model adds one pathway to the previous. AIC ranks on likelihood and a parameter penalty; the remaining columns are predictive error on the fitted probabilities. RMSE is the root mean squared error and is the square root of the Brier score; RMSE (%) expresses it against the prevalence of the response. Brier skill is the improvement over predicting the prevalence for every cell, where 0 is no better than the base rate. MAPE and Theil\'s U are not reported: both divide by the observed value, which is zero for the majority class of a binary response, so both are undefined without discarding that class.'}
 ::: {.cell-output-display}
 
 
-|Model                             | Parameters|    AIC|  dAIC|
-|:---------------------------------|----------:|------:|-----:|
-|M0 host size + shading + landform |         15| 49,547| 2,307|
-|M1 + stand density                |         18| 49,049| 1,809|
-|M2 + terrain and flight radiation |         25| 48,305| 1,065|
-|M3 + interactions                 |         30| 47,240|     0|
+|Model                             |    AIC|  ΔAIC|  RMSE| RMSE (%)|   MAE| Brier| Log loss|   AUC|Brier skill |
+|:---------------------------------|------:|-----:|-----:|--------:|-----:|-----:|--------:|-----:|:-----------|
+|M0 host size + shading + landform | 49,547| 2,307| 0.416|    128.3| 0.346| 0.173|    0.523| 0.771|0.211       |
+|M1 + stand density                | 49,049| 1,809| 0.412|    127.3| 0.342| 0.170|    0.518| 0.775|0.223       |
+|M2 + terrain and flight radiation | 48,305| 1,065| 0.409|    126.2| 0.336| 0.167|    0.510| 0.784|0.237       |
+|M3 + interactions                 | 47,240|     0| 0.404|    124.7| 0.327| 0.163|    0.498| 0.798|0.256       |
 
 
 :::
@@ -1555,39 +1503,39 @@ aic |>
 co3 |>
   filter(term != "(Intercept)", !grepl("^geomorphon", term)) |>
   arrange(desc(abs(beta))) |>
-  transmute(Term = term, Beta = sprintf("%+.3f", beta), SE = sprintf("%.3f", se),
-            z = sprintf("%.1f", z), p = sapply(p, pv)) |>
-  kable(booktabs = TRUE, align = "lrrrr")
+  transmute(Term = pretty_terms(term), Beta = sprintf("%+.3f", beta), SE = sprintf("%.3f", se),
+            z = sprintf("%.2f", z), p = sapply(p, pv)) |>
+  kable(booktabs = TRUE, align = "lrrrr", row.names = FALSE)
 ```
 
 ::: {.cell-output-display}
 
 
-|                                          |Term                                      |   Beta|    SE|     z|        p|
-|:-----------------------------------------|:-----------------------------------------|------:|-----:|-----:|--------:|
-|solar_flight_direct                       |solar_flight_direct                       | +0.487| 0.028|  17.2|  < 1e-16|
-|PINE_BA                                   |PINE_BA                                   | +0.459| 0.014|  32.4|  < 1e-16|
-|QUAD_DIAM_125                             |QUAD_DIAM_125                             | -0.422| 0.023| -18.4|  < 1e-16|
-|northness                                 |northness                                 | +0.382| 0.016|  23.2|  < 1e-16|
-|LIVE_STAND_VOLUME_125                     |LIVE_STAND_VOLUME_125                     | +0.381| 0.024|  15.6|  < 1e-16|
-|wind_effect                               |wind_effect                               | +0.358| 0.029|  12.4|  < 1e-16|
-|elevation                                 |elevation                                 | +0.329| 0.018|  18.2|  < 1e-16|
-|VRI_LIVE_STEMS_PER_HA:wind_effect         |VRI_LIVE_STEMS_PER_HA:wind_effect         | +0.221| 0.021|  10.6|  < 1e-16|
-|PROJ_AGE_1                                |PROJ_AGE_1                                | +0.218| 0.018|  11.9|  < 1e-16|
-|jul                                       |jul                                       | +0.215| 0.012|  17.8|  < 1e-16|
-|valley_depth                              |valley_depth                              | -0.193| 0.022|  -8.7|  < 1e-16|
-|CROWN_CLOSURE                             |CROWN_CLOSURE                             | -0.183| 0.020|  -9.0|  < 1e-16|
-|VRI_LIVE_STEMS_PER_HA:solar_flight_direct |VRI_LIVE_STEMS_PER_HA:solar_flight_direct | -0.144| 0.017|  -8.6|  < 1e-16|
-|jun                                       |jun                                       | +0.107| 0.012|   8.7|  < 1e-16|
-|VRI_LIVE_STEMS_PER_HA                     |VRI_LIVE_STEMS_PER_HA                     | -0.099| 0.018|  -5.4| 8.29e-08|
-|twi                                       |twi                                       | +0.073| 0.019|   3.7| 0.000184|
-|midslope_position                         |midslope_position                         | +0.063| 0.013|   4.7| 2.78e-06|
-|vrm                                       |vrm                                       | -0.043| 0.019|  -2.2|   0.0272|
-|tpi                                       |tpi                                       | +0.040| 0.023|   1.8|   0.0761|
-|curv_prof                                 |curv_prof                                 | -0.038| 0.012|  -3.0|  0.00236|
-|tri                                       |tri                                       | -0.036| 0.023|  -1.5|    0.124|
-|convergence                               |convergence                               | -0.029| 0.014|  -2.1|   0.0384|
-|VRI_LIVE_STEMS_PER_HA:jun                 |VRI_LIVE_STEMS_PER_HA:jun                 | -0.001| 0.013|  -0.1|    0.905|
+|Term                                        |   Beta|    SE|      z|        p|
+|:-------------------------------------------|------:|-----:|------:|--------:|
+|Flight-window direct radiation (kWh/m2)     | +0.487| 0.028|  17.21|  < 1e-16|
+|Susceptible pine basal area (m2/ha)         | +0.459| 0.014|  32.40|  < 1e-16|
+|Quadratic mean diameter (cm)                | -0.422| 0.023| -18.35|  < 1e-16|
+|Northness                                   | +0.382| 0.016|  23.19|  < 1e-16|
+|Standing volume (m3/ha)                     | +0.381| 0.024|  15.61|  < 1e-16|
+|Windward-leeward index                      | +0.358| 0.029|  12.37|  < 1e-16|
+|Elevation (m)                               | +0.329| 0.018|  18.20|  < 1e-16|
+|Live stems x Windward-leeward index         | +0.221| 0.021|  10.63|  < 1e-16|
+|Stand age (years)                           | +0.218| 0.018|  11.89|  < 1e-16|
+|July mean wind (km/h)                       | +0.215| 0.012|  17.84|  < 1e-16|
+|Valley depth (m)                            | -0.193| 0.022|  -8.70|  < 1e-16|
+|Crown closure (%)                           | -0.183| 0.020|  -9.02|  < 1e-16|
+|Live stems x Flight-window direct radiation | -0.144| 0.017|  -8.58|  < 1e-16|
+|June mean wind (km/h)                       | +0.107| 0.012|   8.66|  < 1e-16|
+|Live stems (n/ha)                           | -0.099| 0.018|  -5.36| 8.29e-08|
+|Topographic wetness index                   | +0.073| 0.019|   3.74| 0.000184|
+|Mid-slope position                          | +0.063| 0.013|   4.69| 2.78e-06|
+|Vector ruggedness measure                   | -0.043| 0.019|  -2.21|   0.0272|
+|Topographic position index                  | +0.040| 0.023|   1.77|   0.0761|
+|Profile curvature                           | -0.038| 0.012|  -3.04|  0.00236|
+|Terrain ruggedness index                    | -0.036| 0.023|  -1.54|    0.124|
+|Convergence index                           | -0.029| 0.014|  -2.07|   0.0384|
+|Live stems x June mean wind                 | -0.001| 0.013|  -0.12|    0.905|
 
 
 :::
@@ -1691,7 +1639,7 @@ data.frame(
   p     = c(pe1("ep_wind_mean"), pe1(EINT[1]), pe1(EINT[2]),
             pe2("ep_wind_mean"), pe2(EINT[1]), pe2(EINT[2]),
             pe2("ep_lag_self"), pe2("ep_lag_nbr90"))) |>
-  kable(booktabs = TRUE, align = "lllrr")
+  kable(booktabs = TRUE, align = "lllrr", row.names = FALSE)
 ```
 
 ::: {.cell-output-display}
@@ -1810,7 +1758,7 @@ data.frame(
   Beta = c(b4(WTMP_V), b4(I_TMP), b5(WMM), b5(INT_MM)),
   z = c(z4(WTMP_V), z4(I_TMP), z5(WMM), z5(INT_MM)),
   p = c(p4(WTMP_V), p4(I_TMP), p5(WMM), p5(INT_MM))) |>
-  kable(booktabs = TRUE, align = "lllrr")
+  kable(booktabs = TRUE, align = "lllrr", row.names = FALSE)
 ```
 
 ::: {.cell-output-display}
@@ -1859,32 +1807,32 @@ in the opposite direction.
 ```{.r .cell-code}
 shift |>
   head(14) |>
-  transmute(Term = term,
+  transmute(Term = pretty_terms(term),
             `Environment only` = sprintf("%+.3f", beta_env),
             `With autocorrelation` = sprintf("%+.3f", beta_auto),
             Retained = sprintf("%.2f", retained)) |>
-  kable(booktabs = TRUE, align = "lrrr")
+  kable(booktabs = TRUE, align = "lrrr", row.names = FALSE)
 ```
 
 ::: {.cell-output-display}
 
 
-|   |Term                                      | Environment only| With autocorrelation| Retained|
-|:--|:-----------------------------------------|----------------:|--------------------:|--------:|
-|17 |PINE_BA                                   |           +0.494|               +0.346|     0.70|
-|20 |solar_flight_direct                       |           +0.482|               +0.302|     0.63|
-|19 |QUAD_DIAM_125                             |           -0.437|               -0.190|     0.43|
-|14 |LIVE_STAND_VOLUME_125                     |           +0.367|               +0.165|     0.45|
-|30 |wind_effect                               |           +0.357|               +0.215|     0.60|
-|16 |northness                                 |           +0.353|               +0.160|     0.45|
-|5  |elevation                                 |           +0.331|               +0.319|     0.96|
-|28 |VRI_LIVE_STEMS_PER_HA:wind_effect         |           +0.232|               +0.115|     0.50|
-|18 |PROJ_AGE_1                                |           +0.224|               +0.062|     0.28|
-|24 |valley_depth                              |           -0.191|               -0.096|     0.50|
-|3  |CROWN_CLOSURE                             |           -0.172|               -0.053|     0.31|
-|27 |VRI_LIVE_STEMS_PER_HA:solar_flight_direct |           -0.148|               -0.075|     0.50|
-|12 |jul                                       |           +0.147|               +0.432|     2.93|
-|25 |VRI_LIVE_STEMS_PER_HA                     |           -0.103|               -0.081|     0.79|
+|Term                                        | Environment only| With autocorrelation| Retained|
+|:-------------------------------------------|----------------:|--------------------:|--------:|
+|Susceptible pine basal area (m2/ha)         |           +0.494|               +0.346|     0.70|
+|Flight-window direct radiation (kWh/m2)     |           +0.482|               +0.302|     0.63|
+|Quadratic mean diameter (cm)                |           -0.437|               -0.190|     0.43|
+|Standing volume (m3/ha)                     |           +0.367|               +0.165|     0.45|
+|Windward-leeward index                      |           +0.357|               +0.215|     0.60|
+|Northness                                   |           +0.353|               +0.160|     0.45|
+|Elevation (m)                               |           +0.331|               +0.319|     0.96|
+|Live stems x Windward-leeward index         |           +0.232|               +0.115|     0.50|
+|Stand age (years)                           |           +0.224|               +0.062|     0.28|
+|Valley depth (m)                            |           -0.191|               -0.096|     0.50|
+|Crown closure (%)                           |           -0.172|               -0.053|     0.31|
+|Live stems x Flight-window direct radiation |           -0.148|               -0.075|     0.50|
+|July mean wind (km/h)                       |           +0.147|               +0.432|     2.93|
+|Live stems (n/ha)                           |           -0.103|               -0.081|     0.79|
 
 
 :::
@@ -1965,7 +1913,7 @@ gm_desc |>
             Beta = ifelse(is.na(beta), sprintf("%s (reference)", GEOM_REF), sprintf("%+.3f", beta)),
             p = ifelse(is.na(p), "", sapply(p, function(x) if (is.na(x)) "" else pv(x)))) |>
   arrange(desc(`Attacked (%)`)) |>
-  kable(booktabs = TRUE, align = "lrrrr")
+  kable(booktabs = TRUE, align = "lrrrr", row.names = FALSE)
 ```
 
 ::: {.cell-output-display}
@@ -2017,26 +1965,18 @@ is measurable directly, which is the same lesson the terrain-wind index taught i
 
 
 
-::: {#tbl-qmd .cell tbl-cap='Moderate-to-high beetle disturbance by quadratic mean diameter class, on the balanced sample. The 25 cm boundary is the source-sink threshold of the species\' bionomics.'}
-
-```{.r .cell-code}
-qmd_bin |>
-  transmute(`QMD class (cm)` = bin, Cells = fmt(n),
-            `Attacked (%)` = sprintf("%.1f", 100*attack)) |>
-  kable(booktabs = TRUE, align = "lrr")
-```
-
+::: {#tbl-qmd .cell tbl-cap='Moderate-to-high beetle disturbance by quadratic mean diameter class, on the balanced sample. The 25 cm boundary is the source-sink threshold of the species\' bionomics. Intervals are Wilson score intervals on the class proportion. Note that 30 m cells in a spreading outbreak are not independent, so the accompanying tests are anti-conservative.'}
 ::: {.cell-output-display}
 
 
-|QMD class (cm) |  Cells| Attacked (%)|
-|:--------------|------:|------------:|
-|<15            |    736|         31.5|
-|15-20          |  2,371|         23.8|
-|20-25          |  7,058|         36.3|
-|25-30          | 14,634|         45.9|
-|30-40          | 18,902|         24.5|
-|>40            |  3,627|         17.0|
+|QMD class (cm) |      n| Attacked| Attacked (%)| 95% CI (%)|
+|:--------------|------:|--------:|------------:|----------:|
+|<15            |    736|      232|         31.5|  28.3-35.0|
+|15-20          |  2,371|      564|         23.8|  22.1-25.5|
+|20-25          |  7,058|    2,559|         36.3|  35.1-37.4|
+|25-30          | 14,634|    6,717|         45.9|  45.1-46.7|
+|30-40          | 18,902|    4,639|         24.5|  23.9-25.2|
+|>40            |  3,627|      617|         17.0|  15.8-18.3|
 
 
 :::
@@ -2418,29 +2358,29 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] tidyterra_1.1.0 patchwork_1.3.2 ranger_0.18.0   car_3.1-5      
- [5] carData_3.0-6   mgcv_1.9-4      nlme_3.1-168    knitr_1.51     
- [9] ggplot2_4.0.2   tidyr_1.3.2     dplyr_1.2.0     sf_1.1-0       
-[13] terra_1.9-1    
+ [1] e1071_1.7-17     ggspatial_1.1.10 tidyterra_1.1.0  patchwork_1.3.2 
+ [5] ranger_0.18.0    car_3.1-5        carData_3.0-6    mgcv_1.9-4      
+ [9] nlme_3.1-168     knitr_1.51       ggplot2_4.0.2    tidyr_1.3.2     
+[13] dplyr_1.2.0      sf_1.1-0         terra_1.9-1     
 
 loaded via a namespace (and not attached):
  [1] s2_1.1.9            generics_0.1.4      class_7.3-23       
  [4] KernSmooth_2.23-26  lattice_0.22-9      pROC_1.19.0.1      
  [7] digest_0.6.39       magrittr_2.0.4      evaluate_1.0.5     
 [10] grid_4.4.1          RColorBrewer_1.1-3  fastmap_1.2.0      
-[13] jsonlite_2.0.0      Matrix_1.7-5        e1071_1.7-17       
-[16] Formula_1.2-5       DBI_1.3.0           purrr_1.2.1        
-[19] viridisLite_0.4.3   scales_1.4.0        codetools_0.2-20   
-[22] abind_1.4-8         cli_3.6.5           rlang_1.1.7        
-[25] units_1.0-1         splines_4.4.1       withr_3.0.2        
-[28] yaml_2.3.12         otel_0.2.0          tools_4.4.1        
-[31] vctrs_0.7.2         R6_2.6.1            proxy_0.4-29       
-[34] lifecycle_1.0.5     classInt_0.4-11     pkgconfig_2.0.3    
-[37] pillar_1.11.1       gtable_0.3.6        data.table_1.18.2.1
-[40] glue_1.8.0          Rcpp_1.1.1          xfun_0.57          
-[43] tibble_3.3.1        tidyselect_1.2.1    farver_2.1.2       
-[46] htmltools_0.5.9     labeling_0.4.3      rmarkdown_2.30     
-[49] wk_0.9.5            compiler_4.4.1      S7_0.2.1           
+[13] jsonlite_2.0.0      Matrix_1.7-5        Formula_1.2-5      
+[16] DBI_1.3.0           purrr_1.2.1         viridisLite_0.4.3  
+[19] scales_1.4.0        codetools_0.2-20    abind_1.4-8        
+[22] cli_3.6.5           rlang_1.1.7         units_1.0-1        
+[25] splines_4.4.1       withr_3.0.2         yaml_2.3.12        
+[28] otel_0.2.0          tools_4.4.1         vctrs_0.7.2        
+[31] R6_2.6.1            proxy_0.4-29        lifecycle_1.0.5    
+[34] classInt_0.4-11     pkgconfig_2.0.3     pillar_1.11.1      
+[37] gtable_0.3.6        data.table_1.18.2.1 glue_1.8.0         
+[40] Rcpp_1.1.1          xfun_0.57           tibble_3.3.1       
+[43] tidyselect_1.2.1    farver_2.1.2        htmltools_0.5.9    
+[46] labeling_0.4.3      rmarkdown_2.30      wk_0.9.5           
+[49] compiler_4.4.1      S7_0.2.1           
 ```
 
 
