@@ -78,10 +78,9 @@ academic_map <- function(r, title, ctx, palette = "viridis", base_size = 8,
   km <- function(x) sprintf("%.0f", x / 1000)
   g <- ggplot() +
     ## The grey relief base map first, as RGB, so everything above it reads against it.
-    geom_spatraster_rgb(data = ctx$relief, maxcell = 6e5) +
-    geom_sf(data = ctx$water, fill = "#b6d4ea", colour = "#8fbcda", linewidth = 0.15)
+    geom_spatraster_rgb(data = ctx$relief, maxcell = 6e5)
   if (contours)
-    g <- g + geom_sf(data = ctx$cont, colour = "grey35", linewidth = 0.07, alpha = 0.4)
+    g <- g + geom_sf(data = ctx$cont, colour = "grey45", linewidth = 0.07, alpha = 0.5)
   g <- g +
     ## No alpha on the data layer. geom_spatraster applies alpha to the whole layer
     ## including its NA cells, which paints a pale rectangle over the hillshade wherever
@@ -90,8 +89,16 @@ academic_map <- function(r, title, ctx, palette = "viridis", base_size = 8,
     ## perimeter.
     geom_spatraster(data = r, maxcell = 6e5) +
     scale_fill_viridis_c(option = palette, na.value = "transparent", name = NULL) +
-    geom_sf(data = ctx$perimeter, fill = NA, colour = "grey10", linewidth = 0.35) +
+    ## Water goes OVER the data, not under it. The surfaces now fill the page, so drawn
+    ## underneath the lakes simply disappear, and a stand basal area painted across
+    ## Kootenay Lake is worse than no base map at all.
+    geom_sf(data = ctx$water, fill = "#a8cae4", colour = "#7fb0d0", linewidth = 0.15) +
+    ## The perimeter has to read against both a pale and a near-black surface, so it is
+    ## drawn as a white casing under a dark line rather than as one stroke.
+    geom_sf(data = ctx$perimeter, fill = NA, colour = "white", linewidth = 0.75) +
+    geom_sf(data = ctx$perimeter, fill = NA, colour = "grey5", linewidth = 0.3) +
     ## The burn anchors the perimeter, so it belongs on every panel, not just the first.
+    geom_sf(data = ctx$burn, fill = NA, colour = "white", linewidth = 0.8) +
     geom_sf(data = ctx$burn, fill = NA, colour = "#d7301f", linewidth = 0.4) +
     ## datum = the map's own CRS draws the projected grid the ticks are labelled in.
     ## Omit it and ggplot draws a latitude and longitude graticule matching no tick.

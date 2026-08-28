@@ -973,14 +973,20 @@ deposited in Dryad on acceptance, and are available to reviewers on request.
 ```{r}
 #| label: figure-1
 #| echo: false
-#| fig-cap: "The study area over the British Columbia Freshwater Atlas, with Kootenay Lake and the Kootenay River to the east. (a) Elevation, with the 2015 Mt Midgeley burn that anchors the perimeter outlined in red. (b) Terrain ruggedness index. (c) Stand basal area from the Vegetation Resources Inventory, the density term the pheromone-disruption mechanism runs through. The study perimeter is the grey outline and contours are at 250 m. The base map is Esri World Shaded Relief, desaturated to grey, so the ground the analysis excludes is still visible: the hole inside the perimeter is the summit ridge above the 1744 m ceiling and the ragged outer edge is the valley floor below the 830 m floor. Contours are at 200 m. Every panel carries its own north arrow and the same numerical scale, 1:250,000, which holds at a printed panel width of 66 mm. Coordinates are EPSG:3153, NAD83(CSRS) / BC Albers."
+#| fig-cap: "The study area over the British Columbia Freshwater Atlas, with Kootenay Lake and the Kootenay River to the east. (a) Elevation, with the 2015 Mt Midgeley burn that anchors the perimeter outlined in red. (b) Terrain ruggedness index. (c) Stand basal area from the Vegetation Resources Inventory, the density term the pheromone-disruption mechanism runs through. The study perimeter is the grey outline and contours are at 250 m. Surfaces are drawn across the whole page rather than clipped to the study area, over Esri World Shaded Relief desaturated to grey. The white outline is the study perimeter: it is the 2015 burn buffered 5 km and then cut to the 830 to 1744 m elevation band, so the ground it encloses excludes both the summit ridge, which reaches 2294 m here, and the valley floor. Contours are at 200 m. Every panel carries its own north arrow and the same numerical scale, 1:250,000, which holds at a printed panel width of 66 mm. Coordinates are EPSG:3153, NAD83(CSRS) / BC Albers."
 #| fig-height: 4.6
 
-geo <- rast(file.path(BC, "geomorphometry", "geomorphometry.tif"))
-vri <- rast(file.path(SA, "vri_covariates.tif"))
-ctx <- map_context(per, burn, SA)
+## The unclipped display surfaces from 49-context-covariates.R, so a figure shows a
+## continuous landscape rather than a ring floating on a base map. They are the same
+## computations as the modelled rasters, read before the perimeter mask is applied; the
+## perimeter is drawn over them so the analysed ground is still marked. dem_context is
+## the elevation model over the same page.
+geo  <- rast(file.path(SA, "geomorphometry_context.tif"))
+vri  <- rast(file.path(SA, "vri_context.tif"))
+elevc <- rast(file.path(SA, "dem_context.tif"))
+ctx  <- map_context(per, burn, SA)
 
-academic_map(elev, "(a) Elevation (m)", ctx, "viridis") +
+academic_map(elevc, "(a) Elevation (m)", ctx, "viridis") +
   academic_map(geo[["tri"]], "(b) Terrain ruggedness index", ctx, "magma") +
   academic_map(vri[["BASAL_AREA"]], "(c) Stand basal area (m2/ha)", ctx, "mako")
 ```
