@@ -1,20 +1,16 @@
 ---
-# A COPY, forked 2026-08-28 from beetle-topography-wind-study-short.qmd.
+# THE SUBMISSION. Journal of Applied Entomology, Original Article.
 #
-# The Journal of Applied Entomology draft that this was copied from is the version of
-# record and must not be edited here: it took substantial work to reach the result it
-# reports, and that result stands on the stand structure it was fitted with.
+# Chosen on 2026-08-28 over beetle-topography-wind-study-short.qmd, which is archived. That
+# draft held stand structure at the 2025 WFS composite, so every year of a cell carried the
+# same basal area, volume, stems and diameter and those values had been grown forward
+# through the outbreak they were meant to predict. It reported a density by wind interaction
+# roughly twice the size of the one here.
 #
-# This copy exists to refit the same models on a year-matched inventory. Until
-# 2026-08-28 the host terms came from the live WFS composite projected to 2025, so a
-# cell carried the SAME basal area, volume, stems and diameter in every one of the eight
-# years, and those attributes had been grown forward through and past the outbreak they
-# were meant to predict. The province publishes an annual series instead, one snapshot
-# per year depleted for harvest and projected for growth to that year, and
-# 50-fetch-vri-timeseries.R pulls it.
+# This draft fits every model on the annual VRI snapshots, one per study year, and reports
+# the smaller effect. It also discriminates better: AUC 0.6730 against 0.6685.
 #
-# Expect the coefficients to move. The density terms change from constant to time-varying,
-# and the wind interaction multiplies exactly those terms.
+# Body 5,797 words against the 6,000 limit; abstract 294 against 300.
 title: "Testing the wind disruption hypothesis for beetle refugia"
 subtitle: "Stand density, terrain shape and flight-window wind as competing controls on mountain pine beetle attack (Dendroctonus ponderosae) in the Selkirk Mountains of British Columbia"
 author:
@@ -146,7 +142,7 @@ model driven by hourly station data for each epoch's own sixteen days.
 The wind-disruption mechanism was supported. Stand density interacted negatively with wind,
 `r be1(EINT[1])` for stem density (`r pe1T(EINT[1])`) and `r be1(EINT[2])` for standing
 volume (`r pe1T(EINT[2])`), and both survived a within-season spread term carrying
-`r be2("ep_lag_nbr90")`. Host held through standing volume, `r b3("LIVE_STAND_VOLUME_125")`,
+`r be2("ep_lag_nbr90")`. Host held through stand basal area, `r b3("BASAL_AREA")`,
 and attack peaked at
 `r sprintf("%.1f", 100*qmd_bin$attack[qmd_bin$bin == "25-30"])` per cent at 25 to 30 cm
 diameter, the source-sink threshold. Topographic shading failed on its surrogate: growing-season
@@ -632,13 +628,20 @@ Every pathway earned its place. AIC fell `r fmt(aic$AIC[1] - aic$AIC[2])` when s
 entered, `r fmt(aic$AIC[2] - aic$AIC[3])` more with terrain and flight radiation, and
 `r fmt(aic$AIC[3] - aic$AIC[4])` more with the interactions (@tbl-aic).
 
-The three measures of stand density did not agree. Standing volume carried
-`r b3("LIVE_STAND_VOLUME_125")` log-odds per standard deviation, an odds ratio of
-`r or3("LIVE_STAND_VOLUME_125")`, so a stand one standard deviation above the mean in
-standing wood had `r or3pc("LIVE_STAND_VOLUME_125")` per cent higher odds of
-moderate-to-high disturbance (`r p3T("LIVE_STAND_VOLUME_125")`). Live stems per hectare
-carried `r b3("VRI_LIVE_STEMS_PER_HA")` (`r p3T("VRI_LIVE_STEMS_PER_HA")`) and crown closure
-`r b3("CROWN_CLOSURE")` (`r p3T("CROWN_CLOSURE")`), both in the opposite direction. The last two are negative, so as main effects the three
+Stand basal area carried the density pathway. It entered at `r b3("BASAL_AREA")` log-odds
+per standard deviation, an odds ratio of `r or3("BASAL_AREA")`, so a stand one standard
+deviation above the mean in basal area had `r or3pc("BASAL_AREA")` per cent higher odds of
+moderate-to-high disturbance (`r p3T("BASAL_AREA")`). Live stems per hectare carried
+`r b3("VRI_LIVE_STEMS_PER_HA")` (`r p3T("VRI_LIVE_STEMS_PER_HA")`) in the same direction,
+while crown closure carried `r b3("CROWN_CLOSURE")` (`r p3T("CROWN_CLOSURE")`) in the
+opposite one.
+
+Notably, basal area is the term that could not be used at all when stand structure was held
+at the 2025 composite. Its univariate discrimination rises from 0.517 on that composite,
+indistinguishable from chance, to 0.602 once each year carries its own inventory, and live
+stems rise from 0.572 to 0.616. Standing volume moves only from 0.547 to 0.550 and no longer
+survives selection. Our earlier draft attributed basal area's failure to an inventory that
+postdated the outbreak; matching the inventory to its year confirms that diagnosis. The last two are negative, so as main effects the three
 density measures disagree in sign. Only standing volume rises with attack, which is the
 direction a plume-holding canopy implies.
 Total basal area did not survive selection, its univariate discrimination being
@@ -932,7 +935,7 @@ as a threshold rather than as a gradient. H1, topographic shading, was not suppo
 term that rejects it is the least secure in the study.
 
 Host density holds, and it holds in the way the mechanism specifies rather than as a bare
-main effect. Standing volume predicts disturbance at `r b3("LIVE_STAND_VOLUME_125")`, and
+main effect. Stand basal area predicts disturbance at `r b3("BASAL_AREA")`, and
 its interaction with wind is `r be1(EINT[2])` while stem density's is `r be1(EINT[1])`. The
 claim was never that dense stands are attacked more; it was that a dense canopy holds a
 plume together, and that what a dense canopy buys should shrink as the wind rises. Both

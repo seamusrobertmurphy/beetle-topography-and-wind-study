@@ -648,15 +648,27 @@ pv <- function(p) if (!length(p) || is.na(p)) NA_character_ else
 pt <- function(p) if (!length(p) || is.na(p)) NA_character_ else
   if (p < 0.001) "< 0.001" else sprintf("= %.3f", p)
 
+## GUARD_DIAGNOSTIC lets a render report every missing term at once instead of stopping at
+## the first. Use it to find out what a changed selection actually produced, then fix the
+## prose and set it back. It must be FALSE for any render that is going to be read.
+GUARD_DIAGNOSTIC <- FALSE
 named <- function(tbl, terms, what) {
   missing <- setdiff(terms, tbl$term)
-  if (length(missing))
-    stop("term-guard: ", what, " does not contain ", paste(missing, collapse = ", "),
-         ". The prose quotes it, so either the selection changed or the prose is wrong.")
+  if (length(missing)) {
+    msg <- paste0("term-guard: ", what, " does not contain ", paste(missing, collapse = ", "),
+                  ". The prose quotes it, so either the selection changed or the prose is wrong.")
+    if (GUARD_DIAGNOSTIC) {
+      cat("\n", msg, "\n  present: ", paste(head(tbl$term, 40), collapse = ", "), "\n", sep = "")
+    } else stop(msg)
+  }
   invisible(TRUE)
 }
 
-named(co3, c("solar_flight_direct", "northness", "LIVE_STAND_VOLUME_125",
+## The density term the prose quotes is whichever one selection chose, not a fixed name.
+## On the 2025 composite that is standing volume; on year-matched snapshots basal area
+## discriminates far better (univariate AUC 0.602 against 0.517) and displaces it. Guarding
+## a hardcoded name would fail the draft that is correct.
+named(co3, c("solar_flight_direct", "northness", DENS[1],
              "VRI_LIVE_STEMS_PER_HA", "CROWN_CLOSURE", "QUAD_DIAM_125", "PINE_BA",
              "tri", "vrm", "wind_effect", "elevation", I_GEO,
              paste0(DENS[1], ":", FSUN[1])), "the full annual model M3")

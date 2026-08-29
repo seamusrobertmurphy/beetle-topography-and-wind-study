@@ -29,8 +29,8 @@ ROOT = Path(__file__).resolve().parent.parent
 # abandoned: the aerial survey as the response, the Global Wind Atlas as the wind term,
 # and the conclusion "We find no wind effect", which the 16-day models reversed. The
 # README therefore published the opposite of the current finding.
-HTML = ROOT / "01.manuscript" / "beetle-topography-wind-study-short.html"
-QMD = ROOT / "01.manuscript" / "beetle-topography-wind-study-short.qmd"
+HTML = ROOT / "01.manuscript" / "beetle-topography-wind-study-vri-timeseries.html"
+QMD = ROOT / "01.manuscript" / "beetle-topography-wind-study-vri-timeseries.qmd"
 FIGDIR = ROOT / "03.outputs" / "PNG"
 OUT = ROOT / "README.md"
 

@@ -18,3 +18,19 @@ carries the five numbers its own model table contradicts, corrected in the live 
 2026-08-27 but never here.
 
 Neither should be rendered or cited. The live drafts are in `01.manuscript/`.
+
+## Added 2026-08-28, second archiving
+
+**`beetle-topography-wind-study-short.qmd`**, the Journal of Applied Entomology draft that
+was the version of record until the year-matched refit replaced it. It is archived rather
+than deleted because it is the record of what the study reported before the inventory was
+matched to its years, and because the difference is the paper's own cautionary result.
+
+It held stand structure at the 2025 composite the web feature service serves, so every year
+of a cell carried the same basal area, volume, stems and diameter, and those values had been
+grown forward through and past the outbreak they were meant to predict. It reported a stem
+density by wind interaction of -0.0941 and a standing volume interaction of -0.0410. On the
+annual snapshots those become -0.0491 and -0.0169, and discrimination rises from 0.6685 to
+0.6730.
+
+The submission is `01.manuscript/beetle-topography-wind-study-vri-timeseries.qmd`.

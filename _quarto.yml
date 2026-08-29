@@ -1,5 +1,13 @@
 project:
   type: default
+  # Render only the live drafts. Quarto otherwise scans the whole tree, and the archived
+  # drafts still carry {{< include _sections/_preamble.qmd >}} directives whose relative
+  # paths do not resolve from archive/, which fails the render of every other document
+  # with "Include directive failed". They are superseded and must never be rendered.
+  render:
+    - "01.manuscript/beetle-topography-wind-study-vri-timeseries.qmd"
+    - "01.manuscript/beetle-topography-wind-study-short-short.qmd"
+    - "01.manuscript/submission-jae/*.qmd"
   pre-render: "find . -name ._* -delete"
   post-render:
     - "find . -name ._* -delete"
