@@ -421,6 +421,10 @@ b5 <- function(v) sprintf("%+.3f", co5$beta[co5$term == v])
 z5 <- function(v) sprintf("%.2f", co5$z[co5$term == v])
 p5 <- function(v) pv(co5$p[co5$term == v])
 p5t <- function(v) pt(co5$p[co5$term == v])
+p5T <- function(v) pthr(co5$p[co5$term == v])
+or5 <- function(v) orr(co5$beta[co5$term == v])
+or5pc <- function(v) orpc(co5$beta[co5$term == v])
+or5pcabs <- function(v) orpcabs(co5$beta[co5$term == v])
 AUC5 <- as.numeric(pROC::auc(pROC::roc(bl$modhigh, fitted(M5), quiet = TRUE)))
 co4 <- as.data.frame(coef(summary(M4)))
 names(co4) <- c("beta", "se", "z", "p"); co4$term <- rownames(co4)
@@ -428,6 +432,10 @@ b4 <- function(v) sprintf("%+.3f", co4$beta[co4$term == v])
 z4 <- function(v) sprintf("%.2f", co4$z[co4$term == v])
 p4 <- function(v) pv(co4$p[co4$term == v])
 p4t <- function(v) pt(co4$p[co4$term == v])
+p4T <- function(v) pthr(co4$p[co4$term == v])
+or4 <- function(v) orr(co4$beta[co4$term == v])
+or4pc <- function(v) orpc(co4$beta[co4$term == v])
+or4pcabs <- function(v) orpcabs(co4$beta[co4$term == v])
 co3l <- as.data.frame(coef(summary(M3l)))
 names(co3l) <- c("beta","se","z","p"); co3l$term <- rownames(co3l)
 b3l <- function(v) sprintf("%+.3f", co3l$beta[co3l$term == v])
@@ -487,10 +495,18 @@ be1 <- function(v) sprintf("%+.3f", ce1$beta[ce1$term == v])
 ze1 <- function(v) sprintf("%.2f", ce1$z[ce1$term == v])
 pe1 <- function(v) pv(ce1$p[ce1$term == v])
 pe1t <- function(v) pt(ce1$p[ce1$term == v])
+pe1T <- function(v) pthr(ce1$p[ce1$term == v])
+ore1 <- function(v) orr(ce1$beta[ce1$term == v])
+ore1pc <- function(v) orpc(ce1$beta[ce1$term == v])
+ore1pcabs <- function(v) orpcabs(ce1$beta[ce1$term == v])
 be2 <- function(v) sprintf("%+.3f", ce2$beta[ce2$term == v])
 ze2 <- function(v) sprintf("%.2f", ce2$z[ce2$term == v])
 pe2 <- function(v) pv(ce2$p[ce2$term == v])
 pe2t <- function(v) pt(ce2$p[ce2$term == v])
+pe2T <- function(v) pthr(ce2$p[ce2$term == v])
+ore2 <- function(v) orr(ce2$beta[ce2$term == v])
+ore2pc <- function(v) orpc(ce2$beta[ce2$term == v])
+ore2pcabs <- function(v) orpcabs(ce2$beta[ce2$term == v])
 AUCE1 <- as.numeric(pROC::auc(pROC::roc(be$modhigh,  fitted(E1), quiet = TRUE)))
 AUCE2 <- as.numeric(pROC::auc(pROC::roc(bel$modhigh, fitted(E2), quiet = TRUE)))
 EP_LAG_N <- nrow(bel)
@@ -505,12 +521,33 @@ co3 <- as.data.frame(coef(summary(M3)))
 names(co3) <- c("beta", "se", "z", "p")
 co3$term <- rownames(co3)
 
+## Odds ratios, so an effect can be stated in a unit a reader can hold. A logistic
+## coefficient on a standardised predictor is a log-odds change per standard deviation, which
+## is not a quantity anyone has an intuition for; exp() of it is the multiplicative change in
+## the odds of attack for a one standard deviation change in that predictor.
+orr  <- function(beta) sprintf("%.3f", exp(beta))
+orpc <- function(beta) sprintf("%.1f", 100 * (exp(beta) - 1))
+## The same as a magnitude, for sentences that supply the direction in words.
+orpcabs <- function(beta) sprintf("%.1f", abs(100 * (exp(beta) - 1)))
+
+## p-values at the thresholds a reader expects, following the convention of the companion
+## study on this landscape rather than printing an exact value to three significant figures.
+pthr <- function(p) {
+  if (!length(p) || is.na(p)) return(NA_character_)
+  if (p < 0.001) "p < 0.001" else if (p < 0.01) "p < 0.01" else
+  if (p < 0.05) "p < 0.05" else sprintf("p = %.2f", p)
+}
+
 ## Accessors, so no coefficient is ever transcribed into the prose by hand.
 b3 <- function(v) sprintf("%+.3f", co3$beta[co3$term == v])
 z3 <- function(v) sprintf("%.2f", co3$z[co3$term == v])
 p3 <- function(v) pv(co3$p[co3$term == v])
 ## The "t" variants carry the relational operator for use inside a sentence.
 p3t <- function(v) pt(co3$p[co3$term == v])
+p3T <- function(v) pthr(co3$p[co3$term == v])
+or3 <- function(v) orr(co3$beta[co3$term == v])
+or3pc <- function(v) orpc(co3$beta[co3$term == v])
+or3pcabs <- function(v) orpcabs(co3$beta[co3$term == v])
 DENS_V <- if (length(DENS)) DENS[1] else NA_character_
 WGEO_V <- if (length(WGEO)) WGEO[1] else NA_character_
 WTMP_V <- if (length(WTMP)) WTMP[1] else NA_character_

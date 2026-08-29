@@ -94,8 +94,8 @@ flight window and the growing season, and a terrain-resolved wind field from the
 model driven by hourly station data for each epoch's own sixteen days.
 
 The wind-disruption mechanism was supported. Stand density interacted negatively with wind,
-`r be1(EINT[1])` for stem density (p `r pe1t(EINT[1])`) and `r be1(EINT[2])` for standing
-volume (p `r pe1t(EINT[2])`), and both survived a within-season spread term carrying
+`r be1(EINT[1])` for stem density (`r pe1T(EINT[1])`) and `r be1(EINT[2])` for standing
+volume (`r pe1T(EINT[2])`), and both survived a within-season spread term carrying
 `r be2("ep_lag_nbr90")`. Host held through standing volume, `r b3("LIVE_STAND_VOLUME_125")`,
 and attack peaked at
 `r sprintf("%.1f", 100*qmd_bin$attack[qmd_bin$bin == "25-30"])` per cent at 25 to 30 cm
@@ -105,7 +105,7 @@ radiation did not survive selection, and northness, which correlates
 carries more attack.
 
 Temporal resolution decided the outcome. With one map a year, the same wind field, covariates
-and threshold gave `r b5(INT_MM)` (p `r p5t(INT_MM)`), the opposite sign. Two further
+and threshold gave `r b5(INT_MM)` (`r p5T(INT_MM)`), the opposite sign. Two further
 specification tests showed why proxies mislead here: flight-window radiation cut the density
 by terrain-exposure interaction from `r bnr(I_GEO)` to `r b3(I_GEO)` without changing its
 sign, and previous-year pressure left valley depth at `r ret("valley_depth")` of its value
@@ -127,7 +127,11 @@ itself [@cartwright2018].
 temperatures (eg from topographic shading) that protect trees from water stress; in areas
 with lower host density, allowing for greater wind disruption of beetle pheromone
 communication and more vigorous tree growth and chemical defenses; and in areas with fewer
-large-diameter host trees". That is three mechanisms, two of which act through terrain. None has been fitted to a map.
+large-diameter host trees". We treat these as three testable hypotheses. Under H1, topographic shading reduces attack
+by relieving water stress on cool ground. Under H2, low host density reduces attack by
+admitting the wind that disperses the aggregation pheromone. Under H3, a scarcity of
+large-diameter hosts reduces attack by limiting brood production. Two of the three act
+through terrain, and none has been fitted to a map.
 Of the studies our screen retained, one enters a wind term at all, and it is a companion
 study on this same landscape whose response is conifer regeneration rather than beetle
 attack [@murphy2026].
@@ -587,36 +591,39 @@ co3 |>
   kable(booktabs = TRUE, align = "lrrrr", row.names = FALSE)
 ```
 
-Every pathway earns its place: AIC falls `r fmt(aic$AIC[1] - aic$AIC[2])` when stand density
-enters, `r fmt(aic$AIC[2] - aic$AIC[3])` more with terrain and flight radiation, and
+Every pathway earned its place. AIC fell `r fmt(aic$AIC[1] - aic$AIC[2])` when stand density
+entered, `r fmt(aic$AIC[2] - aic$AIC[3])` more with terrain and flight radiation, and
 `r fmt(aic$AIC[3] - aic$AIC[4])` more with the interactions (@tbl-aic).
 
-The three measures of stand density do not agree. Standing volume carries
-`r b3("LIVE_STAND_VOLUME_125")` log-odds per standard deviation, stem count
-`r b3("VRI_LIVE_STEMS_PER_HA")`, and crown closure `r b3("CROWN_CLOSURE")`
-(p `r p3t("CROWN_CLOSURE")`). The last two are negative, so as main effects the three
+The three measures of stand density did not agree. Standing volume carried
+`r b3("LIVE_STAND_VOLUME_125")` log-odds per standard deviation, an odds ratio of
+`r or3("LIVE_STAND_VOLUME_125")`, so a stand one standard deviation above the mean in
+standing wood had `r or3pc("LIVE_STAND_VOLUME_125")` per cent higher odds of
+moderate-to-high disturbance (`r p3T("LIVE_STAND_VOLUME_125")`). Live stems per hectare
+carried `r b3("VRI_LIVE_STEMS_PER_HA")` (`r p3T("VRI_LIVE_STEMS_PER_HA")`) and crown closure
+`r b3("CROWN_CLOSURE")` (`r p3T("CROWN_CLOSURE")`), both in the opposite direction. The last two are negative, so as main effects the three
 density measures disagree in sign. Only standing volume rises with attack, which is the
 direction a plume-holding canopy implies.
 Total basal area did not survive selection, its univariate discrimination being
 `r sprintf("%.3f", uni$auc[uni$term == "BASAL_AREA"])`. What predicts attack is standing wood
 in large stems, not how many stems there are.
 
-Radiation enters once. Flight-window direct radiation carries `r b3("solar_flight_direct")`,
+We entered radiation once. Flight-window direct radiation carried `r b3("solar_flight_direct")`,
 which is the thermal gate on flight. Growing-season radiation did not survive selection, so
 the shading pathway is carried by northness, with which it correlates
 `r cc("solar_season_direct", "northness")`. Northness is `r b3("northness")`: shaded,
 north-facing ground carries more attack, against the prediction.
 
-Terrain predicts attack independently of both. The windward-leeward index is
+We found that terrain predicted attack independently of both. The windward-leeward index was
 `r b3("wind_effect")` and elevation `r b3("elevation")`, while ruggedness is `r b3("tri")`
-and not distinguishable from zero (p `r p3t("tri")`), the vector ruggedness measure agreeing
+and not distinguishable from zero (`r p3T("tri")`), the vector ruggedness measure agreeing
 in sign at `r b3("vrm")`.
 Ruggedness takes the opposite sign to the parent study's, whose response is seedling
 establishment rather than attack [@murphy2026].
 
 Fitted without flight-window radiation, stand density interacts with terrain exposure at
 `r bnr(I_GEO)`, which reads as a wind result pointing the wrong way. With radiation in the
-model that interaction is `r b3(I_GEO)` (p `r p3t(I_GEO)`) and density interacts with
+model that interaction is `r b3(I_GEO)` (`r p3T(I_GEO)`) and density interacts with
 radiation at `r b3(paste0(DENS[1], ":", FSUN[1]))`. On a range whose prevailing bearing is
 `r sprintf("%.0f", WDIR)` degrees the windward slopes face west, which are also the slopes
 taking afternoon sun, so part of the apparent exposure effect was the sun. Not all of it:
@@ -696,14 +703,17 @@ it is retained because the contrast with the 16-day models is the paper's method
 result.
 
 The terrain-resolved field carries `r b5(WMM)` log-odds per standard deviation
-(z = `r z5(WMM)`, p `r p5t(WMM)`) when the response is one map per year. Windier ground
+(z = `r z5(WMM)`, `r p5T(WMM)`) when the response is one map per year. Windier ground
 carries more moderate-to-high disturbance. The interaction the mechanism turns on is
 `r b5(INT_MM)` (z = `r z5(INT_MM)`, p `r p5t(INT_MM)`), positive where the
 pheromone-disruption mechanism requires negative.
 
-At 16 days the same wind field, the same covariates and the same classification threshold
-give `r be1(EINT[1])` and `r be1(EINT[2])`. Nothing about the landscape or the
-wind product changed between the two. What changed is that an annual response can only ask
+At sixteen days, the same wind field, the same covariates and the same classification
+threshold gave `r be1(EINT[1])` for stem density (`r pe1T(EINT[1])`) and
+`r be1(EINT[2])` for standing volume (`r pe1T(EINT[2])`). Expressed as odds, each standard
+deviation of the epoch wind regime multiplied the contribution of stem density by
+`r ore1(EINT[1])`, a reduction of `r ore1pcabs(EINT[1])` per cent. Notably, nothing
+about the landscape or the wind product changed between the two specifications. What changed is that an annual response can only ask
 whether windy summers carry less attack than calm ones, and a summer contains both windy and
 calm weeks. Averaging across them destroys exactly the contrast the mechanism operates on.
 
@@ -727,7 +737,7 @@ after the autologistic design used for this province, gives `r b4("lag_self")` a
 `r b4("lag_nbr90")`, raising discrimination from `r sprintf("%.3f", AUC3l)` to
 `r sprintf("%.3f", AUC4)`.
 
-Which environmental terms survive is the informative part. Ruggedness keeps `r ret("tri")`
+Notably, which environmental terms survived is the informative part. Ruggedness keeps `r ret("tri")`
 of its value, a term describing a condition a cell has whether or not the beetle was there.
 The landform terms are not stable: valley depth keeps `r ret("valley_depth")` while mid-slope
 position moves to `r ret("midslope_position")`, growing rather than shrinking. Part of what
@@ -803,8 +813,13 @@ clock will attribute radiation to wind.
 
 ## What survives
 
-@krawchuk2020 name three mechanisms. At the resolution the sensor and the insect share, two
-of the three hold and the third does not.
+In this study we tested the three mechanisms @krawchuk2020 propose for refugia from mountain
+pine beetle, using a response measured at the sixteen-day cadence the sensor and the insect
+share. Our results offered partial support. H2, low host density admitting the wind that
+disperses the aggregation pheromone, was supported, and in the conditional form the mechanism
+specifies rather than as a main effect. H3, a scarcity of large-diameter hosts, was supported
+as a threshold rather than as a gradient. H1, topographic shading, was not supported, and the
+term that rejects it is the least secure in the study.
 
 Host density holds, and it holds in the way the mechanism specifies rather than as a bare
 main effect. Standing volume predicts disturbance at `r b3("LIVE_STAND_VOLUME_125")`, and
@@ -896,7 +911,7 @@ carried by northness, `r b3("northness")`, which correlates
 The methodological finding travels further than the ecological one, and it has three parts.
 
 First, a terrain index is partly a measurement of sunlight. Adding flight-window radiation
-to the model cut the density by terrain-exposure interaction from `r bnr(I_GEO)` to
+to the model, we found it cut the density by terrain-exposure interaction from `r bnr(I_GEO)` to
 `r b3(I_GEO)`, without changing its sign. A landform variable in a spreading outbreak records the outbreak's own history:
 entering previous-year pressure left valley depth at `r ret("valley_depth")` of its value
 while mid-slope position moved to `r ret("midslope_position")`, against `r ret("tri")` for
