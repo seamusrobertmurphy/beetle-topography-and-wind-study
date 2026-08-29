@@ -254,18 +254,13 @@ radiation did not survive selection, and northness, which correlates
 -0.824 with it, is +0.305, so shaded ground
 carries more attack.
 
-Wind had no main effect on attack. What it did was change what stand density was worth,
-which is the form the population biology predicts for an environmental control on mass
-attack. A refugium from beetle is therefore not a location but a conjunction of thin stand
-and wind, in the weeks the insect flies. That distinguishes it from a fire refugium, which
-the framework was built on and which can be mapped from terrain alone.
-
-Two measurement results bear on any refugia study. Terrain wind indices are partly
-insolation: entering flight-window radiation weakened the density by exposure interaction
-from -0.068 to -0.040. And inventory vintage governs what can be detected at
-all. Holding stand structure at its current projection, as is routine, halved the
-interaction and left basal area at chance, 0.517 against 0.602 once each year carried its
-own inventory.
+Temporal resolution decided the outcome. With one map a year, the same wind field, covariates
+and threshold gave +0.031 (p = 0.087), the opposite sign. Two further
+specification tests showed why proxies mislead here: flight-window radiation cut the density
+by terrain-exposure interaction from -0.068 to -0.040 without changing its
+sign, and previous-year pressure left valley depth at 0.18 of its value
+while mid-slope position moved to 1.35. A wind test aggregated to the year answers a different question from the one
+the mechanism poses, and answers it wrongly.
 
 # Keywords {.unnumbered}
 
@@ -444,7 +439,7 @@ reaches the Kootenay Lake surface at 534 m, which is not a site elevation.
 
 ::: {.cell}
 ::: {.cell-output-display}
-![Landscape, terrain and stand surfaces across the study area, all EPSG:3153 at 30 m over Esri World Shaded Relief. (a) elevation; (b) terrain ruggedness index; (c) windward-leeward index at the prevailing bearing; (d) flight-window direct radiation, the thermal gate on flight; (e) growing-season direct radiation, the shading pathway; (f) the MicroMet wind weighting factor at the prevailing bearing; (g) stand basal area; (h) quadratic mean diameter, whose 25 cm source-sink threshold falls near the midpoint of the scale; (i) live stems per hectare. The white outline is the study perimeter and the red outline the 2015 Mt Midgeley burn. Contours are at 200 m. Every panel carries its own north arrow and the same numerical scale, 1:150,000, which holds at a printed panel width of 66 mm.](beetle-topography-wind-study-vri-timeseries_files/figure-docx/fig-study-area-1.png){#fig-study-area}
+![Landscape, terrain and stand surfaces across the study area, all EPSG:3153 at 30 m over Esri World Shaded Relief. (a) elevation; (b) terrain ruggedness index; (c) windward-leeward index at the prevailing bearing; (d) flight-window direct radiation, the thermal gate on flight; (e) growing-season direct radiation, the shading pathway; (f) the MicroMet wind weighting factor at the prevailing bearing; (g) stand basal area; (h) quadratic mean diameter, whose 25 cm source-sink threshold falls near the midpoint of the scale; (i) live stems per hectare. The white outline is the study perimeter and the red outline the 2015 Mt Midgeley burn. Contours are at 200 m. Every panel carries its own north arrow and the same numerical scale, 1:150,000, which holds at a printed panel width of 66 mm.](beetle-topography-wind-study-vri-timeseries_files/figure-html/fig-study-area-1.png){#fig-study-area width=2250}
 :::
 :::
 
@@ -641,7 +636,7 @@ models report an interaction rather than a main effect, and why the response was
 
 ::: {.cell}
 ::: {.cell-output-display}
-![The flight window against the landscape's own climate, from hourly Environment and Climate Change Canada station records for May to September of the nine study years. The window, 1 July to 15 August, is the shaded band; it is taken from the bionomics and is not fitted to these data. (a) Mean afternoon temperature by day of year, with the 19 to 41 degrees C flight gate and the 22 to 32 degrees C peak band marked. (b) The share of afternoon hours falling inside the flight gate, day by day. (c) The diurnal curve: mean temperature and the share of all hours inside the gate, by hour, with the 12:00 to 17:00 restriction shaded. (d) Mean wind speed by hour, on the same axis, showing that the hours the beetle can fly are also the windiest of the day.](beetle-topography-wind-study-vri-timeseries_files/figure-docx/fig-flight-window-1.png){#fig-flight-window}
+![The flight window against the landscape's own climate, from hourly Environment and Climate Change Canada station records for May to September of the nine study years. The window, 1 July to 15 August, is the shaded band; it is taken from the bionomics and is not fitted to these data. (a) Mean afternoon temperature by day of year, with the 19 to 41 degrees C flight gate and the 22 to 32 degrees C peak band marked. (b) The share of afternoon hours falling inside the flight gate, day by day. (c) The diurnal curve: mean temperature and the share of all hours inside the gate, by hour, with the 12:00 to 17:00 restriction shaded. (d) Mean wind speed by hour, on the same axis, showing that the hours the beetle can fly are also the windiest of the day.](beetle-topography-wind-study-vri-timeseries_files/figure-html/fig-flight-window-1.png){#fig-flight-window width=2250}
 :::
 :::
 
@@ -788,7 +783,7 @@ disruption.
 
 ::: {.cell}
 ::: {.cell-output-display}
-![The refugia mechanism as fitted. (a) Predicted probability of moderate-to-high disturbance against terrain-resolved epoch wind, at the 10th and 90th percentiles of stem density, all other terms held at their means; the lines cross, so wind raises attack in thin stands and lowers it in dense ones, which is the interaction. (b) The same for standing volume, where the interaction is a fifth the size and attenuates the dense-stand slope without reversing it, so the lines converge rather than cross over the observed range. (c) Coefficients of the 16-day model, with and without the within-season spread term; the shading of a term between the two fits is what the within-season spread term absorbs. (d) Epoch prevalence against epoch mean wind, one point per epoch, years distinguished by both shape and shade so the panel survives black-and-white printing.](beetle-topography-wind-study-vri-timeseries_files/figure-docx/fig-interaction-1.png){#fig-interaction}
+![The refugia mechanism as fitted. (a) Predicted probability of moderate-to-high disturbance against terrain-resolved epoch wind, at the 10th and 90th percentiles of stem density, all other terms held at their means; the lines cross, so wind raises attack in thin stands and lowers it in dense ones, which is the interaction. (b) The same for standing volume, where the interaction is a fifth the size and attenuates the dense-stand slope without reversing it, so the lines converge rather than cross over the observed range. (c) Coefficients of the 16-day model, with and without the within-season spread term; the shading of a term between the two fits is what the within-season spread term absorbs. (d) Epoch prevalence against epoch mean wind, one point per epoch, years distinguished by both shape and shade so the panel survives black-and-white printing.](beetle-topography-wind-study-vri-timeseries_files/figure-html/fig-interaction-1.png){#fig-interaction width=2700}
 :::
 :::
 
@@ -834,9 +829,10 @@ calm weeks. Averaging across them destroys exactly the contrast the mechanism op
 The station terms behave the same way and for the same reason. In this specification they
 collapse to flight-window calm hours (share below 5 km/h) at -0.543, which carries no flight-window information at all.
 
-The resolution requirement follows from the biology and is stated here as a constraint on
-design rather than as a result: a plume that persists for minutes, acting over a flight
-period of weeks, cannot be tested against a response aggregated to the year.
+The lesson generalises past this dataset. The mechanism concerns a plume that persists for
+minutes, acting on a flight period of weeks. A test that aggregates the response to a year is
+not a weaker version of the right test; it is a different question, and this study answers it
+in the opposite direction.
 
 ## Previous-year pressure {#sec-autologistic}
 
@@ -1099,21 +1095,21 @@ fails on a surrogate: growing-season radiation did not survive selection, so the
 carried by northness, +0.305, which correlates
 -0.824 with it.
 
-Two measurement results travel beyond this landscape, and both concern variables that look
-like one thing and behave as another.
+The methodological finding travels further than the ecological one, and it has three parts.
 
-A terrain wind index is partly a measurement of sunlight. Entering flight-window radiation
-weakened the density by terrain-exposure interaction from -0.068 to -0.040.
-On any range whose prevailing bearing puts the windward slopes into the afternoon sun, and
-that is most of them, a study entering a windward-leeward index without a radiation term on
-the same clock will attribute radiation to wind.
+First, a terrain index is partly a measurement of sunlight. Adding flight-window radiation
+to the model, we found it cut the density by terrain-exposure interaction from -0.068 to
+-0.040, without changing its sign. A landform variable in a spreading outbreak records the outbreak's own history:
+entering previous-year pressure left valley depth at 0.18 of its value
+while mid-slope position moved to 1.35, against 1.23 for
+ruggedness. That is the second part. Third, an annual response cannot test a mechanism
+that operates over weeks. The same wind field, the same covariates and the same threshold
+gave +0.031 at annual resolution and -0.049 at sixteen days.
 
-A landform variable in a spreading outbreak partly records where the outbreak has already
-been. Entering previous-year attack left valley depth retaining 0.18 of
-its coefficient and moved mid-slope position to 1.35, against
-1.23 for ruggedness, which describes a condition a cell holds whether or not the
-beetle ever arrived. Landform terms fitted without a contagion term are not measuring
-landform alone.
+Since no previous study has fitted a wind term at all [@krawchuk2020; @cartwright2018], there
+is no precedent establishing the resolution at which one should be fitted. This study's answer
+is that it must be no coarser than the flight period, and that a test which aggregates past it
+will reject a mechanism that is there.
 
 # Limitations {#sec-limits}
 
@@ -1269,12 +1265,12 @@ loaded via a namespace (and not attached):
 [25] splines_4.4.1       withr_3.0.2         yaml_2.3.12        
 [28] otel_0.2.0          tools_4.4.1         vctrs_0.7.2        
 [31] R6_2.6.1            proxy_0.4-29        lifecycle_1.0.5    
-[34] classInt_0.4-11     pkgconfig_2.0.3     pillar_1.11.1      
-[37] gtable_0.3.6        data.table_1.18.2.1 glue_1.8.0         
-[40] Rcpp_1.1.1          xfun_0.57           tibble_3.3.1       
-[43] tidyselect_1.2.1    farver_2.1.2        htmltools_0.5.9    
-[46] labeling_0.4.3      rmarkdown_2.30      wk_0.9.5           
-[49] compiler_4.4.1      S7_0.2.1           
+[34] classInt_0.4-11     htmlwidgets_1.6.4   pkgconfig_2.0.3    
+[37] pillar_1.11.1       gtable_0.3.6        data.table_1.18.2.1
+[40] glue_1.8.0          Rcpp_1.1.1          xfun_0.57          
+[43] tibble_3.3.1        tidyselect_1.2.1    farver_2.1.2       
+[46] htmltools_0.5.9     labeling_0.4.3      rmarkdown_2.30     
+[49] wk_0.9.5            compiler_4.4.1      S7_0.2.1           
 ```
 
 

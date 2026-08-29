@@ -1,5 +1,5 @@
 "Model","Term","Beta","z","p"
-"M4 station wind","flight_calm","-0.543","-16.42","< 0.001"
-"M4 station wind","Stand basal area x flight_calm","+0.032","1.20","0.232"
+"M4 station wind","Flight-window calm hours (share below 5 km/h)","-0.543","-16.42","< 0.001"
+"M4 station wind","Stand basal area x Flight-window calm hours","+0.032","1.20","0.232"
 "M5 terrain-resolved wind","MicroMet flight-window wind (km/h)","+0.386","22.18","< 0.001"
 "M5 terrain-resolved wind","Stand basal area x MicroMet flight-window wind","+0.031","1.71","0.087"

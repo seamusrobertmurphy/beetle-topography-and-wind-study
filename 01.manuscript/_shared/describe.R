@@ -92,7 +92,29 @@ VRI_LABELS <- c(
   mm_flight_mean        = "MicroMet flight-window wind (km/h)",
   ep_wind_mean          = "Epoch mean wind (km/h)",
   jun = "June mean wind (km/h)", jul = "July mean wind (km/h)",
-  aug = "August mean wind (km/h)")
+  aug = "August mean wind (km/h)",
+  ## Added 2026-08-28. Without these, pretty_terms() falls back to the raw column name and
+  ## the submitted tables printed "flight_calm" beside nine labelled terms.
+  flight_mean           = "Flight-window mean wind (km/h)",
+  flight_p95            = "Flight-window 95th percentile wind (km/h)",
+  flight_calm           = "Flight-window calm hours (share below 5 km/h)",
+  flight_windy          = "Flight-window windy hours (share above 15 km/h)",
+  lag_self              = "Attack in the same cell, previous year",
+  lag_nbr90             = "Attack within 90 m, previous year",
+  ep_lag_self           = "Attack in the same cell, previous epoch",
+  ep_lag_nbr90          = "Attack within 90 m, previous epoch",
+  mstpi                 = "Multi-scale topographic position",
+  slope                 = "Slope (degrees)",
+  curv_plan             = "Plan curvature",
+  openness_pos          = "Positive openness",
+  openness_neg          = "Negative openness",
+  sky_view              = "Sky view factor",
+  wind_afh              = "Effective air flow height",
+  wind_exposition       = "Wind exposition index",
+  wind_shelter          = "Wind shelter index",
+  heat_load             = "Heat load index",
+  normalised_height     = "Normalised height",
+  height_above_valley   = "Height above valley floor (m)")
 
 pretty_terms <- function(x) {
   out <- VRI_LABELS[x]

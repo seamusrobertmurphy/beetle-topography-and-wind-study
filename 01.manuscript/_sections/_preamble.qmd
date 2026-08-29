@@ -57,7 +57,9 @@ save_tbl <- function(x, name) {
   x
 }
 
-pv  <- function(p) if (p < 1e-16) "< 1e-16" else sprintf("%.3g", p)
+## pv() and pt() are defined once, with the journal's convention, in the reporting block
+## below. An earlier "%.3g" version stood here and was shadowed by that one; it is removed
+## so a chunk inserted above the redefinition cannot pick up the wrong formatter.
 ```
 
 
@@ -535,7 +537,19 @@ orpcabs <- function(beta) sprintf("%.1f", abs(100 * (exp(beta) - 1)))
 pthr <- function(p) {
   if (!length(p) || is.na(p)) return(NA_character_)
   if (p < 0.001) "p < 0.001" else if (p < 0.01) "p < 0.01" else
-  if (p < 0.05) "p < 0.05" else sprintf("p = %.2f", p)
+  ## Three decimals above the 0.05 threshold, matching pt() and the tables. Two decimals
+  ## printed the density-by-exposure interaction as "p = 0.10" in the Results while the
+  ## Discussion printed the same term as "p = 0.098". Audited 2026-08-28.
+  if (p < 0.05) "p < 0.05" else sprintf("p = %.3f", p)
+}
+
+## The journal spells out numbers under ten except with a unit, an age, or in a list with
+## other numbers. A count that comes from the data still has to obey that, so it is spelt
+## here rather than typed. Added 2026-08-28: the rendered text carried "8 outbreak years",
+## "8 numbers per metric", "8 distinct wind values" and "9 study years".
+spellnum <- function(n) {
+  w <- c("one","two","three","four","five","six","seven","eight","nine")
+  if (length(n) == 1 && !is.na(n) && n >= 1 && n <= 9) w[n] else format(n, big.mark = ",")
 }
 
 ## Accessors, so no coefficient is ever transcribed into the prose by hand.
@@ -715,12 +729,4 @@ CLIM_HR_PK <- clim_x$hour[which.max(clim_x$temp)]
 CLIM_YRS   <- length(unique(clim_h$year))
 ```
 
-```{r}
-#| label: tbl-inventory
-#| echo: false
-#| tbl-cap: "The datasets this study combines, with the structure and resolution of each. Every count is read from the files at render time. Spatial resolution is the grid the variable is analysed on; temporal resolution is the interval at which it varies. Note that the response varies every 16 days, the inventory once a year and the terrain not at all, which is the asymmetry the wind analysis turns on."
 
-data_inventory(BC, SA) |>
-  save_tbl("table-1-inventory") |>
-  kable(booktabs = TRUE, align = "llllllr", row.names = FALSE)
-```

@@ -39,6 +39,14 @@ Forest Carbon Verification, TÜV SÜD, Comox, British Columbia, Canada
 
 Corresponding author: Seamus Murphy, seamusrobertmurphy@gmail.com
 
+# Keywords
+
+Dendroctonus ponderosae, Landsat time series, stand density, geomorphometry, temporal
+resolution, pheromone communication
+
+<!-- Six, as the journal requires, and none appears in the title. The title carries
+     testing, wind, disruption, hypothesis, beetle and refugia. -->
+
 # Acknowledgements
 
 This work received no external funding. Beetle disturbance was classified from Landsat

@@ -20,6 +20,17 @@ data_inventory <- function(BC, SA) {
     if (length(v) == 0 || all(is.na(v))) "not built" else sprintf(fmt, v)
   }
   cnt <- function(dir, pat) length(list.files(dir, pattern = pat))
+  ## The modelling tables are the year-matched ones. Reading model_table.csv here reported
+  ## the superseded static-composite counts, 122,700 and 71,127, beside a text that quotes
+  ## 111,707 and 66,302 from the tables actually fitted. Audited 2026-08-28.
+  mt   <- utils::read.csv(file.path(BC, "model-data", "model_table_vri.csv"))
+  ept  <- utils::read.csv(file.path(BC, "model-data", "epoch_model_table_vri.csv"))
+  span <- function(x) {
+    y <- sort(unique(x))
+    gap <- setdiff(seq(min(y), max(y)), y)
+    sprintf("%d-%d%s", min(y), max(y),
+            if (length(gap)) paste0(", excluding ", paste(gap, collapse = ", ")) else "")
+  }
   yrs <- function(dir, pat) {
     f <- list.files(dir, pattern = pat)
     y <- as.integer(regmatches(f, regexpr("\\d{4}", f)))
@@ -37,15 +48,15 @@ data_inventory <- function(BC, SA) {
       "Landsat 5 and 8 Collection 2 Level-2",
       "Moderate-to-high disturbance, binary, from NDMI",
       "30 m", "1 year",
-      "2005-2014, excluding 2012",
-      "8 years"),
+      span(mt$year),
+      sprintf("%d years", length(unique(mt$year)))),
     inventory_row(
       "Beetle disturbance, 16-day",
       "Landsat 5 and 8 Collection 2 Level-2",
       "Moderate-to-high disturbance, binary, from NDMI",
       "30 m", "16 days, the sensor's repeat",
-      n_or(yrs(ep, "modhigh_\\d{4}")),
-      n_or(cnt(ep, "^modhigh_.*[.]tif$"), "%s epochs")),
+      span(ept$year),
+      sprintf("%d epochs", nrow(unique(ept[, c("year", "epoch")])))),
     inventory_row(
       "Stand structure",
       "VRI Historical, BC Data Catalogue",
@@ -66,8 +77,8 @@ data_inventory <- function(BC, SA) {
       "Speed and direction",
       "4 to 7 valley stations", "1 hour",
       "2005-2014, May to September",
-      n_or(nrow(utils::read.csv(file.path(BC, "covariates", "flight-window",
-                                          "hourly_climate.csv"))), "%s hourly records")),
+      paste(formatC(nrow(utils::read.csv(file.path(BC, "covariates", "flight-window",
+                    "hourly_climate.csv"))), format = "d", big.mark = ","), "hourly records")),
     inventory_row(
       "Terrain-resolved wind",
       "MicroMet over the DEM, driven by station wind",
@@ -80,16 +91,14 @@ data_inventory <- function(BC, SA) {
       "Assembled by 38-assemble-model-data.R",
       "Response and every covariate, one row per cell-year",
       "30 m", "1 year",
-      "2005-2014, excluding 2012",
-      n_or(nrow(utils::read.csv(file.path(BC, "model-data", "model_table.csv"))),
-           "%s cell-years")),
+      span(mt$year),
+      paste(formatC(nrow(mt), format = "d", big.mark = ","), "cell-years")),
     inventory_row(
       "Modelling table, 16-day",
       "Assembled by 45-epoch-model-data.R",
       "Response and every covariate, one row per cell-epoch",
       "30 m", "16 days",
-      n_or(yrs(ep, "modhigh_\\d{4}")),
-      n_or(nrow(utils::read.csv(file.path(BC, "model-data", "epoch_model_table.csv"))),
-           "%s cell-epochs"))
+      span(ept$year),
+      paste(formatC(nrow(ept), format = "d", big.mark = ","), "cell-epochs"))
   )
 }

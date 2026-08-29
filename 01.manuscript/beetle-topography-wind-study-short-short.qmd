@@ -195,6 +195,21 @@ expected of every attribute entered and the reasoning behind it.
 
 # Methods
 
+@tbl-inventory sets out the datasets this study combines and the resolution of each.
+The asymmetry it shows is the one the analysis turns on: the response varies every sixteen
+days, the inventory once a year, the station wind every hour, and the terrain not at all.
+
+```{r}
+#| label: tbl-inventory
+#| echo: false
+#| tbl-cap: "The datasets this study combines, with the structure and resolution of each. Every count is read from the files at render time. Spatial resolution is the grid the variable is analysed on; temporal resolution is the interval at which it varies. Note that the response varies every 16 days, the inventory once a year and the terrain not at all, which is the asymmetry the wind analysis turns on."
+
+data_inventory(BC, SA) |>
+  save_tbl("table-1-inventory") |>
+  kable(booktabs = TRUE, align = "llllllr", row.names = FALSE)
+```
+
+
 The study area is `r fmt(AREA_HA)` ha of the Selkirk Mountains in southeastern British
 Columbia, `r fmt(N_CELL)` cells at 30 m in EPSG:`r EPSG`, spanning `r fmt(ELEV_R[1])` to
 `r fmt(ELEV_R[2])` m (Figure 1). The grid and the perimeter are the parent study's
@@ -211,7 +226,7 @@ are never unioned: unioning destroys the year-to-year spread this study measures
 Stand structure comes from the provincial Vegetation Resources Inventory (Appendix S4). Six
 attributes carry the mechanism and the stem-size threshold: basal area, crown closure, live
 stems per hectare, quadratic mean diameter over stems 12.5 cm and up, stand age, and
-susceptible pine basal area. Terrain is `r length(GEO_V)` geomorphometric surfaces computed
+susceptible pine basal area. We described terrain with `r length(GEO_V)` geomorphometric surfaces, computed
 with SAGA GIS over the full elevation model and clipped afterwards, so a search radius near
 the boundary sees real ground. They cover exposure, shape, landform and aspect, the last
 entering as northward and eastward components and as the heat load index of @mccune2002. Radiation is computed twice, because two mechanisms need it:

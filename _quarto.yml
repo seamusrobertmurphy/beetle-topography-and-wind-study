@@ -8,7 +8,12 @@ project:
     - "01.manuscript/beetle-topography-wind-study-vri-timeseries.qmd"
     - "01.manuscript/beetle-topography-wind-study-short-short.qmd"
     - "01.manuscript/submission-jae/*.qmd"
-  pre-render: "find . -name ._* -delete"
+  pre-render:
+    - "find . -name ._* -delete"
+    # The shared preamble is included before the Abstract, so a chunk in it that prints
+    # appears at the top of every document. That is how the dataset inventory table came
+    # to render above the abstract in a submission package on 2026-08-28.
+    - "python3 05.tasks/scripts/check-preamble-silent.py"
   post-render:
     - "find . -name ._* -delete"
     # Table geometry a reference doc cannot carry: 16.5 cm width, 1.1 cm

@@ -40,20 +40,21 @@ a dense canopy is worth less to the beetle where and when the wind blows harder,
 what plume disruption requires. The interaction survives a within-season spread term, so
 it is not the outbreak's own contagion wearing a wind coefficient.
 
-The finding I expect to be most useful to your readers is the negative one attached to
-it. Collapse the same wind field, the same covariates and the same classification
-threshold to one map per year, and the interaction reverses sign. Nothing about the
-landscape or the wind product changes. What changes is that an annual response can only
-ask whether windy summers carry less attack than calm ones, and a summer contains both
-windy and calm weeks. The mechanism concerns a plume that persists for minutes acting over
-a flight period of weeks; a test aggregated to the year is not a weaker version of the
-right test but a different question, and it answers in the opposite direction. Since no
-prior study has fitted a wind term at all, nothing in the literature establishes the
-resolution at which one should be fitted. This paper's answer is that it must be no
-coarser than the flight period.
+The finding I expect to be most useful to your readers concerns what a beetle refugium is.
+Wind has no main effect on attack in these models. What it does is change what stand
+density is worth. A refugium from beetle is therefore not a place on a map but a
+conjunction: a thin stand and wind, in the same weeks the insect flies. This matters
+because the disturbance refugia framework was built on wildfire, where refugia can be
+mapped from terrain alone, and the transfer to beetle does not hold. A manager mapping
+exposed ground will find nothing, and so will one mapping thin stands.
 
-Two further specification results support the same caution. Entering flight-window
-radiation cuts the apparent density-by-terrain-exposure interaction by about a third, so a
+The failure of the shading mechanism points the same way. It does not merely fail to
+reach significance; it runs backwards, with shaded ground carrying more attack than
+exposed ground, not less. The most intuitive piece of the fire framework, that cool
+ground protects trees, is the piece that fails hardest here.
+
+Two measurement results bear on any study of this kind. Entering flight-window
+radiation cuts the apparent density-by-terrain-exposure interaction by about two fifths, so a
 terrain wind index is partly an insolation measurement. Entering previous-year attack
 destabilises the landform terms, so a landform variable in a spreading outbreak partly
 records where the outbreak has already been.

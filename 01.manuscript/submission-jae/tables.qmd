@@ -4,6 +4,11 @@ format:
   docx:
     reference-doc: ../../04.references/style-formal.docx
     number-sections: false
+bibliography: ../../04.references/references-beetle.bib
+csl: ../../04.references/apa-6th-edition.csl
+## The bibliography is declared so the citations inside Table 2's rationale column resolve.
+## It is suppressed because the reference list belongs in the main document, not here.
+suppress-bibliography: true
 execute:
   echo: false
   warning: false
@@ -18,13 +23,27 @@ execute:
 ## Journal of Applied Entomology asks for tables as a separate, editable file. These are
 ## read back from the CSVs the manuscript wrote as it rendered, not recomputed, so this
 ## file cannot report a different number from the article it accompanies. If a CSV is
-## missing, render the manuscript first.
+## missing, render 01.manuscript/beetle-topography-wind-study-vri-timeseries.qmd first.
+##
+## Audited 2026-08-28. Three faults were fixed here at once, all of which shipped to the
+## package on that date:
+##   1. The numbering was one behind the main document, because the data-inventory table
+##      was added as Table 1 after this file was written and everything else kept its old
+##      number. The CSV names have been renumbered in the manuscript to match.
+##   2. Tables 1 and 9 were missing entirely, so the editor received seven of nine.
+##   3. No bibliography or CSL was declared, so Table 2 printed its raw citation keys,
+##      "[@krawchuk2020; @cartwright2018; @powell2014]", into a submission document.
+## The captions below are the manuscript's own, in full. The abridged versions used here
+## previously dropped the abbreviation definitions the journal requires: it states that
+## "the table, legend, and footnotes must be understandable without reference to the text"
+## and that "All abbreviations must be defined in footnotes".
 library(knitr)
 TBL <- file.path("..", "..", "03.outputs", "TBL")
 get <- function(n) {
   f <- file.path(TBL, paste0(n, ".csv"))
   if (!file.exists(f))
-    stop("missing ", f, ". Render beetle-topography-wind-study-short.qmd first.")
+    stop("missing ", f,
+         ". Render 01.manuscript/beetle-topography-wind-study-vri-timeseries.qmd first.")
   read.csv(f, check.names = FALSE)
 }
 ```
@@ -35,63 +54,105 @@ get <- function(n) {
 
 # Table 1
 
-Landscape attributes entered in this study, the direction expected of each, and the
-reasoning behind that expectation.
+The datasets this study combines, with the structure and resolution of each. Every count is
+read from the files at render time. Spatial resolution is the grid the variable is analysed
+on; temporal resolution is the interval at which it varies. Note that the response varies
+every 16 days, the inventory once a year and the terrain not at all, which is the asymmetry
+the wind analysis turns on.
 
 ```{r}
-kable(get("table-1-hypotheses"), booktabs = TRUE, align = "lll")
+kable(get("table-1-inventory"), booktabs = TRUE)
 ```
 
 # Table 2
 
-Moderate-to-high beetle disturbance by year inside the study perimeter.
+Landscape attributes entered in this study, the direction expected of each, and the
+reasoning behind that expectation.
 
 ```{r}
-kable(get("table-2-prevalence"), booktabs = TRUE, align = "lrr")
+kable(get("table-2-hypotheses"), booktabs = TRUE, align = "lll")
 ```
 
 # Table 3
 
-Stand structure across the study perimeter, from the Vegetation Resources Inventory.
+Moderate-to-high beetle disturbance by year inside the study perimeter.
 
 ```{r}
-kable(get("table-3-stand-structure"), booktabs = TRUE, align = "lrrrr")
+kable(get("table-3-prevalence"), booktabs = TRUE, align = "lrr")
 ```
 
 # Table 4
 
-Model comparison. Each model adds one pathway to the previous.
+Stand structure across the study perimeter, from the Vegetation Resources Inventory. n is
+cell-years. SD is the standard deviation of the landscape; SE is the standard error of the
+mean and is small by construction at this n, so it should not be read as precision about any
+one cell. Skewness and kurtosis are the bias-corrected third and fourth standardised moments;
+kurtosis is excess, so 0 is Gaussian and positive is heavy-tailed.
 
 ```{r}
-kable(get("table-4-model-comparison"), booktabs = TRUE, align = "lrrr")
+kable(get("table-4-stand-structure"), booktabs = TRUE, align = "lrrrr")
 ```
 
 # Table 5
 
-Full model, continuous terms. Coefficients are log-odds per standard deviation on a
-class-balanced sample, so the intercept is not landscape prevalence. SE is the standard
-error of the coefficient.
+Model comparison, panel A of the model table. Each model adds one pathway to the previous.
+AIC ranks on likelihood and a parameter penalty; the remaining columns are predictive error
+on the fitted probabilities. RMSE is the root mean squared error and is the square root of
+the Brier score; RMSE (%) expresses it against the prevalence of the response. MAE is the
+mean absolute error. AUC is the area under the receiver operating characteristic curve.
+Brier skill is the improvement over predicting the prevalence for every cell, where 0 is no
+better than the base rate. MAPE and Theil's U are not reported: both divide by the observed
+value, which is zero for the majority class of a binary response, so both are undefined
+without discarding that class.
 
 ```{r}
-kable(get("table-5-full-model"), booktabs = TRUE, align = "lrrrr")
+kable(get("table-5-model-comparison"), booktabs = TRUE, align = "lrrr")
 ```
 
 # Table 6
 
-The wind terms under two specifications, both with previous-year pressure in the model.
-M4 carries station wind, which is flat within a year and identified only across years.
-M5 carries the terrain-resolved MicroMet field, which varies within the year and is
-identified in space.
+Full model M3, panel B of the model table: continuous terms, ordered by absolute effect.
+Coefficients are log-odds per standard deviation on a class-balanced sample, so the intercept
+is not landscape prevalence. SE is the standard error of the coefficient; z is the Wald
+statistic. The geomorphon landform classes are also in this model and are not reported here.
 
 ```{r}
-kable(get("table-6-wind-terms"), booktabs = TRUE, align = "lllrr")
+kable(get("table-6-full-model"), booktabs = TRUE, align = "lrrrr")
 ```
 
 # Table 7
 
-Moderate-to-high beetle disturbance by quadratic mean diameter class, on the balanced
-sample. The 25 cm boundary is the source-sink threshold of the species' bionomics.
+The wind terms under two specifications, both with previous-year pressure in the model.
+M4 carries station wind, which is flat within a year and identified only across years.
+M5 carries the terrain-resolved MicroMet field, which varies within the year and is
+identified in space. z is the Wald statistic.
 
 ```{r}
-kable(get("table-7-diameter-class"), booktabs = TRUE, align = "lrr")
+kable(get("table-7-wind-terms"), booktabs = TRUE, align = "lllrr")
+```
+
+# Table 8
+
+Moderate-to-high beetle disturbance by quadratic mean diameter class, on the balanced
+sample. QMD is quadratic mean diameter over stems 12.5 cm and up. The 25 cm boundary is the
+source-sink threshold of the species' bionomics. Intervals are Wilson score intervals on the
+class proportion, which is why they are asymmetric in the smallest class; the normal
+approximation is not used because it misbehaves at the small class sizes at both ends of the
+range. Note that 30 m cells in a spreading outbreak are not independent, so the tests
+reported beneath this table in the main text are anti-conservative.
+
+```{r}
+kable(get("table-8-diameter-class"), booktabs = TRUE, align = "lrr")
+```
+
+# Table 9
+
+The 16-day model refitted under four definitions of the wind window. The epoch wind regime,
+every hour, is the definition used throughout this paper. Coefficients are log-odds per
+standard deviation. AUC is the area under the receiver operating characteristic curve. The
+thermal-gate row is fitted on fewer cell-epochs because two epochs carried too few qualifying
+hours, so its AIC is not comparable with the other three and AIC is therefore not shown.
+
+```{r}
+kable(get("table-9-flight-window"), booktabs = TRUE)
 ```
