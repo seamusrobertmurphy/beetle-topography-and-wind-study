@@ -33,16 +33,16 @@ Every figure and table below is reproduced from the current render, in the order
 
 | Attribute | Expected | Rationale |
 | :--- | :--- | :--- |
-| Stand basal area, volume, crown closure, stems | positive | Denser canopy holds the pheromone plume together; thinner stands admit wind that disperses it (Powell and Bentz 2014; Cartwright 2018; Krawchuk et al. 2020). |
-| Quadratic mean diameter | positive above 25 cm | Trees under 25 cm are beetle sinks, over 25 cm are sources (Carroll and Safranyik 2004). |
-| Lodgepole pine cover and basal area | positive | Attack cannot occur where the host is absent; a cell without pine is not a refugium (Cartwright 2018). |
-| Flight-period direct radiation | positive | Flight is gated between 19 and 41 degrees C and peaks on bright afternoons, so sunlit slopes are reachable (McCambridge 1971; Safranyik and Carroll 2006). |
-| Growing-season direct radiation | negative | Shading cools, relieving water stress and funding defence, and cool sites also push the beetle toward a two-year cycle (Krawchuk et al. 2020; Sambaraju and Goodsman 2021). |
-| Terrain exposure to wind | negative | Wind disrupts the pheromone plume, so exposed ground should carry less attack (Krawchuk et al. 2020). |
-| Terrain ruggedness | uncertain | The strongest terrain term in the companion study on this landscape, but fitted there against regeneration rather than attack (Murphy et al. 2026). |
-| Convergence, wetness, valley depth, slope position | positive in convergent terrain | Infested groups gather in draws and gullies, and deep snow insulates overwintering brood (Safranyik and Carroll 2006). |
-| Flight-period wind speed | negative | The mechanism acts during dispersal, and no study specifies the interval, so it is taken at the flight period (Jones et al. 2019; Krawchuk et al. 2020). |
-| Elevation | uncertain | A composite of temperature, snowpack, season length and host distribution that this design cannot separate (Sambaraju and Goodsman 2021). |
+| Stand basal area, volume, crown closure, stems | positive | Denser canopy holds the pheromone plume together; thinner stands admit wind that disperses it (Cartwright, 2018; Krawchuk et al., 2020; Powell & Bentz, 2014). |
+| Quadratic mean diameter | positive above 25 cm | Trees under 25 cm are beetle sinks, over 25 cm are sources (Carroll & Safranyik, 2004). |
+| Lodgepole pine cover and basal area | positive | Attack cannot occur where the host is absent; a cell without pine is not a refugium (Cartwright, 2018). |
+| Flight-period direct radiation | positive | Flight is gated between 19 and 41 degrees C and peaks on bright afternoons, so sunlit slopes are reachable (McCambridge, 1971; Safranyik & Carroll, 2006). |
+| Growing-season direct radiation | negative | Shading cools, relieving water stress and funding defence, and cool sites also push the beetle toward a two-year cycle (Krawchuk et al., 2020; Sambaraju & Goodsman, 2021). |
+| Terrain exposure to wind | negative | Wind disrupts the pheromone plume, so exposed ground should carry less attack (Krawchuk et al., 2020). |
+| Terrain ruggedness | uncertain | The strongest terrain term in the companion study on this landscape, but fitted there against regeneration rather than attack (Murphy et al., 2026). |
+| Convergence, wetness, valley depth, slope position | positive in convergent terrain | Infested groups gather in draws and gullies, and deep snow insulates overwintering brood (Safranyik & Carroll, 2006). |
+| Flight-period wind speed | negative | The mechanism acts during dispersal, and no study specifies the interval, so it is taken at the flight period (Jones, Shegelski, Marculis, Wijerathna, & Evenden, 2019; Krawchuk et al., 2020). |
+| Elevation | uncertain | A composite of temperature, snowpack, season length and host distribution that this design cannot separate (Sambaraju & Goodsman, 2021). |
 
 ### Figure 1
 

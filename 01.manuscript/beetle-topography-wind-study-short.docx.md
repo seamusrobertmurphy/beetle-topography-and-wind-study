@@ -57,7 +57,12 @@ engine: knitr
 citeproc: true
 editor: visual
 bibliography: ../04.references/references-beetle.bib
-csl: ../04.references/springer-basic-author-date.csl
+# Journal of Applied Entomology requires APA 6th: "References should be prepared
+# according to the Publication Manual of the American Psychological Association (6th
+# edition)". Both drafts carried the Springer style until 2026-08-28, and apa-6th-edition.csl
+# had been sitting unused in 04.references since 20 August. Note that apa.csl in the same
+# folder is APA FIFTH edition despite its name.
+csl: ../04.references/apa-6th-edition.csl
 df-print: kable
 ---
 
@@ -256,39 +261,43 @@ the mechanism poses, and answers it wrongly.
 
 Mountain pine beetle (*Dendroctonus ponderosae* Hopkins) has killed more lodgepole pine
 (*Pinus contorta* Douglas ex Loudon) in British Columbia than any other agent on record
-[@taylor2003; @sambaraju2021]. Where a landscape is not killed uniformly the surviving
-patches shape what the forest becomes, and one framework for them is disturbance refugia,
-places buffered from disturbance over time [@krawchuk2020]. Explaining refugia rather than
-merely locating them requires mechanistic links to landscape drivers such as terrain, soil
-and stand structure [@cartwright2018].
+[@taylor2003; @sambaraju2021]. An outbreak never kills a landscape evenly. The patches that survive carry the forest's
+structure and seed into whatever comes next, and those patches have a name: disturbance
+refugia, places buffered from disturbance over time [@krawchuk2020]. Finding a refugium is
+not the same as explaining one. Explanation needs a mechanism that ties survival to
+something measurable on the ground, such as terrain, soil or the structure of the stand
+itself [@cartwright2018].
 
 @krawchuk2020 proposed such a mechanism: refugia could occur "in areas with cooler
 temperatures (eg from topographic shading) that protect trees from water stress; in areas
 with lower host density, allowing for greater wind disruption of beetle pheromone
 communication and more vigorous tree growth and chemical defenses; and in areas with fewer
-large-diameter host trees". Three mechanisms, two of them terrain, and none fitted spatially:
-of the studies our screen retained, only a companion study on this landscape enters a wind
-term, and its response is conifer regeneration rather than attack [@murphy2026].
+large-diameter host trees". That is three mechanisms, two of which act through terrain. None has been fitted to a map.
+Of the studies our screen retained, one enters a wind term at all, and it is a companion
+study on this same landscape whose response is conifer regeneration rather than beetle
+attack [@murphy2026].
 
-The wind half is a claim about canopy, not open air. @cartwright2018, the one retained study
-designed to model insect-refugium controls, found them in stands of low basal area: "thinner
-stands also increase wind penetration, helping to disperse beetle pheromones and disrupt
-chemical communications needed to coordinate attacks." @powell2014 state the converse as the
+The wind half is a claim about canopy, not open air. @cartwright2018 is the one retained study designed
+to model what controls an insect refugium, and it located refugia in stands of low basal
+area, reasoning that "thinner stands also increase wind penetration, helping to disperse
+beetle pheromones and disrupt chemical communications needed to coordinate attacks." @powell2014 state the converse as the
 condition for outbreak: "higher local host density, which minimizes pheromone plume
 dispersion, reduces wind, and promotes successful switching to nearby hosts, positively
 influences outbreak propensity." A model that controls stand density out and then reads a
 terrain coefficient as a wind effect has removed the pathway it set out to test.
 
-Terrain acts through more than airflow. Flight is thermally gated at 19 to 41 degrees C, most
-of it between 22 and 32, and "most flights occur on bright sunny days, and peak flight is in
+Terrain acts through more than airflow. Flight has a temperature window: the beetle flies
+between 19 and 41 degrees C, and mostly between 22 and 32, and "most flights occur on bright sunny days, and peak flight is in
 the early to mid afternoon" [@safranyik2006chap1; @mccambridge1971]. Radiation during the
 flight window is therefore a different quantity from radiation across the season, and the
-season quantity is the one the shading pathway concerns. Light, temperature and wind are named
-as one triad rather than as alternatives, stand density affecting "tree vigour and within-stand
+season quantity is the one the shading pathway concerns. Light, temperature and wind are not
+competing explanations but one bundle. Stand density governs "tree vigour and within-stand
 microclimate, which in turn influence success of bark beetle dispersal, host selection, attack
-or brood development" [@safranyik2006chap1], an argument @bartos1989 put in their title as
-microclimate against tree vigour. Cool sites also push the beetle toward a two-year cycle
-[@sambaraju2021], so shading and vigour predict the same sign by independent routes.
+or brood development" [@safranyik2006chap1]; @bartos1989 set the two halves of that bundle
+against each other in their own title, microclimate against tree vigour. A third route leads
+to the same place. Cool sites slow development enough to push the beetle onto a two-year
+cycle [@sambaraju2021]. So shade and vigour both predict less attack on cool ground, by
+routes this design cannot separate.
 
 Two further constraints decide what a wind term can be measured over, and both are
 temporal rather than spatial. The first is the day. @gray1972 recorded emergence in
@@ -326,10 +335,10 @@ radar was watching. They found beetles "at altitudes up to more than 800 m above
 canopy", estimated that those in flight above the canopy "may move 30--110
 km$\cdot$day$^{-1}$", and put the instantaneous density at a mean of 4950 and a maximum of
 18\,600 beetles per hectare. @ainslie2010 reproduced that above-canopy dispersion with an
-atmospheric dispersion model driven by the same radar. An insect entrained in the boundary
-layer at those heights is exposed to the atmospheric regime of the period rather than to the
-breeze in a stand during the hours it happens to leave the bark, and the wind variable in
-this study is named and measured accordingly.
+atmospheric dispersion model driven by the same radar. An insect carried in the lower
+atmosphere at those heights meets the weather of the whole period. It does not meet the
+breeze inside one stand during the few hours it happens to leave the bark. The wind variable
+in this study is named and measured accordingly.
 
 No product reports the wind the hypothesis concerns, an instantaneous below-canopy speed at
 flight height during the flight period. Gridded climatologies report a long-run mean at 10 m
@@ -340,11 +349,12 @@ from station observations of each 16-day period, modify it over the terrain with
 model [@liston2006], and test the response at Landsat's own 16-day repeat rather than annually.
 
 @tbl-hypotheses gives the direction expected of each attribute and the reasoning behind it.
-The objectives were to test whether stand density predicts moderate-to-high disturbance as the
-pheromone mechanism requires, whether topographic shading predicts it against the microclimate
-and adaptive-seasonality arguments, whether terrain shape predicts it independently of density
-and radiation, whether the density effect is conditional on wind, and how much the answer
-depends on temporal resolution.
+This study asks five questions. Does stand density predict moderate-to-high disturbance, as
+the pheromone mechanism requires? Does topographic shading predict it, against the competing
+microclimate and adaptive-seasonality arguments? Does terrain shape predict it once density
+and radiation are already in the model? Is the density effect conditional on wind, which is
+the form the mechanism actually takes? And how much of the answer depends on the interval the
+response is measured over?
 
 
 ::: {#tbl-hypotheses .cell tbl-cap='Landscape attributes entered in this study, the direction expected of each, and the reasoning behind that expectation.'}
@@ -583,9 +593,10 @@ last step into monthly means for June, July and August and four flight-window me
 1 July to 15 August: mean speed, the 95th percentile, and the fractions of hours below
 5 km h and above 15 km h.
 
-Hourly resolution buys metrics, not observations. With an annual response every hourly
-reading collapses into one of 8 values per metric, so a wind main effect is
-identified only across years and its standard error should not be believed alone. Stand
+Hourly readings buy detail, not independent observations. With one map a year, every hour
+of wind collapses into one of 8 numbers per metric, so the model has only
+8 distinct wind values to work with and a wind coefficient rests on those
+alone. Its standard error will look small and should not be believed. Stand
 density varies cell to cell; a season's wind does not. That asymmetry is why the annual
 models report an interaction rather than a main effect, and why the response was rebuilt at
 16 days.
@@ -694,12 +705,12 @@ Every pathway earns its place: AIC falls 498 when stand density
 enters, 744 more with terrain and flight radiation, and
 1,065 more with the interactions (@tbl-aic).
 
-Stand density is supported in one of its three measures. Standing volume carries
+The three measures of stand density do not agree. Standing volume carries
 +0.381 log-odds per standard deviation, stem count
 -0.099, and crown closure -0.183
 (p < 0.001). The last two are negative, so as main effects the three
-density measures disagree in sign and only standing volume points the way the mechanism
-predicts.
+density measures disagree in sign. Only standing volume rises with attack, which is the
+direction a plume-holding canopy implies.
 Total basal area did not survive selection, its univariate discrimination being
 0.516. What predicts attack is standing wood
 in large stems, not how many stems there are.
@@ -887,8 +898,8 @@ Large-diameter host holds as a threshold rather than a slope. Attack peaks at
 45.9 per cent in the 25 to 30 cm
 class, at the source-sink boundary of @carroll2004bionomics, and falls away on both sides.
 
-Topographic shading does not hold, and it fails on a surrogate rather than on the surface
-the mechanism names. Growing-season radiation did not survive variable selection, so the
+Topographic shading does not hold, and it fails on a stand-in rather than on the quantity
+the mechanism actually names. Growing-season radiation did not survive variable selection, so the
 pathway is carried by northness, which correlates -0.834
 with it. Northness is +0.382, so shaded ground carries more attack where the
 mechanism requires less. Northness tests aspect, and aspect carries more than shade, so this
@@ -963,15 +974,16 @@ fails on a surrogate: growing-season radiation did not survive selection, so the
 carried by northness, +0.382, which correlates
 -0.834 with it.
 
-The methodological finding is the more transferable one, and it has three parts. A terrain
-index is partly an insolation measurement: entering flight-window radiation cut the density
-by terrain-exposure interaction from +0.311 to +0.221, leaving the sign
-unchanged. A landform variable in a spreading outbreak records the outbreak's own history:
+The methodological finding travels further than the ecological one, and it has three parts.
+
+First, a terrain index is partly a measurement of sunlight. Adding flight-window radiation
+to the model cut the density by terrain-exposure interaction from +0.311 to
++0.221, without changing its sign. A landform variable in a spreading outbreak records the outbreak's own history:
 entering previous-year pressure left valley depth at 0.50 of its value
 while mid-slope position moved to 1.32, against 0.61 for
-ruggedness. And an annual response cannot test a mechanism that operates over weeks: the
-same wind field, covariates and threshold gave +0.031 at annual resolution against
--0.094 at sixteen days.
+ruggedness. Third, an annual response cannot test a mechanism
+that operates over weeks. The same wind field, the same covariates and the same threshold
+gave +0.031 at annual resolution and -0.094 at sixteen days.
 
 Since no previous study has fitted a wind term at all [@krawchuk2020; @cartwright2018], there
 is no precedent establishing the resolution at which one should be fitted. This study's answer

@@ -39,6 +39,11 @@ BC   <- here("02.inputs", "beetle-classification")
 SA   <- file.path(BC, "study-area")
 LIT  <- here("02.inputs", "literature")
 
+USE_VRI <- exists("USE_VRI_TIMESERIES") && isTRUE(USE_VRI_TIMESERIES)
+EPOCH_TBL <- if (USE_VRI) "epoch_model_table_vri.csv" else "epoch_model_table.csv"
+ANNUAL_TBL <- if (USE_VRI) "model_table_vri.csv" else "model_table.csv"
+cat(sprintf("host structure: %s\n", if (USE_VRI) "year-matched VRI snapshots" else "static 2025 composite"))
+
 fmt <- function(x, d = 0) formatC(x, format = "f", digits = d, big.mark = ",")
 
 ## Tables and figures have to be uploaded to Journal of Applied Entomology as separate
@@ -136,7 +141,7 @@ burn_e  <- range(values(mask(crop(elev, vect(burn)), vect(burn))), na.rm = TRUE)
 #| echo: false
 #| output: false
 
-d <- read.csv(file.path(BC, "model-data", "model_table.csv"), stringsAsFactors = FALSE)
+d <- read.csv(file.path(BC, "model-data", ANNUAL_TBL), stringsAsFactors = FALSE)
 YRS      <- sort(unique(d$year))
 N_ROWS   <- nrow(d)
 PREV     <- mean(d$modhigh)
@@ -443,7 +448,13 @@ AUC4  <- as.numeric(pROC::auc(pROC::roc(bl$modhigh, fitted(M4),  quiet = TRUE)))
 ## cadence: imagery, classification, terrain-resolved wind and the modelling table. Wind
 ## then varies both across the grid within an epoch and between the 59 epochs, so its
 ## effect is identified in space and in time rather than across eight annual values.
-de <- read.csv(file.path(BC, "model-data", "epoch_model_table.csv"))
+## Which stand structure the epoch models are fitted on. The including document sets
+## USE_VRI_TIMESERIES before the include; unset means the static 2025 composite, which is
+## what the Journal of Applied Entomology draft reports. Without this switch the
+## time-series draft fitted the static table and printed year-matched numbers only in the
+## section that read them from a CSV, so its abstract and its Results disagreed by a
+## factor of two.
+de <- read.csv(file.path(BC, "model-data", EPOCH_TBL))
 EP_N     <- nrow(de); EP_EPOCHS <- length(unique(de$t)); EP_YEARS <- length(unique(de$year))
 epsum    <- read.csv(file.path(BC, "epoch-response", "epoch_summary.csv"))
 epwind   <- read.csv(file.path(BC, "covariates", "wind-epoch", "epoch_wind_summary.csv"))
