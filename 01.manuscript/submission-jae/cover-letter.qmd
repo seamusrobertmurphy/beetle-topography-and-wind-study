@@ -43,10 +43,8 @@ it is not the outbreak's own contagion wearing a wind coefficient.
 The finding I expect to be most useful to your readers concerns what a beetle refugium is.
 Wind has no main effect on attack in these models. What it does is change what stand
 density is worth. A refugium from beetle is therefore not a place on a map but a
-conjunction: a thin stand and wind, in the same weeks the insect flies. This matters
-because the disturbance refugia framework was built on wildfire, where refugia can be
-mapped from terrain alone, and the transfer to beetle does not hold. A manager mapping
-exposed ground will find nothing, and so will one mapping thin stands.
+conjunction: a thin stand and wind, in the same weeks the insect flies. A manager mapping exposed ground will
+find nothing, and so will one mapping thin stands.
 
 The failure of the shading mechanism points the same way. It does not merely fail to
 reach significance; it runs backwards, with shaded ground carrying more attack than

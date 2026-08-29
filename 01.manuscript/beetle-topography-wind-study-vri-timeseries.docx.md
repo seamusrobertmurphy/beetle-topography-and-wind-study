@@ -227,45 +227,33 @@ df-print: kable
 # Abstract {.unnumbered}
 
 
-::: {.cell}
-
-:::
-
 
 Refugia from mountain pine beetle (*Dendroctonus ponderosae* Hopkins) are hypothesised to
 form where stands are thin enough for wind to disrupt the pheromone plume coordinating mass
 attack. The hypothesis names topographic shading, low host density and few large-diameter
-hosts, and none has been fitted. We tested all three over 5,573 ha of the Selkirk
-Mountains, British Columbia, at 30 m across 914 m of relief, using Landsat
-at its 16-day repeat: 59 epochs across eight outbreak years,
-66,302 cell-epochs. Predictors were inventory stand structure,
-29 geomorphometric surfaces, solar radiation computed separately for the
-flight window and the growing season, and a terrain-resolved wind field from the MicroMet
-model driven by hourly station data for each epoch's own sixteen days.
+hosts, and none has been fitted spatially. We tested all three over 5,573 ha of
+the Selkirk Mountains, British Columbia, using Landsat at its 16-day repeat across
+eight outbreak years, year-matched forest inventory,
+29 geomorphometric surfaces, and a terrain-resolved wind field from the
+MicroMet model driven by hourly station data.
 
-The wind-disruption mechanism was supported. Stand density interacted negatively with wind,
+Two of the three mechanisms held. Stand density interacted negatively with wind,
 -0.049 for stem density (p < 0.001) and -0.017 for standing
-volume (p < 0.05), and both survived a within-season spread term carrying
-+0.704. Host held through stand basal area, +0.504,
-and attack peaked at
-39.7 per cent at 25 to 30 cm
-diameter, the source-sink threshold. Topographic shading failed on its surrogate: growing-season
-radiation did not survive selection, and northness, which correlates
--0.824 with it, is +0.305, so shaded ground
-carries more attack.
+volume (p < 0.05), both surviving a within-season contagion term. Large-diameter
+host held as a threshold rather than a gradient, attack peaking at
+39.7 per cent in the 25 to 30 cm
+class, at the source-sink boundary. Topographic shading failed, and failed backwards: shaded
+ground carried more attack, not less.
 
-Wind had no main effect on attack. What it did was change what stand density was worth,
-which is the form the population biology predicts for an environmental control on mass
-attack. A refugium from beetle is therefore not a location but a conjunction of thin stand
-and wind, in the weeks the insect flies. That distinguishes it from a fire refugium, which
-the framework was built on and which can be mapped from terrain alone.
+Windier ground carried slightly more attack, not less, +0.022. Wind reduced
+attack only where the stand was thin. Low stand density and wind during the flight period
+were therefore both required, and neither predicted attack on its own.
 
-Two measurement results bear on any refugia study. Terrain wind indices are partly
-insolation: entering flight-window radiation weakened the density by exposure interaction
-from -0.068 to -0.040. And inventory vintage governs what can be detected at
-all. Holding stand structure at its current projection, as is routine, halved the
-interaction and left basal area at chance, 0.517 against 0.602 once each year carried its
-own inventory.
+Two results affect measurement in studies of this kind. Terrain wind indices are correlated
+with insolation: adding flight-window radiation reduced the density by exposure interaction
+from -0.068 to -0.040. Inventory vintage affected detection: stand structure
+taken from the current projection rather than matched to each year halved the interaction
+and reduced the univariate discrimination of basal area from 0.602 to 0.517.
 
 # Keywords {.unnumbered}
 
