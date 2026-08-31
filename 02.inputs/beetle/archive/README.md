@@ -102,3 +102,26 @@ M5 was dropped because `mm_flight_mean` remains a column in the modelling table.
 manuscript's base map is another such case: `basemap_relief.tif` and
 `basemap_water.geojson` are read by `map_context()` in `01.manuscript/_shared/map-academic.R`,
 not by the manuscript or the preamble directly.
+
+## Intermediates, archived 2026-08-31
+
+`intermediates/` holds every file the pipeline builds but the render never opens, 749 files
+and about 1.6 GB, moved on Seamus's instruction that intermediary files belong in the
+archive. The directory structure is preserved, so restoring any of it is a move back.
+
+What stayed, and why. The render's dependency set was read out of
+`01.manuscript/_sections/_preamble.qmd`, the manuscript master and
+`01.manuscript/_shared/*.R`, and it is 36 files. Twenty-seven are opened by name. The other
+nine are `study-area/vri-timeseries/vri_YYYY.gpkg`, which `data-inventory.R` counts with
+`list.files()` to fill the year range and snapshot count in Table 1. Nothing else under
+`02.inputs/beetle` is read at render time.
+
+What this costs. The manuscript still renders. The pipeline no longer re-runs from source
+without moving folders back: `24-modhigh-binary-svm.R` needs `ndmi-darkwoods/`,
+`37-geomorphometry.R` needs `geomorphometry/saga/`, `43-epoch-classification.R` needs
+`cube-16day/`, and `53-refit-flight-window.R` needs `covariates/wind-epoch-sensitivity/`.
+A Dryad deposit that claims to reproduce every number must therefore draw its derived data
+from here, not from the working tree.
+
+`epoch-response/` keeps only `epoch_summary.csv`. Its 60 `modhigh_*_e*.tif` rasters are
+here: the `ep` path in `data-inventory.R` is assigned at line 42 and never used again.
