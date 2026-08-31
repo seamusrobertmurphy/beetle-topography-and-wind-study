@@ -13,7 +13,7 @@
   </SOURCE>
   <HISTORY saga-version="9.12.4">
     <TOOL library="io_gdal" id="0" name="Import Raster">
-      <OPTION type="file" id="FILES" name="Files">"02.inputs/beetle-classification/geomorphometry/saga/dem.tif"</OPTION>
+      <OPTION type="file" id="FILES" name="Files">"/Volumes/PortableSSD/Github/claude-science-library/publications-academic/beetle-topography-and-wind-study/02.inputs/beetle/geomorphometry/saga/dem.tif"</OPTION>
       <OPTION type="choice" id="MULTIPLE" name="Multiple Bands Output" index="2">automatic</OPTION>
       <OPTION type="text" id="SUBSETS" name="Subsets"/>
       <OPTION type="text" id="SELECTION" name="Select from Multiple Bands"/>
@@ -23,7 +23,7 @@
       <OUTPUT type="grid_list" id="GRIDS" name="Grids">dem</OUTPUT>
     </TOOL>
   </HISTORY>
-  <FILE>02.inputs/beetle-classification/geomorphometry/saga/dem.tif</FILE>
+  <FILE>/Volumes/PortableSSD/Github/claude-science-library/publications-academic/beetle-topography-and-wind-study/02.inputs/beetle/geomorphometry/saga/dem.tif</FILE>
   <DESCRIPTION>elevation</DESCRIPTION>
   <PROJECTION>
     <WKT2>PROJCRS["NAD83(CSRS) / BC Albers",BASEGEODCRS["NAD83(CSRS)",DATUM["NAD83 Canadian Spatial Reference System",ELLIPSOID["GRS 1980",6378137,298.257222101,LENGTHUNIT["metre",1]]],PRIMEM["Greenwich",0,ANGLEUNIT["degree",0.0174532925199433]]],CONVERSION["unnamed",METHOD["Albers Equal Area",ID["EPSG",9822]],PARAMETER["Latitude of false origin",45,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8821]],PARAMETER["Longitude of false origin",-126,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8822]],PARAMETER["Latitude of 1st standard parallel",50,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8823]],PARAMETER["Latitude of 2nd standard parallel",58.5,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8824]],PARAMETER["Easting at false origin",1000000,LENGTHUNIT["metre",1],ID["EPSG",8826]],PARAMETER["Northing at false origin",0,LENGTHUNIT["metre",1],ID["EPSG",8827]]],CS[Cartesian,2],AXIS["easting",east,ORDER[1],LENGTHUNIT["metre",1]],AXIS["northing",north,ORDER[2],LENGTHUNIT["metre",1]],ID["EPSG",3153]]</WKT2>

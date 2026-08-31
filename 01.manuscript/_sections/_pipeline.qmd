@@ -2679,15 +2679,22 @@ for (y in YEARS) {
 ## file. If basal area does not move across the nine years, the extraction is wrong.
 files <- list.files(OUT, pattern = "^vri_\\d{4}\\.gpkg$", full.names = TRUE)
 if (length(files)) {
+  ## A column absent from one delivery must not stop the summary. The province's 2007
+  ## snapshot carries no PROJECTED_DATE, and v$PROJECTED_DATE[1] on a missing column
+  ## returns NULL, which data.frame() refuses to recycle into a row. col() returns NA
+  ## instead, so the summary reports the gap rather than halting the render.
+  col <- function(v, nm) if (nm %in% names(v)) v[[nm]] else NA
   s <- do.call(rbind, lapply(files, function(f) {
     v <- st_read(f, quiet = TRUE)
+    pd <- col(v, "PROJECTED_DATE")
     data.frame(year = as.integer(sub(".*vri_(\\d{4})\\.gpkg", "\\1", f)),
                polygons = nrow(v),
-               projected = substr(as.character(v$PROJECTED_DATE[1]), 1, 10),
-               basal_area = mean(v$BASAL_AREA, na.rm = TRUE),
-               stems = mean(v$VRI_LIVE_STEMS_PER_HA, na.rm = TRUE),
-               qmd = mean(v$QUAD_DIAM_125, na.rm = TRUE),
-               volume = mean(v$LIVE_STAND_VOLUME_125, na.rm = TRUE))
+               projected = if (all(is.na(pd))) NA_character_
+                           else substr(as.character(pd[1]), 1, 10),
+               basal_area = mean(col(v, "BASAL_AREA"), na.rm = TRUE),
+               stems = mean(col(v, "VRI_LIVE_STEMS_PER_HA"), na.rm = TRUE),
+               qmd = mean(col(v, "QUAD_DIAM_125"), na.rm = TRUE),
+               volume = mean(col(v, "LIVE_STAND_VOLUME_125"), na.rm = TRUE))
   }))
   s <- s[order(s$year), ]
   write.csv(s, file.path(OUT, "vri_timeseries_summary.csv"), row.names = FALSE)
