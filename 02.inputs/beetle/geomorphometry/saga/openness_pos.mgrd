@@ -20,7 +20,7 @@
       <OPTION type="double" id="PROC_BUFFER" name="Processing Buffer Distance">0</OPTION>
       <INPUT type="grid" id="DEM" name="Elevation" system="PARAMETERS_GRID_SYSTEM">
         <TOOL library="io_gdal" id="0" name="Import Raster">
-          <OPTION type="file" id="FILES" name="Files">"02.inputs/beetle-classification/geomorphometry/saga/dem.tif"</OPTION>
+          <OPTION type="file" id="FILES" name="Files">"/Volumes/PortableSSD/Github/claude-science-library/publications-academic/beetle-topography-and-wind-study/02.inputs/beetle/geomorphometry/saga/dem.tif"</OPTION>
           <OPTION type="choice" id="MULTIPLE" name="Multiple Bands Output" index="2">automatic</OPTION>
           <OPTION type="text" id="SUBSETS" name="Subsets"/>
           <OPTION type="text" id="SELECTION" name="Select from Multiple Bands"/>
