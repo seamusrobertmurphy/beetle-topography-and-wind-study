@@ -591,10 +591,19 @@ bz$above_qmd <- as.integer(bal$QUAD_DIAM_125 >= QMD_THRESH)
 Mc <- glm(f(setdiff(c(V_CTX, DENS, WGEO), "QUAD_DIAM_125")), data = bz, family = binomial)
 Md <- glm(f(c(setdiff(c(V_CTX, DENS, WGEO), "QUAD_DIAM_125"), "above_qmd")),
           data = bz, family = binomial)
+## Composition travels with the diameter class, and the abstract now says so, so the
+## two basal-area columns are carried here rather than computed in a terminal and
+## typed into prose. Pine basal area peaks in the middle classes and collapses in the
+## largest while total basal area keeps rising: the big stands are not pine. Read these
+## on the balanced sample, the same rows the attacked percentage comes from, because
+## the full landscape table gives a different pine figure for the same class.
 qmd_bin <- bal |>
   mutate(bin = cut(QUAD_DIAM_125, breaks = c(0, 15, 20, 25, 30, 40, Inf),
                    labels = c("<15","15-20","20-25","25-30","30-40",">40"))) |>
-  group_by(bin) |> summarise(n = n(), attack = mean(modhigh))
+  group_by(bin) |> summarise(n = n(), attack = mean(modhigh),
+                             pine_ba = mean(PINE_BA), tot_ba = mean(BASAL_AREA)) |>
+  mutate(attack_pc = 100 * attack)
+qb <- function(col, cls) sprintf("%.1f", qmd_bin[[col]][qmd_bin$bin == cls])
 
 ## The tests the diameter table needs, computed here so the prose reads them rather than
 ## restating a difference by eye. See _shared/diameter-test.R for what each one asks.

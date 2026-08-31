@@ -21,6 +21,8 @@ execute:
 
 Testing the wind disruption hypothesis for beetle refugia
 
+Stand density, terrain and wind as competing controls on mountain pine beetle attack (Dendroctonus ponderosae) in the Selkirk Mountains of British Columbia
+
 # Running title
 
 Wind disruption and beetle refugia
@@ -41,11 +43,13 @@ Corresponding author: Seamus Murphy, seamusrobertmurphy@gmail.com
 
 # Keywords
 
-Dendroctonus ponderosae, Landsat time series, stand density, geomorphometry, temporal
-resolution, pheromone communication
+Dendroctonus ponderosae, forest disturbance, insect outbreaks, Landsat time series,
+refugia, British Columbia
 
-<!-- Six, as the journal requires, and none appears in the title. The title carries
-     testing, wind, disruption, hypothesis, beetle and refugia. -->
+<!-- Six, as the journal requires. Set on 2026-08-30 from the keyword lists of the target
+     literature and kept identical to the main document. One deliberate breach: "refugia"
+     is also in the title, which the journal's rule forbids. Seamus instructed it after
+     being told the rule twice. It becomes legal if "refugia" leaves the title. -->
 
 # Acknowledgements
 

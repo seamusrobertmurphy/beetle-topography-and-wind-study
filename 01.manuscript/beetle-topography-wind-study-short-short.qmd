@@ -3,21 +3,24 @@
 # cap Frontiers in Ecology and the Environment sets in its "Titles and Abstracts"
 # section, so nothing in the guidelines requires it to be rewritten.
 #
-# The subtitle is dropped, and only the subtitle. The guidelines make no provision for
-# one, and title plus subtitle is 233 characters against the 95-character cap. The
-# subtitle's content is carried by the abstract's first two sentences instead.
+# The subtitle was dropped here until 2026-08-30, because Frontiers in Ecology and the
+# Environment makes no provision for one and title plus subtitle is 233 characters against
+# its 95-character cap. Seamus reinstated it on that date so every draft carries the same
+# title and subtitle. The cap conflict is real and unresolved, and this file will not
+# satisfy that guideline until the subtitle is cut or the venue changes.
 title: "Testing the wind disruption hypothesis for beetle refugia"
+subtitle: "Stand density, terrain and wind as competing controls on mountain pine beetle attack (Dendroctonus ponderosae) in the Selkirk Mountains of British Columbia"
 author:
   - name: Seamus Murphy
     orcid: 0000-0002-1792-0351
     email: seamusrobertmurphy@gmail.com
 keywords:
-  - Beetle refugia
-  - Mountain pine beetle
-  - Stand density
-  - Geomorphometry
-  - Wind exposure
-  - Pheromone disruption
+  - Dendroctonus ponderosae
+  - forest disturbance
+  - insect outbreaks
+  - Landsat time series
+  - refugia
+  - British Columbia
 
 date: today
 keep-md: true
@@ -63,21 +66,36 @@ csl: ../04.references/frontiers-in-ecology-and-the-environment.csl
 df-print: kable
 ---
 
+```{r}
+#| label: host-structure-switch
+#| echo: false
+#| output: false
+
+## Fit on the annual VRI snapshots, one per study year, not the static 2025 composite.
+## Set 2026-08-29. Without this the shared preamble falls back to the composite, which
+## holds stand structure at its 2025 projection and so grows it forward through the
+## outbreak it is meant to predict. That fallback is silent, and it had this file
+## reporting a density-by-wind interaction of -0.094 and a diameter peak of 45.9 per
+## cent where the Journal of Applied Entomology submission reports -0.049 and 39.7,
+## from the same data. Two drafts of one study must not disagree on their own numbers.
+USE_VRI_TIMESERIES <- TRUE
+```
+
 {{< include _sections/_preamble.qmd >}}
 
 # Abstract {.unnumbered}
 
-Refugia from mountain pine beetle (*Dendroctonus ponderosae*) are thought to form where
-stands are thin enough for wind to break up the pheromone plume that coordinates mass
-attack. It names three mechanisms, shading, low host density and few large-diameter hosts,
-and none has been fitted. We tested all three over `r fmt(AREA_HA)` ha of the Selkirk
-Mountains, British Columbia, at 30 m and Landsat's 16-day repeat, `r EP_EPOCHS` epochs across
-`r EP_YEARS` outbreak years, with wind from a terrain-resolved field driven hourly. Stand density interacted negatively with wind,
-`r be1(EINT[1])` for stem density and `r be1(EINT[2])` for standing volume, both surviving a
-within-season spread term. Host held through standing volume, attack peaking at
-`r sprintf("%.1f", 100*qmd_bin$attack[qmd_bin$bin == "25-30"])` per cent at 25 to 30 cm.
-Shading failed: shaded ground carried more attack, not less. Resolution decided it. One map
-a year, same wind field and covariates, gave `r b5(INT_MM)`, the opposite sign.
+Refugia from mountain pine beetle (*Dendroctonus ponderosae*) are hypothesised to form
+where tree defences hold: on shaded ground that spares trees water stress, or in thin stands
+with few large hosts, where wind may disrupt the aggregation pheromone. None has been fitted
+spatially. We tested all three over `r fmt(AREA_HA)` ha of the Selkirk Mountains, British
+Columbia, at 30 m across `r EP_EPOCHS` sixteen-day Landsat epochs and `r EP_YEARS` outbreak
+years, with a terrain-resolved wind field from hourly station records. Wind disruption held,
+conditionally. Stand density interacted negatively with wind, `r be1(EINT[1])` for stem
+density and `r be1(EINT[2])` for standing volume, both surviving a within-season spread term;
+neither protected alone. A refugium here is a conjunction of stand and weather, not a fixed
+place. Host held as a threshold, attack peaking at `r qb("attack_pc", "25-30")` per cent at
+25 to 30 cm. Shading failed backwards: shaded ground carried more attack.
 
 ```{r}
 #| label: word-budget
@@ -127,6 +145,14 @@ fee_refcount <- function(path = "beetle-topography-wind-study-short-short.qmd") 
   keys <- regmatches(src, gregexpr("@[a-z]+[0-9]{4}[a-z0-9]*", src))[[1]]
   length(unique(keys))
 }
+
+## The caps a Research Communication is held to, re-read live from the guidelines page on
+## 2026-08-29: "Not exceed 2500 words in the main text", "Include an abstract with a
+## maximum of 150 words", "Contain a maximum of 25 references". They live here rather than
+## in the shared preamble because the preamble also serves the Journal of Applied
+## Entomology draft, whose caps are 6000 and 300, and it no longer defines these at all.
+WC_LIMIT  <- 2500L
+REF_LIMIT <- 25L
 
 WC_BODY <- fee_wordcount()
 N_REF   <- fee_refcount()
@@ -238,6 +264,19 @@ flight-window surface spanning a
 against `r sprintf("%.1f", max(d$solar_season_total)/min(d$solar_season_total))`-fold for the
 season total.
 
+```{r}
+#| label: micromet-load
+#| echo: false
+#| output: false
+
+## The MicroMet summary the paragraph below reads. It is loaded here rather than in the
+## shared preamble because the preamble does not carry it: the Journal of Applied
+## Entomology draft loads it in its own @sec-micromet chunk, and this file inherited the
+## sentence without the chunk. Only `spatial_range` is used here, so the direction rasters
+## the sibling chunk also reads are not opened.
+mmsum <- read.csv(file.path(BC, "covariates", "wind-micromet", "micromet_summary.csv"))
+```
+
 Station wind interpolated from four to seven valley stations is nearly flat within a year, so
 wind is also computed as a field varying in space, using the MicroMet model of @liston2006.
 Its wind component is seven equations rather than a program, implemented directly. Terrain
@@ -269,12 +308,12 @@ Every pathway earns its place. AIC falls `r fmt(aic$AIC[1] - aic$AIC[2])` when s
 enters, `r fmt(aic$AIC[2] - aic$AIC[3])` more with terrain and flight radiation, and
 `r fmt(aic$AIC[3] - aic$AIC[4])` more with the interactions.
 
-Stand density does not behave as one variable (Table 1). Standing volume carries
-`r b3("LIVE_STAND_VOLUME_125")` log-odds per standard deviation, but live stems per hectare
-carries `r b3("VRI_LIVE_STEMS_PER_HA")` and crown closure `r b3("CROWN_CLOSURE")`, both
-negative and both far from zero (p = `r p3("CROWN_CLOSURE")`). As a main effect the density
-pathway is mixed, and standing wood in large stems is the only measure of it that points the
-way the mechanism predicts. That is a weaker reading than it first appears, because the
+Stand basal area carries the density pathway (Table 1), at `r b3(DENS[1])` log-odds per
+standard deviation (p = `r p3(DENS[1])`). Live stems per hectare carries
+`r b3("VRI_LIVE_STEMS_PER_HA")` in the same direction, while crown closure alone runs the
+other way at `r b3("CROWN_CLOSURE")` (p = `r p3("CROWN_CLOSURE")`). Standing volume does not
+survive selection once each year carries its own inventory. As main effects the density
+measures therefore disagree, which is a weaker reading than it first appears, because the
 mechanism's prediction is not about a main effect at all.
 
 Radiation enters once. Flight-window direct radiation carries
@@ -291,9 +330,9 @@ stand density interacts with terrain exposure at `r bnr(I_GEO)`. With radiation 
 that interaction falls to `r b3(I_GEO)` (p = `r p3(I_GEO)`) and density interacts with
 radiation at `r b3(paste0(DENS[1], ":", FSUN[1]))`. On a range whose prevailing bearing is
 `r sprintf("%.0f", WDIR)` degrees the windward slopes face west, which are also the slopes
-taking afternoon sun, so about a third of the apparent exposure effect was the sun. The
-remainder is not, and it stays positive, which is the wrong sign for pheromone disruption.
-That is the annual answer, and the next paragraph shows it is an artefact of the calendar.
+taking afternoon sun, so about two fifths of the apparent exposure effect was the sun. What
+remains is not distinguishable from zero, so the annual model neither supports the mechanism
+nor rejects it. The next paragraph shows why.
 
 Temporal resolution decided the outcome (Figure 2). At 16 days, stand density interacts with
 terrain-resolved wind at `r be1(EINT[1])` for stem density (p = `r pe1(EINT[1])`) and
@@ -312,12 +351,10 @@ contains both windy and calm weeks.
 Attack also recurs where it was, by a margin that changes how every other coefficient reads.
 Entering persistence and 90 m spread separately gives `r b4("lag_self")` and
 `r b4("lag_nbr90")` and raises discrimination from `r sprintf("%.3f", AUC3l)` to
-`r sprintf("%.3f", AUC4)`. Which environmental terms survive is the informative part.
-Ruggedness keeps `r ret("tri")` of its value, a term describing a condition a cell has
-whether or not the beetle was there. The landform terms are not stable: valley depth keeps
-`r ret("valley_depth")` while mid-slope position moves to `r ret("midslope_position")`,
-growing rather than shrinking. Part of what the landform terms measured was where the
-outbreak had already been.
+`r sprintf("%.3f", AUC4)`. Which environmental terms survive is the informative part, and
+the landform terms do not: valley depth keeps `r ret("valley_depth")` of its value while
+mid-slope position moves to `r ret("midslope_position")`, growing rather than shrinking. Part
+of what the landform terms measured was where the outbreak had already been.
 
 Host coded as diameter holds as a threshold rather than a slope. Attack peaks in the 25 to
 30 cm class at `r sprintf("%.1f", 100*qmd_bin$attack[qmd_bin$bin == "25-30"])` per cent,
@@ -344,7 +381,7 @@ index is not an environmental measurement: entering flight-window radiation cut 
 by terrain-exposure interaction from `r bnr(I_GEO)` to `r b3(I_GEO)`. A landform variable in
 a spreading outbreak records the outbreak's own history: entering previous-year pressure left
 valley depth at `r ret("valley_depth")` of its value while mid-slope position moved to
-`r ret("midslope_position")`, against `r ret("tri")` for ruggedness. And an annual response cannot test a mechanism that operates over weeks: the
+`r ret("midslope_position")`. And an annual response cannot test a mechanism that operates over weeks: the
 same wind field, covariates and threshold gave `r b5(INT_MM)` annually against
 `r be1(EINT[1])` at sixteen days. A test that aggregates past the flight period is not a
 weaker version of the right test. It is a different question, and this study answers it in
@@ -359,12 +396,13 @@ landscape.
 Four limits stay attached. Flight-window radiation and terrain exposure are not separable
 here, correlating `r cc("solar_flight_direct", "wind_effect")`, so the positive flight
 radiation coefficient is consistent with the thermal gate and with exposure alike, and the
-annual density by exposure interaction stays positive after radiation enters. The wind
-field is modelled from station data rather than measured on the ridge, so what is established
-is that the modelled field behaves as the mechanism requires, not that the air did. The
-inventory postdates part of the outbreak, which is the likeliest reason total basal area
-discriminates below chance at
-`r sprintf("%.3f", uni$auc[uni$term == "BASAL_AREA"])`. And every conclusion rests on one
+annual density by exposure interaction is not distinguishable from zero once radiation
+enters. The wind field is modelled from station data rather than measured on the ridge, so
+what is established is that the modelled field behaves as the mechanism requires, not that
+the air did. Matching the inventory to its own year is what lets basal area carry the density
+pathway at all, at a univariate
+`r sprintf("%.3f", uni$auc[uni$term == "BASAL_AREA"])`; held at the 2025 composite it is
+indistinguishable from chance. And every conclusion rests on one
 mountain range over `r EP_YEARS` years and `r EP_EPOCHS` epochs.
 
 # Open research

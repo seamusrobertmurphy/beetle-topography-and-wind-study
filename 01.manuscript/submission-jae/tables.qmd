@@ -122,17 +122,6 @@ kable(get("table-6-full-model"), booktabs = TRUE, align = "lrrrr")
 
 # Table 7
 
-The wind terms under two specifications, both with previous-year pressure in the model.
-M4 carries station wind, which is flat within a year and identified only across years.
-M5 carries the terrain-resolved MicroMet field, which varies within the year and is
-identified in space. z is the Wald statistic.
-
-```{r}
-kable(get("table-7-wind-terms"), booktabs = TRUE, align = "lllrr")
-```
-
-# Table 8
-
 Moderate-to-high beetle disturbance by quadratic mean diameter class, on the balanced
 sample. QMD is quadratic mean diameter over stems 12.5 cm and up. The 25 cm boundary is the
 source-sink threshold of the species' bionomics. Intervals are Wilson score intervals on the
@@ -142,17 +131,17 @@ range. Note that 30 m cells in a spreading outbreak are not independent, so the 
 reported beneath this table in the main text are anti-conservative.
 
 ```{r}
-kable(get("table-8-diameter-class"), booktabs = TRUE, align = "lrr")
+kable(get("table-7-diameter-class"), booktabs = TRUE, align = "lrr")
 ```
 
-# Table 9
+# Table 8
 
 The 16-day model refitted under four definitions of the wind window. The epoch wind regime,
 every hour, is the definition used throughout this paper. Coefficients are log-odds per
 standard deviation. AUC is the area under the receiver operating characteristic curve. The
-thermal-gate row is fitted on fewer cell-epochs because two epochs carried too few qualifying
+thermal-gate row is fitted on fewer cell-epochs because two epochs had too few qualifying
 hours, so its AIC is not comparable with the other three and AIC is therefore not shown.
 
 ```{r}
-kable(get("table-9-flight-window"), booktabs = TRUE)
+kable(get("table-8-flight-window"), booktabs = TRUE)
 ```
