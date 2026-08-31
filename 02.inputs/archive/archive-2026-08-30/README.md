@@ -5,7 +5,7 @@ the manuscript reports. It was moved here so `02.inputs/` shows only the data th
 actually used. Nothing was deleted, and nothing here was ever tracked in git.
 
 Each folder was checked by searching every `.R` and `.py` script in
-`02.inputs/beetle-classification/` and both live manuscript `.qmd` files for its name.
+`02.inputs/beetle/` and both live manuscript `.qmd` files for its name.
 
 | Folder | Size | Why it is here |
 |---|---|---|
@@ -19,7 +19,7 @@ Each folder was checked by searching every `.R` and `.py` script in
 
 What stayed in `02.inputs/`, and why:
 
-- `beetle-classification/` is the pipeline.
+- `beetle/` is the pipeline.
 - `climate/` is read by seven scripts.
 - `literature/` supplies the review screening tables the manuscript reads at render time.
 - `vri/` holds `vri_darkwoods.geojson`, written by `34-fetch-vri.py`, which the Data

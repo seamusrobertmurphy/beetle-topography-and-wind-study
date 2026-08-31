@@ -1094,7 +1094,7 @@ Every dataset used here is public and none was collected by the author. Beetle d
 is classified from Landsat Collection 2 Level-2 surface reflectance. Stand structure is the
 provincial Vegetation Resources Inventory layer `VEG_COMP_LYR_R1_POLY`, retrieved from the
 British Columbia Data Catalogue web feature service by
-`02.inputs/beetle-classification/34-fetch-vri.py`. Terrain derives from the Natural
+`02.inputs/beetle/34-fetch-vri.py`. Terrain derives from the Natural
 Resources Canada High Resolution Digital Elevation Model [@nrcan2017], with geomorphometry
 computed by SAGA GIS in `37-geomorphometry.R`. Wind is Environment and Climate Change Canada
 hourly station data, retrieved by `30-wind-hourly-metrics.R` and `36-wind-direction.R`.

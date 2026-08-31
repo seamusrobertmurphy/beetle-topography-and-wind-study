@@ -19,11 +19,11 @@ list below is read in the right order.
 The **Aerial Overview Survey is no longer the response**, and it is no longer a training
 label. It is a visual check only. The response is moderate-to-high beetle disturbance
 classified from Landsat normalised difference moisture index by the parent study's own
-method, rebuilt across Darkwoods by `beetle-classification/17-` through `24-`.
+method, rebuilt across Darkwoods by `beetle/17-` through `24-`.
 
 The **Global Wind Atlas is gone**. Wind now comes from Environment and Climate Change
 Canada hourly station records, modified over the terrain with the MicroMet model of
-Liston and Elder (2006), implemented in `beetle-classification/41-micromet-wind.R`.
+Liston and Elder (2006), implemented in `beetle/41-micromet-wind.R`.
 
 The **grid is EPSG:3153 at 30 m**, the parent study's grid, not the inherited UTM
 terrain archive described under source 3 below.
@@ -80,7 +80,7 @@ Quote the CRS as a string literal inside `BBOX(...)` or the CQL parser rejects i
 
 **Superseded.** Retained for provenance only. Terrain is now the NRCan High Resolution
 DEM reprojected to EPSG:3153 at 30 m, with 29 geomorphometric surfaces computed by SAGA
-GIS in `beetle-classification/37-geomorphometry.R`. Wind is source 5 below, not the
+GIS in `beetle/37-geomorphometry.R`. Wind is source 5 below, not the
 Global Wind Atlas.
 
 <details>
@@ -127,8 +127,8 @@ Rerun with `/usr/local/bin/Rscript 02.inputs/climate/fetch-station-minima.R`. It
 | Network | Environment and Climate Change Canada, hourly |
 | Service | `https://api.weather.gc.ca/collections/climate-hourly/items` |
 | Licence | Open Government Licence, Canada |
-| Scripts | `beetle-classification/30-wind-hourly-metrics.R`, `36-wind-direction.R`, `41-micromet-wind.R`, `44-epoch-wind.R` |
-| Local path | `beetle-classification/covariates/wind-micromet/`, `covariates/wind-epoch/` |
+| Scripts | `beetle/30-wind-hourly-metrics.R`, `36-wind-direction.R`, `41-micromet-wind.R`, `44-epoch-wind.R` |
+| Local path | `beetle/covariates/wind-micromet/`, `covariates/wind-epoch/` |
 
 Four to seven valley stations, which interpolate to a surface spanning under a kilometre
 per hour across 50 km. That is why the field is not interpolated but modelled: MicroMet's
@@ -145,7 +145,7 @@ nothing is averaged before the terrain acts on it.
 | Network | Environment and Climate Change Canada, hourly, via `weathercan` |
 | Period | 1 May to 30 September, 2005 to 2014 excluding 2012 |
 | Retrieved | 2026-08-28 |
-| Script | `beetle-classification/51-flight-window-climate.R` |
+| Script | `beetle/51-flight-window-climate.R` |
 | Local path | `covariates/flight-window/` (236,079 hourly records) |
 
 The flight window, 1 July to 15 August and the hours 12:00 to 17:00, is taken from the
@@ -166,7 +166,7 @@ nothing else on disk carries the shape within a season.
 | Catalogue id | `02dba161-fdb7-48ae-a4bb-bd6ef017c36d` |
 | Portal | https://catalogue.data.gov.bc.ca/dataset/vri-historical-vegetation-resource-inventory-2002-2024- |
 | Licence | Open Government Licence, British Columbia |
-| Script | `beetle-classification/50-fetch-vri-timeseries.R` |
+| Script | `beetle/50-fetch-vri-timeseries.R` |
 | Local path | `study-area/vri-timeseries/vri_<year>.gpkg` |
 | Status | **incomplete as of 2026-08-28**; see below |
 
@@ -237,7 +237,7 @@ it did not. The substitution is recorded in `model-data/vri_year_source.csv`.
 | Access | Google Earth Engine through `rgee` |
 | Grid | 1739 x 1695 at 30 m, EPSG:3153, 2,947,605 cells |
 | Years | 2005 to 2011, 2013, 2014, 2020 |
-| Scripts | `beetle-classification/17-`, `20-`, `22-`, `19-`, `24-`, and `42-` to `45-` for the 16-day series |
+| Scripts | `beetle/17-`, `20-`, `22-`, `19-`, `24-`, and `42-` to `45-` for the 16-day series |
 
 2012 is excluded: Landsat 7 only, scan-line corrector off since May 2003. Run
 `22-harmonise-landsat8.R` before anything downstream. Skipping it put 52 per cent of the
@@ -251,8 +251,8 @@ landscape in the attacked class for 2013 and 2014.
 | Service | `https://openmaps.gov.bc.ca/geo/pub/<layer>/ows` (WFS 2.0.0) |
 | Licence | Open Government Licence, British Columbia |
 | Retrieved | 2026-08-27 |
-| Script | `beetle-classification/46-fetch-basemap.py` |
-| Local path | `beetle-classification/study-area/basemap_water.geojson` (529 features) |
+| Script | `beetle/46-fetch-basemap.py` |
+| Local path | `beetle/study-area/basemap_water.geojson` (529 features) |
 
 Kootenay Lake, 42,300 ha, sits 1.9 km from the study perimeter, and the Kootenay River
 0.6 km. The perimeter is the burn buffered 5 km and then cut to the parent's elevation

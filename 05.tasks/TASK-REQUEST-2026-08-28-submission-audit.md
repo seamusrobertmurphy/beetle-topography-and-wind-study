@@ -50,14 +50,14 @@ What to do, in order:
    Dryad after 2026-01-01 to qualify for fee coverage under the sponsorship.
 2. Deposit the derived data and code that reproduce every number, not the raw archives.
    Candidates, with sizes:
-   - `02.inputs/beetle-classification/model-data/model_table_vri.csv` (111,707 rows)
-   - `02.inputs/beetle-classification/model-data/epoch_model_table_vri.csv` (66,302 rows)
-   - `02.inputs/beetle-classification/model-data/vri_year_source.csv`
-   - `02.inputs/beetle-classification/model-data/vri_refit_comparison.csv`
-   - `02.inputs/beetle-classification/model-data/flight_window_sensitivity.csv`
-   - `02.inputs/beetle-classification/study-area/vri-timeseries/` (nine GeoPackages)
-   - `02.inputs/beetle-classification/covariates/flight-window/` (hourly climate)
-   - every numbered script in `02.inputs/beetle-classification/`
+   - `02.inputs/beetle/model-data/model_table_vri.csv` (111,707 rows)
+   - `02.inputs/beetle/model-data/epoch_model_table_vri.csv` (66,302 rows)
+   - `02.inputs/beetle/model-data/vri_year_source.csv`
+   - `02.inputs/beetle/model-data/vri_refit_comparison.csv`
+   - `02.inputs/beetle/model-data/flight_window_sensitivity.csv`
+   - `02.inputs/beetle/study-area/vri-timeseries/` (nine GeoPackages)
+   - `02.inputs/beetle/covariates/flight-window/` (hourly climate)
+   - every numbered script in `02.inputs/beetle/`
    Do NOT deposit the provincial archives themselves; cite them instead.
 3. Take the **Private for Peer Review** link Dryad issues and put it in the data
    availability statement AND in the cover letter, as the journal asks.
@@ -255,7 +255,7 @@ All paths relative to
 - `04.references/apa-6th-edition.csl` the correct style
 - `04.references/literature/` source PDFs for quotation checking
 
-**Data and scripts**, all in `02.inputs/beetle-classification/`
+**Data and scripts**, all in `02.inputs/beetle/`
 - `17-`, `20-`, `22-`, `19-`, `24-` the Landsat classification chain
 - `30-`, `36-`, `41-` station wind and the MicroMet field
 - `37-geomorphometry.R` SAGA terrain, its unclipped intermediates in `geomorphometry/saga/`

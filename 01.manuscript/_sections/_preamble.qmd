@@ -35,7 +35,7 @@ set.seed(42)
 knitr::opts_chunk$set(dpi = 300, fig.width = 9, fig.height = 6)
 
 here <- function(...) file.path("..", ...)          # repo-relative, from 01.manuscript/
-BC   <- here("02.inputs", "beetle-classification")
+BC   <- here("02.inputs", "beetle")
 SA   <- file.path(BC, "study-area")
 LIT  <- here("02.inputs", "literature")
 
