@@ -1,7 +1,9 @@
----
-title: "pipeline smoke test"
-format: html
----
+<!-- THE PIPELINE. Every step that builds a variable this manuscript reports, as live
+     chunks, in order. The document reproduces the study from raw imagery to fitted model
+     when run from the top: there is no code anywhere outside this manuscript.
+
+     Chunks are echo: false to match the rest of the submission, and they run. A full run
+     needs Google Earth Engine credentials and SAGA GIS, and takes hours. -->
 
 ```{r}
 #| label: pipeline-00-make-directories
@@ -3246,4 +3248,3 @@ print(res |> transmute(model, n,
   `volume x wind` = sprintf("%+.4f (p %.3g)", volume_x_wind, volume_p),
   AUC = round(AUC, 4)), row.names = FALSE)
 ```
-

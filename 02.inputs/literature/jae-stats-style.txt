@@ -1,0 +1,93 @@
+Journal of Applied Entomology statistical reporting, 11 open-access PDFs from 2025-2026
+========================================================================
+
+p-value: 76 occurrences, 41 distinct forms
+    p<0.001                      x24
+    p>0.05                       x4
+    p=0                          x4
+    p<0.01                       x2
+    p<0.05                       x2
+    p≤0.001                      x2
+    p=0.003                      x2
+    p=0.034                      x2
+    p<0                          x2
+    p=0.21                       x1
+    p=0.004                      x1
+    p<0.05.                      x1
+
+plus-minus: 55 occurrences, 55 distinct forms
+    4±2                          x1
+    5.52±2.52                    x1
+    12.29±7.01                   x1
+    3.97±0.54                    x1
+    4.38±0.40                    x1
+    5.91±0.59                    x1
+    6.21±0.95                    x1
+    4.00±1.64                    x1
+    4.85±0.50                    x1
+    0.123±0.018                  x1
+    1.757±0.235                  x1
+    8.7±1.95                     x1
+
+F statistic: 11 occurrences, 11 distinct forms
+    F2,598=52.06                 x1
+    F2,82=14.31                  x1
+    F5,82=16.43                  x1
+    F1,62=1.66                   x1
+    F5,62=15.109                 x1
+    F5,181=22.86                 x1
+    F5,181=4.65                  x1
+    F5,181=14.77                 x1
+    F5,181=17.19                 x1
+    F5,181=45.6                  x1
+    F5,181=18.26                 x1
+
+chi-square: 1 occurrences, 1 distinct forms
+    χ2=11.11                     x1
+
+t statistic: 0 occurrences, 0 distinct forms
+
+CI: 3 occurrences, 3 distinct forms
+    95%confidenceinterval        x1
+    95%
+confidenceinterval       x1
+    95%CI                        x1
+
+sci notation: 1 occurrences, 1 distinct forms
+    2.964e−08                    x1
+
+--- Integrated Pest Management in Pigeonpea: Progress and Prospects (20036 words) ---
+
+--- Osmia cornuta Is a More Suitable Managed Pollinator for Cherry and App (9262 words) ---
+  p-value: 15  e.g. p<0.001, p<0.01, p=0.21, p<0.05, p=0.004
+  plus-minus: 9  e.g. 4±2, 5.52±2.52, 12.29±7.01, 3.97±0.54, 4.38±0.40
+
+--- The Buzz of Inconsistency: Pollinator Potential vs. Research Effort (8552 words) ---
+  CI: 1  e.g. 95%confidenceinterval
+
+--- Geographic Distribution, Flight Phenology and Infestation Level of the (8039 words) ---
+  p-value: 21  e.g. p≤0.001, p>0.05, p<0.001, p=0.003, p=0.034
+
+--- Development of Pheromone‐Based Mating Disruption for Three Lepidoptera (8372 words) ---
+  p-value: 14  e.g. p=0.893, p=0.077, p=0.500, p=0.031, p=0.012
+
+--- Detecting a Small Hive Beetle's eDNA in Honeybee Colonies (6515 words) ---
+  p-value: 13  e.g. p<0.05, p<0, p>0.05, p=0.4121, p=0.5912
+
+--- Shoot Fly Resistance in Sorghum: An Overview (14183 words) ---
+
+--- The Hidden Influence: Host Plant Suitability as a Key Factor in Acaric (6332 words) ---
+  CI: 2  e.g. 95%
+confidenceinterval, 95%CI
+
+--- Insectary Plant Species Preferences of Predators and Parasitoid Famili (10141 words) ---
+  p-value: 12  e.g. p<0.001, p=0.203, p=0.049
+  plus-minus: 46  e.g. 0.123±0.018, 1.757±0.235, 8.7±1.95, 7.05±1.2, 4.14±0.80
+  F statistic: 11  e.g. F2,598=52.06, F2,82=14.31, F5,82=16.43, F1,62=1.66, F5,62=15.109
+  chi-square: 1  e.g. χ2=11.11
+
+--- Vectors and Vector‐Borne Diseases: Biology, Epidemiology and Integrate (27180 words) ---
+
+--- Dominant Wild Pollinators of Moroccan Crops Are Soil Nesting and Polle (8500 words) ---
+  p-value: 1  e.g. p<0.001
+  sci notation: 1  e.g. 2.964e−08
