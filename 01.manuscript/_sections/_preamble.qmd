@@ -409,25 +409,11 @@ M3l <- glm(formula(M3), data = bl, family = binomial)
 M4  <- glm(f(c(V_CTX, DENS, WGEO, SHAP, FSUN, WTMP, LAGV), INT),
            data = bl, family = binomial)
 
-## M5 replaces the station wind terms with the terrain-resolved MicroMet field, which is
-## the only wind variable in this study that varies within a year. Its main effect is
-## therefore identified in space, unlike the station terms, and its interaction with stand
-## density is the spatial form of the test the station terms could only make in time.
-INT_MM <- if (length(DENS) && length(WMM)) paste0(DENS[1], ":", WMM[1]) else character(0)
-INT_NOW <- INT[!grepl(paste0(":", paste(PATH$wind_t, collapse = "|:")), INT)]
-M5 <- glm(f(c(V_CTX, DENS, WGEO, SHAP, FSUN, LAGV, WMM), c(INT_NOW, INT_MM)),
-          data = bl, family = binomial)
-co5 <- as.data.frame(coef(summary(M5)))
-names(co5) <- c("beta","se","z","p"); co5$term <- rownames(co5)
-b5 <- function(v) sprintf("%+.3f", co5$beta[co5$term == v])
-z5 <- function(v) sprintf("%.2f", co5$z[co5$term == v])
-p5 <- function(v) pv(co5$p[co5$term == v])
-p5t <- function(v) pt(co5$p[co5$term == v])
-p5T <- function(v) pthr(co5$p[co5$term == v])
-or5 <- function(v) orr(co5$beta[co5$term == v])
-or5pc <- function(v) orpc(co5$beta[co5$term == v])
-or5pcabs <- function(v) orpcabs(co5$beta[co5$term == v])
-AUC5 <- as.numeric(pROC::auc(pROC::roc(bl$modhigh, fitted(M5), quiet = TRUE)))
+## M5, the annual model carrying the terrain-resolved MicroMet field, was removed on
+## 2026-08-31 with the annual-against-sixteen-day comparison it existed to support. The
+## wind claim now rests on the 16-day models E1 and E2, where the same field varies within
+## the season and the interaction is identified. Nothing printed in the manuscript read a
+## coefficient from M5.
 co4 <- as.data.frame(coef(summary(M4)))
 names(co4) <- c("beta", "se", "z", "p"); co4$term <- rownames(co4)
 b4 <- function(v) sprintf("%+.3f", co4$beta[co4$term == v])
@@ -696,7 +682,6 @@ named(co3, c("solar_flight_direct", "northness", DENS[1],
              "tri", "vrm", "wind_effect", "elevation", I_GEO,
              paste0(DENS[1], ":", FSUN[1])), "the full annual model M3")
 named(cnr, I_GEO, "the annual model fitted without flight-window radiation")
-named(co5, c(WMM, INT_MM), "the terrain-resolved annual model M5")
 named(co4, c("lag_self", "lag_nbr90"), "the autologistic annual model M4")
 named(ce1, EINT, "the 16-day model E1")
 named(ce2, c(EINT[2], "ep_lag_nbr90"), "the 16-day model E2 with the within-season lag")

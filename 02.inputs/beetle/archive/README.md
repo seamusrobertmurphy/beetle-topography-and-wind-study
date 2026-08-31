@@ -59,3 +59,29 @@ measure wind, it reshapes station observations over terrain, so those hourly rec
 raw material `41-micromet-wind.R` needs, and `36-wind-direction.R` and
 `51-flight-window-climate.R` read them for the prevailing bearing and the climate figure.
 `covariates/wind-epoch-sensitivity/` stays because it feeds the four-window table.
+
+## Dead rasters and plot files, added 2026-08-31
+
+Eight folders were reviewed file by file against the preamble, the manuscript master and
+all 42 live scripts. Filenames built at runtime were resolved by reading the code that
+builds them, not by matching text, because the first pass got that wrong.
+
+`dead-rasters/`, 17 files. Twelve `*_l8raw.tif`, the raw Landsat 8 years before
+harmonisation. `22-harmonise-landsat8.R` writes them and nothing reads them, and
+`19-derive-balanced-plots.R` lists NDMI with `^ndmi_\d{4}\.tif$`, which excludes them by
+construction. Three 2020 index rasters, `nbr_2020.tif`, `ndvi_2020.tif` and `tcw_2020.tif`:
+`24-modhigh-binary-svm.R` loops 2006 to 2014 against a 2005 baseline and never reaches
+2020. `ndmi_2020.tif` is NOT here, because 19 does read it. Plus
+`study-area/darkwoods_perimeter.gpkg` and `study-area/perimeter_forest_mask.tif`, which no
+script or manuscript reads.
+
+`dead-plots/`, the 28-ground-plot material, superseded by the class-balanced set. Every
+`beetle_plots_*` file, `candidate_universe.gpkg`, both `cube_correlation_search` tables,
+`plot-trained-model.rds`, the `search-area/` folder and `red-stage/training-sample.csv`.
+`plot-locations/` now holds only `darkwoods_balanced_plots.gpkg` and
+`darkwoods_balanced_plots_ndmi.csv`, which `24-modhigh-binary-svm.R` trains on.
+
+Nothing was moved from `geomorphometry/saga`, `model-data`, `lag-covariates` or
+`red-stage-darkwoods`. Every file in all four is reached by live code. In particular every
+`ndvi_`, `nbr_` and `tcw_` raster for 2005 to 2014 is a live predictor: 24 reads them
+through `sprintf("%s_%d.tif", nm, y)`, so their names never appear literally in any script.

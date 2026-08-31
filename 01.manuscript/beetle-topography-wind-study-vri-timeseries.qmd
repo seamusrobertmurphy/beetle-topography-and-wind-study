@@ -532,10 +532,11 @@ in wind. Mean speed peaks in the same hours as temperature, at
 `r sprintf("%.1f", CLIM_W_MIN)` km/h at dawn, so the hours the beetle can fly are also the
 windiest of the day. That is a coincidence of timing the mechanism depends on.
 
-Station wind is Environment and Climate Change Canada hourly records, reduced only at the
-last step into monthly means for June, July and August and four flight-window metrics for
-1 July to 15 August. Those four are the mean speed, the 95th percentile, and the
-fractions of hours below 5 km/h and above 15 km/h.
+Station wind is Environment and Climate Change Canada hourly records, and it enters in
+three places. It is the observation MicroMet modifies over the terrain, it supplies the
+prevailing bearing the directional terrain indices are computed at, and it is the climate
+against which the flight window is checked in @fig-flight-window. The records are never
+reduced before the terrain acts on them.
 
 Hourly readings give detail, not independent observations. Summarised over a whole season,
 every hour of wind collapses into one number per metric, a coefficient rests on as many
