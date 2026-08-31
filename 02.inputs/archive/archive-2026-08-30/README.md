@@ -24,3 +24,13 @@ What stayed in `02.inputs/`, and why:
 - `literature/` supplies the review screening tables the manuscript reads at render time.
 - `vri/` holds `vri_darkwoods.geojson`, written by `34-fetch-vri.py`, which the Data
   availability statement names.
+
+## Climate, archived 2026-08-31
+
+The whole `02.inputs/climate` folder, 116 MB, moved to `climate-cold-tolerance/`. It holds
+Environment and Climate Change Canada and BC Wildfire Service winter station minima and a
+monthly climatology, gathered for the cold-tolerance question the study did not pursue.
+The four files it produced, `station-monthly-climatology.csv`,
+`station-winter-minima.csv`, `station-winter-minimum-dates.csv` and the 38 raw
+`bcws-winter-*.csv` files, are named only by four superseded drafts under `archive/`. No
+live script, no live manuscript and no shared helper reads any of it.

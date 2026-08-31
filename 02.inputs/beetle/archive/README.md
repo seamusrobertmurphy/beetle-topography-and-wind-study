@@ -85,3 +85,20 @@ Nothing was moved from `geomorphometry/saga`, `model-data`, `lag-covariates` or
 `red-stage-darkwoods`. Every file in all four is reached by live code. In particular every
 `ndvi_`, `nbr_` and `tcw_` raster for 2005 to 2014 is a live predictor: 24 reads them
 through `sprintf("%s_%d.tif", nm, y)`, so their names never appear literally in any script.
+
+## Decline rasters, added 2026-08-31
+
+`red-stage/dec_2006.tif` through `dec_2014.tif`, nine files, about 10 MB. Only
+`dec_2005.tif` is used, and only as a grid template: `17-ndmi-annual-darkwoods.R` line 28
+reads it to define the analysis grid. Nothing constructs the other years by any pattern.
+`dec_2005.tif` stays in `red-stage/`.
+
+A full sweep of `02.inputs/beetle` on 2026-08-31 found nothing else unused. Two families
+that looked dead to a text match are live once the code that builds their names is read.
+`43-epoch-classification.R` reads all 81 `cube-16day` rasters through
+`sprintf("ndmi_%d_e%02d.tif", y, e)`, and `38-assemble-model-data.R` reads all nine annual
+MicroMet rasters through `sprintf("micromet_%d.tif", y)`, which still matters after model
+M5 was dropped because `mm_flight_mean` remains a column in the modelling table. The
+manuscript's base map is another such case: `basemap_relief.tif` and
+`basemap_water.geojson` are read by `map_context()` in `01.manuscript/_shared/map-academic.R`,
+not by the manuscript or the preamble directly.
