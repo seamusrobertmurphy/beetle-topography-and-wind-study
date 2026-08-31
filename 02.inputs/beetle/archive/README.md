@@ -120,8 +120,14 @@ What this costs. The manuscript still renders. The pipeline no longer re-runs fr
 without moving folders back: `24-modhigh-binary-svm.R` needs `ndmi-darkwoods/`,
 `37-geomorphometry.R` needs `geomorphometry/saga/`, `43-epoch-classification.R` needs
 `cube-16day/`, and `53-refit-flight-window.R` needs `covariates/wind-epoch-sensitivity/`.
-A Dryad deposit that claims to reproduce every number must therefore draw its derived data
-from here, not from the working tree.
+This does NOT affect the Dryad deposit. Every number, table and figure in the article is
+computed at render time by the chunks in `01.manuscript/_sections/_preamble.qmd`, which fit
+all sixteen models from `model_table_vri.csv` and `epoch_model_table_vri.csv`. The render of
+2026-08-31 built the whole document with only those 36 files present and touched nothing in
+this folder. The deposit is therefore the 36 files plus the manuscript and its preamble, and
+that satisfies the statement's claim to reproduce every number. What is archived here would
+only be needed to rebuild the 36 files from raw Landsat, inventory and station wind, which is
+reproducing the inputs rather than the results.
 
 `epoch-response/` keeps only `epoch_summary.csv`. Its 60 `modhigh_*_e*.tif` rasters are
 here: the `ep` path in `data-inventory.R` is assigned at line 42 and never used again.
