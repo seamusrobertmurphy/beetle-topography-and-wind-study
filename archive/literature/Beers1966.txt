@@ -1,0 +1,10 @@
+@article{beers1966notes,
+  title={Notes and observations: aspect transformation in site productivity research},
+  author={Beers, Thomas W and Dress, Peter E and Wensel, Lee C},
+  journal={Journal of Forestry},
+  volume={64},
+  number={10},
+  pages={691--692},
+  year={1966},
+  publisher={Springer}
+}

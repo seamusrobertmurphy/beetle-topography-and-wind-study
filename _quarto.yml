@@ -13,13 +13,13 @@ project:
     # The shared preamble is included before the Abstract, so a chunk in it that prints
     # appears at the top of every document. That is how the dataset inventory table came
     # to render above the abstract in a submission package on 2026-08-28.
-    - "python3 05.tasks/scripts/check-preamble-silent.py"
+    - "python3 01.manuscript/_tools/check-preamble-silent.py"
   post-render:
     - "find . -name ._* -delete"
     # Table geometry a reference doc cannot carry: 16.5 cm width, 1.1 cm
     # header and 0.6 cm body rows, 8 pt, left justified. Without this every
     # render would need the tables reformatted by hand in Word.
-    - "python3 05.tasks/scripts/format-tables.py"
+    - "python3 01.manuscript/_tools/format-tables.py"
     # Fills the four {{WC_*}} placeholders with the rendered document's own
     # counts, so the declared length cannot drift from the manuscript.
-    - "python3 05.tasks/scripts/stamp-wordcounts.py"
+    - "python3 01.manuscript/_tools/stamp-wordcounts.py"

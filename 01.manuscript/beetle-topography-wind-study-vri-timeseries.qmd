@@ -1120,4 +1120,32 @@ both shape and shade so the panel survives black-and-white printing.
 sessionInfo()
 ```
 
+```{r}
+#| label: save-figures
+#| echo: false
+#| output: false
+
+## Figures are copied to 03.outputs/PNG as the render finishes, so the outputs folder
+## holds the current figures beside the current tables and neither can drift from the
+## article. save_tbl() does the same for tables as each one prints. This must sit after
+## the last figure chunk, because knitr writes a figure file only when its chunk runs.
+##
+## Quarto writes figures to <stem>_files/figure-<format>/ during a render and replays them
+## from .quarto/_freeze/ when a chunk is frozen, so both are searched.
+
+.pngdir <- c(
+  file.path(here::here("01.manuscript"),
+            "beetle-topography-wind-study-vri-timeseries_files", "figure-docx"),
+  file.path(here::here(".quarto", "_freeze", "01.manuscript",
+                       "beetle-topography-wind-study-vri-timeseries"), "figure-docx"))
+.out <- here::here("03.outputs", "PNG")
+dir.create(.out, recursive = TRUE, showWarnings = FALSE)
+for (.d in .pngdir) {
+  if (!dir.exists(.d)) next
+  .f <- list.files(.d, pattern = "\\.png$", full.names = TRUE)
+  if (length(.f)) file.copy(.f, .out, overwrite = TRUE)
+}
+rm(.pngdir, .out, .d, .f)
+```
+
 # References

@@ -1,0 +1,6 @@
+@book{diggle2013statistical,
+  title={Statistical analysis of spatial and spatio-temporal point patterns},
+  author={Diggle, Peter J},
+  year={2013},
+  publisher={CRC press}
+}

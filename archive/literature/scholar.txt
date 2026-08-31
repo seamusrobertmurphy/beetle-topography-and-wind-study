@@ -1,0 +1,6 @@
+@article{daly2013prism,
+  title={The PRISM climate and weather system—an introduction},
+  author={Daly, Christopher and Bryant, Kirk},
+  journal={Corvallis, OR: PRISM climate group},
+  year={2013}
+}

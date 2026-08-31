@@ -1,0 +1,6 @@
+@book{illian2008statistical,
+  title={Statistical analysis and modelling of spatial point patterns},
+  author={Illian, Janine and Penttinen, Antti and Stoyan, Helga and Stoyan, Dietrich},
+  year={2008},
+  publisher={John Wiley \& Sons}
+}

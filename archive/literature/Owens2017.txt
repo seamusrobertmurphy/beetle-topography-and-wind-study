@@ -1,0 +1,9 @@
+@article{owen2017spatial,
+  title={Spatial patterns of ponderosa pine regeneration in high-severity burn patches},
+  author={Owen, Suzanne M and Sieg, Carolyn H and Meador, Andrew J S{\'a}nchez and Ful{\'e}, Peter Z and Iniguez, Jos{\'e} M and Baggett, L Scott and Fornwalt, Paula J and Battaglia, Michael A},
+  journal={Forest Ecology and Management},
+  volume={405},
+  pages={134--149},
+  year={2017},
+  publisher={Elsevier}
+}
