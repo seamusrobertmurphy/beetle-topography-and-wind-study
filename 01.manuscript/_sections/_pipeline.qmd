@@ -2,11 +2,22 @@
      chunks, in order. The document reproduces the study from raw imagery to fitted model
      when run from the top: there is no code anywhere outside this manuscript.
 
-     Chunks are echo: false to match the rest of the submission, and they run. A full run
-     needs Google Earth Engine credentials and SAGA GIS, and takes hours. -->
+     Chunks carry eval: false. Set on 2026-08-31, because running them inside a render
+     exhausts memory on an 8 GB machine: the stage loads 53 Landsat rasters over a
+     1739 by 1695 grid, trains an SVM and holds several covariate stacks at once, and two
+     renders were killed by the operating system before reaching the document. The code is
+     here, in the manuscript, and nothing in the study is built anywhere else. To rebuild
+     the inputs from raw imagery, set eval to true and run with Earth Engine credentials
+     and SAGA GIS on a machine with headroom. The document itself fits every model live
+     from the tables in 02.inputs/beetle/model-data, so every number it reports is still
+     computed at render time.
+
+     They are also echo: false, to match the rest of the submission. Printing 160 kB of
+     code into the article would swamp it. -->
 
 ```{r}
 #| label: pipeline-00-make-directories
+#| eval: false
 #| echo: false
 #| output: false
 #| warning: false
@@ -32,6 +43,7 @@ rm(.bc, .dirs, .d)
 
 ```{r}
 #| label: pipeline-17-ndmi-annual-darkwoods
+#| eval: false
 #| echo: false
 #| output: false
 #| warning: false
@@ -124,6 +136,7 @@ for (y in YEARS) {
 
 ```{r}
 #| label: pipeline-19-derive-balanced-plots
+#| eval: false
 #| echo: false
 #| output: false
 #| warning: false
@@ -246,6 +259,7 @@ cat(sprintf("\nwrote %s\n", out))
 
 ```{r}
 #| label: pipeline-20-indices-darkwoods
+#| eval: false
 #| echo: false
 #| output: false
 #| warning: false
@@ -315,6 +329,7 @@ for (y in YEARS) for (nm in names(IDX)) {
 
 ```{r}
 #| label: pipeline-22-harmonise-landsat8
+#| eval: false
 #| echo: false
 #| output: false
 #| warning: false
@@ -388,6 +403,7 @@ for (nm in IDX) {
 
 ```{r}
 #| label: pipeline-24-modhigh-binary-svm
+#| eval: false
 #| echo: false
 #| output: false
 #| warning: false
@@ -495,6 +511,7 @@ cat(sprintf("\nwrote annual rasters modhigh_YYYY.tif and %s\n",
 
 ```{r}
 #| label: pipeline-25-terrain-wind-covariates
+#| eval: false
 #| echo: false
 #| output: false
 #| warning: false
@@ -588,6 +605,7 @@ cat(sprintf("\nwrote %s (%d layers)\n", file.path(OUT, "covariates.tif"), nlyr(s
 
 ```{r}
 #| label: pipeline-27-host-covariates
+#| eval: false
 #| echo: false
 #| output: false
 #| warning: false
@@ -663,6 +681,7 @@ cat(sprintf("\nwrote %s (%d layers)\n", file.path(COV,"host_covariates.tif"), nl
 
 ```{r}
 #| label: pipeline-30-wind-hourly-metrics
+#| eval: false
 #| echo: false
 #| output: false
 #| warning: false
@@ -767,6 +786,7 @@ cat(sprintf("\nwrote %d yearly metric stacks to %s\n", nrow(tab), OUT))
 
 ```{r}
 #| label: pipeline-33-study-perimeter
+#| eval: false
 #| echo: false
 #| output: false
 #| warning: false
@@ -850,6 +870,7 @@ cat(sprintf("\nBBOX for WFS (EPSG:3005): %s\n", paste(bb, collapse = ",")))
 
 ```{python}
 #| label: pipeline-34-fetch-vri
+#| eval: false
 #| echo: false
 #| output: false
 #| warning: false
@@ -939,6 +960,7 @@ for f in FIELDS:
 
 ```{r}
 #| label: pipeline-35-vri-covariates
+#| eval: false
 #| echo: false
 #| output: false
 #| warning: false
@@ -1043,6 +1065,7 @@ print(table(cut(v$REFERENCE_YEAR, c(-Inf, 1990, 2000, 2005, 2011, 2014, Inf),
 
 ```{r}
 #| label: pipeline-36-wind-direction
+#| eval: false
 #| echo: false
 #| output: false
 #| warning: false
@@ -1111,6 +1134,7 @@ cat(sprintf("between-year spread: %.1f to %.1f degrees\n",
 
 ```{r}
 #| label: pipeline-37-geomorphometry
+#| eval: false
 #| echo: false
 #| output: false
 #| warning: false
@@ -1328,6 +1352,7 @@ print(round(t(sapply(d, function(x) c(min = min(x, na.rm = TRUE),
 
 ```{r}
 #| label: pipeline-40-lag-covariates
+#| eval: false
 #| echo: false
 #| output: false
 #| warning: false
@@ -1399,6 +1424,7 @@ cat(sprintf("\nwrote %d annual lag stacks; 2006 has no predecessor and is exclud
 
 ```{r}
 #| label: pipeline-41-micromet-wind
+#| eval: false
 #| echo: false
 #| output: false
 #| warning: false
@@ -1593,6 +1619,7 @@ print(sm, row.names = FALSE)
 
 ```{r}
 #| label: pipeline-38-assemble-model-data
+#| eval: false
 #| echo: false
 #| output: false
 #| warning: false
@@ -1677,6 +1704,7 @@ cat("columns:\n"); print(names(d))
 
 ```{r}
 #| label: pipeline-39-temporal-autocorrelation
+#| eval: false
 #| echo: false
 #| output: false
 #| warning: false
@@ -1774,6 +1802,7 @@ cat("\nwrote lag1_persistence.csv and neighbourhood_pressure.csv\n")
 
 ```{r}
 #| label: pipeline-42-cube-grid-ee
+#| eval: false
 #| echo: false
 #| output: false
 #| warning: false
@@ -1881,6 +1910,7 @@ cat(sprintf("\n%d epoch rasters written to %s\n", length(fs), OUT))
 
 ```{r}
 #| label: pipeline-43-epoch-classification
+#| eval: false
 #| echo: false
 #| output: false
 #| warning: false
@@ -1945,6 +1975,7 @@ print(sm, row.names = FALSE)
 
 ```{r}
 #| label: pipeline-44-epoch-wind
+#| eval: false
 #| echo: false
 #| output: false
 #| warning: false
@@ -2029,6 +2060,7 @@ cat(sprintf("\n%d epoch wind fields; between-epoch mean ranges %.2f to %.2f km/h
 
 ```{r}
 #| label: pipeline-45-epoch-model-data
+#| eval: false
 #| echo: false
 #| output: false
 #| warning: false
@@ -2112,6 +2144,7 @@ cat(sprintf("\nepoch table: %d rows, %d epochs, %d years, %d with a within-seaso
 
 ```{python}
 #| label: pipeline-46-fetch-basemap
+#| eval: false
 #| echo: false
 #| output: false
 #| warning: false
@@ -2202,6 +2235,7 @@ print(f"wrote {OUT}: {len(out)} features")
 
 ```{r}
 #| label: pipeline-47-context-terrain
+#| eval: false
 #| echo: false
 #| output: false
 #| warning: false
@@ -2274,6 +2308,7 @@ cat(sprintf("  above the 1744 m ceiling: %.1f%%; below the 830 m floor: %.1f%%\n
 
 ```{r}
 #| label: pipeline-48-fetch-basemap-relief
+#| eval: false
 #| echo: false
 #| output: false
 #| warning: false
@@ -2352,6 +2387,7 @@ cat("Attribution required in the caption: Esri World Shaded Relief.\n")
 
 ```{r}
 #| label: pipeline-49-context-covariates
+#| eval: false
 #| echo: false
 #| output: false
 #| warning: false
@@ -2500,6 +2536,7 @@ cat("wrote geomorphometry_context.tif, vri_context.tif and micromet_weight_conte
 
 ```{r}
 #| label: pipeline-50-fetch-vri-timeseries
+#| eval: false
 #| echo: false
 #| output: false
 #| warning: false
@@ -2704,6 +2741,7 @@ if (length(files)) {
 
 ```{r}
 #| label: pipeline-51-flight-window-climate
+#| eval: false
 #| echo: false
 #| output: false
 #| warning: false
@@ -2825,6 +2863,7 @@ cat(sprintf("wrote %s\n", OUT))
 
 ```{r}
 #| label: pipeline-52-flight-window-sensitivity
+#| eval: false
 #| echo: false
 #| output: false
 #| warning: false
@@ -2969,6 +3008,7 @@ cat("wrote", OUT, "\n")
 
 ```{r}
 #| label: pipeline-53-refit-flight-window
+#| eval: false
 #| echo: false
 #| output: false
 #| warning: false
@@ -3057,6 +3097,7 @@ print(res |> transmute(definition, n,
 
 ```{r}
 #| label: pipeline-55-build-vri-timeseries-table
+#| eval: false
 #| echo: false
 #| output: false
 #| warning: false
@@ -3187,6 +3228,7 @@ print(a |> group_by(year) |>
 
 ```{r}
 #| label: pipeline-56-refit-vri-timeseries
+#| eval: false
 #| echo: false
 #| output: false
 #| warning: false
