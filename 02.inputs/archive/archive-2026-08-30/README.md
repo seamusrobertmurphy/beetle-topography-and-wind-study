@@ -1,36 +1,44 @@
-# Archived inputs, 2026-08-30
+# Archived beetle data, 2026-08-30
 
-Nothing in this folder is read by the manuscript or by any script that produces a number
-the manuscript reports. It was moved here so `02.inputs/` shows only the data the study
-actually used. Nothing was deleted, and nothing here was ever tracked in git.
-
-Each folder was checked by searching every `.R` and `.py` script in
-`02.inputs/beetle/` and both live manuscript `.qmd` files for its name.
+Superseded intermediates from the burn-only phase of this study, before it was rebuilt
+across Darkwoods. Nothing here is read by the manuscript or by any script that still
+produces a number the manuscript reports. Nothing was deleted.
 
 | Folder | Size | Why it is here |
 |---|---|---|
-| `aos/` | 1.6 GB | The BC aerial overview survey. The study moved off it entirely. It is not a response variable and supplies no training label, and the manuscript says so in Materials. No script reads it. |
-| `legacy-tree/` | 189 MB | No reference in any script or manuscript. |
-| `beetle-task/` | 55 MB | No reference in any script or manuscript. |
-| `tallo/` | 51 MB | No reference in any script or manuscript. |
-| `scripts 15.10.42/` | 21 MB | A dated copy of a scripts folder. No reference anywhere. |
-| `larch/` | 6.0 MB | No reference in any script or manuscript. Belongs to a different study. |
-| `enfor/` | 5.0 MB | No reference in any script or manuscript. |
+| `1. Beetle Plots Feb01/` | 88 MB | No script or manuscript refers to it. Duplicates the folder below under a different name. |
+| `1.beetle_plots_feb01/` | 58 MB | No script or manuscript refers to it. |
+| `beetle_stages/` | 24 MB | Read only by `02-parent-raster-audit.R`, an audit of the parent study's rasters. |
+| `red-stage-ndmi/` | 23 MB | Written by `16-classify-red-stage.R`, the superseded burn-grid classification. Nothing live consumes it. |
+| `ndmi-annual/` | 23 MB | Written by `15-ndmi-annual-grid.R` on the narrow burn grid. Superseded by `ndmi-darkwoods/`, built by `17-ndmi-annual-darkwoods.R`. `20-indices-darkwoods.R` names 17 in a comment only, not this folder. |
 
-What stayed in `02.inputs/`, and why:
+The scripts that wrote these are left in place so the chain stays documented. Scripts
+`00-recompute-parent-metrics.R`, `01-scene-metadata.R`, `02-parent-raster-audit.R` and
+`03-training-provenance.R` reach nothing the manuscript reads and are dead, but were left
+alongside the rest for the same reason.
 
-- `beetle/` is the pipeline.
-- `climate/` is read by seven scripts.
-- `literature/` supplies the review screening tables the manuscript reads at render time.
-- `vri/` holds `vri_darkwoods.geojson`, written by `34-fetch-vri.py`, which the Data
-  availability statement names.
+## Superseded scripts, added 2026-08-30
 
-## Climate, archived 2026-08-31
+Sixteen files moved to `superseded-scripts/`. Each is either an audit of the parent study
+or a phase a later numbered script explicitly replaced, in that later script's own header.
 
-The whole `02.inputs/climate` folder, 116 MB, moved to `climate-cold-tolerance/`. It holds
-Environment and Climate Change Canada and BC Wildfire Service winter station minima and a
-monthly climatology, gathered for the cold-tolerance question the study did not pursue.
-The four files it produced, `station-monthly-climatology.csv`,
-`station-winter-minima.csv`, `station-winter-minimum-dates.csv` and the 38 raw
-`bcws-winter-*.csv` files, are named only by four superseded drafts under `archive/`. No
-live script, no live manuscript and no shared helper reads any of it.
+| File | Why it is here |
+|---|---|
+| `00-recompute-parent-metrics.R` | Gate 1(d), an audit of the parent study's NDMI validation metrics. |
+| `01-scene-metadata.R` | Gate 1(a) and 1(c), an audit of which sensor supplied each annual scene. |
+| `02-parent-raster-audit.R` | Gate 1(b), an audit of the parent study's differencing baseline. |
+| `03-training-provenance.R` | Gate 3 blocker check on the parent's 310-row training sample. |
+| `04-` to `14-` | The 28-ground-plot phase. `19-derive-balanced-plots.R` states in its own header why the parent's 28 plots cannot train a landscape classifier, and derives the class-balanced set that replaced them. |
+| `landsat-scene-inventory.csv` | Written and read only by `01-scene-metadata.R`. |
+
+`2.1.darkwoods_beetle_ground_plots_ndmi.xlsx` stays in place. `18-svm-red-stage-darkwoods.R`
+still reads it, and 18 has not been ruled on.
+
+Not moved, and needing a decision. Each looks superseded but the chain was not verified:
+`15-ndmi-annual-grid.R` and `16-classify-red-stage.R`, the narrow burn grid that
+`17-ndmi-annual-darkwoods.R` replaced, except that 16 writes `red-stage/`, which the live
+scripts 39 and 40 read. `18-`, `21-` and `23-`, the classifier development that ended at
+`24-modhigh-binary-svm.R`, named in CLAUDE.md as the manuscript's classifier.
+`28-refugia-model.R`, replaced by `31-refugia-model-wind.R`. `29-wind-annual-stations.R`,
+replaced by `30-wind-hourly-metrics.R`, whose header describes the replacement.
+`32-refugia-coefficients.R`, which builds coefficient tables from 31.

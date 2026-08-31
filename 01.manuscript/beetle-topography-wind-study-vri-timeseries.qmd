@@ -105,6 +105,8 @@ df-print: kable
 USE_VRI_TIMESERIES <- TRUE
 ```
 
+{{< include _sections/_pipeline.qmd >}}
+
 {{< include _sections/_preamble.qmd >}}
 
 ```{r}
