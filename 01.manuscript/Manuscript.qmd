@@ -302,7 +302,7 @@ tibble::tribble(
   "Elevation", "uncertain",
   "A composite of temperature, snowpack, season length and host distribution that this design cannot separate [@sambaraju2021]."
 ) |>
-  save_tbl("table-2-hypotheses") |>
+  save_tbl("table-1-hypotheses") |>
   kable(booktabs = TRUE, align = "lll", row.names = FALSE)
 ```
 
@@ -321,7 +321,7 @@ not at all.
 #| tbl-cap: "The datasets this study combines, with the structure and resolution of each. Every count is read from the files at render time. Spatial resolution is the grid the variable is analysed on; temporal resolution is the interval at which it varies. Note that the response varies every 16 days, the inventory once a year and the terrain not at all, which is the asymmetry the wind analysis depends on."
 
 data_inventory(BC, SA) |>
-  save_tbl("table-1-inventory") |>
+  save_tbl("table-2-inventory") |>
   kable(booktabs = TRUE, align = "llllllr", row.names = FALSE)
 ```
 
