@@ -142,6 +142,9 @@ for (y in YEARS) {
 #| warning: false
 #| message: false
 
+## SUPERSEDED 2026-09-02 by chunk 24b. Kept as the record of the 1000-plot derivation, whose
+## forest mask admitted open water; its outputs are archived as *-derived-plots.
+
 ## Derive a new, class-balanced plot set across Darkwoods and extract NDMI at it.
 ##
 ## Why the parent's 28 plots cannot train a landscape classifier. Every one of them
@@ -409,6 +412,8 @@ for (nm in IDX) {
 #| warning: false
 #| message: false
 
+## SUPERSEDED 2026-09-02 by chunk 24b, which trains on the ground plots. Kept as the record.
+
 ## Moderate-to-high beetle disturbance against everything else, annually.
 ##
 ## The target class. This manuscript tests whether topography and wind shape where
@@ -507,6 +512,107 @@ for (y in OY) {
 write.csv(do.call(rbind, res), file.path(OUT, "modhigh_by_year.csv"), row.names = FALSE)
 cat(sprintf("\nwrote annual rasters modhigh_YYYY.tif and %s\n",
             file.path(OUT, "modhigh_by_year.csv")))
+```
+
+```{r}
+#| label: pipeline-24b-fieldplot-classifier
+#| eval: false
+#| echo: false
+#| output: false
+#| warning: false
+#| message: false
+
+## The classifier of record since 2026-09-02. The 28 ground plots of the parent study,
+## labelled low, moderate and high by tertiles of killed pine basal area, plus derived
+## undisturbed plots sampled where the imagery shows no drop, train the same SVM on the
+## same predictors, and the annual maps are predicted over the study perimeter only,
+## with water masked. Outputs go to 02.inputs/beetle-fieldplots, never to beetle/.
+suppressPackageStartupMessages({library(terra); library(sf); library(e1071); library(readxl)})
+set.seed(42)
+ROOT <- here::here("02.inputs", "beetle")
+IN   <- file.path(ROOT, "ndmi-darkwoods"); SA <- file.path(ROOT, "study-area")
+LOC  <- file.path(ROOT, "plot-locations"); OUT <- file.path(ROOT, "red-stage-darkwoods")
+N_UNDIST <- 10L; MIN_SEP <- 120; STABLE <- -0.05
+COST <- 0.947; GAMMA <- 0.10; PRED <- c("dndvi","dnbr","dtcw")
+OY <- c(2006:2011, 2013, 2014)
+rd  <- function(nm, y) rast(file.path(IN, sprintf("%s_%d.tif", nm, y)))
+dif <- function(nm, y) { r <- rd(nm, y) - rd(nm, 2005); names(r) <- paste0("d", nm); r }
+
+## ---- field plots, severity from the measurement alone ------------------------------
+fp <- as.data.frame(read_excel(file.path(LOC, "2.1.darkwoods_beetle_ground_plots_ndmi.xlsx")))
+br <- quantile(fp$pi_mpb_killed, c(1/3, 2/3))
+fp$severity <- as.character(cut(fp$pi_mpb_killed, c(-Inf, br, Inf), labels = c("low","moderate","high")))
+cat(sprintf("field plots %d; killed basal area tertiles %.3f and %.3f m2/ha; %s\n",
+            nrow(fp), br[1], br[2], paste(names(table(fp$severity)), table(fp$severity), collapse = " ")))
+
+## ---- undisturbed plots, derived where the imagery never dropped --------------------
+per <- st_transform(st_read(file.path(SA, "study_perimeter.gpkg"), quiet = TRUE), 32611)
+wat <- st_transform(st_read(file.path(SA, "basemap_water.geojson"), quiet = TRUE), 32611)
+base <- rd("ndmi", 2005)
+bb <- ext(vect(st_buffer(per, 2000)))
+base_c <- crop(base, bb)
+dmin <- min(rast(lapply(OY, function(y) crop(rd("ndmi", y), bb) - base_c)))
+forest <- base_c > 0.20
+forest <- mask(forest, vect(wat), inverse = TRUE)           # water is not forest
+cand <- mask(ifel(forest == 1 & dmin > STABLE, 1, NA), vect(per))
+sp <- spatSample(cand, size = N_UNDIST * 60, method = "random", as.points = TRUE, na.rm = TRUE)
+xy <- crds(sp); keep <- integer(0)
+for (i in seq_len(nrow(xy))) {
+  if (!length(keep) || min(sqrt((xy[keep,1]-xy[i,1])^2 + (xy[keep,2]-xy[i,2])^2)) >= MIN_SEP) keep <- c(keep, i)
+  if (length(keep) == N_UNDIST) break
+}
+ud <- data.frame(plot = NA_integer_, pi_mpb_killed = NA_real_, easting = xy[keep,1], northing = xy[keep,2],
+                 severity = "unaffected", source = "derived")
+fp2 <- data.frame(plot = fp$plot, pi_mpb_killed = fp$pi_mpb_killed, easting = fp$easting, northing = fp$northing,
+                  severity = fp$severity, source = "field")
+pl <- rbind(fp2, ud)
+pv <- vect(pl, geom = c("easting","northing"), crs = "EPSG:32611")
+
+## worst year from the imagery, as for every other plot set in this study
+dst <- rast(lapply(OY, function(y) rd("ndmi", y) - base)); names(dst) <- OY
+ex  <- terra::extract(dst, pv, ID = FALSE)
+pl$worst_year <- OY[apply(ex, 1, which.min)]; pl$dndmi_min <- apply(ex, 1, min)
+pl$on_water <- lengths(st_intersects(st_as_sf(pv), wat)) > 0
+stopifnot(!any(pl$on_water))
+write.csv(pl, file.path(LOC, "fieldplots_with_undisturbed.csv"), row.names = FALSE)
+cat(sprintf("plot set written: %d plots, %s\n", nrow(pl), paste(names(table(pl$severity)), table(pl$severity), collapse = " ")))
+
+## ---- the same SVM ----------------------------------------------------------------
+X <- matrix(NA_real_, nrow(pl), length(PRED), dimnames = list(NULL, PRED))
+for (y in OY) {
+  k <- which(pl$worst_year == y); if (!length(k)) next
+  X[k, ] <- as.matrix(terra::extract(rast(list(dif("ndvi", y), dif("nbr", y), dif("tcw", y))), pv[k], ID = FALSE))
+}
+tr <- data.frame(X, cls = factor(ifelse(pl$severity %in% c("moderate","high"), "modhigh", "other"), levels = c("other","modhigh")))
+tr <- tr[stats::complete.cases(tr), ]
+cat(sprintf("training pool %d, %s\n", nrow(tr), paste(names(table(tr$cls)), table(tr$cls), collapse = " / ")))
+f <- as.formula(paste("cls ~", paste(PRED, collapse = " + ")))
+## leave-one-out, because 38 plots do not support a held-out quarter
+loo <- factor(sapply(seq_len(nrow(tr)), function(i)
+  as.character(predict(svm(f, data = tr[-i, ], kernel = "radial", cost = COST, gamma = GAMMA), tr[i, ]))),
+  levels = levels(tr$cls))
+cm <- table(predicted = loo, observed = tr$cls); print(cm)
+oa <- sum(diag(cm))/sum(cm); pe <- sum(rowSums(cm)*colSums(cm))/sum(cm)^2
+cat(sprintf("leave-one-out accuracy %.3f  kappa %.3f\n", oa, (oa-pe)/(1-pe)))
+write.csv(data.frame(n = nrow(tr), accuracy = oa, kappa = (oa-pe)/(1-pe),
+                     tp = cm["modhigh","modhigh"], fp = cm["modhigh","other"], fn = cm["other","modhigh"], tn = cm["other","other"]),
+          file.path(OUT, "classifier_loo.csv"), row.names = FALSE)
+
+## ---- annual maps over the perimeter, water masked, no union -----------------------
+mfull <- svm(f, data = tr, kernel = "radial", cost = COST, gamma = GAMMA)
+watv <- vect(wat); res <- list()
+for (y in OY) {
+  st <- crop(rast(list(dif("ndvi", y), dif("nbr", y), dif("tcw", y))), bb)
+  st <- mask(st, watv, inverse = TRUE)
+  cl <- terra::predict(st, mfull, na.rm = TRUE,
+        filename = file.path(OUT, sprintf("modhigh_%d.tif", y)), overwrite = TRUE,
+        wopt = list(datatype = "INT1U", gdal = "COMPRESS=DEFLATE"))
+  fq <- freq(cl); ct <- setNames(fq$count, as.character(fq$value)); tot <- sum(fq$count); a <- sum(ct["modhigh"], na.rm = TRUE)
+  res[[length(res)+1]] <- data.frame(year = y, valid = tot, modhigh_cells = a, modhigh_pc = 100*a/tot, modhigh_ha = a*900/1e4)
+  cat(sprintf("%d  moderate-to-high %6.2f%%\n", y, 100*a/tot))
+}
+write.csv(do.call(rbind, res), file.path(OUT, "modhigh_by_year.csv"), row.names = FALSE)
+cat("annual maps written to", OUT, "\n")
 ```
 
 ```{r}
@@ -2549,7 +2655,7 @@ cat("wrote geomorphometry_context.tif, vri_context.tif and micromet_weight_conte
 ## 2025. Every annual observation of a cell therefore carried the SAME basal area, volume,
 ## stems and diameter, so the host terms had no time variation at all, and the attributes
 ## had been grown forward through and past the outbreak they were meant to predict. On the
-## study perimeter that layer gives a mean basal area of 35.18 m2/ha; the year-matched 2014
+## study perimeter that layer gives a mean basal area of 35.18 m2/ha; the annualized 2014
 ## snapshot gives 30.0, with 787 stems per hectare against 670 and a quadratic mean
 ## diameter of 26.74 cm against 30.13.
 ##
@@ -3014,6 +3120,12 @@ cat("wrote", OUT, "\n")
 #| warning: false
 #| message: false
 
+## SUPERSEDED 2026-09-02. This chunk fitted on epoch_model_table.csv, the static-composite
+## frame, so its all-hours row disagreed with the reported model E1, which is fitted on
+## the annualized frame. The refit now runs in _preamble.qmd as fw_fit(), on the same frame
+## as E1, and its CSV is no longer read. The chunk is kept for the record of how the
+## question was first put.
+##
 ## Refit the 16-day refugia model under each flight-window definition.
 ##
 ## The question this answers. The manuscript's result is a negative interaction between
@@ -3103,7 +3215,7 @@ print(res |> transmute(definition, n,
 #| warning: false
 #| message: false
 
-## Year-matched stand structure for the modelling tables.
+## Annualized stand structure for the modelling tables.
 ##
 ## Replaces the host columns in model_table.csv and epoch_model_table.csv with the value
 ## from the inventory snapshot for that row's own year. Until now every year of a cell
@@ -3219,7 +3331,7 @@ a <- swap(file.path(MD, "model_table.csv"),       file.path(MD, "model_table_vri
 e <- swap(file.path(MD, "epoch_model_table.csv"), file.path(MD, "epoch_model_table_vri.csv"))
 
 ## The point of the exercise: host structure now varies between years.
-cat("\nannual means by year, year-matched:\n")
+cat("\nannual means by year, annualized:\n")
 print(a |> group_by(year) |>
         summarise(basal = mean(BASAL_AREA), stems = mean(VRI_LIVE_STEMS_PER_HA),
                   qmd = mean(QUAD_DIAM_125), vol = mean(LIVE_STAND_VOLUME_125),
@@ -3234,11 +3346,11 @@ print(a |> group_by(year) |>
 #| warning: false
 #| message: false
 
-## Refit every model on year-matched stand structure, and report what changed.
+## Refit every model on annualized stand structure, and report what changed.
 ##
 ## The comparison is like for like: the same covariates, the same selection, the same
 ## interactions, the same balanced sampling. Only the host columns differ, static 2025
-## composite against the year-matched snapshots. Whatever the interaction does, it is
+## composite against the annualized snapshots. Whatever the interaction does, it is
 ## reported: this test can weaken the refugia result and that outcome is a result.
 ##
 ## Writes: model-data/vri_refit_comparison.csv
@@ -3287,7 +3399,7 @@ fit_epoch <- function(path, label) {
 
 res <- bind_rows(
   fit_epoch(file.path(MD, "epoch_model_table.csv"),     "static 2025 composite"),
-  fit_epoch(file.path(MD, "epoch_model_table_vri.csv"), "year-matched VRI"))
+  fit_epoch(file.path(MD, "epoch_model_table_vri.csv"), "annualized VRI"))
 write.csv(res, file.path(MD, "vri_refit_comparison.csv"), row.names = FALSE)
 
 cat("\n")

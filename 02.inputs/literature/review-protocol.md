@@ -99,3 +99,17 @@ companion study on this landscape, with 36 mentions carrying monthly and annual
 vocabulary, drawn from Global Wind Atlas monthly means at 10 m for 2015 to 2020.
 Krawchuk et al. 2020, who state the hypothesis, mention wind six times and specify no
 interval.
+
+## Citing-works pass, 2026-09-02
+
+The store search of 2026-08-19 drew on titles held locally. On 2026-09-02 every work citing
+Krawchuk et al. (2020) was listed from OpenAlex (152 works, id W3032872923) and Semantic
+Scholar (133), and titles were screened for beetle, bark beetle, Dendroctonus, Ips, insect,
+outbreak, pest, refugia, conifer, pine, mortality and survival. One study tests a refugium
+hypothesis for mountain pine beetle, Maher et al. (2021), Ecological Applications 31,
+e02274, which surveys whitebark pine mortality on transects across alpine treeline ecotones
+and attributes survival to the krummholz growth form. It does not fit any of the three
+mechanisms Krawchuk et al. propose and fits no spatial model, so the manuscript's claim
+stands in the sharpened form the Introduction now carries. Seven Journal of Pest Science
+papers supplied by Seamus the same day were read in full and none tests a refugium
+hypothesis; their relevant findings are in the source notes in `scientific-library/sources/`.

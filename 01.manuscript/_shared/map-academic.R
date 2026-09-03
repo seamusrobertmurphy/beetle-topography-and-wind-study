@@ -68,8 +68,8 @@ map_context <- function(perimeter, burn, sa_dir) {
   cont <- st_as_sf(as.contour(dem, levels = brk))
 
   ## The representative fraction holds only at the nominal printed panel width, which
-  ## the caption states. Journal of Applied Entomology asked for a numerical scale, so
-  ## the ratio is printed and no scale bar is drawn.
+  ## the caption states. A numerical scale is printed as the ratio and no scale bar is
+  ## drawn, which is the form the earlier target journal asked for and Springer accepts.
   list(xl = xl, yl = yl, water = w, cont = cont, relief = relief,
        perimeter = per, burn = st_transform(burn, MAP_CRS),
        rf_label = paste0("1:", formatC(MAP_RF, format = "d", big.mark = ",")))

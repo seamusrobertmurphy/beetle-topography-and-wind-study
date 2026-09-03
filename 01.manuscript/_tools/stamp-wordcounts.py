@@ -32,19 +32,22 @@ from lxml import etree
 # Limits are per target venue, keyed on the output file's stem, because this project
 # renders more than one manuscript and one set of limits cannot be right for all of them.
 #
-# Journal of Applied Entomology, Original Article, checked against the guide for
-# authors on 2026-08-20: "6000 limit (without references)" and "an abstract of no
-# more than 300 words". Forest Science's 10,000 and 150-250 were carried here until
-# then and were stale from 2026-08-18, when that journal rejected the manuscript.
+# Journal of Pest Science, Original Research Paper, read from the Wayback capture of
+# 2025-12-05 of the submission guidelines on 2026-09-01, the live page being behind a
+# script challenge that day. "Original articles are limited to 7,000 words per article
+# (all text excluding tables, figure legends, and reference list)" and "Please provide an
+# abstract of 150 to 250 words." Key message bullets are "3 to 5 bullet points of
+# maximum 100 characters, including spaces".
 #
-# Frontiers in Ecology and the Environment, Research Communication, checked against the
-# live guidelines (revised March 2026) on 2026-08-27: "Not exceed 2500 words in the main
-# text" and "an abstract with a maximum of 150 words".
+# Journal of Applied Entomology, the target until 2026-09-01, was 6000 and 300. Frontiers
+# in Ecology and the Environment, Research Communication, checked 2026-08-27, is 2500 and
+# 150 and applies to the archived short-short draft.
 LIMITS = {
     "beetle-topography-wind-study-short-short": (2500, 150),   # Front Ecol Environ
-    "beetle-topography-wind-study-vri-timeseries": (6000, 300),  # J Appl Entomol, submission
+    "Manuscript": (7000, 250),                                  # J Pest Sci, submission
 }
-DEFAULT_LIMITS = (6000, 300)                                   # J Appl Entomol
+DEFAULT_LIMITS = (7000, 250)                                   # J Pest Sci
+KEY_MESSAGE_MAX = 100
 
 W = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
 w = lambda tag: f"{{{W}}}{tag}"
@@ -78,13 +81,22 @@ def measure(root):
     # zero: style-formal.docx has no such style, so the abstract fell into the running text
     # and the 300-word cap was never actually tested by anything.
     in_abstract = False
+    in_key = False
+    in_legends = False
+    key_lines = []
+    prose_w = 0   # the journal's measure: text excluding tables, figure legends, references
     for child in body:
         if child.tag == w("p"):
             st, txt = style_of(child), para_text(child)
             if is_heading(child):
-                in_abstract = txt.strip().lower() == "abstract"
+                h = re.sub(r"^[\d.]+\s*", "", txt.strip().lower())
+                in_abstract = h == "abstract"
+                in_key = h == "key message"
+                in_legends = h == "figure legends"
                 running_w += words(txt)
                 continue
+            if in_key and txt.strip():
+                key_lines.append(txt.strip())
             if st == "Bibliography":
                 refs_w += words(txt)
             elif in_abstract:
@@ -94,6 +106,8 @@ def measure(root):
                 pass
             else:
                 running_w += words(txt)
+                if not in_legends and st != "SourceCode" and "aption" not in st:
+                    prose_w += words(txt)
         elif child.tag == w("tbl"):
             in_abstract = False
             float_w += words(" ".join(n.text or "" for n in child.iter(w("t"))))
@@ -103,20 +117,32 @@ def measure(root):
         "WC_NOREFS": total_norefs,
         "WC_ABSTRACT": abstract_w,
         "WC_SUPP": SUPP_WORDS,
+        "WC_PROSE": prose_w,
+        "KEY_LINES": key_lines,
     }
 
 
 def report(path, counts, word_limit, abstract_max):
     """Say the length out loud, and say loudly when it is over."""
-    body = counts["WC_NOREFS"]
+    body = counts["WC_PROSE"]
     abstract = counts["WC_ABSTRACT"]
-    print(f"  {path.name}: body without references {body:,} against a {word_limit:,} limit; "
-          f"abstract {abstract:,} against {abstract_max:,}.")
+    print(f"  {path.name}: prose excluding tables, figure legends, code and references "
+          f"{body:,} against a {word_limit:,} limit; inclusive of tables and code "
+          f"{counts['WC_NOREFS']:,}; abstract {abstract:,} against {abstract_max:,}.")
     over = []
     if body > word_limit:
         over.append(f"body over by {body - word_limit:,} words")
     if abstract > abstract_max:
         over.append(f"abstract over by {abstract - abstract_max:,} words")
+    keys = counts.get("KEY_LINES", [])
+    if keys:
+        print(f"  {path.name}: key message, {len(keys)} bullets, longest "
+              f"{max(len(k) for k in keys)} characters against {KEY_MESSAGE_MAX}.")
+        for k in keys:
+            if len(k) > KEY_MESSAGE_MAX:
+                over.append(f"key message bullet of {len(k)} characters: {k[:40]}...")
+        if not 3 <= len(keys) <= 5:
+            over.append(f"key message has {len(keys)} bullets, not 3 to 5")
     if over:
         bar = "!" * 74
         print(f"\n{bar}\n  OVER THE LIMIT: {'; '.join(over)}.\n"
@@ -145,6 +171,8 @@ def process(path):
             continue
         new = txt
         for k, v in counts.items():
+            if k in ("KEY_LINES",):
+                continue
             new = new.replace("{{" + k + "}}", f"{v:,}")
         runs = p.findall(w("r"))
         if not runs:

@@ -24,13 +24,13 @@ import struct
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-# The paper of record is the Journal of Applied Entomology draft. Until 2026-08-27
-# this script read the long manuscript, which still describes the design the study
-# abandoned: the aerial survey as the response, the Global Wind Atlas as the wind term,
-# and the conclusion "We find no wind effect", which the 16-day models reversed. The
-# README therefore published the opposite of the current finding.
-HTML = ROOT / "01.manuscript" / "beetle-topography-wind-study-vri-timeseries.html"
-QMD = ROOT / "01.manuscript" / "beetle-topography-wind-study-vri-timeseries.qmd"
+# The paper of record is 01.manuscript/Manuscript.qmd, the Journal of Pest Science
+# submission. Until 2026-08-27 this script read the long manuscript, which still
+# describes the design the study abandoned, the aerial survey as the response and the
+# Global Wind Atlas as the wind term, so the README published the opposite of the
+# current finding.
+HTML = ROOT / "01.manuscript" / "Manuscript.html"
+QMD = ROOT / "01.manuscript" / "Manuscript.qmd"
 FIGDIR = ROOT / "03.outputs" / "PNG"
 OUT = ROOT / "README.md"
 

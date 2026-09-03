@@ -47,16 +47,18 @@ describe_vars <- function(data, vars, labels = NULL) {
 
 describe_table <- function(d) {
   data.frame(
+    ## n is the same for every attribute and is stated in the caption; Seamus dropped the
+    ## column by hand on 2026-09-02 and shortened the two moment headings, so the render
+    ## does the same.
     Attribute    = d$Attribute,
-    n            = formatC(d$n, format = "d", big.mark = ","),
     Mean         = sprintf("%.2f", d$Mean),
     SD           = sprintf("%.2f", d$SD),
-    SE           = sprintf("%.3f", d$SE),
+    `SE#`        = sprintf("%.3f", d$SE),
     Median       = sprintf("%.2f", d$Median),
     Min          = sprintf("%.2f", d$Min),
     Max          = sprintf("%.2f", d$Max),
-    Skewness     = sprintf("%+.2f", d$Skewness),
-    Kurtosis     = sprintf("%+.2f", d$Kurtosis),
+    Skew         = sprintf("%+.2f", d$Skewness),
+    `Kurt.`      = sprintf("%+.2f", d$Kurtosis),
     check.names = FALSE)
 }
 
@@ -64,14 +66,14 @@ describe_table <- function(d) {
 ## the code keeps the raw names, so the mapping lives in one place and a table can never
 ## show a column the model did not fit.
 VRI_LABELS <- c(
-  BASAL_AREA            = "Stand basal area (m2/ha)",
+  BASAL_AREA            = "Stand basal area (m\u00b2 ha\u207b\u00b9)",
   CROWN_CLOSURE         = "Crown closure (%)",
   VRI_LIVE_STEMS_PER_HA = "Live stems (n/ha)",
   QUAD_DIAM_125         = "Quadratic mean diameter (cm)",
   PROJ_AGE_1            = "Stand age (years)",
   PROJ_HEIGHT_1         = "Stand height (m)",
-  LIVE_STAND_VOLUME_125 = "Standing volume (m3/ha)",
-  PINE_BA               = "Susceptible pine basal area (m2/ha)",
+  LIVE_STAND_VOLUME_125 = "Standing volume (m\u00b3 ha\u207b\u00b9)",
+  PINE_BA               = "Susceptible pine BA (m\u00b2 ha\u207b\u00b9)",
   PinePct               = "Lodgepole pine cover (%)",
   elevation             = "Elevation (m)",
   tri                   = "Terrain ruggedness index",

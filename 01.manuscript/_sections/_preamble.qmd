@@ -35,22 +35,24 @@ set.seed(42)
 knitr::opts_chunk$set(dpi = 300, fig.width = 9, fig.height = 6)
 
 here <- function(...) file.path("..", ...)          # repo-relative, from 01.manuscript/
-BC   <- here("02.inputs", "beetle")
+## A variant document may set BEETLE_ROOT before the include to read a parallel data
+## root, such as the field-plot classifier variant; the default is the submission data.
+BC   <- here("02.inputs", if (exists("BEETLE_ROOT")) BEETLE_ROOT else "beetle")
 SA   <- file.path(BC, "study-area")
 LIT  <- here("02.inputs", "literature")
 
 USE_VRI <- exists("USE_VRI_TIMESERIES") && isTRUE(USE_VRI_TIMESERIES)
 EPOCH_TBL <- if (USE_VRI) "epoch_model_table_vri.csv" else "epoch_model_table.csv"
 ANNUAL_TBL <- if (USE_VRI) "model_table_vri.csv" else "model_table.csv"
-cat(sprintf("host structure: %s\n", if (USE_VRI) "year-matched VRI snapshots" else "static 2025 composite"))
+cat(sprintf("host structure: %s\n", if (USE_VRI) "annualized VRI snapshots" else "static 2025 composite"))
 
 fmt <- function(x, d = 0) formatC(x, format = "f", digits = d, big.mark = ",")
 
-## Tables and figures have to be uploaded to Journal of Applied Entomology as separate
-## files. Rather than rebuild them in a second document, which would let the two drift,
-## every table is written to 03.outputs/TBL as it is printed, and submission-jae/tables.qmd
-## reads those files back. save_tbl returns its argument so it can sit inside a pipe.
-TBLDIR <- here("03.outputs", "TBL")
+## Journal of Pest Science wants every editable source file at submission, and the tables
+## travel as one. Rather than rebuild them in a second document, which would let the two
+## drift, every table is written to 03.outputs/TBL as it is printed, and Tables.qmd reads
+## those files back. save_tbl returns its argument so it can sit inside a pipe.
+TBLDIR <- here("03.outputs", if (exists("BEETLE_ROOT")) paste0("TBL-", BEETLE_ROOT) else "TBL")
 dir.create(TBLDIR, showWarnings = FALSE, recursive = TRUE)
 save_tbl <- function(x, name) {
   write.csv(x, file.path(TBLDIR, paste0(name, ".csv")), row.names = FALSE)
@@ -251,6 +253,10 @@ bz <- bal; for (v in CAND) bz[[v]] <- z(bz[[v]])
 GEO_LAB <- c("flat","peak","ridge","shoulder","spur","slope","hollow","footslope",
              "valley","pit")
 bz$geomorphon <- factor(GEO_LAB[bal$geomorphons], levels = GEO_LAB)
+## Shoulder holds 16 perimeter cells and no attack, which separates completely and returns
+## a coefficient of -9.9 with a standard error of 59. It is merged into ridge, the
+## neighbouring convex form, before fitting. Recorded 2026-09-02.
+levels(bz$geomorphon)[levels(bz$geomorphon) == "shoulder"] <- "ridge"
 bz$geomorphon <- droplevels(bz$geomorphon)
 bz$geomorphon <- relevel(bz$geomorphon,
                          ref = names(sort(table(bz$geomorphon), decreasing = TRUE))[1])
@@ -325,8 +331,12 @@ vif_final <- car::vif(glm(reformulate(VIF_KEEP, "modhigh"), data = bz, family = 
 ```{r}
 #| label: sel-importance
 #| echo: false
-#| cache: true
 #| output: false
+
+## Never cache this chunk. knitr keys a cache on the chunk's code, not on the data it reads,
+## so a cached selection outlives the maps it was made from. On 2026-09-02 the cached
+## ranking from the derived-plot maps was replayed against the field-plot maps and the
+## term guard stopped the render on terms the fresh selection contains.
 
 rf <- ranger::ranger(as.factor(modhigh) ~ ., data = bz[, c("modhigh", VIF_KEEP)],
                      num.trees = 500, importance = "permutation",
@@ -336,7 +346,52 @@ imp <- data.frame(term = names(rf$variable.importance),
   left_join(uni |> select(term, group), by = "term") |>
   arrange(desc(importance))
 RF_AUC <- as.numeric(pROC::auc(pROC::roc(bz$modhigh, rf$predictions[, 2], quiet = TRUE)))
-FINAL <- imp$term
+```
+
+```{r}
+#| label: sel-penalty
+#| echo: false
+#| output: false
+
+## Stage four, added 2026-09-02. The three stages above filter on significance,
+## collinearity and inflation, and the forest only ranks what survives, so the full model
+## carried every survivor, including terms indistinguishable from zero. A lasso fit with
+## the penalty chosen by ten-fold cross-validation at the one-standard-error rule removes
+## the terms that do not earn their place, which is the selection the parent study used.
+## One variable per pathway, the survivor the forest ranks highest, is exempt from the
+## penalty so that a mechanism the Introduction names cannot be removed by shrinkage
+## alone. Covariates are already standardised, so the penalty treats them alike.
+X_pen <- as.matrix(bz[, VIF_KEEP])
+PROTECT <- unlist(lapply(PATH, function(g) { v <- imp$term[imp$term %in% g]; if (length(v)) v[1] else NULL }))
+pen_fac <- ifelse(VIF_KEEP %in% PROTECT, 0, 1)
+set.seed(42)
+cv_pen <- glmnet::cv.glmnet(X_pen, bz$modhigh, family = "binomial", alpha = 1,
+                            penalty.factor = pen_fac, nfolds = 10, standardize = FALSE)
+LAMBDA_1SE <- cv_pen$lambda.1se
+pen_coef <- coef(cv_pen, s = "lambda.1se")[-1, 1]
+LASSO_KEEP <- names(pen_coef)[pen_coef != 0]
+FINAL <- imp$term[imp$term %in% LASSO_KEEP]
+N_FINAL <- length(FINAL)
+## The count the Methods report in place of the candidate count: terrain variables that
+## entered the models, from the exposure, shape, landform, shading and flight-radiation
+## pathways, every one of them a surface computed from the elevation model.
+N_FINAL_TERRAIN <- length(intersect(FINAL, c(PATH$wind_geo, PATH$shape, PATH$landform, PATH$shading, PATH$flightsun)))
+
+## The selection table the Methods print: every candidate, its pathway, the univariate
+## screen, and the stage at which it left or the fact that it stayed.
+sel_tab <- uni |>
+  transmute(term, group, auc, p,
+            stage = dplyr::case_when(
+              !(term %in% UNI_KEEP)   ~ "univariate",
+              !(term %in% CLUST_KEEP) ~ "collinearity",
+              !(term %in% VIF_KEEP)   ~ "inflation",
+              !(term %in% LASSO_KEEP) ~ "penalty",
+              TRUE                    ~ "retained"),
+            importance = imp$importance[match(term, imp$term)],
+            penalised = as.numeric(pen_coef[term]),
+            protected = term %in% PROTECT) |>
+  arrange(factor(stage, levels = c("retained", "penalty", "inflation", "collinearity", "univariate")),
+          desc(importance), desc(auc))
 ```
 
 ```{r}
@@ -464,8 +519,8 @@ AUC4  <- as.numeric(pROC::auc(pROC::roc(bl$modhigh, fitted(M4),  quiet = TRUE)))
 ## effect is identified in space and in time rather than across eight annual values.
 ## Which stand structure the epoch models are fitted on. The including document sets
 ## USE_VRI_TIMESERIES before the include; unset means the static 2025 composite, which is
-## what the Journal of Applied Entomology draft reports. Without this switch the
-## time-series draft fitted the static table and printed year-matched numbers only in the
+## what the archived static-composite draft reports. Without this switch the
+## time-series draft fitted the static table and printed annualized numbers only in the
 ## section that read them from a CSV, so its abstract and its Results disagreed by a
 ## factor of two.
 de <- read.csv(file.path(BC, "model-data", EPOCH_TBL))
@@ -478,7 +533,9 @@ EV <- c("elevation","PINE_BA","LIVE_STAND_VOLUME_125","VRI_LIVE_STEMS_PER_HA",
         "valley_depth","curv_prof","solar_season_direct","solar_flight_direct",
         "wind_effect","ep_wind_mean")
 be <- de; for (v in EV) be[[v]] <- (be[[v]] - mean(be[[v]])) / sd(be[[v]])
-be$geomorphon <- droplevels(factor(GEO_LAB[round(de$geomorphons)], levels = GEO_LAB))
+be$geomorphon <- factor(GEO_LAB[round(de$geomorphons)], levels = GEO_LAB)
+levels(be$geomorphon)[levels(be$geomorphon) == "shoulder"] <- "ridge"
+be$geomorphon <- droplevels(be$geomorphon)
 be$geomorphon <- relevel(be$geomorphon,
                          ref = names(sort(table(be$geomorphon), decreasing = TRUE))[1])
 EINT <- c("VRI_LIVE_STEMS_PER_HA:ep_wind_mean", "LIVE_STAND_VOLUME_125:ep_wind_mean")
@@ -501,6 +558,53 @@ be1 <- function(v) sprintf("%+.3f", ce1$beta[ce1$term == v])
 ze1 <- function(v) sprintf("%.2f", ce1$z[ce1$term == v])
 pe1 <- function(v) pv(ce1$p[ce1$term == v])
 pe1t <- function(v) pt(ce1$p[ce1$term == v])
+
+## ---- the flight-window sensitivity table -------------------------------------------
+## The sixteen-day model refitted under each definition of the wind window, on the same
+## frame, covariate set and interaction as E1, so that the all-hours row IS E1 and the
+## other rows differ from it only in the wind variable. Pipeline chunk 53 fitted this on
+## the static-composite epoch table, which is why its all-hours row did not match the
+## reported model; the fit now lives here. The wind under each definition is read from
+## the rasters pipeline chunk 52 wrote, one per year and epoch.
+SENS_DIR <- file.path(BC, "covariates", "wind-epoch-sensitivity")
+FW_DEFS  <- c("all24", "h12_17", "h11_18", "gate")
+fw_pts   <- terra::vect(as.matrix(de[, c("x", "y")]), crs = paste0("EPSG:", EPSG))
+fw_fit <- function(def) {
+  w <- rep(NA_real_, nrow(de))
+  for (k in unique(paste(de$year, de$epoch))) {
+    p <- strsplit(k, " ")[[1]]
+    f <- file.path(SENS_DIR, sprintf("wind_%s_%s_e%02d.tif", def, p[1], as.integer(p[2])))
+    if (!file.exists(f)) next
+    idx <- de$year == as.integer(p[1]) & de$epoch == as.integer(p[2])
+    w[idx] <- terra::extract(terra::rast(f), fw_pts[idx])[, 2]
+  }
+  keep <- !is.na(w)
+  d <- de[keep, ]; d$ep_wind_mean <- w[keep]
+  b <- d; for (v in EV) b[[v]] <- (b[[v]] - mean(b[[v]])) / sd(b[[v]])
+  b$geomorphon <- factor(GEO_LAB[round(d$geomorphons)], levels = GEO_LAB)
+  levels(b$geomorphon)[levels(b$geomorphon) == "shoulder"] <- "ridge"
+  b$geomorphon <- droplevels(b$geomorphon)
+  b$geomorphon <- relevel(b$geomorphon, ref = names(sort(table(b$geomorphon), decreasing = TRUE))[1])
+  m <- glm(reformulate(c(EV, "geomorphon", EINT), "modhigh"), data = b, family = binomial)
+  co <- as.data.frame(coef(summary(m))); names(co) <- c("beta", "se", "z", "p"); co$term <- rownames(co)
+  g <- function(v, col) { x <- co[[col]][co$term == v]; if (length(x)) x else NA_real_ }
+  data.frame(definition = def, n = nrow(d), wind_mean = mean(d$ep_wind_mean), wind_sd = sd(d$ep_wind_mean),
+             stems_x_wind = g(EINT[1], "beta"), stems_p = g(EINT[1], "p"),
+             volume_x_wind = g(EINT[2], "beta"), volume_p = g(EINT[2], "p"),
+             wind_main = g("ep_wind_mean", "beta"), wind_main_p = g("ep_wind_mean", "p"),
+             AIC = AIC(m), AUC = as.numeric(pROC::auc(pROC::roc(b$modhigh, fitted(m), quiet = TRUE))))
+}
+FWS <- do.call(rbind, lapply(FW_DEFS, fw_fit))
+fw  <- function(def, col) sprintf("%+.3f", FWS[[col]][FWS$definition == def])
+fwp <- function(def, col) pt(FWS[[col]][FWS$definition == def])
+## Guard: the all-hours row must reproduce the reported model, or the table describes a
+## different fit from the one the text quotes.
+fw_gap <- c(abs(FWS$stems_x_wind[FWS$definition == "all24"] - ce1$beta[ce1$term == EINT[1]]),
+            abs(FWS$volume_x_wind[FWS$definition == "all24"] - ce1$beta[ce1$term == EINT[2]]))
+if (any(fw_gap > 0.005)) {
+  msg <- sprintf("flight-window guard: the all-hours row of the sensitivity table differs from E1 by %.4f and %.4f", fw_gap[1], fw_gap[2])
+  if (isTRUE(get0("GUARD_DIAGNOSTIC", ifnotfound = FALSE))) cat("\n", msg, "\n") else stop(msg)
+}
 pe1T <- function(v) pthr(ce1$p[ce1$term == v])
 ore1 <- function(v) orr(ce1$beta[ce1$term == v])
 ore1pc <- function(v) orpc(ce1$beta[ce1$term == v])
@@ -660,7 +764,7 @@ for (w in WIND_V) {
 ## only catches the erroring half is not a guard, so the presence of every named term is
 ## asserted here instead.
 
-## Statistical reporting follows the journal's own recent practice, measured from 11
+## Statistical reporting follows entomology journal practice, measured from 11
 ## open-access Journal of Applied Entomology papers of 2025 and 2026 by
 ## 02.inputs/literature/audit-jae-stats-style.py. Across 76 p-value expressions the
 ## form is a decimal to three places with "p < 0.001" as the floor; scientific notation
@@ -672,13 +776,16 @@ for (w in WIND_V) {
 ## "< 0.001" prints "p = < 0.001".
 pv <- function(p) if (!length(p) || is.na(p)) NA_character_ else
   if (p < 0.001) "< 0.001" else sprintf("%.3f", p)
+## Significance in tables is shown as asterisks beside the estimate, the convention of the
+## parent study's Tables 5 and 7, with the legend in the caption. Exact p-values stay in prose.
+stars <- function(p) ifelse(is.na(p), "", ifelse(p <= 1e-4, "****", ifelse(p <= 0.001, "***", ifelse(p <= 0.01, "**", ifelse(p <= 0.05, "*", "")))))
 pt <- function(p) if (!length(p) || is.na(p)) NA_character_ else
   if (p < 0.001) "< 0.001" else sprintf("= %.3f", p)
 
 ## GUARD_DIAGNOSTIC lets a render report every missing term at once instead of stopping at
 ## the first. Use it to find out what a changed selection actually produced, then fix the
 ## prose and set it back. It must be FALSE for any render that is going to be read.
-GUARD_DIAGNOSTIC <- FALSE
+if (!exists("GUARD_DIAGNOSTIC")) GUARD_DIAGNOSTIC <- FALSE
 named <- function(tbl, terms, what) {
   missing <- setdiff(terms, tbl$term)
   if (length(missing)) {
@@ -692,23 +799,28 @@ named <- function(tbl, terms, what) {
 }
 
 ## The density term the prose quotes is whichever one selection chose, not a fixed name.
-## On the 2025 composite that is standing volume; on year-matched snapshots basal area
+## On the 2025 composite that is standing volume; on annualized snapshots basal area
 ## discriminates far better (univariate AUC 0.602 against 0.517) and displaces it. Guarding
 ## a hardcoded name would fail the draft that is correct.
-named(co3, c("solar_flight_direct", "northness", DENS[1],
-             "VRI_LIVE_STEMS_PER_HA", "CROWN_CLOSURE", "QUAD_DIAM_125", "PINE_BA",
-             "tri", "vrm", "wind_effect", "elevation", I_GEO,
-             paste0(DENS[1], ":", FSUN[1])), "the full annual model M3")
+named(co3, c("solar_flight_direct", "northness", DENS[1], "QUAD_DIAM_125", "PINE_BA",
+             "wind_shelter", "sky_view", "convergence", "curv_prof", "elevation",
+             I_GEO, paste0(DENS[1], ":", FSUN[1])), "the full annual model M3")
 named(cnr, I_GEO, "the annual model fitted without flight-window radiation")
 named(co4, c("lag_self", "lag_nbr90"), "the autologistic annual model M4")
 named(ce1, EINT, "the 16-day model E1")
 named(ce2, c(EINT[2], "ep_lag_nbr90"), "the 16-day model E2 with the within-season lag")
-stopifnot(all(c("tri", "valley_depth", "midslope_position") %in% shift$term))
+if (!all(c("sky_view", "wind_shelter", "convergence", "curv_prof") %in% shift$term)) {
+  msg <- "term-guard: the autologistic shift table lacks sky_view, wind_shelter, convergence or curv_prof"
+  if (GUARD_DIAGNOSTIC) cat("\n", msg, "\n") else stop(msg)
+}
 
-## Growing-season direct radiation did not survive selection into M3, so the shading
-## pathway is carried by northness. That is asserted rather than assumed, because the
+## Growing-season direct radiation did not survive selection into M3, so northness
+## stands in for the shading pathway. That is asserted rather than assumed, because the
 ## whole shading result is read off northness below.
-stopifnot(!("solar_season_direct" %in% co3$term))
+if ("solar_season_direct" %in% co3$term) {
+  msg <- "term-guard: solar_season_direct survived selection, so the shading prose, written around northness, is wrong for this fit"
+  if (GUARD_DIAGNOSTIC) cat("\n", msg, "\n") else stop(msg)
+}
 ```
 
 ```{r}

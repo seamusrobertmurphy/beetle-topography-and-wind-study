@@ -5,9 +5,8 @@ project:
   # paths do not resolve from archive/, which fails the render of every other document
   # with "Include directive failed". They are superseded and must never be rendered.
   render:
-    - "01.manuscript/beetle-topography-wind-study-vri-timeseries.qmd"
-    - "01.manuscript/beetle-topography-wind-study-short-short.qmd"
-    - "01.manuscript/submission-jae/*.qmd"
+    - "01.manuscript/Manuscript.qmd"
+    - "01.manuscript/Tables.qmd"
   pre-render:
     - "find . -name ._* -delete"
     # The shared preamble is included before the Abstract, so a chunk in it that prints
@@ -23,3 +22,7 @@ project:
     # Fills the four {{WC_*}} placeholders with the rendered document's own
     # counts, so the declared length cannot drift from the manuscript.
     - "python3 01.manuscript/_tools/stamp-wordcounts.py"
+    # Journal of Pest Science asks for double line spacing and consecutive line
+    # numbers. Both are section and style properties the reference document does not
+    # carry, so they are written into the main document after the render.
+    - "python3 01.manuscript/_tools/format-body.py"

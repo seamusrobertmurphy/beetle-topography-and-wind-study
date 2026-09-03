@@ -5,7 +5,7 @@ format:
     reference-doc: ../04.references/style-formal.docx
     number-sections: false
 bibliography: ../04.references/references-beetle.bib
-csl: ../04.references/apa-6th-edition.csl
+csl: ../04.references/springer-basic-author-date.csl
 ## The bibliography is declared so the citations inside Table 2's rationale column resolve.
 ## It is suppressed because the reference list belongs in the main document, not here.
 suppress-bibliography: true
@@ -20,10 +20,11 @@ execute:
 #| echo: false
 #| output: false
 
-## Journal of Applied Entomology asks for tables as a separate, editable file. These are
-## read back from the CSVs the manuscript wrote as it rendered, not recomputed, so this
-## file cannot report a different number from the article it accompanies. If a CSV is
-## missing, render 01.manuscript/beetle-topography-wind-study-vri-timeseries.qmd first.
+## Journal of Pest Science asks for every editable source file at submission, and the
+## tables are kept as one such file. These are read back from the CSVs the manuscript
+## wrote as it rendered, not recomputed, so this file cannot report a different number
+## from the article it accompanies. If a CSV is missing, render
+## 01.manuscript/Manuscript.qmd first.
 ##
 ## Audited 2026-08-28. Three faults were fixed here at once, all of which shipped to the
 ## package on that date:
@@ -43,9 +44,17 @@ get <- function(n) {
   f <- file.path(TBL, paste0(n, ".csv"))
   if (!file.exists(f))
     stop("missing ", f,
-         ". Render 01.manuscript/beetle-topography-wind-study-vri-timeseries.qmd first.")
+         ". Render 01.manuscript/Manuscript.qmd first.")
   read.csv(f, check.names = FALSE)
 }
+## Caption numbers the manuscript wrote beside the CSVs, so a caption here cannot carry a
+## count the article does not.
+txt <- function(n) {
+  f <- file.path(TBL, paste0(n, ".txt"))
+  if (!file.exists(f)) stop("missing ", f, ". Render 01.manuscript/Manuscript.qmd first.")
+  readLines(f, warn = FALSE)
+}
+fmt <- function(x) formatC(as.numeric(x), format = "d", big.mark = ",")
 ```
 
 <!-- Footnote symbols follow the journal's rule: dagger, double dagger, section and
@@ -63,11 +72,7 @@ kable(get("table-1-hypotheses"), booktabs = TRUE, align = "lll")
 
 # Table 2
 
-The datasets this study combines, with the structure and resolution of each. Every count is
-read from the files at render time. Spatial resolution is the grid the variable is analysed
-on; temporal resolution is the interval at which it varies. Note that the response varies
-every 16 days, the inventory once a year and the terrain not at all, which is the asymmetry
-the wind analysis depends on.
+The datasets this study combined, with the structure and resolution of each. Spatial resolution was the grid on which a variable was analysed and temporal resolution the interval at which it varied. The response varied every 16 days, the inventory once a year, the station wind every hour and the terrain not at all, which was the unevenness the wind analysis depended on.
 
 ```{r}
 kable(get("table-2-inventory"), booktabs = TRUE)
@@ -83,65 +88,56 @@ kable(get("table-3-prevalence"), booktabs = TRUE, align = "lrr")
 
 # Table 4
 
-Stand structure across the study perimeter, from the Vegetation Resources Inventory. n is
-cell-years. SD is the standard deviation of the landscape; SE is the standard error of the
-mean and is small by construction at this n, so it should not be read as precision about any
-one cell. Skewness and kurtosis are the bias-corrected third and fourth standardised moments;
-kurtosis is excess, so 0 is Gaussian and positive is heavy-tailed.
+Stand structure across the study perimeter, from the Vegetation Resources Inventory, over `r fmt(txt("table-4-cell-years"))` cell-years. SD was the standard deviation across the landscape and SE the standard error of the mean, which was small at this sample size by construction and measured the precision of the landscape mean rather than of any one cell. Skewness and kurtosis were the bias-corrected third and fourth standardised moments, kurtosis being excess, so that 0 was Gaussian and a positive value heavy-tailed.
 
 ```{r}
-kable(get("table-4-stand-structure"), booktabs = TRUE, align = "lrrrr")
+kable(get("table-4-stand-structure"), booktabs = TRUE, align = "lrrrrrrrr")
 ```
 
 # Table 5
 
-Model comparison, panel A of the model table. Each model adds one pathway to the previous.
-AIC ranks on likelihood and a parameter penalty; the remaining columns are predictive error
-on the fitted probabilities. RMSE is the root mean squared error and is the square root of
-the Brier score; RMSE (%) expresses it against the prevalence of the response. MAE is the
-mean absolute error. AUC is the area under the receiver operating characteristic curve.
-Brier skill is the improvement over predicting the prevalence for every cell, where 0 is no
-better than the base rate. MAPE and Theil's U are not reported: both divide by the observed
-value, which is zero for the majority class of a binary response, so both are undefined
-without discarding that class.
+Variable selection. Every candidate with its pathway, its univariate AUC, the stage at which it left, and for the survivors of the inflation stage the lasso coefficient at the chosen penalty. Protected marked the highest-ranked survivor of each pathway, which the penalty could not remove. AUC was the area under the receiver operating characteristic curve of the univariate fit, and the asterisks beside it marked the significance of that fit, * p ≤ 0.05, ** p ≤ 0.01, *** p ≤ 0.001, **** p ≤ 0.0001.
 
 ```{r}
-kable(get("table-5-model-comparison"), booktabs = TRUE, align = "lrrr")
+kable(get("table-5-selection"), booktabs = TRUE, align = "llrlrl")
 ```
 
 # Table 6
 
-Full model M3, panel B of the model table: continuous terms, ordered by absolute effect.
-Coefficients are log-odds per standard deviation on a class-balanced sample, so the intercept
-is not landscape prevalence. SE is the standard error of the coefficient; z is the Wald
-statistic. The geomorphon landform classes are also in this model and are not reported here.
+Comparison of the four annual models, each adding one mechanism to the one before. AIC ranked the models on likelihood with a penalty for the number of parameters, and the remaining columns measured how far the fitted probabilities fell from the observed classes. RMSE was the root mean squared error and MAE the mean absolute error, both on the fitted probabilities, and AUC the area under the receiver operating characteristic curve. Brier skill was the improvement over predicting the prevalence for every cell, where 0 was no better than that base rate.
 
 ```{r}
-kable(get("table-6-full-model"), booktabs = TRUE, align = "lrrrr")
+kable(get("table-6-model-comparison"), booktabs = TRUE, align = "lrrrrrr")
 ```
 
 # Table 7
 
-Moderate-to-high beetle disturbance by quadratic mean diameter class, on the balanced
-sample. QMD is quadratic mean diameter over stems 12.5 cm and up. The 25 cm boundary is the
-source-sink threshold of the species' bionomics. Intervals are Wilson score intervals on the
-class proportion, which is why they are asymmetric in the smallest class; the normal
-approximation is not used because it misbehaves at the small class sizes at both ends of the
-range. Note that 30 m cells in a spreading outbreak are not independent, so the tests
-reported beneath this table in the main text are anti-conservative.
+Coefficients of the full annual model M3, continuous terms ordered by absolute size. Each coefficient was the change in log-odds per standard deviation of its variable, fitted on a class-balanced sample, so the intercept was not the landscape prevalence. SE was the standard error and z the Wald statistic. Significance was marked * p ≤ 0.05, ** p ≤ 0.01, *** p ≤ 0.001, **** p ≤ 0.0001. The geomorphon landform classes of the same model were reported in Table 8.
 
 ```{r}
-kable(get("table-7-diameter-class"), booktabs = TRUE, align = "lrr")
+kable(get("table-7-full-model"), booktabs = TRUE, align = "lrrr")
 ```
 
 # Table 8
 
-The 16-day model refitted under four definitions of the wind window. The epoch wind regime,
-every hour, is the definition used throughout this paper. Coefficients are log-odds per
-standard deviation. AUC is the area under the receiver operating characteristic curve. The
-thermal-gate row is fitted on fewer cell-epochs because two epochs had too few qualifying
-hours, so its AIC is not comparable with the other three and AIC is therefore not shown.
+Geomorphon landform classes in the full annual model M3, as coefficients against the reference class, `r txt("table-8-reference-and-shoulder")[1]`, the most common class on the perimeter. Cells was the number of perimeter cells in each class and Attacked the share of those cells classed moderate-to-high over all years. Flat and pit did not occur on the perimeter, and shoulder, `r txt("table-8-reference-and-shoulder")[2]` cells with no attack, was merged into ridge. Significance was marked * p ≤ 0.05, ** p ≤ 0.01, *** p ≤ 0.001, **** p ≤ 0.0001.
 
 ```{r}
-kable(get("table-8-flight-window"), booktabs = TRUE)
+kable(get("table-8-geomorphon-classes"), booktabs = TRUE, align = "lrrrr")
+```
+
+# Table 9
+
+Moderate-to-high beetle disturbance by quadratic mean diameter class, on the balanced sample. QMD was quadratic mean diameter over stems 12.5 cm and up. The 25 cm boundary was the source-sink threshold of the species' bionomics. Intervals were Wilson score intervals on the class proportion, which is why they were asymmetric in the smallest class. Because 30 m cells in a spreading outbreak were not independent, the tests reported in the main text were anti-conservative.
+
+```{r}
+kable(get("table-9-diameter-class"), booktabs = TRUE, align = "lrr")
+```
+
+# Table 10
+
+The 16-day model refitted under four definitions of the wind window. The epoch wind regime, every hour, was the definition used throughout this paper. Coefficients were log-odds per standard deviation and AUC the area under the receiver operating characteristic curve. Significance was marked * p ≤ 0.05, ** p ≤ 0.01, *** p ≤ 0.001, **** p ≤ 0.0001. The thermal-limits row was fitted on fewer cell-epochs because two epochs had too few qualifying hours, so its row was not directly comparable with the other three.
+
+```{r}
+kable(get("table-10-flight-window"), booktabs = TRUE)
 ```

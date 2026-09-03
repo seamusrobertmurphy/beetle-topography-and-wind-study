@@ -1,0 +1,943 @@
+[
+ {
+  "table": 1,
+  "caption_key": "Landscape attributes entered in this study, the direction ex",
+  "cols": 3,
+  "tblW": 9354,
+  "grid": [
+   1800,
+   1094,
+   6460
+  ],
+  "header_height": {
+   "val": 397,
+   "hRule": "exact"
+  },
+  "body_height": {
+   "val": 624,
+   "hRule": "exact"
+  },
+  "header_cells": [
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   }
+  ],
+  "body_cells": [
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   }
+  ]
+ },
+ {
+  "table": 2,
+  "caption_key": "The datasets this study combined, with the structure and res",
+  "cols": 7,
+  "tblW": 9354,
+  "grid": [
+   1454,
+   1701,
+   2409,
+   709,
+   992,
+   1070,
+   1019
+  ],
+  "header_height": {
+   "val": 397,
+   "hRule": "exact"
+  },
+  "body_height": {
+   "val": 680,
+   "hRule": "exact"
+  },
+  "header_cells": [
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   }
+  ],
+  "body_cells": [
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   }
+  ]
+ },
+ {
+  "table": 3,
+  "caption_key": "Moderate-to-high beetle disturbance by year inside the study",
+  "cols": 3,
+  "tblW": 9354,
+  "grid": [
+   3118,
+   3118,
+   3118
+  ],
+  "header_height": {
+   "val": 397,
+   "hRule": "exact"
+  },
+  "body_height": {
+   "val": 340,
+   "hRule": "exact"
+  },
+  "header_cells": [
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   }
+  ],
+  "body_cells": [
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   }
+  ]
+ },
+ {
+  "table": 4,
+  "caption_key": "Stand structure across the study perimeter, from the Vegetat",
+  "cols": 9,
+  "tblW": 9356,
+  "grid": [
+   2446,
+   863,
+   864,
+   864,
+   864,
+   863,
+   864,
+   864,
+   864
+  ],
+  "header_height": {
+   "val": 397,
+   "hRule": "auto"
+  },
+  "body_height": {
+   "val": 454,
+   "hRule": "auto"
+  },
+  "header_cells": [
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   }
+  ],
+  "body_cells": [
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 15,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 15,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 15,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 15,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 15,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 15,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 15,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 15,
+    "bold": false
+   }
+  ]
+ },
+ {
+  "table": 5,
+  "caption_key": "Variable selection. Every candidate with its pathway, its un",
+  "cols": 6,
+  "tblW": 9354,
+  "grid": [
+   3939,
+   820,
+   1231,
+   1067,
+   1477,
+   820
+  ],
+  "header_height": {
+   "val": 567,
+   "hRule": "exact"
+  },
+  "body_height": {
+   "val": 340,
+   "hRule": "exact"
+  },
+  "header_cells": [
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   }
+  ],
+  "body_cells": [
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   }
+  ]
+ },
+ {
+  "table": 6,
+  "caption_key": "Comparison of the four annual models, each adding one mechan",
+  "cols": 9,
+  "tblW": 9354,
+  "grid": [
+   2447,
+   863,
+   863,
+   863,
+   863,
+   863,
+   863,
+   863,
+   866
+  ],
+  "header_height": {
+   "val": 567,
+   "hRule": "auto"
+  },
+  "body_height": {
+   "val": 397,
+   "hRule": "auto"
+  },
+  "header_cells": [
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   }
+  ],
+  "body_cells": [
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   }
+  ]
+ },
+ {
+  "table": 7,
+  "caption_key": "Coefficients of the full annual model M3, continuous terms o",
+  "cols": 4,
+  "tblW": 9354,
+  "grid": [
+   5997,
+   1119,
+   1119,
+   1119
+  ],
+  "header_height": {
+   "val": 567,
+   "hRule": "exact"
+  },
+  "body_height": {
+   "val": 340,
+   "hRule": "exact"
+  },
+  "header_cells": [
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   }
+  ],
+  "body_cells": [
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   }
+  ]
+ },
+ {
+  "table": 8,
+  "caption_key": "Geomorphon landform classes in the full annual model M3, as ",
+  "cols": 5,
+  "tblW": 9354,
+  "grid": [
+   1559,
+   1948,
+   1948,
+   1948,
+   1951
+  ],
+  "header_height": {
+   "val": 624,
+   "hRule": "exact"
+  },
+  "body_height": {
+   "val": 340,
+   "hRule": "exact"
+  },
+  "header_cells": [
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   }
+  ],
+  "body_cells": [
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   }
+  ]
+ },
+ {
+  "table": 9,
+  "caption_key": "Moderate-to-high beetle disturbance by quadratic mean diamet",
+  "cols": 5,
+  "tblW": 9354,
+  "grid": [
+   1871,
+   1871,
+   1871,
+   1871,
+   1870
+  ],
+  "header_height": {
+   "val": 624,
+   "hRule": "exact"
+  },
+  "body_height": {
+   "val": 340,
+   "hRule": "exact"
+  },
+  "header_cells": [
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   }
+  ],
+  "body_cells": [
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   }
+  ]
+ },
+ {
+  "table": 10,
+  "caption_key": "The 16-day model refitted under four definitions of the wind",
+  "cols": 6,
+  "tblW": 9354,
+  "grid": [
+   2162,
+   1438,
+   1438,
+   1438,
+   1438,
+   1440
+  ],
+  "header_height": {
+   "val": 624,
+   "hRule": "exact"
+  },
+  "body_height": {
+   "val": 340,
+   "hRule": "exact"
+  },
+  "header_cells": [
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 16,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 16,
+    "bold": true
+   }
+  ],
+  "body_cells": [
+   {
+    "vAlign": null,
+    "jc": "left",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "center",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "center",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "center",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "center",
+    "sz": 16,
+    "bold": false
+   },
+   {
+    "vAlign": null,
+    "jc": "center",
+    "sz": 16,
+    "bold": false
+   }
+  ]
+ }
+]
