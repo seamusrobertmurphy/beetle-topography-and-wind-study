@@ -87,7 +87,8 @@ Every figure and table below is reproduced from the current render, in the order
 | Standing volume (m³ ha⁻¹) | 272.33 | 131.38 | 0.393 | 281.47 | 0.82 | 586.61 | +0.01 | -0.35 |
 | Lodgepole pine cover (%) | 20.11 | 23.93 | 0.072 | 10.00 | 0.00 | 100.00 | +1.45 | +1.56 |
 | Susceptible pine BA (m² ha⁻¹) | 7.07 | 8.85 | 0.026 | 4.00 | 0.00 | 48.30 | +1.63 | +2.63 |
-| # Note the standard error is small because it is computed over 111,707 cell-years, and it measures the precision of the landscape mean, rather than of any one cell. |  |  |  |  |  |  |  |  |
+
+*Note the standard error is small because it is computed over 111,707 cell-years, and it measures the precision of the landscape mean, rather than of any one cell.*
 
 ### Figure 3
 
@@ -194,7 +195,8 @@ Every figure and table below is reproduced from the current render, in the order
 | valley | 2,963 | 3.8 | -0.676**** | 0.121 |
 | ridge# | 1,276 | 11.0 | -1.160**** | 0.119 |
 | peak | 168 | 22.6 | -0.523* | 0.227 |
-| # Ridge includes the 16 shoulder cells on the perimeter. No shoulder cell was classed as attacked in any year, so the class could not be estimated on its own and was counted with ridge, its neighbour on the geomorphon scale. |  |  |  |  |
+
+*Ridge includes the 16 shoulder cells on the perimeter. No shoulder cell was classed as attacked in any year, so the class could not be estimated on its own and was counted with ridge, its neighbour on the geomorphon scale.*
 
 ### Figure 4
 

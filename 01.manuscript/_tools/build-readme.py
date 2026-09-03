@@ -72,7 +72,15 @@ def front_matter() -> dict:
     return {k: re.sub(r"\s+", " ", v).strip() for k, v in out.items()}
 
 
-def to_pipe_table(chunk: str) -> str | None:
+def to_pipe_table(chunk: str) -> tuple[str, str] | None:
+    """Return the pipe table and its footnote, which is empty when there is none.
+
+    A last row whose first cell begins with the # marker and whose other cells are
+    empty is a table footnote, the form set by hand in the Word file on 2026-09-02 and
+    merged across the table by format-tables.py. A pipe table has no merged cells, so
+    left in place the note sits in the first column beside a row of empty cells; it is
+    lifted out and printed under the table instead.
+    """
     m = re.search(r"<table[^>]*>(.*?)</table>", chunk, re.S)
     if not m:
         return None
@@ -97,6 +105,11 @@ def to_pipe_table(chunk: str) -> str | None:
             rows.append(cells)
     if not heads or not rows:
         return None
+    note = ""
+    last = rows[-1]
+    if last[0].startswith("#") and not any(c.strip() for c in last[1:]):
+        note = last[0].lstrip("#").strip()
+        rows = rows[:-1]
     while len(aligns) < len(heads):
         aligns.append(":---")
     esc = lambda s: s.replace("|", "\\|")
@@ -107,7 +120,7 @@ def to_pipe_table(chunk: str) -> str | None:
     for r in rows:
         r = (r + [""] * len(heads))[: len(heads)]
         out.append("| " + " | ".join(esc(x) for x in r) + " |")
-    return "\n".join(out)
+    return "\n".join(out), note
 
 
 def save_figure(chunk: str, slug: str) -> Path | None:
@@ -186,11 +199,14 @@ def main() -> None:
             parts += [f"### {label or 'Figure'}", "",
                       f"![{label}]({path.as_posix()})", "", f"*{text}*", ""]
         else:
-            table = to_pipe_table(chunk)
-            if not table:
+            got = to_pipe_table(chunk)
+            if not got:
                 continue
+            table, note = got
             n_tbl += 1
             parts += [f"### {label or 'Table'}", "", f"*{text}*", "", table, ""]
+            if note:
+                parts += [f"*{note}*", ""]
 
     OUT.write_text("\n".join(parts).rstrip() + "\n", encoding="utf8")
     print(f"wrote {OUT.relative_to(ROOT)}: {n_fig} figures and {n_tbl} tables, in document order")
