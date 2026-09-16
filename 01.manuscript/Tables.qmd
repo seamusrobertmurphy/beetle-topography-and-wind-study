@@ -64,19 +64,18 @@ fmt <- function(x) formatC(as.numeric(x), format = "d", big.mark = ",")
 
 # Table 1
 
-Landscape attributes entered in this study, the direction expected of each, and the
-reasoning behind that expectation.
+Stand structure across the study perimeter, from the Vegetation Resources Inventory, over `r fmt(txt("table-1-cell-years"))` cell-years. SD was the standard deviation across the landscape and SE the standard error of the mean, which was small at this sample size by construction and measured the precision of the landscape mean rather than of any one cell. Skewness and kurtosis were the bias-corrected third and fourth standardised moments, kurtosis being excess, so that 0 was Gaussian and a positive value heavy-tailed.
 
 ```{r}
-kable(get("table-1-hypotheses"), booktabs = TRUE, align = "lll")
+kable(get("table-1-stand-structure"), booktabs = TRUE, align = "lrrrrrrrr")
 ```
 
 # Table 2
 
-Stand structure across the study perimeter, from the Vegetation Resources Inventory, over `r fmt(txt("table-2-cell-years"))` cell-years. SD was the standard deviation across the landscape and SE the standard error of the mean, which was small at this sample size by construction and measured the precision of the landscape mean rather than of any one cell. Skewness and kurtosis were the bias-corrected third and fourth standardised moments, kurtosis being excess, so that 0 was Gaussian and a positive value heavy-tailed.
+The variables that entered the models after selection, the pathway each served, and the direction expected of it from the mechanism named in the Introduction. AUC was the area under the receiver operating characteristic curve of the univariate fit, with the asterisks beside it marking its significance, * p ≤ 0.05, ** p ≤ 0.01, *** p ≤ 0.001, **** p ≤ 0.0001.
 
 ```{r}
-kable(get("table-2-stand-structure"), booktabs = TRUE, align = "lrrrrrrrr")
+kable(get("table-2-variables"), booktabs = TRUE, align = "lllr")
 ```
 
 # Table 3
@@ -89,7 +88,7 @@ kable(get("table-3-model-comparison"), booktabs = TRUE, align = "lrrrrrr")
 
 # Table 4
 
-Coefficients of the full annual model M3, continuous terms ordered by absolute size. Each coefficient was the change in log-odds per standard deviation of its variable, fitted on a class-balanced sample, so the intercept was not the landscape prevalence. SE was the standard error and z the Wald statistic. Significance was marked * p ≤ 0.05, ** p ≤ 0.01, *** p ≤ 0.001, **** p ≤ 0.0001. The geomorphon landform classes of the same model were reported in Table 5.
+Coefficients of the full annual model M3, continuous terms ordered by absolute size. Each coefficient was the change in log-odds per standard deviation of its variable, fitted on a class-balanced sample, so the intercept was not the landscape prevalence. SE was the standard error and z the Wald statistic. Significance was marked * p ≤ 0.05, ** p ≤ 0.01, *** p ≤ 0.001, **** p ≤ 0.0001. The geomorphon landform classes of the same model were reported in Table 6.
 
 ```{r}
 kable(get("table-4-full-model"), booktabs = TRUE, align = "lrrr")
@@ -97,16 +96,16 @@ kable(get("table-4-full-model"), booktabs = TRUE, align = "lrrr")
 
 # Table 5
 
-Geomorphon landform classes in the full annual model M3, as coefficients against the reference class, `r txt("table-5-reference-and-shoulder")[1]`, the most common class on the perimeter. Cells was the number of perimeter cells in each class and Attacked the share of those cells classed moderate-to-high over all years. Flat and pit did not occur on the perimeter, and shoulder, `r txt("table-5-reference-and-shoulder")[2]` cells with no attack, was merged into ridge. Significance was marked * p ≤ 0.05, ** p ≤ 0.01, *** p ≤ 0.001, **** p ≤ 0.0001.
+Moderate-to-high beetle disturbance by quadratic mean diameter class, on the balanced sample. QMD was quadratic mean diameter over stems 12.5 cm and up. The 25 cm boundary was the source-sink threshold of the species' bionomics. Intervals were Wilson score intervals on the class proportion, which is why they were asymmetric in the smallest class. Because 30 m cells in a spreading outbreak were not independent, the tests reported in the main text were anti-conservative.
 
 ```{r}
-kable(get("table-5-geomorphon-classes"), booktabs = TRUE, align = "lrrrr")
+kable(get("table-5-diameter-class"), booktabs = TRUE, align = "lrr")
 ```
 
 # Table 6
 
-Moderate-to-high beetle disturbance by quadratic mean diameter class, on the balanced sample. QMD was quadratic mean diameter over stems 12.5 cm and up. The 25 cm boundary was the source-sink threshold of the species' bionomics. Intervals were Wilson score intervals on the class proportion, which is why they were asymmetric in the smallest class. Because 30 m cells in a spreading outbreak were not independent, the tests reported in the main text were anti-conservative.
+Geomorphon landform classes in the full annual model M3, as coefficients against the reference class, `r txt("table-6-reference-and-shoulder")[1]`, the most common class on the perimeter. Cells was the number of perimeter cells in each class and Attacked the share of those cells classed moderate-to-high over all years. Flat and pit did not occur on the perimeter, and shoulder, `r txt("table-6-reference-and-shoulder")[2]` cells with no attack, was merged into ridge. Significance was marked * p ≤ 0.05, ** p ≤ 0.01, *** p ≤ 0.001, **** p ≤ 0.0001.
 
 ```{r}
-kable(get("table-6-diameter-class"), booktabs = TRUE, align = "lrr")
+kable(get("table-6-geomorphon-classes"), booktabs = TRUE, align = "lrrrr")
 ```

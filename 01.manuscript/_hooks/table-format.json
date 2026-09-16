@@ -1,6 +1,6 @@
 [
  {
-  "table": 1,
+  "table": 2,
   "caption_key": "Landscape attributes entered in this study, the direction ex",
   "cols": 3,
   "tblW": 9354,
@@ -229,7 +229,7 @@
   ]
  },
  {
-  "table": 2,
+  "table": 1,
   "caption_key": "Stand structure across the study perimeter, from the Vegetat",
   "cols": 9,
   "tblW": 9356,
@@ -673,7 +673,7 @@
   ]
  },
  {
-  "table": 5,
+  "table": 6,
   "caption_key": "Geomorphon landform classes in the full annual model M3, as ",
   "cols": 5,
   "tblW": 9354,
@@ -758,7 +758,7 @@
   ]
  },
  {
-  "table": 6,
+  "table": 5,
   "caption_key": "Moderate-to-high beetle disturbance by quadratic mean diamet",
   "cols": 5,
   "tblW": 9354,
