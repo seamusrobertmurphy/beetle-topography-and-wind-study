@@ -1,0 +1,125 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.Rprofile
+.Rproj
+
+# Secrets: keep credentials out of git
+.Renviron
+.env
+
+# Project-local Python virtualenv (rebuilt on render)
+.venv/
+__pycache__/
+
+_staging/
+_site/
+_backups/
+# Claude Code local state. Nothing under .claude is committed. The project memory store
+# was tracked until 2026-08-30 and was removed: this repository is public and is cited in
+# the manuscript's data availability statement.
+**/.claude/
+.claudeprism/
+
+# Obsidian vault settings, local to one machine.
+.obsidian/
+tasks/
+_extensions/
+
+CLAUDE.md
+INDEX.md
+SPEC.md
+_quarto_book.yml.disabled
+
+.DS_Store
+*.tif
+._*
+
+/.quarto/
+.quarto/
+
+.gitignore
+# Quarto render artefacts
+01.manuscript/*_files/
+01.manuscript/*.rmarkdown
+# 05.tasks/ holds working material that does not belong in the repository, but two kinds of
+# file in it are build-critical and must travel: the scripts _quarto.yml and the package
+# assembly depend on, and the task requests a fresh session is handed. Until 2026-08-29 the
+# whole folder was ignored, so a clone could not render (the pre-render hook calls
+# check-preamble-silent.py) or assemble a submission, and three task requests reported as
+# committed were never in the repository at all.
+# 05.tasks holds communication and working files only. Nothing enters it as an output and
+# nothing leaves it as an input, and no build step may depend on it. The three render hooks
+# _quarto.yml invokes moved to 01.manuscript/_tools on 2026-08-31, so the folder is now
+# ignored with no exceptions.
+05.tasks/
+Rplots.pdf
+DECISIONS.md
+
+# BC Aerial Overview Survey bulk download: now carried in Git LFS (see .gitattributes)
+# rather than excluded. Open Government Licence BC; also retrievable from the BC Data Catalogue.
+*.zip
+
+# knitr cache for the manuscript. Regenerable; the submission render is run from empty.
+# The glob matters: each .qmd gets its own <stem>_cache/ directory, and they run to
+# several hundred megabytes each, well past the 100 MB file limit GitHub enforces.
+01.manuscript/_cache/
+01.manuscript/*_cache/
+01.manuscript/*_files/
+
+# Microsoft Word autosave backups next to the render
+01.manuscript/beetle-topography-wind-study/
+
+# Raw third-party GIS and thesis archives. Hundreds of megabytes of BC government
+# geodatasets, ArcMap exports and remote sensing output that this project reads but
+# did not create. Provenance is recorded in the scripts that read them.
+archive/1.1.1 Data analysis/
+archive/1.2 Remote Sensing Output/
+archive/1.8 GIS Data/
+archive/ArcExports -Full Folder/
+
+# Raster stacks rebuilt by the pipeline. Every one is reproducible from the numbered
+# scripts in 02.inputs/beetle/, and together they are about 700 MB.
+02.inputs/beetle/ndmi-darkwoods/
+02.inputs/beetle/covariates/*.tif
+02.inputs/beetle/covariates/wind-hourly/
+02.inputs/beetle/red-stage-darkwoods/*.tif
+02.inputs/beetle/red-stage/*.tif
+
+# Archived inputs, moved 2026-08-30. Nothing in either folder is read by the manuscript
+# or by any script that produces a number it reports. Each carries a README naming every
+# folder and the reason it is there. About 2.2 GB in total, none of it ever tracked.
+02.inputs/archive/*
+!02.inputs/archive/README.md
+02.inputs/beetle/archive/*
+!02.inputs/beetle/archive/README.md
+
+# Quarto intermediate render directory
+01.manuscript/manuscript-short/
+
+# Model input tables. Re-drawn by a fresh random sample on every run of 26-, 28- and
+# 31-, so they are outputs of a seed rather than data. 129 MB between them. The
+# summary tables they produce are committed.
+02.inputs/beetle/red-stage-darkwoods/covariates_by_year.csv
+02.inputs/beetle/red-stage-darkwoods/refugia_model_data.csv
+02.inputs/beetle/red-stage-darkwoods/refugia_wind_data.csv
+
+# Added 2026-09-02, when the archives of the promotion were first committed.
+# The knitr cache moved aside with the copy is the same cache the rules above already
+# exclude, and four of its files are over the 100 MiB GitHub ceiling. The unzipped
+# full-repo-package is the contents of full-repo-package.zip, excluded above, and a
+# late-August snapshot the git history already holds. The three seed-drawn model tables
+# are excluded in their archived copy for the reason given for the live ones above.
+archive/2026-09-02-promotion/stale-knitr-cache/
+archive/full-repo-package/
+02.inputs/beetle/red-stage-darkwoods-derived-plots/covariates_by_year.csv
+02.inputs/beetle/red-stage-darkwoods-derived-plots/refugia_model_data.csv
+02.inputs/beetle/red-stage-darkwoods-derived-plots/refugia_wind_data.csv
+
+# Added 2026-09-02 at Seamus's request. The whole archive folder is out of the repository;
+# nothing in it is read by the manuscript or by any script that produces a number it reports.
+archive/
+
+# knitr cache of the archived draft render, 669 MB with files over 100 MB
+01.manuscript/drafts/Manuscript_cache/

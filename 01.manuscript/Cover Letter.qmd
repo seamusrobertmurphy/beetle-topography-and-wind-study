@@ -1,0 +1,35 @@
+---
+format:
+  docx:
+    reference-doc: ../04.references/style-formal.docx
+    number-sections: false
+---
+
+Dr Seamus Murphy\
+TÜV SÜD, 2187 Comox Ave, Comox, British Columbia V9M 1P5, Canada\
+seamusrobertmurphy@gmail.com\
+ORCID 0000-0002-1792-0351
+
+16 September 2026
+
+The Editors\
+Agricultural and Forest Entomology\
+Royal Entomological Society
+
+RE: Submission of a Research Article to Agricultural and Forest Entomology
+
+Dear Editors,
+
+I wish to submit the attached manuscript, "Testing the wind disruption and disturbance refugia hypothesis for mountain pine beetle outbreaks (*Dendroctonus ponderosae*). Terrain, stand density and flight-period wind as controls on attack in the Selkirk Mountains of British Columbia", to Agricultural and Forest Entomology as a Research Article.
+
+The study takes up a question left open by Krawchuk et al. (2020), who proposed that some stands escape mountain pine beetle outbreaks because shade, low host density and a shortage of large hosts make them refugia, and who named wind as the cause that breaks up the aggregation pheromone in thin stands. The paper fits the three mechanisms together across 5,573 ha of the Selkirk Mountains over eight outbreak years, with wind measured at the sixteen-day interval of the Landsat record and resolved over the terrain, and with previous-year attack in every model.
+
+Its origin is my companion study of forest regeneration on the same ground, Murphy, Leslie, Wilson and Banks (2026), Forest Ecology and Management 618, 123985, which found that terrain ruggedness shaped where the forest returned but could not say which property of the terrain the beetle answered to. The present paper reuses that study's ground plots of beetle-killed pine as the ground truth for mapping attack, and separates ruggedness into the components the beetle's biology names.
+
+The contribution is a distinction between two ways terrain and wind act on an outbreak. Wind during the flight period weakens the advantage a dense canopy gives the beetle, which is the plume mechanism the refugia hypothesis anticipated, and sheltered, open ground receives more of the beetles the wind carries whatever the stand, which it did not. For managers the result means that refugia cannot be mapped from terrain alone, and that thinning can be expected to lower attack on windward ground during windy flight periods and to do little on the sheltered lee slopes where beetles come down. The readership of the journal, entomologists and the managers of insects in managed forests, is the readership that result is written for.
+
+The manuscript is within the journal's 8,000-word limit including references, figures and tables, with the MicroMet equations, three descriptive tables and a sensitivity analysis of the wind window in a Supporting Information file. The work is original, is not published or under consideration elsewhere, and received no external funding. I am the sole author, I declare no conflict of interest, there is no dispute over the ownership of the data presented, and every contribution has been attributed by acknowledgement. The derived data and the complete analysis code are public on GitHub and will be deposited in Dryad with the revised manuscript.
+
+Yours sincerely,
+
+Dr Seamus Murphy

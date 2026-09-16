@@ -8,6 +8,7 @@ project:
     - "01.manuscript/Manuscript.qmd"
     - "01.manuscript/Tables.qmd"
     - "01.manuscript/Supporting Information.qmd"
+    - "01.manuscript/Cover Letter.qmd"
   # 2026-09-16. The hooks run from _hooks, a copy of _tools restored from git, because the
   # _tools directory entry was corrupted when the drive unmounted mid-session and cannot
   # be read or removed until Disk Utility First Aid runs. After the repair, restore _tools

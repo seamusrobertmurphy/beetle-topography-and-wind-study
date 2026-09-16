@@ -5,7 +5,7 @@ format:
     reference-doc: ../04.references/style-formal.docx
     number-sections: false
 bibliography: ../04.references/references-beetle.bib
-csl: ../04.references/springer-basic-author-date.csl
+csl: ../04.references/apa.csl
 ## The bibliography is declared so the citations inside Table 2's rationale column resolve.
 ## It is suppressed because the reference list belongs in the main document, not here.
 suppress-bibliography: true
@@ -72,7 +72,7 @@ kable(get("table-1-stand-structure"), booktabs = TRUE, align = "lrrrrrrrr")
 
 # Table 2
 
-The variables that entered the models after selection, the pathway each served, and the direction expected of it from the mechanism named in the Introduction. AUC was the area under the receiver operating characteristic curve of the univariate fit, with the asterisks beside it marking its significance, * p ≤ 0.05, ** p ≤ 0.01, *** p ≤ 0.001, **** p ≤ 0.0001.
+The variables that entered the models after selection, the pathway each served, and the direction expected of it from the mechanism named in the Introduction. AUC was the area under the receiver operating characteristic curve of the univariate fit, with the asterisks beside it marking its significance, * P ≤ 0.05, ** P ≤ 0.01, *** P ≤ 0.001, **** P ≤ 0.0001.
 
 ```{r}
 kable(get("table-2-variables"), booktabs = TRUE, align = "lllr")
@@ -80,7 +80,7 @@ kable(get("table-2-variables"), booktabs = TRUE, align = "lllr")
 
 # Table 3
 
-Comparison of the four annual models, each adding one mechanism to the one before. AIC ranked the models on likelihood with a penalty for the number of parameters, and the remaining columns measured how far the fitted probabilities fell from the observed classes. RMSE was the root mean squared error and MAE the mean absolute error, both on the fitted probabilities, and AUC the area under the receiver operating characteristic curve. Brier skill was the improvement over predicting the prevalence for every cell, where 0 was no better than that base rate.
+Comparison of the four annual models, each adding one mechanism to the one before. RMSE was the root mean squared error and MAE the mean absolute error, both on the fitted probabilities, and AUC the area under the receiver operating characteristic curve. Brier skill was the improvement over predicting the prevalence for every cell, where 0 was no better than that base rate.
 
 ```{r}
 kable(get("table-3-model-comparison"), booktabs = TRUE, align = "lrrrrrr")
@@ -88,7 +88,7 @@ kable(get("table-3-model-comparison"), booktabs = TRUE, align = "lrrrrrr")
 
 # Table 4
 
-Coefficients of the full annual model M3, continuous terms ordered by absolute size. Each coefficient was the change in log-odds per standard deviation of its variable, fitted on a class-balanced sample, so the intercept was not the landscape prevalence. SE was the standard error and z the Wald statistic. Significance was marked * p ≤ 0.05, ** p ≤ 0.01, *** p ≤ 0.001, **** p ≤ 0.0001. The geomorphon landform classes of the same model were reported in Table 6.
+Coefficients of the full annual model M3, continuous terms ordered by absolute size. Each coefficient was the change in log-odds per standard deviation of its variable, fitted on a class-balanced sample, so the intercept was not the landscape prevalence. SE was the standard error and z the Wald statistic. Significance was marked * P ≤ 0.05, ** P ≤ 0.01, *** P ≤ 0.001, **** P ≤ 0.0001. The geomorphon landform classes of the same model were reported in Table 6.
 
 ```{r}
 kable(get("table-4-full-model"), booktabs = TRUE, align = "lrrr")
@@ -104,7 +104,7 @@ kable(get("table-5-diameter-class"), booktabs = TRUE, align = "lrr")
 
 # Table 6
 
-Geomorphon landform classes in the full annual model M3, as coefficients against the reference class, `r txt("table-6-reference-and-shoulder")[1]`, the most common class on the perimeter. Cells was the number of perimeter cells in each class and Attacked the share of those cells classed moderate-to-high over all years. Flat and pit did not occur on the perimeter, and shoulder, `r txt("table-6-reference-and-shoulder")[2]` cells with no attack, was merged into ridge. Significance was marked * p ≤ 0.05, ** p ≤ 0.01, *** p ≤ 0.001, **** p ≤ 0.0001.
+Geomorphon landform classes in the full annual model M3, as coefficients against the reference class, `r txt("table-6-reference-and-shoulder")[1]`, the most common class on the perimeter. Cells was the number of perimeter cells in each class and Attacked the share of those cells classed moderate-to-high over all years. Flat and pit did not occur on the perimeter, and shoulder, `r txt("table-6-reference-and-shoulder")[2]` cells with no attack, was merged into ridge. Significance was marked * P ≤ 0.05, ** P ≤ 0.01, *** P ≤ 0.001, **** P ≤ 0.0001.
 
 ```{r}
 kable(get("table-6-geomorphon-classes"), booktabs = TRUE, align = "lrrrr")
