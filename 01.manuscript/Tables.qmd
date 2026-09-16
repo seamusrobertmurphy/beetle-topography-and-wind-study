@@ -20,8 +20,9 @@ execute:
 #| echo: false
 #| output: false
 
-## Journal of Pest Science asks for every editable source file at submission, and the
-## tables are kept as one such file. These are read back from the CSVs the manuscript
+## The tables are kept as one editable file beside the article, in the numbering the
+## article uses; the four tables moved to the Supporting Information on 2026-09-16 are
+## read by Supporting Information.qmd. These are read back from the CSVs the manuscript
 ## wrote as it rendered, not recomputed, so this file cannot report a different number
 ## from the article it accompanies. If a CSV is missing, render
 ## 01.manuscript/Manuscript.qmd first.
@@ -72,72 +73,40 @@ kable(get("table-1-hypotheses"), booktabs = TRUE, align = "lll")
 
 # Table 2
 
-The datasets this study combined, with the structure and resolution of each. Spatial resolution was the grid on which a variable was analysed and temporal resolution the interval at which it varied. The response varied every 16 days, the inventory once a year, the station wind every hour and the terrain not at all, which was the unevenness the wind analysis depended on.
+Stand structure across the study perimeter, from the Vegetation Resources Inventory, over `r fmt(txt("table-2-cell-years"))` cell-years. SD was the standard deviation across the landscape and SE the standard error of the mean, which was small at this sample size by construction and measured the precision of the landscape mean rather than of any one cell. Skewness and kurtosis were the bias-corrected third and fourth standardised moments, kurtosis being excess, so that 0 was Gaussian and a positive value heavy-tailed.
 
 ```{r}
-kable(get("table-2-inventory"), booktabs = TRUE)
+kable(get("table-2-stand-structure"), booktabs = TRUE, align = "lrrrrrrrr")
 ```
 
 # Table 3
 
-Moderate-to-high beetle disturbance by year inside the study perimeter.
+Comparison of the four annual models, each adding one mechanism to the one before. AIC ranked the models on likelihood with a penalty for the number of parameters, and the remaining columns measured how far the fitted probabilities fell from the observed classes. RMSE was the root mean squared error and MAE the mean absolute error, both on the fitted probabilities, and AUC the area under the receiver operating characteristic curve. Brier skill was the improvement over predicting the prevalence for every cell, where 0 was no better than that base rate.
 
 ```{r}
-kable(get("table-3-prevalence"), booktabs = TRUE, align = "lrr")
+kable(get("table-3-model-comparison"), booktabs = TRUE, align = "lrrrrrr")
 ```
 
 # Table 4
 
-Stand structure across the study perimeter, from the Vegetation Resources Inventory, over `r fmt(txt("table-4-cell-years"))` cell-years. SD was the standard deviation across the landscape and SE the standard error of the mean, which was small at this sample size by construction and measured the precision of the landscape mean rather than of any one cell. Skewness and kurtosis were the bias-corrected third and fourth standardised moments, kurtosis being excess, so that 0 was Gaussian and a positive value heavy-tailed.
+Coefficients of the full annual model M3, continuous terms ordered by absolute size. Each coefficient was the change in log-odds per standard deviation of its variable, fitted on a class-balanced sample, so the intercept was not the landscape prevalence. SE was the standard error and z the Wald statistic. Significance was marked * p ≤ 0.05, ** p ≤ 0.01, *** p ≤ 0.001, **** p ≤ 0.0001. The geomorphon landform classes of the same model were reported in Table 5.
 
 ```{r}
-kable(get("table-4-stand-structure"), booktabs = TRUE, align = "lrrrrrrrr")
+kable(get("table-4-full-model"), booktabs = TRUE, align = "lrrr")
 ```
 
 # Table 5
 
-Variable selection. Every candidate with its pathway, its univariate AUC, the stage at which it left, and for the survivors of the inflation stage the lasso coefficient at the chosen penalty. Protected marked the highest-ranked survivor of each pathway, which the penalty could not remove. AUC was the area under the receiver operating characteristic curve of the univariate fit, and the asterisks beside it marked the significance of that fit, * p ≤ 0.05, ** p ≤ 0.01, *** p ≤ 0.001, **** p ≤ 0.0001.
+Geomorphon landform classes in the full annual model M3, as coefficients against the reference class, `r txt("table-5-reference-and-shoulder")[1]`, the most common class on the perimeter. Cells was the number of perimeter cells in each class and Attacked the share of those cells classed moderate-to-high over all years. Flat and pit did not occur on the perimeter, and shoulder, `r txt("table-5-reference-and-shoulder")[2]` cells with no attack, was merged into ridge. Significance was marked * p ≤ 0.05, ** p ≤ 0.01, *** p ≤ 0.001, **** p ≤ 0.0001.
 
 ```{r}
-kable(get("table-5-selection"), booktabs = TRUE, align = "llrlrl")
+kable(get("table-5-geomorphon-classes"), booktabs = TRUE, align = "lrrrr")
 ```
 
 # Table 6
 
-Comparison of the four annual models, each adding one mechanism to the one before. AIC ranked the models on likelihood with a penalty for the number of parameters, and the remaining columns measured how far the fitted probabilities fell from the observed classes. RMSE was the root mean squared error and MAE the mean absolute error, both on the fitted probabilities, and AUC the area under the receiver operating characteristic curve. Brier skill was the improvement over predicting the prevalence for every cell, where 0 was no better than that base rate.
-
-```{r}
-kable(get("table-6-model-comparison"), booktabs = TRUE, align = "lrrrrrr")
-```
-
-# Table 7
-
-Coefficients of the full annual model M3, continuous terms ordered by absolute size. Each coefficient was the change in log-odds per standard deviation of its variable, fitted on a class-balanced sample, so the intercept was not the landscape prevalence. SE was the standard error and z the Wald statistic. Significance was marked * p ≤ 0.05, ** p ≤ 0.01, *** p ≤ 0.001, **** p ≤ 0.0001. The geomorphon landform classes of the same model were reported in Table 8.
-
-```{r}
-kable(get("table-7-full-model"), booktabs = TRUE, align = "lrrr")
-```
-
-# Table 8
-
-Geomorphon landform classes in the full annual model M3, as coefficients against the reference class, `r txt("table-8-reference-and-shoulder")[1]`, the most common class on the perimeter. Cells was the number of perimeter cells in each class and Attacked the share of those cells classed moderate-to-high over all years. Flat and pit did not occur on the perimeter, and shoulder, `r txt("table-8-reference-and-shoulder")[2]` cells with no attack, was merged into ridge. Significance was marked * p ≤ 0.05, ** p ≤ 0.01, *** p ≤ 0.001, **** p ≤ 0.0001.
-
-```{r}
-kable(get("table-8-geomorphon-classes"), booktabs = TRUE, align = "lrrrr")
-```
-
-# Table 9
-
 Moderate-to-high beetle disturbance by quadratic mean diameter class, on the balanced sample. QMD was quadratic mean diameter over stems 12.5 cm and up. The 25 cm boundary was the source-sink threshold of the species' bionomics. Intervals were Wilson score intervals on the class proportion, which is why they were asymmetric in the smallest class. Because 30 m cells in a spreading outbreak were not independent, the tests reported in the main text were anti-conservative.
 
 ```{r}
-kable(get("table-9-diameter-class"), booktabs = TRUE, align = "lrr")
-```
-
-# Table 10
-
-The 16-day model refitted under four definitions of the wind window. The epoch wind regime, every hour, was the definition used throughout this paper. Coefficients were log-odds per standard deviation and AUC the area under the receiver operating characteristic curve. Significance was marked * p ≤ 0.05, ** p ≤ 0.01, *** p ≤ 0.001, **** p ≤ 0.0001. The thermal-limits row was fitted on fewer cell-epochs because two epochs had too few qualifying hours, so its row was not directly comparable with the other three.
-
-```{r}
-kable(get("table-10-flight-window"), booktabs = TRUE)
+kable(get("table-6-diameter-class"), booktabs = TRUE, align = "lrr")
 ```

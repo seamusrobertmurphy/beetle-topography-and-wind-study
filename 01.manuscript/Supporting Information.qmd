@@ -1,0 +1,109 @@
+---
+title: "Supporting Information"
+subtitle: "Testing the wind disruption and disturbance refugia hypothesis for mountain pine beetle outbreaks (*Dendroctonus ponderosae*). Terrain, stand density and flight-period wind as controls on attack in the Selkirk Mountains of British Columbia"
+author:
+  - name: Seamus Murphy
+    orcid: 0000-0002-1792-0351
+    email: seamusrobertmurphy@gmail.com
+    corresponding: true
+    affiliations:
+      - name: TÜV SÜD
+        address: 2187 Comox Ave
+        city: Comox
+        postal-code: V9M 1P5
+        region: British Columbia
+        country: Canada
+format:
+  docx:
+    reference-doc: ../04.references/style-formal.docx
+    number-sections: false
+  html:
+    embed-resources: true
+    toc: false
+bibliography: ../04.references/references-beetle.bib
+csl: ../04.references/springer-basic-author-date.csl
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r}
+#| label: si-setup
+#| output: false
+
+## Every table and value printed here is read back from the files Manuscript.qmd wrote
+## as it rendered, so the appendix cannot report a number the article does not. Render
+## 01.manuscript/Manuscript.qmd first.
+library(knitr)
+TBL <- here::here("03.outputs", "TBL")
+get <- function(n) {
+  f <- file.path(TBL, paste0(n, ".csv"))
+  if (!file.exists(f)) stop("missing ", f, ". Render 01.manuscript/Manuscript.qmd first.")
+  read.csv(f, check.names = FALSE)
+}
+V <- readRDS(file.path(TBL, "si-values.rds"))
+fw  <- function(def, col) sprintf("%+.3f", V$fws[[col]][V$fws$definition == def])
+fwp <- function(def, col) { p <- V$fws[[col]][V$fws$definition == def]
+  if (p < 0.001) "< 0.001" else sprintf("= %.3f", p) }
+```
+
+# Table S1
+
+The datasets this study combined, with the structure and resolution of each. Spatial resolution was the grid on which a variable was analysed and temporal resolution the interval at which it varied. The response varied every 16 days, the inventory once a year, the station wind every hour and the terrain not at all, which was the unevenness the wind analysis depended on.
+
+```{r}
+kable(get("table-S1-inventory"), booktabs = TRUE)
+```
+
+# Table S2
+
+Moderate-to-high beetle disturbance by year inside the study perimeter.
+
+```{r}
+kable(get("table-S2-prevalence"), booktabs = TRUE, align = "lrr")
+```
+
+# Methods S1
+
+The wind component of the MicroMet model of @liston2006 is seven equations, implemented directly from the source paper with its equation numbers given below.
+
+Terrain slope $\beta$ and slope azimuth $\xi$ came from the elevation model, equations 12 and 13 of @liston2006. Curvature $\Omega_c$ is a cell's elevation minus the mean of the two opposite cells one curvature length scale away, taken on four direction lines and averaged, their equation 14, and the length scale was estimated as the first lag at which elevation autocorrelation fell below 0.5, which was 600 m here. Assigning $\theta$ to wind bearing, slope in the wind direction was computed as follows
+
+$$\Omega_s = \beta \cos(\theta - \xi)$$ {#eq-slope}
+
+with $\Omega_s$ and $\Omega_c$ each scaled to $[-0.5,\,0.5]$. The terrain weighting factor applied to the observed speed $W$ was derived using
+
+$$W_w = 1 + \gamma_s \Omega_s + \gamma_c \Omega_c, \qquad \gamma_s = \gamma_c = 0.5$$ {#eq-weight}
+
+This provided the basis for calculation of the terrain-modified speed using
+
+$$W_t = W_w W$$ {#eq-speed}
+
+and a diversion of wind direction computed as
+
+$$\theta_d = -\tfrac{1}{2}\, \Omega_s \sin\!\left[2(\xi - \theta)\right].$$ {#eq-divert}
+
+By @eq-weight, $W_w$ depends on direction and not on speed, so it was computed once for each of 16 wind direction sectors of 22.5 degrees, the sixteen points of the compass, and each hourly observation was multiplied by the surface for its own sector, so that nothing was averaged before the terrain acted on it, and over all sectors $W_w$ ran from `r sprintf("%.2f", V$mm_ww[1])` to `r sprintf("%.2f", V$mm_ww[2])`.
+
+# Table S3
+
+Variable selection. Every candidate with its pathway, its univariate AUC, the stage at which it left, and for the survivors of the inflation stage the lasso coefficient at the chosen penalty. Protected marked the highest-ranked survivor of each pathway, which the penalty could not remove. AUC was the area under the receiver operating characteristic curve of the univariate fit, and the asterisks beside it marked the significance of that fit, * p ≤ 0.05, ** p ≤ 0.01, *** p ≤ 0.001, **** p ≤ 0.0001.
+
+```{r}
+kable(get("table-S3-selection"), booktabs = TRUE, align = "llrlrl")
+```
+
+# Table S4
+
+The wind variable of the sixteen-day models was the epoch wind regime, the mean over every hourly station observation in the sixteen days an epoch covered, each hour modified over the terrain by its own bearing. It was not restricted to the flight window, and that choice followed from the way the insect was known to disperse. @jackson2008 tracked mountain pine beetle on weather radar and confirmed the returns by aerial capture, finding beetles "at altitudes up to more than 800 m above the forest canopy" and estimating that those in flight above the canopy "may move 30 to 110 km$\cdot$day$^{-1}$", at a mean density of 4,950 and a maximum of 18,600 beetles per hectare. @ainslie2010 subsequently reproduced that above-canopy dispersion with an atmospheric model. An insect carried in the boundary layer at those heights and over those distances was exposed to the atmospheric regime of the period rather than to the wind measured within a stand between noon and five, and the variable was named accordingly.
+
+The 16-day model was refitted under four definitions of the window (Table S4), every hour, the 12:00 to 17:00 hours the flight peak occupied, the 11:00 to 18:00 hours that fell inside the thermal limits on this landscape more than half the time, and only those hours whose observed temperature fell inside the 19 to 41 degrees C range itself. The stem-density interaction was negative under all four definitions and distinguishable from zero under three, at `r fw("all24", "stems_x_wind")` over the full regime and `r fw("h12_17", "stems_x_wind")` and `r fw("h11_18", "stems_x_wind")` over the two clock windows, and fell to `r fw("gate", "stems_x_wind")` (p `r fwp("gate", "stems_p")`) when the hours were restricted to those inside the thermal limits, where the standing-volume interaction was instead the larger of the two at `r fw("gate", "volume_x_wind")` (p `r fwp("gate", "volume_p")`). One of the two density terms therefore carried the interaction under every definition, but which one depended on how the window was drawn, so the mechanism did not rest on the choice while its expression through stems or through volume did.
+
+The 16-day model refitted under four definitions of the wind window. The epoch wind regime, every hour, was the definition used throughout the article. Coefficients were log-odds per standard deviation and AUC the area under the receiver operating characteristic curve. Significance was marked * p ≤ 0.05, ** p ≤ 0.01, *** p ≤ 0.001, **** p ≤ 0.0001. The thermal-limits row was fitted on fewer cell-epochs because two epochs had too few qualifying hours, so its row was not directly comparable with the other three.
+
+```{r}
+kable(get("table-S4-flight-window"), booktabs = TRUE)
+```
+
+# References
