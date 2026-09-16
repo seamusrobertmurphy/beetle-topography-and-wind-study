@@ -11,8 +11,9 @@ the current render rather than retyped so the two cannot drift. Rerun after any
 Two things this script exists to handle:
 
 1. GitHub does not render the Pandoc grid tables Quarto produces, so a paste of
-   the render would print a wall of plus signs. Tables are converted to
-   GitHub-flavoured pipe tables, with column alignment preserved.
+   the render would print a wall of plus signs. Tables are emitted as raw HTML
+   tables that fill the page column, see html_table(), with column alignment
+   preserved.
 2. Figures are decoded from the HTML render's embedded base64, which keeps them
    in document order and avoids picking up the Word reference template's own
    images.
@@ -112,15 +113,34 @@ def to_pipe_table(chunk: str) -> tuple[str, str] | None:
         rows = rows[:-1]
     while len(aligns) < len(heads):
         aligns.append(":---")
-    esc = lambda s: s.replace("|", "\\|")
-    out = [
-        "| " + " | ".join(esc(x) for x in heads) + " |",
-        "| " + " | ".join(aligns[: len(heads)]) + " |",
-    ]
+    return html_table(heads, aligns[: len(heads)], rows), note
+
+
+# Every README table fills the page column and lets the browser size the cells. A pipe
+# table cannot do that: GitHub's stylesheet sets `width: max-content` on tables, so a
+# pipe table sits at the width of its text and `<table width="100%">` is overruled. The
+# one mechanism that works, measured against GitHub's live stylesheet by the
+# writing-readme skill, is an oversized pixel hint on every header cell,
+# `<th width="2000">`: it pushes the intrinsic width past any viewport and GitHub's
+# `max-width: 100%` clamps the table back to exactly the column, while the browser's
+# automatic layout still shares that width among the columns by their content. The
+# cost is raw HTML in the README instead of a pipe table.
+TH_WIDTH = "2000"
+ALIGN = {":---": "left", "---:": "right", ":---:": "center"}
+
+
+def html_table(heads: list[str], aligns: list[str], rows: list[list[str]]) -> str:
+    """Emit a full-width GitHub table from parsed header, alignment and body cells."""
+    esc = lambda s: html.escape(s, quote=False)
+    al = [ALIGN.get(a, "left") for a in aligns] + ["left"] * len(heads)
+    out = ["<table>", "<thead>", "<tr>"]
+    out += [f'<th width="{TH_WIDTH}" align="{al[i]}">{esc(h)}</th>' for i, h in enumerate(heads)]
+    out += ["</tr>", "</thead>", "<tbody>"]
     for r in rows:
         r = (r + [""] * len(heads))[: len(heads)]
-        out.append("| " + " | ".join(esc(x) for x in r) + " |")
-    return "\n".join(out), note
+        out.append("<tr>" + "".join(f'<td align="{al[i]}">{esc(c)}</td>' for i, c in enumerate(r)) + "</tr>")
+    out += ["</tbody>", "</table>"]
+    return "\n".join(out)
 
 
 def save_figure(chunk: str, slug: str) -> Path | None:

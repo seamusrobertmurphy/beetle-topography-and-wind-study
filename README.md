@@ -16,34 +16,56 @@ Every figure and table below is reproduced from the current render, in the order
 
 *Landscape attributes entered in this study, the direction expected of each, and the reasoning behind that expectation.*
 
-| Attribute | Expected | Rationale |
-| :--- | :--- | :--- |
-| Stand BA, volume, crown closure, stems | positive | Denser canopy holds the pheromone plume together; thinner stands admit wind that disperses it (Powell and Bentz 2014; Cartwright 2018; Krawchuk et al. 2020). |
-| Quadratic mean diameter | positive >25cm | Trees under 25 cm are beetle sinks, over 25 cm are sources (Carroll and Safranyik 2004). |
-| Lodgepole pine cover and BA | positive | Attack cannot occur where the host is absent; a cell without pine is not a refugium (Cartwright 2018). |
-| Flight-period direct radiation | positive | Flight is confined to 19 to 41 degrees C and peaks on bright afternoons, so sunlit slopes are reachable (McCambridge 1971; Safranyik and Carroll 2006). |
-| Growing-season direct radiation | negative | Shading cools, relieving water stress and sustaining defence, and cool sites also push the beetle toward a two-year cycle (Krawchuk et al. 2020; Sambaraju and Goodsman 2021). |
-| Terrain exposure to wind | negative | Wind disrupts the pheromone plume, so exposed ground should have less attack (Krawchuk et al. 2020). |
-| Terrain shelter and sky view | positive, as main effect | Beetles land without discriminating hosts after wind-borne transport, so sheltered, open ground should receive more landings whatever the stand (Hynum and Berryman 1980; Jackson et al. 2008; Chen and Jackson 2017). |
-| Terrain ruggedness | uncertain | The strongest terrain term in the companion study on this landscape, but fitted there against regeneration rather than attack (Murphy et al. 2026). |
-| Convergence, wetness, valley & slope position | positive in convergent terrain | Infested groups gather in draws and gullies, and deep snow insulates overwintering brood (Safranyik and Carroll 2006). |
-| Flight-period wind speed | negative | The mechanism acts during dispersal, and no study specifies the interval, so it is taken at the flight period (Jones et al. 2019; Krawchuk et al. 2020). |
-| Elevation | uncertain | A composite of temperature, snowpack, season length and host distribution that this design cannot separate (Sambaraju and Goodsman 2021). |
+<table>
+<thead>
+<tr>
+<th width="2000" align="left">Attribute</th>
+<th width="2000" align="left">Expected</th>
+<th width="2000" align="left">Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr><td align="left">Stand BA, volume, crown closure, stems</td><td align="left">positive</td><td align="left">Denser canopy holds the pheromone plume together; thinner stands admit wind that disperses it (Powell and Bentz 2014; Cartwright 2018; Krawchuk et al. 2020).</td></tr>
+<tr><td align="left">Quadratic mean diameter</td><td align="left">positive &gt;25cm</td><td align="left">Trees under 25 cm are beetle sinks, over 25 cm are sources (Carroll and Safranyik 2004).</td></tr>
+<tr><td align="left">Lodgepole pine cover and BA</td><td align="left">positive</td><td align="left">Attack cannot occur where the host is absent; a cell without pine is not a refugium (Cartwright 2018).</td></tr>
+<tr><td align="left">Flight-period direct radiation</td><td align="left">positive</td><td align="left">Flight is confined to 19 to 41 degrees C and peaks on bright afternoons, so sunlit slopes are reachable (McCambridge 1971; Safranyik and Carroll 2006).</td></tr>
+<tr><td align="left">Growing-season direct radiation</td><td align="left">negative</td><td align="left">Shading cools, relieving water stress and sustaining defence, and cool sites also push the beetle toward a two-year cycle (Krawchuk et al. 2020; Sambaraju and Goodsman 2021).</td></tr>
+<tr><td align="left">Terrain exposure to wind</td><td align="left">negative</td><td align="left">Wind disrupts the pheromone plume, so exposed ground should have less attack (Krawchuk et al. 2020).</td></tr>
+<tr><td align="left">Terrain shelter and sky view</td><td align="left">positive, as main effect</td><td align="left">Beetles land without discriminating hosts after wind-borne transport, so sheltered, open ground should receive more landings whatever the stand (Hynum and Berryman 1980; Jackson et al. 2008; Chen and Jackson 2017).</td></tr>
+<tr><td align="left">Terrain ruggedness</td><td align="left">uncertain</td><td align="left">The strongest terrain term in the companion study on this landscape, but fitted there against regeneration rather than attack (Murphy et al. 2026).</td></tr>
+<tr><td align="left">Convergence, wetness, valley &amp; slope position</td><td align="left">positive in convergent terrain</td><td align="left">Infested groups gather in draws and gullies, and deep snow insulates overwintering brood (Safranyik and Carroll 2006).</td></tr>
+<tr><td align="left">Flight-period wind speed</td><td align="left">negative</td><td align="left">The mechanism acts during dispersal, and no study specifies the interval, so it is taken at the flight period (Jones et al. 2019; Krawchuk et al. 2020).</td></tr>
+<tr><td align="left">Elevation</td><td align="left">uncertain</td><td align="left">A composite of temperature, snowpack, season length and host distribution that this design cannot separate (Sambaraju and Goodsman 2021).</td></tr>
+</tbody>
+</table>
 
 ### Table 2
 
 *The datasets this study combined, with the structure and resolution of each. Spatial resolution was the grid on which a variable was analysed and temporal resolution the interval at which it varied. The response varied every 16 days, the inventory once a year, the station wind every hour and the terrain not at all, which was the unevenness the wind analysis depended on.*
 
-| Dataset | Source | Variables | Spatial | Temporal | Period | n |
-| :--- | :--- | :--- | :--- | :--- | :--- | ---: |
-| Beetle attack (Annual) | Landsat 5 and 8 Collection 2 Level-2 | Moderate-to-high NDMI binary | 30 m | 1 year | 2006-2014, (excl. 2012) | 8 years |
-| Beetle attack (/16-day) | Landsat 5 and 8 Collection 2 Level-2 | Moderate-to-high NDMI binary | 30 m | 16 days | 2006-2014, (excl. 2012) | 59 epochs |
-| Stand structure | VRI Historical, BC Data Catalogue | BA, volume, stems, quadratic mean diameter, age, height | 30 m (rasterised) | 1 year, projected-yr | 2005-2014 | 9 windows |
-| Terrain | NRCan High-Res DEM, SAGA indices | Geomorphons (incl. radiation, exposure, landform) | 30 m | Static | n/a | 8 fitted |
-| Station wind | Env. & Climate Change Canada | Speed and direction | 4 to 7 stations | 1 hour | 2005-2014, May-Sept | 236,079 hourly records |
-| Terrain-resolved wind | DEM-conditioned MicroMet wind field of station data | Weighting factor, modified speed, diverted direction | 30 m | 16 days, & 1 year | 2005-2014 | 16 sectors (22.5°) |
-| Model frame (Annual) | Rows joined above, (one row / cell-year) | Response & covariates, one row per cell-year | 30 m | 1 year | 2006-2014, (excl. 2012) | 111,707 cell-years |
-| Model frame (/16-day) | Rows joined above per Landsat pass (one row / cell-epoch) | Response & covariates, one row per cell-epoch | 30 m | 16 days | 2006-2014, (excl. 2012) | 66,302 cell-epochs |
+<table>
+<thead>
+<tr>
+<th width="2000" align="left">Dataset</th>
+<th width="2000" align="left">Source</th>
+<th width="2000" align="left">Variables</th>
+<th width="2000" align="left">Spatial</th>
+<th width="2000" align="left">Temporal</th>
+<th width="2000" align="left">Period</th>
+<th width="2000" align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr><td align="left">Beetle attack (Annual)</td><td align="left">Landsat 5 and 8 Collection 2 Level-2</td><td align="left">Moderate-to-high NDMI binary</td><td align="left">30 m</td><td align="left">1 year</td><td align="left">2006-2014, (excl. 2012)</td><td align="right">8 years</td></tr>
+<tr><td align="left">Beetle attack (/16-day)</td><td align="left">Landsat 5 and 8 Collection 2 Level-2</td><td align="left">Moderate-to-high NDMI binary</td><td align="left">30 m</td><td align="left">16 days</td><td align="left">2006-2014, (excl. 2012)</td><td align="right">59 epochs</td></tr>
+<tr><td align="left">Stand structure</td><td align="left">VRI Historical, BC Data Catalogue</td><td align="left">BA, volume, stems, quadratic mean diameter, age, height</td><td align="left">30 m (rasterised)</td><td align="left">1 year, projected-yr</td><td align="left">2005-2014</td><td align="right">9 windows</td></tr>
+<tr><td align="left">Terrain</td><td align="left">NRCan High-Res DEM, SAGA indices</td><td align="left">Geomorphons (incl. radiation, exposure, landform)</td><td align="left">30 m</td><td align="left">Static</td><td align="left">n/a</td><td align="right">8 fitted</td></tr>
+<tr><td align="left">Station wind</td><td align="left">Env. &amp; Climate Change Canada</td><td align="left">Speed and direction</td><td align="left">4 to 7 stations</td><td align="left">1 hour</td><td align="left">2005-2014, May-Sept</td><td align="right">236,079 hourly records</td></tr>
+<tr><td align="left">Terrain-resolved wind</td><td align="left">DEM-conditioned MicroMet wind field of station data</td><td align="left">Weighting factor, modified speed, diverted direction</td><td align="left">30 m</td><td align="left">16 days, &amp; 1 year</td><td align="left">2005-2014</td><td align="right">16 sectors (22.5°)</td></tr>
+<tr><td align="left">Model frame (Annual)</td><td align="left">Rows joined above, (one row / cell-year)</td><td align="left">Response &amp; covariates, one row per cell-year</td><td align="left">30 m</td><td align="left">1 year</td><td align="left">2006-2014, (excl. 2012)</td><td align="right">111,707 cell-years</td></tr>
+<tr><td align="left">Model frame (/16-day)</td><td align="left">Rows joined above per Landsat pass (one row / cell-epoch)</td><td align="left">Response &amp; covariates, one row per cell-epoch</td><td align="left">30 m</td><td align="left">16 days</td><td align="left">2006-2014, (excl. 2012)</td><td align="right">66,302 cell-epochs</td></tr>
+</tbody>
+</table>
 
 ### Figure 1
 
@@ -55,16 +77,25 @@ Every figure and table below is reproduced from the current render, in the order
 
 *Moderate-to-high beetle disturbance by year inside the study perimeter.*
 
-| Year | Cells | Moderate-to-high (%) |
-| :--- | ---: | ---: |
-| 2006 | 13,224 | 4.2 |
-| 2007 | 13,225 | 3.9 |
-| 2008 | 13,285 | 18.6 |
-| 2009 | 13,556 | 7.3 |
-| 2010 | 13,538 | 13.5 |
-| 2011 | 14,944 | 9.8 |
-| 2013 | 14,943 | 10.0 |
-| 2014 | 14,992 | 9.7 |
+<table>
+<thead>
+<tr>
+<th width="2000" align="left">Year</th>
+<th width="2000" align="right">Cells</th>
+<th width="2000" align="right">Moderate-to-high (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr><td align="left">2006</td><td align="right">13,224</td><td align="right">4.2</td></tr>
+<tr><td align="left">2007</td><td align="right">13,225</td><td align="right">3.9</td></tr>
+<tr><td align="left">2008</td><td align="right">13,285</td><td align="right">18.6</td></tr>
+<tr><td align="left">2009</td><td align="right">13,556</td><td align="right">7.3</td></tr>
+<tr><td align="left">2010</td><td align="right">13,538</td><td align="right">13.5</td></tr>
+<tr><td align="left">2011</td><td align="right">14,944</td><td align="right">9.8</td></tr>
+<tr><td align="left">2013</td><td align="right">14,943</td><td align="right">10.0</td></tr>
+<tr><td align="left">2014</td><td align="right">14,992</td><td align="right">9.7</td></tr>
+</tbody>
+</table>
 
 ### Figure 2
 
@@ -76,17 +107,32 @@ Every figure and table below is reproduced from the current render, in the order
 
 *Stand structure across the study perimeter, from the Vegetation Resources Inventory, over 111,707 cell-years. SD was the standard deviation of the landscape and SE the standard error of the mean. Skew and Kurt. were the bias-corrected skewness and excess kurtosis.*
 
-| Attribute | Mean | SD | SE# | Median | Min | Max | Skew | Kurt. |
-| :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Stand basal area (m² ha⁻¹) | 35.56 | 11.60 | 0.035 | 37.39 | 0.98 | 62.43 | -1.01 | +1.42 |
-| Crown closure (%) | 50.10 | 13.54 | 0.041 | 50.00 | 3.00 | 70.00 | -1.74 | +3.37 |
-| Live stems (n/ha) | 772.75 | 312.80 | 0.936 | 775.00 | 23.00 | 4600.00 | +1.70 | +19.51 |
-| Quadratic mean diameter (cm) | 27.38 | 6.40 | 0.019 | 26.95 | 13.55 | 58.90 | +0.73 | +1.24 |
-| Stand age (years) | 115.46 | 20.88 | 0.062 | 116.00 | 22.00 | 237.00 | -0.78 | +1.97 |
-| Stand height (m) | 26.97 | 6.27 | 0.019 | 27.90 | 7.00 | 40.30 | -0.26 | +0.23 |
-| Standing volume (m³ ha⁻¹) | 272.33 | 131.38 | 0.393 | 281.47 | 0.82 | 586.61 | +0.01 | -0.35 |
-| Lodgepole pine cover (%) | 20.11 | 23.93 | 0.072 | 10.00 | 0.00 | 100.00 | +1.45 | +1.56 |
-| Susceptible pine BA (m² ha⁻¹) | 7.07 | 8.85 | 0.026 | 4.00 | 0.00 | 48.30 | +1.63 | +2.63 |
+<table>
+<thead>
+<tr>
+<th width="2000" align="left">Attribute</th>
+<th width="2000" align="right">Mean</th>
+<th width="2000" align="right">SD</th>
+<th width="2000" align="right">SE#</th>
+<th width="2000" align="right">Median</th>
+<th width="2000" align="right">Min</th>
+<th width="2000" align="right">Max</th>
+<th width="2000" align="right">Skew</th>
+<th width="2000" align="right">Kurt.</th>
+</tr>
+</thead>
+<tbody>
+<tr><td align="left">Stand basal area (m² ha⁻¹)</td><td align="right">35.56</td><td align="right">11.60</td><td align="right">0.035</td><td align="right">37.39</td><td align="right">0.98</td><td align="right">62.43</td><td align="right">-1.01</td><td align="right">+1.42</td></tr>
+<tr><td align="left">Crown closure (%)</td><td align="right">50.10</td><td align="right">13.54</td><td align="right">0.041</td><td align="right">50.00</td><td align="right">3.00</td><td align="right">70.00</td><td align="right">-1.74</td><td align="right">+3.37</td></tr>
+<tr><td align="left">Live stems (n/ha)</td><td align="right">772.75</td><td align="right">312.80</td><td align="right">0.936</td><td align="right">775.00</td><td align="right">23.00</td><td align="right">4600.00</td><td align="right">+1.70</td><td align="right">+19.51</td></tr>
+<tr><td align="left">Quadratic mean diameter (cm)</td><td align="right">27.38</td><td align="right">6.40</td><td align="right">0.019</td><td align="right">26.95</td><td align="right">13.55</td><td align="right">58.90</td><td align="right">+0.73</td><td align="right">+1.24</td></tr>
+<tr><td align="left">Stand age (years)</td><td align="right">115.46</td><td align="right">20.88</td><td align="right">0.062</td><td align="right">116.00</td><td align="right">22.00</td><td align="right">237.00</td><td align="right">-0.78</td><td align="right">+1.97</td></tr>
+<tr><td align="left">Stand height (m)</td><td align="right">26.97</td><td align="right">6.27</td><td align="right">0.019</td><td align="right">27.90</td><td align="right">7.00</td><td align="right">40.30</td><td align="right">-0.26</td><td align="right">+0.23</td></tr>
+<tr><td align="left">Standing volume (m³ ha⁻¹)</td><td align="right">272.33</td><td align="right">131.38</td><td align="right">0.393</td><td align="right">281.47</td><td align="right">0.82</td><td align="right">586.61</td><td align="right">+0.01</td><td align="right">-0.35</td></tr>
+<tr><td align="left">Lodgepole pine cover (%)</td><td align="right">20.11</td><td align="right">23.93</td><td align="right">0.072</td><td align="right">10.00</td><td align="right">0.00</td><td align="right">100.00</td><td align="right">+1.45</td><td align="right">+1.56</td></tr>
+<tr><td align="left">Susceptible pine BA (m² ha⁻¹)</td><td align="right">7.07</td><td align="right">8.85</td><td align="right">0.026</td><td align="right">4.00</td><td align="right">0.00</td><td align="right">48.30</td><td align="right">+1.63</td><td align="right">+2.63</td></tr>
+</tbody>
+</table>
 
 *Note the standard error is small because it is computed over 111,707 cell-years, and it measures the precision of the landscape mean, rather than of any one cell.*
 
@@ -100,101 +146,147 @@ Every figure and table below is reproduced from the current render, in the order
 
 *Variable selection. Every candidate with its pathway, its univariate AUC, the stage at which it left, and for the survivors of the inflation stage the lasso coefficient at the chosen penalty. Protected marked the highest-ranked survivor of each pathway, which the penalty could not remove. AUC was the area under the receiver operating characteristic curve of the univariate fit, and the asterisks beside it marked the significance of that fit, * p ≤ 0.05, ** p ≤ 0.01, *** p ≤ 0.001, **** p ≤ 0.0001.*
 
-| Candidate | Pathway | Univariate AUC | Stage | Lasso coefficient | Protected |
-| :--- | :--- | ---: | :--- | ---: | :--- |
-| Elevation (m) | landform | 0.682**** | retained | +0.336 | yes |
-| Susceptible pine BA (m² ha⁻¹) | hostsize | 0.678**** | retained | +0.427 | yes |
-| Stand basal area (m² ha⁻¹) | density | 0.601**** | retained | +0.347 | yes |
-| Sky view factor | shading | 0.686**** | retained | +0.315 | yes |
-| Stand age (years) | hostsize | 0.571**** | retained | +0.068 |  |
-| July mean wind (km/h) | wind_t | 0.563**** | retained | +0.249 | yes |
-| Northness | shading | 0.586**** | retained | +0.314 |  |
-| Quadratic mean diameter (cm) | hostsize | 0.510**** | retained | -0.124 |  |
-| June mean wind (km/h) | wind_t | 0.534**** | retained | -0.025 |  |
-| Wind shelter index | wind_geo | 0.526**** | retained | -0.205 | yes |
-| MicroMet flight-window wind (km/h) | wind_mm | 0.580**** | retained | +0.253 | yes |
-| Topographic position index | shape | 0.585**** | retained | -0.168 | yes |
-| Flight-window direct radiation (kWh/m2) | flightsun | 0.561**** | retained | +0.206 | yes |
-| Convergence index | shape | 0.530**** | retained | -0.016 |  |
-| Profile curvature | shape | 0.514**** | retained | -0.010 |  |
-| Height above valley floor (m) | landform | 0.646**** | penalty | +0.000 |  |
-| Live stems (n/ha) | density | 0.602**** | penalty | +0.000 |  |
-| Valley depth (m) | landform | 0.617**** | penalty | +0.000 |  |
-| Mid-slope position | landform | 0.517**** | penalty | +0.000 |  |
-| Crown closure (%) | density | 0.524**** | penalty | +0.000 |  |
-| Vector ruggedness measure | shape | 0.600**** | penalty | +0.000 |  |
-| Terrain ruggedness index | shape | 0.648**** | inflation |  |  |
-| Normalised height | landform | 0.584**** | inflation |  |  |
-| Flight-window mean wind (km/h) | wind_t | 0.558**** | inflation |  |  |
-| Eastness | shading | 0.549**** | inflation |  |  |
-| Effective air flow height | wind_geo | 0.682**** | collinearity |  |  |
-| Lodgepole pine cover (%) | hostsize | 0.656**** | collinearity |  |  |
-| Slope (degrees) | shape | 0.645**** | collinearity |  |  |
-| Positive openness | wind_geo | 0.636**** | collinearity |  |  |
-| Wind exposition index | wind_geo | 0.563**** | collinearity |  |  |
-| Standing volume (m³ ha⁻¹) | density | 0.555**** | collinearity |  |  |
-| Flight-window windy hours (share above 15 km/h) | wind_t | 0.548**** | collinearity |  |  |
-| Flight-window calm hours (share below 5 km/h) | wind_t | 0.547**** | collinearity |  |  |
-| Multi-scale topographic position | shape | 0.540**** | collinearity |  |  |
-| August mean wind (km/h) | wind_t | 0.534**** | collinearity |  |  |
-| Plan curvature | shape | 0.528**** | collinearity |  |  |
-| solar_flight_diffuse | flightsun | 0.528**** | collinearity |  |  |
-| Windward-leeward index | wind_geo | 0.522**** | collinearity |  |  |
-| Growing-season total radiation (kWh/m2) | shading | 0.517**** | collinearity |  |  |
-| Growing-season direct radiation (kWh/m2) | shading | 0.516**** | collinearity |  |  |
-| Flight-window 95th percentile wind (km/h) | wind_t | 0.527 | univariate |  |  |
-| Stand height (m) | hostsize | 0.507 | univariate |  |  |
-| Topographic wetness index | landform | 0.506* | univariate |  |  |
-| Negative openness | wind_geo | 0.501 | univariate |  |  |
-| Heat load index | shading | 0.499 | univariate |  |  |
+<table>
+<thead>
+<tr>
+<th width="2000" align="left">Candidate</th>
+<th width="2000" align="left">Pathway</th>
+<th width="2000" align="right">Univariate AUC</th>
+<th width="2000" align="left">Stage</th>
+<th width="2000" align="right">Lasso coefficient</th>
+<th width="2000" align="left">Protected</th>
+</tr>
+</thead>
+<tbody>
+<tr><td align="left">Elevation (m)</td><td align="left">landform</td><td align="right">0.682****</td><td align="left">retained</td><td align="right">+0.336</td><td align="left">yes</td></tr>
+<tr><td align="left">Susceptible pine BA (m² ha⁻¹)</td><td align="left">hostsize</td><td align="right">0.678****</td><td align="left">retained</td><td align="right">+0.427</td><td align="left">yes</td></tr>
+<tr><td align="left">Stand basal area (m² ha⁻¹)</td><td align="left">density</td><td align="right">0.601****</td><td align="left">retained</td><td align="right">+0.347</td><td align="left">yes</td></tr>
+<tr><td align="left">Sky view factor</td><td align="left">shading</td><td align="right">0.686****</td><td align="left">retained</td><td align="right">+0.315</td><td align="left">yes</td></tr>
+<tr><td align="left">Stand age (years)</td><td align="left">hostsize</td><td align="right">0.571****</td><td align="left">retained</td><td align="right">+0.068</td><td align="left"></td></tr>
+<tr><td align="left">July mean wind (km/h)</td><td align="left">wind_t</td><td align="right">0.563****</td><td align="left">retained</td><td align="right">+0.249</td><td align="left">yes</td></tr>
+<tr><td align="left">Northness</td><td align="left">shading</td><td align="right">0.586****</td><td align="left">retained</td><td align="right">+0.314</td><td align="left"></td></tr>
+<tr><td align="left">Quadratic mean diameter (cm)</td><td align="left">hostsize</td><td align="right">0.510****</td><td align="left">retained</td><td align="right">-0.124</td><td align="left"></td></tr>
+<tr><td align="left">June mean wind (km/h)</td><td align="left">wind_t</td><td align="right">0.534****</td><td align="left">retained</td><td align="right">-0.025</td><td align="left"></td></tr>
+<tr><td align="left">Wind shelter index</td><td align="left">wind_geo</td><td align="right">0.526****</td><td align="left">retained</td><td align="right">-0.205</td><td align="left">yes</td></tr>
+<tr><td align="left">MicroMet flight-window wind (km/h)</td><td align="left">wind_mm</td><td align="right">0.580****</td><td align="left">retained</td><td align="right">+0.253</td><td align="left">yes</td></tr>
+<tr><td align="left">Topographic position index</td><td align="left">shape</td><td align="right">0.585****</td><td align="left">retained</td><td align="right">-0.168</td><td align="left">yes</td></tr>
+<tr><td align="left">Flight-window direct radiation (kWh/m2)</td><td align="left">flightsun</td><td align="right">0.561****</td><td align="left">retained</td><td align="right">+0.206</td><td align="left">yes</td></tr>
+<tr><td align="left">Convergence index</td><td align="left">shape</td><td align="right">0.530****</td><td align="left">retained</td><td align="right">-0.016</td><td align="left"></td></tr>
+<tr><td align="left">Profile curvature</td><td align="left">shape</td><td align="right">0.514****</td><td align="left">retained</td><td align="right">-0.010</td><td align="left"></td></tr>
+<tr><td align="left">Height above valley floor (m)</td><td align="left">landform</td><td align="right">0.646****</td><td align="left">penalty</td><td align="right">+0.000</td><td align="left"></td></tr>
+<tr><td align="left">Live stems (n/ha)</td><td align="left">density</td><td align="right">0.602****</td><td align="left">penalty</td><td align="right">+0.000</td><td align="left"></td></tr>
+<tr><td align="left">Valley depth (m)</td><td align="left">landform</td><td align="right">0.617****</td><td align="left">penalty</td><td align="right">+0.000</td><td align="left"></td></tr>
+<tr><td align="left">Mid-slope position</td><td align="left">landform</td><td align="right">0.517****</td><td align="left">penalty</td><td align="right">+0.000</td><td align="left"></td></tr>
+<tr><td align="left">Crown closure (%)</td><td align="left">density</td><td align="right">0.524****</td><td align="left">penalty</td><td align="right">+0.000</td><td align="left"></td></tr>
+<tr><td align="left">Vector ruggedness measure</td><td align="left">shape</td><td align="right">0.600****</td><td align="left">penalty</td><td align="right">+0.000</td><td align="left"></td></tr>
+<tr><td align="left">Terrain ruggedness index</td><td align="left">shape</td><td align="right">0.648****</td><td align="left">inflation</td><td align="right"></td><td align="left"></td></tr>
+<tr><td align="left">Normalised height</td><td align="left">landform</td><td align="right">0.584****</td><td align="left">inflation</td><td align="right"></td><td align="left"></td></tr>
+<tr><td align="left">Flight-window mean wind (km/h)</td><td align="left">wind_t</td><td align="right">0.558****</td><td align="left">inflation</td><td align="right"></td><td align="left"></td></tr>
+<tr><td align="left">Eastness</td><td align="left">shading</td><td align="right">0.549****</td><td align="left">inflation</td><td align="right"></td><td align="left"></td></tr>
+<tr><td align="left">Effective air flow height</td><td align="left">wind_geo</td><td align="right">0.682****</td><td align="left">collinearity</td><td align="right"></td><td align="left"></td></tr>
+<tr><td align="left">Lodgepole pine cover (%)</td><td align="left">hostsize</td><td align="right">0.656****</td><td align="left">collinearity</td><td align="right"></td><td align="left"></td></tr>
+<tr><td align="left">Slope (degrees)</td><td align="left">shape</td><td align="right">0.645****</td><td align="left">collinearity</td><td align="right"></td><td align="left"></td></tr>
+<tr><td align="left">Positive openness</td><td align="left">wind_geo</td><td align="right">0.636****</td><td align="left">collinearity</td><td align="right"></td><td align="left"></td></tr>
+<tr><td align="left">Wind exposition index</td><td align="left">wind_geo</td><td align="right">0.563****</td><td align="left">collinearity</td><td align="right"></td><td align="left"></td></tr>
+<tr><td align="left">Standing volume (m³ ha⁻¹)</td><td align="left">density</td><td align="right">0.555****</td><td align="left">collinearity</td><td align="right"></td><td align="left"></td></tr>
+<tr><td align="left">Flight-window windy hours (share above 15 km/h)</td><td align="left">wind_t</td><td align="right">0.548****</td><td align="left">collinearity</td><td align="right"></td><td align="left"></td></tr>
+<tr><td align="left">Flight-window calm hours (share below 5 km/h)</td><td align="left">wind_t</td><td align="right">0.547****</td><td align="left">collinearity</td><td align="right"></td><td align="left"></td></tr>
+<tr><td align="left">Multi-scale topographic position</td><td align="left">shape</td><td align="right">0.540****</td><td align="left">collinearity</td><td align="right"></td><td align="left"></td></tr>
+<tr><td align="left">August mean wind (km/h)</td><td align="left">wind_t</td><td align="right">0.534****</td><td align="left">collinearity</td><td align="right"></td><td align="left"></td></tr>
+<tr><td align="left">Plan curvature</td><td align="left">shape</td><td align="right">0.528****</td><td align="left">collinearity</td><td align="right"></td><td align="left"></td></tr>
+<tr><td align="left">solar_flight_diffuse</td><td align="left">flightsun</td><td align="right">0.528****</td><td align="left">collinearity</td><td align="right"></td><td align="left"></td></tr>
+<tr><td align="left">Windward-leeward index</td><td align="left">wind_geo</td><td align="right">0.522****</td><td align="left">collinearity</td><td align="right"></td><td align="left"></td></tr>
+<tr><td align="left">Growing-season total radiation (kWh/m2)</td><td align="left">shading</td><td align="right">0.517****</td><td align="left">collinearity</td><td align="right"></td><td align="left"></td></tr>
+<tr><td align="left">Growing-season direct radiation (kWh/m2)</td><td align="left">shading</td><td align="right">0.516****</td><td align="left">collinearity</td><td align="right"></td><td align="left"></td></tr>
+<tr><td align="left">Flight-window 95th percentile wind (km/h)</td><td align="left">wind_t</td><td align="right">0.527</td><td align="left">univariate</td><td align="right"></td><td align="left"></td></tr>
+<tr><td align="left">Stand height (m)</td><td align="left">hostsize</td><td align="right">0.507</td><td align="left">univariate</td><td align="right"></td><td align="left"></td></tr>
+<tr><td align="left">Topographic wetness index</td><td align="left">landform</td><td align="right">0.506*</td><td align="left">univariate</td><td align="right"></td><td align="left"></td></tr>
+<tr><td align="left">Negative openness</td><td align="left">wind_geo</td><td align="right">0.501</td><td align="left">univariate</td><td align="right"></td><td align="left"></td></tr>
+<tr><td align="left">Heat load index</td><td align="left">shading</td><td align="right">0.499</td><td align="left">univariate</td><td align="right"></td><td align="left"></td></tr>
+</tbody>
+</table>
 
 ### Table 6
 
 *Comparison of the four annual models, each adding one mechanism to the one before. AIC ranked the models on likelihood with a penalty for the number of parameters, and the remaining columns measured how far the fitted probabilities fell from the observed classes. RMSE was the root mean squared error and MAE the mean absolute error, both on the fitted probabilities, and AUC the area under the receiver operating characteristic curve. Brier skill was the improvement over predicting the prevalence for every cell, where 0 was no better than that base rate.*
 
-| Model | AIC | ΔAIC | RMSE | MAE | AUC | Brier skill |
-| :--- | ---: | ---: | ---: | ---: | ---: | ---: |
-| M0 host size, shading, terrain | 41,269 | 1,182 | 0.396 | 0.315 | 0.758 | 0.166 |
-| M1 + stand density | 40,971 | 884 | 0.394 | 0.312 | 0.761 | 0.175 |
-| M2 + terrain, flight radiation | 40,649 | 562 | 0.393 | 0.309 | 0.767 | 0.182 |
-| M3 + interactions | 40,087 | 0 | 0.390 | 0.305 | 0.778 | 0.193 |
+<table>
+<thead>
+<tr>
+<th width="2000" align="left">Model</th>
+<th width="2000" align="right">AIC</th>
+<th width="2000" align="right">ΔAIC</th>
+<th width="2000" align="right">RMSE</th>
+<th width="2000" align="right">MAE</th>
+<th width="2000" align="right">AUC</th>
+<th width="2000" align="right">Brier skill</th>
+</tr>
+</thead>
+<tbody>
+<tr><td align="left">M0 host size, shading, terrain</td><td align="right">41,269</td><td align="right">1,182</td><td align="right">0.396</td><td align="right">0.315</td><td align="right">0.758</td><td align="right">0.166</td></tr>
+<tr><td align="left">M1 + stand density</td><td align="right">40,971</td><td align="right">884</td><td align="right">0.394</td><td align="right">0.312</td><td align="right">0.761</td><td align="right">0.175</td></tr>
+<tr><td align="left">M2 + terrain, flight radiation</td><td align="right">40,649</td><td align="right">562</td><td align="right">0.393</td><td align="right">0.309</td><td align="right">0.767</td><td align="right">0.182</td></tr>
+<tr><td align="left">M3 + interactions</td><td align="right">40,087</td><td align="right">0</td><td align="right">0.390</td><td align="right">0.305</td><td align="right">0.778</td><td align="right">0.193</td></tr>
+</tbody>
+</table>
 
 ### Table 7
 
 *Coefficients of the full annual model M3, continuous terms ordered by absolute size. Each coefficient was the change in log-odds per standard deviation of its variable, fitted on a class-balanced sample, so the intercept was not the landscape prevalence. SE was the standard error and z the Wald statistic. Significance was marked * p ≤ 0.05, ** p ≤ 0.01, *** p ≤ 0.001, **** p ≤ 0.0001. The geomorphon landform classes of the same model were reported in Table 8.*
 
-| Term | Beta | SE | z |
-| :--- | ---: | ---: | ---: |
-| Stand basal area (m² ha⁻¹) | +0.430**** | 0.024 | 18.20 |
-| Northness | +0.384**** | 0.015 | 24.85 |
-| Elevation (m) | +0.381**** | 0.016 | 24.18 |
-| Susceptible pine BA (m² ha⁻¹) | +0.343**** | 0.015 | 23.65 |
-| Quadratic mean diameter (cm) | -0.341**** | 0.022 | -15.37 |
-| Flight-window direct radiation (kWh/m2) | +0.319**** | 0.023 | 13.98 |
-| July mean wind (km/h) | +0.286**** | 0.014 | 20.95 |
-| Sky view factor | +0.285**** | 0.023 | 12.60 |
-| Wind shelter index | -0.267**** | 0.021 | -12.48 |
-| Stand age (years) | +0.201**** | 0.018 | 11.31 |
-| Convergence index | -0.077**** | 0.015 | -5.07 |
-| Stand basal area x July mean wind | -0.077**** | 0.016 | -4.81 |
-| Stand basal area x Flight-window direct radiation | +0.073*** | 0.020 | 3.58 |
-| Profile curvature | -0.059**** | 0.014 | -4.10 |
-| June mean wind (km/h) | +0.030* | 0.014 | 2.20 |
-| Stand basal area x Wind shelter index | +0.023 | 0.025 | 0.89 |
-| Topographic position index | -0.015 | 0.023 | -0.64 |
+<table>
+<thead>
+<tr>
+<th width="2000" align="left">Term</th>
+<th width="2000" align="right">Beta</th>
+<th width="2000" align="right">SE</th>
+<th width="2000" align="right">z</th>
+</tr>
+</thead>
+<tbody>
+<tr><td align="left">Stand basal area (m² ha⁻¹)</td><td align="right">+0.430****</td><td align="right">0.024</td><td align="right">18.20</td></tr>
+<tr><td align="left">Northness</td><td align="right">+0.384****</td><td align="right">0.015</td><td align="right">24.85</td></tr>
+<tr><td align="left">Elevation (m)</td><td align="right">+0.381****</td><td align="right">0.016</td><td align="right">24.18</td></tr>
+<tr><td align="left">Susceptible pine BA (m² ha⁻¹)</td><td align="right">+0.343****</td><td align="right">0.015</td><td align="right">23.65</td></tr>
+<tr><td align="left">Quadratic mean diameter (cm)</td><td align="right">-0.341****</td><td align="right">0.022</td><td align="right">-15.37</td></tr>
+<tr><td align="left">Flight-window direct radiation (kWh/m2)</td><td align="right">+0.319****</td><td align="right">0.023</td><td align="right">13.98</td></tr>
+<tr><td align="left">July mean wind (km/h)</td><td align="right">+0.286****</td><td align="right">0.014</td><td align="right">20.95</td></tr>
+<tr><td align="left">Sky view factor</td><td align="right">+0.285****</td><td align="right">0.023</td><td align="right">12.60</td></tr>
+<tr><td align="left">Wind shelter index</td><td align="right">-0.267****</td><td align="right">0.021</td><td align="right">-12.48</td></tr>
+<tr><td align="left">Stand age (years)</td><td align="right">+0.201****</td><td align="right">0.018</td><td align="right">11.31</td></tr>
+<tr><td align="left">Convergence index</td><td align="right">-0.077****</td><td align="right">0.015</td><td align="right">-5.07</td></tr>
+<tr><td align="left">Stand basal area x July mean wind</td><td align="right">-0.077****</td><td align="right">0.016</td><td align="right">-4.81</td></tr>
+<tr><td align="left">Stand basal area x Flight-window direct radiation</td><td align="right">+0.073***</td><td align="right">0.020</td><td align="right">3.58</td></tr>
+<tr><td align="left">Profile curvature</td><td align="right">-0.059****</td><td align="right">0.014</td><td align="right">-4.10</td></tr>
+<tr><td align="left">June mean wind (km/h)</td><td align="right">+0.030*</td><td align="right">0.014</td><td align="right">2.20</td></tr>
+<tr><td align="left">Stand basal area x Wind shelter index</td><td align="right">+0.023</td><td align="right">0.025</td><td align="right">0.89</td></tr>
+<tr><td align="left">Topographic position index</td><td align="right">-0.015</td><td align="right">0.023</td><td align="right">-0.64</td></tr>
+</tbody>
+</table>
 
 ### Table 8
 
 *Geomorphon landform classes in the full annual model M3, as coefficients against the reference class, slope, the most common class on the perimeter. Cells was the number of perimeter cells in each class and Attacked the share of those cells classed moderate-to-high over all years. Flat and pit did not occur on the perimeter. Significance was marked * p ≤ 0.05, ** p ≤ 0.01, *** p ≤ 0.001, **** p ≤ 0.0001.*
 
-| Class | Cells | Attacked (%) | Beta | SE |
-| :--- | ---: | ---: | ---: | ---: |
-| slope (reference) | 72,262 | 9.6 |  |  |
-| spur | 22,050 | 12.6 | -0.075* | 0.035 |
-| hollow | 12,988 | 6.0 | -0.091 | 0.053 |
-| valley | 2,963 | 3.8 | -0.676**** | 0.121 |
-| ridge# | 1,276 | 11.0 | -1.160**** | 0.119 |
-| peak | 168 | 22.6 | -0.523* | 0.227 |
+<table>
+<thead>
+<tr>
+<th width="2000" align="left">Class</th>
+<th width="2000" align="right">Cells</th>
+<th width="2000" align="right">Attacked (%)</th>
+<th width="2000" align="right">Beta</th>
+<th width="2000" align="right">SE</th>
+</tr>
+</thead>
+<tbody>
+<tr><td align="left">slope (reference)</td><td align="right">72,262</td><td align="right">9.6</td><td align="right"></td><td align="right"></td></tr>
+<tr><td align="left">spur</td><td align="right">22,050</td><td align="right">12.6</td><td align="right">-0.075*</td><td align="right">0.035</td></tr>
+<tr><td align="left">hollow</td><td align="right">12,988</td><td align="right">6.0</td><td align="right">-0.091</td><td align="right">0.053</td></tr>
+<tr><td align="left">valley</td><td align="right">2,963</td><td align="right">3.8</td><td align="right">-0.676****</td><td align="right">0.121</td></tr>
+<tr><td align="left">ridge#</td><td align="right">1,276</td><td align="right">11.0</td><td align="right">-1.160****</td><td align="right">0.119</td></tr>
+<tr><td align="left">peak</td><td align="right">168</td><td align="right">22.6</td><td align="right">-0.523*</td><td align="right">0.227</td></tr>
+</tbody>
+</table>
 
 *Ridge includes the 16 shoulder cells on the perimeter. No shoulder cell was classed as attacked in any year, so the class could not be estimated on its own and was counted with ridge, its neighbour on the geomorphon scale.*
 
@@ -208,22 +300,45 @@ Every figure and table below is reproduced from the current render, in the order
 
 *Moderate-to-high beetle disturbance by quadratic mean diameter class, on the balanced sample. The 25 cm boundary was the source-sink threshold of the species’ bionomics. Intervals were Wilson score intervals on the class proportion, which is why they were asymmetric in the smallest class. Because 30 m cells in a spreading outbreak were not independent, the tests reported beneath this table were anti-conservative.*
 
-| QMD class (cm) | n | Attacked | Attacked (%) | 95% CI (%) |
-| :--- | ---: | ---: | ---: | ---: |
-| <15 | 395 | 111 | 28.1 | 23.9-32.7 |
-| 15-20 | 4,101 | 783 | 19.1 | 17.9-20.3 |
-| 20-25 | 9,286 | 1,998 | 21.5 | 20.7-22.4 |
-| 25-30 | 17,119 | 5,391 | 31.5 | 30.8-32.2 |
-| 30-40 | 10,247 | 2,291 | 22.4 | 21.6-23.2 |
-| >40 | 1,643 | 217 | 13.2 | 11.7-14.9 |
+<table>
+<thead>
+<tr>
+<th width="2000" align="left">QMD class (cm)</th>
+<th width="2000" align="right">n</th>
+<th width="2000" align="right">Attacked</th>
+<th width="2000" align="right">Attacked (%)</th>
+<th width="2000" align="right">95% CI (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr><td align="left">&lt;15</td><td align="right">395</td><td align="right">111</td><td align="right">28.1</td><td align="right">23.9-32.7</td></tr>
+<tr><td align="left">15-20</td><td align="right">4,101</td><td align="right">783</td><td align="right">19.1</td><td align="right">17.9-20.3</td></tr>
+<tr><td align="left">20-25</td><td align="right">9,286</td><td align="right">1,998</td><td align="right">21.5</td><td align="right">20.7-22.4</td></tr>
+<tr><td align="left">25-30</td><td align="right">17,119</td><td align="right">5,391</td><td align="right">31.5</td><td align="right">30.8-32.2</td></tr>
+<tr><td align="left">30-40</td><td align="right">10,247</td><td align="right">2,291</td><td align="right">22.4</td><td align="right">21.6-23.2</td></tr>
+<tr><td align="left">&gt;40</td><td align="right">1,643</td><td align="right">217</td><td align="right">13.2</td><td align="right">11.7-14.9</td></tr>
+</tbody>
+</table>
 
 ### Table 10
 
 *The 16-day model refitted under four definitions of the wind window. The epoch wind regime, every hour, was the definition used throughout this paper. Coefficients were log-odds per standard deviation. Significance was marked * p ≤ 0.05, ** p ≤ 0.01, *** p ≤ 0.001, **** p ≤ 0.0001. The thermal-limits row was fitted on fewer cell-epochs because two epochs had too few qualifying hours, so its row was not directly comparable with the other three.*
 
-| Definition | Cell-epochs | Wind (km/h) | Stems x wind | Volume x wind | AUC |
-| :--- | ---: | ---: | ---: | ---: | ---: |
-| Epoch wind regime (all hours) | 66,302 | 5.01 | -0.0491**** | -0.0169* | 0.673 |
-| 12:00-17:00 | 66,302 | 6.41 | -0.0369**** | -0.0131 | 0.673 |
-| 11:00-18:00 | 66,302 | 6.28 | -0.0413**** | -0.0173* | 0.673 |
-| Inside the 19-41 C range | 64,895 | 5.64 | -0.0108 | -0.0397**** | 0.671 |
+<table>
+<thead>
+<tr>
+<th width="2000" align="left">Definition</th>
+<th width="2000" align="right">Cell-epochs</th>
+<th width="2000" align="right">Wind (km/h)</th>
+<th width="2000" align="right">Stems x wind</th>
+<th width="2000" align="right">Volume x wind</th>
+<th width="2000" align="right">AUC</th>
+</tr>
+</thead>
+<tbody>
+<tr><td align="left">Epoch wind regime (all hours)</td><td align="right">66,302</td><td align="right">5.01</td><td align="right">-0.0491****</td><td align="right">-0.0169*</td><td align="right">0.673</td></tr>
+<tr><td align="left">12:00-17:00</td><td align="right">66,302</td><td align="right">6.41</td><td align="right">-0.0369****</td><td align="right">-0.0131</td><td align="right">0.673</td></tr>
+<tr><td align="left">11:00-18:00</td><td align="right">66,302</td><td align="right">6.28</td><td align="right">-0.0413****</td><td align="right">-0.0173*</td><td align="right">0.673</td></tr>
+<tr><td align="left">Inside the 19-41 C range</td><td align="right">64,895</td><td align="right">5.64</td><td align="right">-0.0108</td><td align="right">-0.0397****</td><td align="right">0.671</td></tr>
+</tbody>
+</table>
