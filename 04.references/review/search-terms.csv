@@ -1,0 +1,23 @@
+term,source,question,concept
+mountain pine beetle,keywords,q1 q2 q3 q4,beetle
+disturbance refugia,keywords,,
+curculionidae,keywords,,
+scolytinae,keywords,,
+british columbia,keywords,,
+thinning,keywords,q2,wind
+dispersal,keywords,q3,terrain
+topography,keywords,q3 q4,terrain
+testing,title,,
+wind disruption,title,,
+disturbance refugia hypothesis,title,,
+mountain pine beetle outbreaks,title,,
+dendroctonus ponderosae,title,q1 q2 q3 q4,beetle
+terrain,subtitle,q1 q3 q4,terrain
+stand density,subtitle,q1 q4,terrain
+flight-period wind,subtitle,,
+controls,subtitle,,
+attack,subtitle,,
+selkirk mountains,subtitle,,
+refugia,keywords,q1,terrain
+wind*,title,q2 q4,wind
+flight,subtitle,q3,terrain

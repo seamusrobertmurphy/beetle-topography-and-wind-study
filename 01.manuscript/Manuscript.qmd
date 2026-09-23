@@ -15,11 +15,13 @@ author:
         country: Canada
 keywords:
   - mountain pine beetle
-  - forest disturbance
-  - insect outbreaks
-  - Landsat time series
-  - refugia
+  - disturbance refugia
+  - Curculionidae
+  - Scolytinae
   - British Columbia
+  - thinning
+  - dispersal
+  - topography
 
 date: today
 keep-md: true
@@ -94,6 +96,8 @@ USE_VRI_TIMESERIES <- TRUE
 
 {{< include _sections/_preamble.qmd >}}
 
+{{< include _sections/_review.qmd >}}
+
 ```{r}
 #| label: vri-refit
 #| echo: false
@@ -132,13 +136,13 @@ sh <- function(v, col) sprintf("%+.3f", shift[[col]][shift$term == v])
 
 **Correspondence.** Seamus Murphy, TÜV SÜD, 2187 Comox Ave, Comox, British Columbia V9M 1P5, Canada. seamusrobertmurphy@gmail.com. ORCID 0000-0002-1792-0351.
 
-**Keywords.** Mountain pine beetle, forest disturbance, insect outbreaks, Landsat time series, refugia, British Columbia
+**Keywords.** Mountain pine beetle, Disturbance refugia, Curculionidae, Scolytinae, British Columbia, thinning, dispersal, topography
 
-**Data availability statement.** Every dataset used was public. Beetle disturbance was classified from Landsat Collection 2 Level-2 surface reflectance, stand structure came from the provincial Vegetation Resources Inventory, terrain from the Natural Resources Canada High Resolution Digital Elevation Model [@nrcan2017] and wind from Environment and Climate Change Canada hourly station records. All derived data and the complete analysis code that reproduce every number, table and figure in this article are at <https://github.com/seamusrobertmurphy/beetle-topography-and-wind-study> and will be deposited in the Dryad Digital Repository, with a DOI, with the revised manuscript.
+**Data availability statement.** Public datasets were used in this analysis. Beetle disturbance was classified from Landsat Collection 2 Level-2 surface reflectance, stand structure was derived from British Columbia's provincial Vegetation Resources Inventory, terrain from the Natural Resources Canada High Resolution Digital Elevation Model [@nrcan2017] and wind from Environment and Climate Change Canada hourly station records. All derived data and the complete analysis code that reproduce every number, table and figure in this article are at <https://github.com/seamusrobertmurphy/beetle-topography-and-wind-study> and will be deposited in the Dryad Digital Repository, with a DOI, with the revised manuscript. The study's classifier was trained on the 28 field plots of beetle-killed basal area established in July and August 2020 in the Darkwoods Conservation Area by Murphy, Leslie, Wilson and Banks [@murphy2026], whose plot locations, killed-basal-area measurements and Landsat classifications of red-stage mortality were used with the permission of those authors; that study and its co-authors, Adrian Leslie, John Wilson and Lauren K. Banks, are acknowledged as the source of the ground truth on which every attack map in this article rests.
 
-**Conflict of interest statement.** The author has no conflict of interest to declare. There is no dispute over the ownership of the data presented, and every contribution has been attributed by acknowledgement.
+**Conflict of interest statement.** The author has no conflict of interest to declare. The author was the lead author of the earlier study on the same ground [@murphy2026], and the field plots on which the classifier in this article was trained were collected under that study with its co-authors, Adrian Leslie, John Wilson and Lauren K. Banks. Those data are used here with their agreement, there is no dispute over the ownership of any data presented, and every contribution to the present article has been attributed by authorship or acknowledgement.
 
-**Author contributions.** Seamus Murphy took every CRediT role, conceptualization, methodology, software, validation, formal analysis, investigation, data curation, visualization, project administration, writing of the original draft, and review and editing.
+**Author contributions.** Seamus Murphy conceived and designed the present study, assembled the datasets, wrote the analysis code, performed the analysis, prepared the figures and tables, and wrote and revised the manuscript, which is every CRediT role. The 28 field plots of beetle-killed basal area and the Landsat classifications of red-stage mortality were produced under the earlier study by Murphy, Leslie, Wilson and Banks [-@murphy2026], and the co-authors of that study contributed to the field data collection and the ground-truthing that this article reuses but took no part in the design, analysis or writing of the present article.
 
 {{< pagebreak >}}
 
