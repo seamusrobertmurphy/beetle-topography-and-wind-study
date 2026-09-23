@@ -1,0 +1,45 @@
+question,route,doi,title,year,venue,type
+q1,crossref-q1-beetle-terrain,10.1093/ee/16.3.738,Potential Mountain Pine Beetle (Coleoptera: Scolytidae) Attack of Lodgepole Pine as Described by Stand Density Index,1987,Environmental Entomology,journal-article
+q1,crossref-q1-beetle-terrain,10.1093/wjaf/11.2.50,Technical Commentary: Management of Lodgepole Pine Stand Density to Reduce Susceptibility to Mountain Pine Beetle Attack,1996,Western Journal of Applied Forestry,journal-article
+q2,crossref-q2-beetle-wind,10.1111/j.1439-0418.1989.tb00484.x,"An empirical approach to modeling the local dispersal of the mountain pine beetle (
+                    <i>Dendroctonus ponderosae</i>
+                    Hopk.) (Col., Scolytidae) in relation to sources of attraction, wind direction and speed",1989,Journal of Applied Entomology,journal-article
+q2,crossref-q2-beetle-wind,10.1093/forestscience/29.1.204,Thinning Lodgepole Pine Increases Tree Vigor and Resistance to Mountain Pine Beetle,1983,Forest Science,journal-article
+q2,crossref-q2-beetle-wind,10.2737/int-rp-479,Effects of thinning on temperature dynamics and mountain pine beetle activity in a lodgepole pine stand,1994,,report
+q2,crossref-q2-beetle-wind,10.1016/j.agrformet.2015.01.018,Modeling spatial and temporal dynamics of wind flow and potential fire behavior following a mountain pine beetle outbreak in a lodgepole pine forest,2015,Agricultural and Forest Meteorology,journal-article
+q3,crossref-q3-beetle-terrain,10.1016/j.ecolmodel.2013.10.034,Phenology and density-dependent dispersal predict patterns of mountain pine beetle (Dendroctonus ponderosae) impact,2014,Ecological Modelling,journal-article
+q3,crossref-q3-beetle-terrain,10.1649/0010-065x-74.3.532,"Flight of the Mountain Pine Beetle, Dendroctonus ponderosae Hopkins (Coleoptera: Curculionidae: Scolytinae), in Suburban Cheyenne, Wyoming, USA during Summer 2011",2020,The Coleopterists Bulletin,journal-article
+q3,crossref-q3-beetle-terrain,10.1093/aesa/64.2.534,"Temperature Limits of Flight of the Mountain Pine Beetle, Dendroctonus ponderosae1",1971,Annals of the Entomological Society of America,journal-article
+q3,crossref-q3-beetle-terrain,10.1111/j.1439-0418.1992.tb00679.x,"The effect of verbenone on dispersal and attack of the mountain pine beetle, <i>Dendroctonus ponderosae</i> Hopk. (Col., Scolytidae) in a lodgepole pine stand",1992,Journal of Applied Entomology,journal-article
+q3,crossref-q3-beetle-terrain,10.7717/peerj.12382,"Identification of genes and gene expression associated with dispersal capacity in the mountain pine beetle,
+                    <i>Dendroctonus ponderosae</i>
+                    Hopkins (Coleoptera: Curculionidae)",2021,PeerJ,journal-article
+q3,crossref-q3-beetle-terrain,10.1111/j.1365-294x.2012.05587.x,Spatial genetic structure of the mountain pine beetle (<i>Dendroctonus ponderosae</i>) outbreak in western Canada: historical patterns and contemporary dispersal,2012,Molecular Ecology,journal-article
+q3,crossref-q3-beetle-terrain,10.1139/x08-066,"Radar observation and aerial capture of mountain pine beetle,<i>Dendroctonus ponderosae</i>Hopk. (Coleoptera: Scolytidae) in flight above the forest canopy",2008,Canadian Journal of Forest Research,journal-article
+q3,crossref-q3-beetle-terrain,10.1111/j.1439-0418.1972.tb01745.x,"On the Emergence and Initial Flight Behaviour of the Mountain Pine Beetle, <i>Dendroctonus ponderosae</i>, in Eastern Washington<sup>1</sup>",1972,Zeitschrift für Angewandte Entomologie,journal-article
+q3,crossref-q3-beetle-terrain,10.7287/peerj.12382v0.1/reviews/1,"Peer Review #1 of ""Identification of genes and gene expression associated with dispersal capacity in the mountain pine beetle, Dendroctonus ponderosae Hopkins (Coleoptera: Curculionidae) (v0.1)""",2021,,peer-review
+q3,crossref-q3-beetle-terrain,10.7287/peerj.12382v0.1/reviews/2,"Peer Review #2 of ""Identification of genes and gene expression associated with dispersal capacity in the mountain pine beetle, Dendroctonus ponderosae Hopkins (Coleoptera: Curculionidae) (v0.1)""",2021,,peer-review
+q3,crossref-q3-beetle-terrain,10.1111/j.1439-0418.1989.tb00484.x,"An empirical approach to modeling the local dispersal of the mountain pine beetle (
+                    <i>Dendroctonus ponderosae</i>
+                    Hopk.) (Col., Scolytidae) in relation to sources of attraction, wind direction and speed",1989,Journal of Applied Entomology,journal-article
+q3,crossref-q3-beetle-terrain,10.4039/ent90464-8,"Internal Changes in the Female Mountain Pine Beetle, <i>Dendroctonus monticolae</i> Hopk., Associated with Egg Laying and Flight",1958,The Canadian Entomologist,journal-article
+q3,crossref-q3-beetle-terrain,10.1111/afe.12305,"Morphological variation associated with dispersal capacity in a tree‐killing bark beetle
+                    <i>Dendroctonus ponderosae</i>
+                    Hopkins",2018,Agricultural and Forest Entomology,journal-article
+q3,crossref-q3-beetle-terrain,10.1007/bf02510942,A dispersal‐aggregation model for mountain pine beetle in lodgepole pine stands,1977,Population Ecology,journal-article
+q3,crossref-q3-beetle-terrain,10.1093/forestscience/53.3.395,Mountain Pine Beetle Dispersal: The Spatial–Temporal Interaction of Infestations,2007,Forest Science,journal-article
+q3,crossref-q3-beetle-terrain,10.1007/s10886-025-01610-5,Energy Use During Flight Impacts Semiochemical Response in the Mountain Pine Beetle,2025,Journal of Chemical Ecology,journal-article
+q3,crossref-q3-beetle-terrain,10.1603/en13244,Factors Influencing Flight Capacity of the Mountain Pine Beetle (Coleoptera: Curculionidae: Scolytinae),2014,Environmental Entomology,journal-article
+q3,crossref-q3-beetle-terrain,10.4039/ent94531-5,"Biology of the Mountain Pine Beetle, <i>Dendroctonus monticolae</i> Hopkins, in the East Kootenay Region of British Columbia I. Life Cycle, Brood Development, and Flight Periods",1962,The Canadian Entomologist,journal-article
+q3,crossref-q3-beetle-terrain,10.1093/ee/nvw121,Flight Period of Mountain Pine Beetle (Coleoptera: Curculionidae) in its Recently Expanded Range,2016,Environmental Entomology,journal-article
+q3,crossref-q3-beetle-terrain,10.1007/s10905-020-09760-y,Effect of Environmental Conditions on Flight Capacity in Mountain Pine Beetle (Coleoptera: Curculionidae: Scolytinae),2020,Journal of Insect Behavior,journal-article
+q3,crossref-q3-beetle-terrain,10.1111/phen.12290,Energy use by the mountain pine beetle (Coleoptera: Curculionidae: Scolytinae) for dispersal by flight,2019,Physiological Entomology,journal-article
+q3,crossref-q3-beetle-terrain,10.1603/ice.2016.113904,Energy use by the mountain pine beetle (Coleoptera: Curculionidae: Scolytinae) for dispersal by flight,2016,2016 International Congress of Entomology,proceedings-article
+q3,crossref-q3-beetle-terrain,10.4039/tce.2019.6,Testing for trade-offs between flight and reproduction in the mountain pine beetle (Coleoptera: Curculionidae) on two pine (Pinaceae) hosts,2019,The Canadian Entomologist,journal-article
+q3,crossref-q3-beetle-terrain,10.1139/cjfr-2016-0510,Climatic conditions for emergence and flight of mountain pine beetle: implications for long-distance dispersal,2017,Canadian Journal of Forest Research,journal-article
+q3,crossref-q3-beetle-terrain,10.1007/s11538-013-9868-8,Pattern Formation in a Model for Mountain Pine Beetle Dispersal: Linking Model Predictions to Data,2013,Bulletin of Mathematical Biology,journal-article
+q3,crossref-q3-beetle-terrain,10.1007/s11829-021-09831-7,Effect of semiochemical exposure on flight propensity and flight capacity of Dendroctonus ponderosae in laboratory bioassays,2021,Arthropod-Plant Interactions,journal-article
+q3,crossref-q3-beetle-terrain,10.1002/ecy.70305,Modeling stratified dispersal in forest pests: A case study of the mountain pine beetle in Alberta,2026,Ecology,journal-article
+q3,crossref-q3-beetle-terrain,10.1890/es10-00172.1,Mountain pine beetle dispersal: spatiotemporal patterns and role in the spread and expansion of the present outbreak,2011,Ecosphere,journal-article
+q3,crossref-q3-beetle-terrain,10.4039/ent101507-5,"FLIGHT MUSCLE CHANGES IN BLACK HILLS BEETLES, <i>DENDROCTONUS PONDEROSAE</i> (COLEOPTERA: SCOLYTIDAE), DURING EMERGENCE AND EGG LAYING",1969,The Canadian Entomologist,journal-article
+q3,crossref-q3-beetle-terrain,10.1111/1365-2656.12700,Differential dispersal and the Allee effect create power‐law behaviour: Distribution of spot infestations during mountain pine beetle outbreaks,2017,Journal of Animal Ecology,journal-article

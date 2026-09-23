@@ -1,0 +1,8 @@
+"Class","Cells","Attacked (%)","Beta","SE"
+"slope (reference)","72,262","9.6","",""
+"spur","22,050","12.6","-0.075*","0.035"
+"hollow","12,988","6.0","-0.091","0.053"
+"valley","2,963","3.8","-0.676****","0.121"
+"ridge#","1,276","11.0","-1.160****","0.119"
+"peak","168","22.6","-0.523*","0.227"
+"# Ridge includes the 16 shoulder cells on the perimeter. No shoulder cell was classed as attacked in any year, so the class could not be estimated on its own and was counted with ridge, its neighbour on the geomorphon scale.","","","",""

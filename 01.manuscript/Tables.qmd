@@ -88,7 +88,7 @@ kable(get("table-3-model-comparison"), booktabs = TRUE, align = "lrrrrrr")
 
 # Table 4
 
-Coefficients of the full annual model M3, continuous terms ordered by absolute size. Each coefficient was the change in log-odds per standard deviation of its variable, fitted on a class-balanced sample, so the intercept was not the landscape prevalence. SE was the standard error and z the Wald statistic. Significance was marked * P ≤ 0.05, ** P ≤ 0.01, *** P ≤ 0.001, **** P ≤ 0.0001. The geomorphon landform classes of the same model were reported in Table 6.
+Coefficients of the full annual model M3, continuous terms ordered by absolute size. Each coefficient was the change in log-odds per standard deviation of its variable, fitted on a class-balanced sample, so the intercept was not the landscape prevalence. SE was the standard error and z the Wald statistic. Significance was marked * P ≤ 0.05, ** P ≤ 0.01, *** P ≤ 0.001, **** P ≤ 0.0001. The geomorphon landform classes of the same model were reported in Table S5 of the Supporting Information.
 
 ```{r}
 kable(get("table-4-full-model"), booktabs = TRUE, align = "lrrr")
@@ -102,10 +102,3 @@ Moderate-to-high beetle disturbance by quadratic mean diameter class, on the bal
 kable(get("table-5-diameter-class"), booktabs = TRUE, align = "lrr")
 ```
 
-# Table 6
-
-Geomorphon landform classes in the full annual model M3, as coefficients against the reference class, `r txt("table-6-reference-and-shoulder")[1]`, the most common class on the perimeter. Cells was the number of perimeter cells in each class and Attacked the share of those cells classed moderate-to-high over all years. Flat and pit did not occur on the perimeter, and shoulder, `r txt("table-6-reference-and-shoulder")[2]` cells with no attack, was merged into ridge. Significance was marked * P ≤ 0.05, ** P ≤ 0.01, *** P ≤ 0.001, **** P ≤ 0.0001.
-
-```{r}
-kable(get("table-6-geomorphon-classes"), booktabs = TRUE, align = "lrrrr")
-```

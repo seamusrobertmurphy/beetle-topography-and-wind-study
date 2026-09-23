@@ -106,4 +106,24 @@ The 16-day model refitted under four definitions of the wind window. The epoch w
 kable(get("table-S4-flight-window"), booktabs = TRUE)
 ```
 
+# Table S5
+
+Geomorphon landform classes in the full annual model M3, as coefficients against the reference class, `r readLines(file.path(TBL, "table-S5-reference-and-shoulder.txt"))[1]`, the most common class on the perimeter. Cells was the number of perimeter cells in each class and Attacked the share of those cells classed moderate-to-high over all years. Flat and pit did not occur on the perimeter, and shoulder, `r readLines(file.path(TBL, "table-S5-reference-and-shoulder.txt"))[2]` cells with no attack, was merged into ridge. Significance was marked * P ≤ 0.05, ** P ≤ 0.01, *** P ≤ 0.001, **** P ≤ 0.0001.
+
+```{r}
+g5 <- get("table-S5-geomorphon-classes")
+g5 <- g5[!startsWith(as.character(g5[[1]]), "#"), ]
+g5[is.na(g5)] <- ""
+kable(g5, booktabs = TRUE, align = "lrrrr", row.names = FALSE)
+```
+
+# Figure S1
+
+The flight window against the landscape's own climate, from hourly Environment and Climate Change Canada station records for May to September of the nine study years. The shaded band marked the window, 1 July to 15 August, taken from the bionomics and not fitted to these data. (a) Mean afternoon temperature by day of year, with the 19 to 41 degrees C flight range and the 22 to 32 degrees C peak band marked. (b) The share of afternoon hours inside the flight range, day by day. (c) Mean temperature and the share of all hours inside the flight range, by hour, with the 12:00 to 17:00 restriction shaded. (d) Mean wind speed by hour on the same axis, showing that the hours in which the beetle could fly were also the windiest of the day.
+
+```{r}
+#| out-width: "100%"
+knitr::include_graphics(here::here("03.outputs", "PNG", "FigS1.png"))
+```
+
 # References

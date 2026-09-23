@@ -1,0 +1,29 @@
+strand,route,query,date,retrieved,reported_total,cap,capped,error
+library-science,store-q1-beetle-terrain,mountain pine beetle|dendroctonus ponderosae AND terrain|stand density|refugia,2026-09-23,5,5,NA,FALSE,NA
+library-science,store-q2-beetle-wind,mountain pine beetle|dendroctonus ponderosae AND thinning|wind*,2026-09-23,11,11,NA,FALSE,NA
+library-science,store-q3-beetle-terrain,mountain pine beetle|dendroctonus ponderosae AND dispersal|topography|terrain|flight,2026-09-23,20,20,NA,FALSE,NA
+library-science,store-q4-beetle-terrain-wind,mountain pine beetle|dendroctonus ponderosae AND topography|terrain|stand density AND wind*,2026-09-23,9,9,NA,FALSE,NA
+semantic-scholar,s2-q1-beetle-terrain,"(""mountain pine beetle"" | ""dendroctonus ponderosae"") + (terrain | ""stand density"" | refugia)",2026-09-23,87,87,5000,FALSE,NA
+semantic-scholar,s2-q2-beetle-wind,"(""mountain pine beetle"" | ""dendroctonus ponderosae"") + (thinning | wind*)",2026-09-23,174,174,5000,FALSE,NA
+semantic-scholar,s2-q3-beetle-terrain,"(""mountain pine beetle"" | ""dendroctonus ponderosae"") + (dispersal | topography | terrain | flight)",2026-09-23,228,228,5000,FALSE,NA
+semantic-scholar,s2-q4-beetle-terrain-wind,"(""mountain pine beetle"" | ""dendroctonus ponderosae"") + (topography | terrain | ""stand density"") + (wind*)",2026-09-23,13,13,5000,FALSE,NA
+crossref,crossref-q1-beetle-terrain,mountain pine beetle|dendroctonus ponderosae AND terrain|stand density|refugia,2026-09-23,2,153538,2000,TRUE,NA
+crossref,crossref-q2-beetle-wind,mountain pine beetle|dendroctonus ponderosae AND thinning|wind*,2026-09-23,4,153538,2000,TRUE,NA
+crossref,crossref-q3-beetle-terrain,mountain pine beetle|dendroctonus ponderosae AND dispersal|topography|terrain|flight,2026-09-23,30,153538,2000,TRUE,NA
+crossref,crossref-q4-beetle-terrain-wind,mountain pine beetle|dendroctonus ponderosae AND topography|terrain|stand density AND wind*,2026-09-23,0,153538,2000,TRUE,NA
+chase,chase-citations-10.1002/fee.2190,10.1002/fee.2190,2026-09-23,133,133,1000,FALSE,
+chase,chase-references-10.1002/fee.2190,10.1002/fee.2190,2026-09-23,58,58,1000,FALSE,
+chase,chase-citations-10.1093/ee/2.4.541,10.1093/ee/2.4.541,2026-09-23,144,144,1000,FALSE,
+chase,chase-citations-10.1093/forestscience/50.5.610,10.1093/forestscience/50.5.610,2026-09-23,118,118,1000,FALSE,
+chase,chase-citations-10.1111/j.0906-7590.2007.05453.x,10.1111/j.0906-7590.2007.05453.x,2026-09-23,218,218,1000,FALSE,
+chase,chase-citations-10.1890/11-1055.1,10.1890/11-1055.1,2026-09-23,182,182,1000,FALSE,
+chase,chase-citations-10.1890/es10-00172.1,10.1890/es10-00172.1,2026-09-23,37,37,1000,FALSE,
+chase,chase-references-10.1890/es10-00172.1,10.1890/es10-00172.1,2026-09-23,26,26,1000,FALSE,
+chase,chase-citations-10.2737/int-rp-400,10.2737/int-rp-400,2026-09-23,23,23,1000,FALSE,
+chase,chase-citations-10.3390/f9110715,10.3390/f9110715,2026-09-23,16,16,1000,FALSE,
+chase,chase-references-10.3390/f9110715,10.3390/f9110715,2026-09-23,98,98,1000,FALSE,
+chase,chase-references-10.1111/j.0906-7590.2007.05453.x,10.1111/j.0906-7590.2007.05453.x,2026-09-23,0,0,1000,FALSE,no reference list held by Semantic Scholar
+chase,chase-references-10.1093/ee/2.4.541,10.1093/ee/2.4.541,2026-09-23,0,0,1000,FALSE,no reference list held by Semantic Scholar
+chase,chase-references-10.1093/forestscience/50.5.610,10.1093/forestscience/50.5.610,2026-09-23,0,0,1000,FALSE,no reference list held by Semantic Scholar
+chase,chase-references-10.1890/11-1055.1,10.1890/11-1055.1,2026-09-23,0,0,1000,FALSE,no reference list held by Semantic Scholar
+chase,chase-references-10.2737/int-rp-400,10.2737/int-rp-400,2026-09-23,0,0,1000,FALSE,no reference list held by Semantic Scholar

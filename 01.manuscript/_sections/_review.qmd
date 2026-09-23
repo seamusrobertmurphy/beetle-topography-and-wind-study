@@ -1,8 +1,9 @@
 ```{r}
 #| label: review-terms
-#| echo: true
+#| echo: !expr knitr::is_html_output()
 
-## Literature review, run under library-science/protocols/literature-review.md. Every chunk
+## Literature review, run under library-science/protocols/literature-review.md. The code prints in
+## the html render and not in the Word file the journal receives. Every chunk
 ## writes its file only when the file is missing, so a selection or a screening decision
 ## typed into a file is never overwritten. The protocol is 04.references/review/protocol.md.
 if (!file.exists("../04.references/review/search-terms.csv")) {
@@ -30,7 +31,7 @@ if (!file.exists("../04.references/review/search-terms.csv")) {
 
 ```{r}
 #| label: review-queries
-#| echo: true
+#| echo: !expr knitr::is_html_output()
 front <- rmarkdown::yaml_front_matter(knitr::current_input())
 declared <- paste(front$title, front$subtitle, paste(unlist(front$keywords), collapse = " ")) |>
   stringr::str_remove_all("[*_]") |>
@@ -50,7 +51,7 @@ queries <- terms |>
 
 ```{r}
 #| label: review-store
-#| echo: true
+#| echo: !expr knitr::is_html_output()
 if (!file.exists("../02.inputs/derived/review-store-hits.csv")) {
   # library-science manifest, https://github.com/seamusrobertmurphy/library-science/blob/main/library/manifest.csv
   manifest <- readr::read_csv("../../library-science/library/manifest.csv", show_col_types = FALSE)
@@ -82,7 +83,7 @@ if (!file.exists("../02.inputs/derived/review-store-hits.csv")) {
 
 ```{r}
 #| label: review-semantic-scholar
-#| echo: true
+#| echo: !expr knitr::is_html_output()
 if (!file.exists("../02.inputs/derived/review-s2-hits.csv")) {
   search_s2 <- function(question, route, concepts, cap = 5000) {
     query <- stringr::str_split_1(concepts, " AND ") |>
@@ -119,33 +120,33 @@ if (!file.exists("../02.inputs/derived/review-s2-hits.csv")) {
 
 ```{r}
 #| label: review-crossref
-#| echo: true
+#| echo: !expr knitr::is_html_output()
 
-## Third strand. Crossref ranks by relevance and does not honour boolean operators, so each
-## page of results is filtered locally by requiring every concept group to match in the
-## title. reported_total is Crossref's count for the loose query and retrieved is the
-## count that passed the filter.
+## Third strand. Crossref does not honour boolean operators and its cursor paging returns
+## records unsorted, so the population terms are sent as a title query ranked by relevance,
+## the top 2,000 are fetched by offset, and every concept group is then required to match
+## in the title. reported_total is Crossref's count for the title query and retrieved is
+## the count that passed the filter.
 if (!file.exists("../02.inputs/derived/review-crossref-hits.csv")) {
   search_crossref <- function(question, route, concepts, cap = 2000) {
     groups <- stringr::str_split_1(concepts, " AND ")
-    words <- purrr::map(groups, \(g) stringr::str_remove(stringr::str_split_1(g, "\\|"), "\\*$"))
     term <- \(x) if (stringr::str_ends(x, "\\*")) paste0(stringr::str_remove(x, "\\*$"), "\\w*") else paste0(x, "\\b")
     patterns <- purrr::map_chr(groups, \(g) paste0("\\b(", paste(purrr::map_chr(stringr::str_split_1(g, "\\|"), term), collapse = "|"), ")"))
-    query <- paste(unlist(words), collapse = " ")
-    items <- list(); cursor <- "*"; total <- NA; err <- NA
-    repeat {
+    population <- paste(stringr::str_split_1(groups[1], "\\|"), collapse = " ")
+    items <- list(); total <- NA; err <- NA
+    for (offset in seq(0, cap - 1000, by = 1000)) {
       # Crossref REST API works, https://api.crossref.org/swagger-ui/index.html
       resp <- httr2::request("https://api.crossref.org/works") |>
-        httr2::req_url_query(query.bibliographic = query, rows = 500, cursor = cursor, select = "DOI,title,issued,container-title,type", mailto = "seamusrobertmurphy@gmail.com") |>
+        httr2::req_url_query(query.title = population, rows = 1000, offset = offset, sort = "relevance", order = "desc", select = "DOI,title,issued,container-title,type", mailto = "seamusrobertmurphy@gmail.com") |>
         httr2::req_user_agent("beetle-topography-and-wind-study review (mailto:seamusrobertmurphy@gmail.com)") |>
         httr2::req_retry(max_tries = 6, backoff = \(i) 3 * i) |>
         httr2::req_error(is_error = \(r) FALSE) |>
         httr2::req_perform()
       if (httr2::resp_status(resp) != 200) { err <- httr2::resp_status_desc(resp); break }
       body <- httr2::resp_body_json(resp)$message
-      total <- body[["total-results"]]; cursor <- body[["next-cursor"]]
+      total <- body[["total-results"]]
       items <- c(items, body$items)
-      if (length(body$items) == 0 || length(items) >= cap) break
+      if (length(body$items) < 1000) break
     }
     works <- items |>
       purrr::map(\(w) tibble::tibble(doi = w$DOI %||% NA_character_, title = paste(unlist(w$title), collapse = " "), year = tryCatch(as.integer(w$issued$`date-parts`[[1]][[1]]), error = \(e) NA_integer_), venue = paste(unlist(w[["container-title"]]), collapse = " "), type = w$type %||% NA_character_)) |>
@@ -165,25 +166,13 @@ if (!file.exists("../02.inputs/derived/review-crossref-hits.csv")) {
 ```
 
 ```{r}
-#| label: review-records
-#| echo: true
-if (!file.exists("../02.inputs/derived/review-records.csv")) {
-  dplyr::bind_rows(
-    readr::read_csv("../02.inputs/derived/review-store-hits.csv", col_types = readr::cols(.default = "c")),
-    readr::read_csv("../02.inputs/derived/review-s2-hits.csv", col_types = readr::cols(.default = "c")),
-    readr::read_csv("../02.inputs/derived/review-crossref-hits.csv", col_types = readr::cols(.default = "c"))
-  ) |>
-    dplyr::mutate(id = dplyr::coalesce(stringr::str_to_lower(doi), stringr::str_squish(stringr::str_to_lower(stringr::str_replace_all(title, "[^[:alnum:] ]", " "))))) |>
-    dplyr::summarise(.by = id, doi = dplyr::first(stats::na.omit(doi)), title = dplyr::first(title), year = dplyr::first(stats::na.omit(year)), venue = dplyr::first(stats::na.omit(venue)), questions = paste(sort(unique(question)), collapse = " "), routes = paste(sort(unique(route)), collapse = " "), duplicates_merged = dplyr::n(), key = dplyr::first(stats::na.omit(key)), source_note = dplyr::first(stats::na.omit(source_note))) |>
-    dplyr::mutate(decision = NA, reason = NA, full_text = NA) |>
-    readr::write_csv("../02.inputs/derived/review-records.csv", na = "")
-}
-```
-
-```{r}
 #| label: review-chase
-#| echo: true
-central <- c()
+#| echo: !expr knitr::is_html_output()
+## Seeds for one round of backward and forward citation chasing, at most five per question,
+## named in the protocol. Aukema 2008 and Chen and Walton 2011 for spread, Bartos and Amman
+## 1989 and Thistle 2004 for the wind mechanism, Amman 1973 and Chapman 2012 for terrain,
+## Krawchuk 2020 and Cartwright 2018 for refugia.
+central <- c("10.1111/j.0906-7590.2007.05453.x", "10.1890/es10-00172.1", "10.2737/int-rp-400", "10.1093/forestscience/50.5.610", "10.1093/ee/2.4.541", "10.1890/11-1055.1", "10.1002/fee.2190", "10.3390/f9110715")
 if (length(central) > 0 && !file.exists("../02.inputs/derived/review-chase-hits.csv")) {
   chase <- function(seed_doi, direction) {
     # Semantic Scholar Academic Graph references and citations, https://api.semanticscholar.org/api-docs/graph#tag/Paper-Data
@@ -207,8 +196,25 @@ if (length(central) > 0 && !file.exists("../02.inputs/derived/review-chase-hits.
 ```
 
 ```{r}
+#| label: review-records
+#| echo: !expr knitr::is_html_output()
+if (!file.exists("../02.inputs/derived/review-records.csv")) {
+  dplyr::bind_rows(
+    readr::read_csv("../02.inputs/derived/review-store-hits.csv", col_types = readr::cols(.default = "c")),
+    readr::read_csv("../02.inputs/derived/review-s2-hits.csv", col_types = readr::cols(.default = "c")),
+    readr::read_csv("../02.inputs/derived/review-crossref-hits.csv", col_types = readr::cols(.default = "c")),
+    if (file.exists("../02.inputs/derived/review-chase-hits.csv")) readr::read_csv("../02.inputs/derived/review-chase-hits.csv", col_types = readr::cols(.default = "c")) |> dplyr::filter(!is.na(title)) |> dplyr::mutate(question = "chase") else NULL
+  ) |>
+    dplyr::mutate(id = dplyr::coalesce(stringr::str_to_lower(doi), stringr::str_squish(stringr::str_to_lower(stringr::str_replace_all(title, "[^[:alnum:] ]", " "))))) |>
+    dplyr::summarise(.by = id, doi = dplyr::first(stats::na.omit(doi)), title = dplyr::first(title), year = dplyr::first(stats::na.omit(year)), venue = dplyr::first(stats::na.omit(venue)), questions = paste(sort(unique(question)), collapse = " "), routes = paste(sort(unique(route)), collapse = " "), duplicates_merged = dplyr::n(), key = dplyr::first(stats::na.omit(key)), source_note = dplyr::first(stats::na.omit(source_note))) |>
+    dplyr::mutate(decision = NA, reason = NA, full_text = NA) |>
+    readr::write_csv("../02.inputs/derived/review-records.csv", na = "")
+}
+```
+
+```{r}
 #| label: review-counts
-#| echo: true
+#| echo: !expr knitr::is_html_output()
 records <- readr::read_csv("../02.inputs/derived/review-records.csv", show_col_types = FALSE)
 search_log <- readr::read_csv("../02.inputs/derived/review-search-log.csv", show_col_types = FALSE)
 review_counts <- tibble::tibble(

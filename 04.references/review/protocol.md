@@ -105,3 +105,7 @@ protocol admits a term only from the front matter and the journal allows up to t
 keywords.
 
 ## Deviations
+
+1. 2026-09-23. The Crossref strand as first written sent every concept word as one bibliographic query with cursor paging, and the cursor returned records unsorted, so the top 2,000 held none with the beetle in the title and all four queries retrieved zero. Rewritten to send the population terms as a title query ranked by relevance with offset paging, then filter by concept in the title. The four zero rows were removed from the search log before the strand reran.
+2. 2026-09-23. Ten works from the candidate scan made before the protocol was written, each resolved at Crossref that day, were not retrieved by any strand or by the chase, because their titles carry none of the selected terms. They were added to the screening table by hand with route `hand` and decision include, so that the table shows every record the review rests on. They are Waring and Pitman 1985, Thistle et al. 2004, Schmid et al. 1992, Hicke and Jenkins 2008, Assal et al. 2014, Six et al. 2018, Trzcinski and Reid 2009, Smith et al. 2010, Bone et al. 2005 and Byers 2000. Byers 2000 has a source note in the store already.
+3. 2026-09-23. The screening was done by the agent reading every title, because the loop ran unattended, and abstracts were available for only 47 of the included records. Seamus is to spot-check the decisions before the Methods sentence describes the review.
