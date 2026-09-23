@@ -38,8 +38,9 @@ annual and sixteen-day logistic fits on standardised covariates.
 
 Known confounds. Elevation is a composite; Wulder et al. (2006) attribute its sign to
 host distribution, Nelson et al. (2007) found hot spots "almost always occur at elevations
-between 800 m and 1000 m" and on warm south and west aspects early in an infestation,
-abstract only, and Shore et al. (2006) review a decline of outbreak with elevation. Aspect
+between 800 m and 1000 m" (p. 91) and that "south- and west-facing aspects are warmer.
+These warmer aspects seem important for outbreak initialization" (p. 105), with no stand
+density data to test, and Shore et al. (2006) review a decline of outbreak with elevation. Aspect
 reads warmth as well as shade; Kaiser et al. (2012) found infestation more likely on "south-
 facing slopes, steep slopes, locations with small contributing areas and locations with
 lower values of the topographic wetness index", abstract only, which is the opposite of the
@@ -148,6 +149,6 @@ and Pitman 1985; Mitchell et al. 1983; Amman et al. 1988; Anhold and Long 1987; 
 and Mitchell 1993; Thistle et al. 2004; Edburg et al. 2010; Schmid et al. 1992; Negrón 2018;
 Klutsch et al. 2020; Fettig et al. 2007; Hood et al. 2016; Six et al. 2014; Shore et al.
 2000; Hicke and Jenkins 2008; Chapman et al. 2012; Preisler et al. 2012; Simard et al.
-2011; Creeden et al. 2014; Kaiser et al. 2012; Nelson et al. 2007; Robertson et al. 2007;
+2011; Creeden et al. 2014; Kaiser et al. 2012; Robertson et al. 2007;
 Boone et al. 2011; Raffa et al. 2008; Bentz et al. 2010; Sambaraju et al. 2012; Bleiker and
 Van Hezewijk 2016; Trzcinski and Reid 2009.
