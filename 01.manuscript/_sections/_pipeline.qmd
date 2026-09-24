@@ -574,7 +574,7 @@ ex  <- terra::extract(dst, pv, ID = FALSE)
 pl$worst_year <- OY[apply(ex, 1, which.min)]; pl$dndmi_min <- apply(ex, 1, min)
 pl$on_water <- lengths(st_intersects(st_as_sf(pv), wat)) > 0
 stopifnot(!any(pl$on_water))
-write.csv(pl, file.path(LOC, "fieldplots_with_undisturbed.csv"), row.names = FALSE)
+write.csv(pl, file.path(LOC, "beetle_plots_coordinates_ndmi_killed_basal_area.csv"), row.names = FALSE)
 cat(sprintf("plot set written: %d plots, %s\n", nrow(pl), paste(names(table(pl$severity)), table(pl$severity), collapse = " ")))
 
 ## ---- the same SVM ----------------------------------------------------------------
@@ -613,6 +613,35 @@ for (y in OY) {
 }
 write.csv(do.call(rbind, res), file.path(OUT, "modhigh_by_year.csv"), row.names = FALSE)
 cat("annual maps written to", OUT, "\n")
+```
+
+```{r}
+#| label: pipeline-24c-beetle-plots-ndmi
+#| echo: false
+#| output: false
+#| warning: false
+#| message: false
+
+## The beetle plots, one file. The 28 field plots of Murphy et al. (2026), confirmed
+## red-stage mountain pine beetle mortality in July and August 2020, and the undisturbed
+## plots added from the imagery, with coordinates in EPSG:32611, killed basal area, and
+## NDMI in every year with its change from 2005. Runs only when the NDMI columns are missing.
+suppressPackageStartupMessages(library(terra))
+BP <- here::here("02.inputs", "beetle", "plot-locations", "beetle_plots_coordinates_ndmi_killed_basal_area.csv")
+bp <- read.csv(BP)
+if (!"ndmi_2005" %in% names(bp)) {
+  NY <- c(2005:2011, 2013, 2014, 2020)
+  # Landsat Collection 2 Level-2 surface reflectance, https://www.usgs.gov/landsat-missions/landsat-collection-2-level-2-science-products
+  nd <- rast(file.path(here::here("02.inputs", "beetle", "ndmi-darkwoods"), sprintf("ndmi_%d.tif", NY)))
+  names(nd) <- paste0("ndmi_", NY)
+  pv <- vect(bp, geom = c("easting", "northing"), crs = "EPSG:32611")
+  ex <- terra::extract(nd, pv, ID = FALSE)
+  bp$class <- ifelse(bp$source == "field", "red-stage attack", "undisturbed")
+  ## the parent's percentage of plot basal area killed is twice this column, as CLAUDE.md records
+  bp$pct_basal_area_killed <- 2 * bp$pi_mpb_killed
+  bp <- cbind(bp, ex, setNames(ex[-1] - ex[[1]], paste0("dndmi_", NY[-1])))
+  write.csv(bp, BP, row.names = FALSE)
+}
 ```
 
 ```{r}

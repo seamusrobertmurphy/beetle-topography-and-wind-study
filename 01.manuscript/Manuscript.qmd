@@ -117,7 +117,7 @@ b  <- function(x) sprintf("%+.4f", x)
 pp <- function(x) if (x < 0.001) "< 0.001" else sprintf("= %.3f", x)
 
 ## The field-plot classifier's own diagnostics, read from the files the variant wrote.
-CLS_PL <- read.csv(file.path(BC, "plot-locations", "fieldplots_with_undisturbed.csv"))
+CLS_PL <- read.csv(file.path(BC, "plot-locations", "beetle_plots_coordinates_ndmi_killed_basal_area.csv"))
 CLS_LOO <- read.csv(file.path(BC, "red-stage-darkwoods", "classifier_loo.csv"))
 CLS_BR <- quantile(CLS_PL$pi_mpb_killed[CLS_PL$source == "field"], c(1/3, 2/3))
 CLS_NU <- sum(CLS_PL$source == "derived"); CLS_N <- CLS_LOO$n
