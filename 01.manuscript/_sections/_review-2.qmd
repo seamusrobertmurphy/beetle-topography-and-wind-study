@@ -1,0 +1,199 @@
+```{r}
+#| label: review2-queries
+#| echo: !expr knitr::is_html_output()
+
+## Second literature review, run under 04.references/review-2/protocol.md, frozen
+## 2026-09-24. Its terms come from Seamus's request of that day and the field's own words,
+## not from the front matter, as the protocol's Departure 1 records, so this chunk checks
+## only that terms are selected. Every chunk writes its file only when the file is
+## missing, and every file is prefixed review2- so the first review's files are untouched.
+terms2 <- readr::read_csv("../04.references/review-2/search-terms.csv", col_types = readr::cols(.default = "c")) |>
+  dplyr::filter(!is.na(question), !is.na(concept)) |>
+  dplyr::mutate(term = stringr::str_to_lower(term)) |>
+  tidyr::separate_longer_delim(question, " ")
+if (nrow(terms2) == 0) stop("No search terms selected in 04.references/review-2/search-terms.csv")
+queries2 <- terms2 |>
+  dplyr::summarise(.by = c(question, concept), group = paste(term, collapse = "|")) |>
+  dplyr::summarise(.by = question, route = paste(c(dplyr::first(question), concept), collapse = "-"), concepts = paste(group, collapse = " AND "))
+```
+
+```{r}
+#| label: review2-store
+#| echo: !expr knitr::is_html_output()
+if (!file.exists("../02.inputs/derived/review2-store-hits.csv")) {
+  # library-science manifest, https://github.com/seamusrobertmurphy/library-science/blob/main/library/manifest.csv
+  manifest <- readr::read_csv("../../library-science/library/manifest.csv", show_col_types = FALSE)
+  # library-science source notes, https://github.com/seamusrobertmurphy/library-science/tree/main/sources
+  notes <- tibble::tibble(path = list.files("../../library-science/sources", "\\.md$", full.names = TRUE)) |>
+    dplyr::mutate(key = tools::file_path_sans_ext(basename(path)), note = purrr::map_chr(path, \(p) paste(readLines(p, warn = FALSE), collapse = " ")))
+  store <- manifest |>
+    dplyr::filter(status %in% c("verified", "filed", "unverified"), !is.na(title) | !is.na(key)) |>
+    dplyr::left_join(dplyr::select(notes, key, note), by = "key") |>
+    dplyr::mutate(text = stringr::str_to_lower(paste(title, note)))
+  hits <- queries2 |>
+    purrr::pmap(\(question, route, concepts) {
+      groups <- stringr::str_split_1(concepts, " AND ")
+      term <- \(x) if (stringr::str_ends(x, "\\*")) paste0(stringr::str_remove(x, "\\*$"), "\\w*") else paste0(x, "\\b")
+      patterns <- purrr::map_chr(groups, \(g) paste0("\\b(", paste(purrr::map_chr(stringr::str_split_1(g, "\\|"), term), collapse = "|"), ")"))
+      keep <- purrr::map(patterns, \(r) stringr::str_detect(store$text, r)) |> purrr::reduce(`&`)
+      store[keep, ] |> dplyr::transmute(question, route = paste0("store-", route), key, doi, title, year, venue = container, source_note = dplyr::if_else(has_source_note == "yes", key, NA))
+    }) |>
+    purrr::list_rbind()
+  readr::write_csv(hits, "../02.inputs/derived/review2-store-hits.csv")
+  queries2 |>
+    dplyr::transmute(strand = "library-science", route = paste0("store-", route), query = concepts, date = as.character(Sys.Date())) |>
+    dplyr::left_join(dplyr::count(hits, route, name = "retrieved"), by = "route") |>
+    dplyr::mutate(retrieved = tidyr::replace_na(retrieved, 0L), reported_total = retrieved, cap = NA, capped = FALSE, error = NA) |>
+    readr::write_csv("../02.inputs/derived/review2-search-log.csv")
+}
+```
+
+```{r}
+#| label: review2-semantic-scholar
+#| echo: !expr knitr::is_html_output()
+if (!file.exists("../02.inputs/derived/review2-s2-hits.csv")) {
+  search_s2 <- function(question, route, concepts, cap = 5000) {
+    query <- stringr::str_split_1(concepts, " AND ") |>
+      purrr::map_chr(\(g) paste0("(", paste(purrr::map_chr(stringr::str_split_1(g, "\\|"), \(x) if (grepl(" ", x)) paste0('"', x, '"') else x), collapse = " | "), ")")) |>
+      paste(collapse = " + ")
+    papers <- list(); token <- NULL; total <- NA; err <- NA
+    repeat {
+      # Semantic Scholar Academic Graph bulk search, https://api.semanticscholar.org/api-docs/graph#tag/Paper-Data/operation/get_graph_paper_bulk_search
+      resp <- httr2::request("https://api.semanticscholar.org/graph/v1/paper/search/bulk") |>
+        httr2::req_url_query(query = query, fields = "title,year,venue,externalIds,citationCount,publicationTypes,abstract", token = token) |>
+        httr2::req_retry(max_tries = 8, backoff = \(i) 5 * i) |>
+        httr2::req_error(is_error = \(r) FALSE) |>
+        httr2::req_perform()
+      if (httr2::resp_status(resp) != 200) { err <- httr2::resp_status_desc(resp); break }
+      body <- httr2::resp_body_json(resp)
+      total <- body$total; token <- body$token
+      papers <- c(papers, body$data)
+      if (is.null(token) || length(papers) >= cap) break
+    }
+    works <- papers |>
+      purrr::map(\(w) tibble::tibble(doi = w$externalIds$DOI %||% NA_character_, title = w$title %||% NA_character_, year = w$year %||% NA_integer_, venue = w$venue %||% NA_character_, type = paste(unlist(w$publicationTypes), collapse = " "), citations = w$citationCount %||% NA_integer_, abstract = w$abstract %||% NA_character_)) |>
+      purrr::list_rbind()
+    if (nrow(works) == 0) works <- tibble::tibble(doi = character(), title = character(), year = integer(), venue = character(), type = character(), citations = integer(), abstract = character())
+    list(hits = dplyr::mutate(works, question, route = paste0("s2-", route), .before = 1),
+         log = tibble::tibble(strand = "semantic-scholar", route = paste0("s2-", route), query, date = as.character(Sys.Date()), retrieved = nrow(works), reported_total = total, cap, capped = isTRUE(total > cap), error = err))
+  }
+  runs <- purrr::pmap(queries2, search_s2)
+  readr::write_csv(purrr::map(runs, "hits") |> purrr::list_rbind(), "../02.inputs/derived/review2-s2-hits.csv")
+  readr::read_csv("../02.inputs/derived/review2-search-log.csv", col_types = readr::cols(.default = "c")) |>
+    dplyr::bind_rows(purrr::map(runs, "log") |> purrr::list_rbind() |> dplyr::mutate(dplyr::across(dplyr::everything(), as.character))) |>
+    readr::write_csv("../02.inputs/derived/review2-search-log.csv")
+}
+```
+
+```{r}
+#| label: review2-crossref
+#| echo: !expr knitr::is_html_output()
+
+## Independent strand, by the method the first review settled on in its Deviation 1. The
+## population terms are sent as a title query ranked by relevance, the top 2,000 are
+## fetched by offset, and every concept group must then match in the title.
+if (!file.exists("../02.inputs/derived/review2-crossref-hits.csv")) {
+  search_crossref <- function(question, route, concepts, cap = 2000) {
+    groups <- stringr::str_split_1(concepts, " AND ")
+    term <- \(x) if (stringr::str_ends(x, "\\*")) paste0(stringr::str_remove(x, "\\*$"), "\\w*") else paste0(x, "\\b")
+    patterns <- purrr::map_chr(groups, \(g) paste0("\\b(", paste(purrr::map_chr(stringr::str_split_1(g, "\\|"), term), collapse = "|"), ")"))
+    population <- paste(stringr::str_split_1(groups[1], "\\|"), collapse = " ")
+    items <- list(); total <- NA; err <- NA
+    for (offset in seq(0, cap - 1000, by = 1000)) {
+      # Crossref REST API works, https://api.crossref.org/swagger-ui/index.html
+      resp <- httr2::request("https://api.crossref.org/works") |>
+        httr2::req_url_query(query.title = population, rows = 1000, offset = offset, sort = "relevance", order = "desc", select = "DOI,title,issued,container-title,type", mailto = "seamusrobertmurphy@gmail.com") |>
+        httr2::req_user_agent("beetle-topography-and-wind-study review (mailto:seamusrobertmurphy@gmail.com)") |>
+        httr2::req_retry(max_tries = 6, backoff = \(i) 3 * i) |>
+        httr2::req_error(is_error = \(r) FALSE) |>
+        httr2::req_perform()
+      if (httr2::resp_status(resp) != 200) { err <- httr2::resp_status_desc(resp); break }
+      body <- httr2::resp_body_json(resp)$message
+      total <- body[["total-results"]]
+      items <- c(items, body$items)
+      if (length(body$items) < 1000) break
+    }
+    works <- items |>
+      purrr::map(\(w) tibble::tibble(doi = w$DOI %||% NA_character_, title = paste(unlist(w$title), collapse = " "), year = tryCatch(as.integer(w$issued$`date-parts`[[1]][[1]]), error = \(e) NA_integer_), venue = paste(unlist(w[["container-title"]]), collapse = " "), type = w$type %||% NA_character_)) |>
+      purrr::list_rbind()
+    if (nrow(works) == 0) works <- tibble::tibble(doi = character(), title = character(), year = integer(), venue = character(), type = character())
+    keep <- purrr::map(patterns, \(r) stringr::str_detect(stringr::str_to_lower(works$title), r)) |> purrr::reduce(`&`)
+    works <- works[keep, ]
+    list(hits = dplyr::mutate(works, question, route = paste0("crossref-", route), .before = 1),
+         log = tibble::tibble(strand = "crossref", route = paste0("crossref-", route), query = concepts, date = as.character(Sys.Date()), retrieved = nrow(works), reported_total = total, cap, capped = isTRUE(total > cap), error = err))
+  }
+  runs <- purrr::pmap(queries2, search_crossref)
+  readr::write_csv(purrr::map(runs, "hits") |> purrr::list_rbind(), "../02.inputs/derived/review2-crossref-hits.csv")
+  readr::read_csv("../02.inputs/derived/review2-search-log.csv", col_types = readr::cols(.default = "c")) |>
+    dplyr::bind_rows(purrr::map(runs, "log") |> purrr::list_rbind() |> dplyr::mutate(dplyr::across(dplyr::everything(), as.character))) |>
+    readr::write_csv("../02.inputs/derived/review2-search-log.csv")
+}
+```
+
+```{r}
+#| label: review2-chase
+#| echo: !expr knitr::is_html_output()
+## Seeds for one round of backward and forward citation chasing, named in the protocol and
+## resolved at Crossref on 2026-09-24. Component A, Aukema 2006, Logan and Powell 2001,
+## Bentz 2010 and Safranyik 2010. Component B, Raffa and Berryman 1983, Boone 2011,
+## Raffa 2008 and Erbilgin 2014.
+central2 <- c("10.1111/j.2006.0906-7590.04445.x", "10.1093/ae/47.3.160", "10.1525/bio.2010.60.8.6", "10.4039/n08-CPA01", "10.2307/1942586", "10.1139/x11-041", "10.1641/B580607", "10.1111/nph.12573")
+if (!file.exists("../02.inputs/derived/review2-chase-hits.csv")) {
+  chase <- function(seed_doi, direction) {
+    # Semantic Scholar Academic Graph references and citations, https://api.semanticscholar.org/api-docs/graph#tag/Paper-Data
+    resp <- httr2::request(paste0("https://api.semanticscholar.org/graph/v1/paper/DOI:", seed_doi, "/", direction)) |>
+      httr2::req_url_query(fields = "title,year,venue,externalIds,citationCount", limit = 1000) |>
+      httr2::req_retry(max_tries = 8, backoff = \(i) 5 * i) |>
+      httr2::req_error(is_error = \(r) FALSE) |>
+      httr2::req_perform()
+    if (httr2::resp_status(resp) != 200) return(tibble::tibble(seed = seed_doi, route = paste0("chase-", direction), error = httr2::resp_status_desc(resp)))
+    key <- if (direction == "references") "citedPaper" else "citingPaper"
+    rows <- httr2::resp_body_json(resp)$data
+    if (length(rows) == 0) return(tibble::tibble(seed = seed_doi, route = paste0("chase-", direction), error = "no rows returned"))
+    rows |>
+      purrr::map(\(w) tibble::tibble(doi = w[[key]]$externalIds$DOI %||% NA_character_, title = w[[key]]$title %||% NA_character_, year = w[[key]]$year %||% NA_integer_, venue = w[[key]]$venue %||% NA_character_, citations = w[[key]]$citationCount %||% NA_integer_)) |>
+      purrr::list_rbind() |>
+      dplyr::mutate(seed = seed_doi, route = paste0("chase-", direction), .before = 1)
+  }
+  tidyr::expand_grid(seed_doi = central2, direction = c("references", "citations")) |>
+    purrr::pmap(chase) |>
+    purrr::list_rbind() |>
+    readr::write_csv("../02.inputs/derived/review2-chase-hits.csv")
+}
+```
+
+```{r}
+#| label: review2-records
+#| echo: !expr knitr::is_html_output()
+## One row per unique record. A record the first review already decided keeps that
+## decision and carries first-review in its routes, as the protocol's criterion 5 sets out.
+if (!file.exists("../02.inputs/derived/review2-records.csv")) {
+  first <- readr::read_csv("../02.inputs/derived/review-records.csv", col_types = readr::cols(.default = "c")) |>
+    dplyr::select(id, first_decision = decision, first_reason = reason, first_full_text = full_text)
+  dplyr::bind_rows(
+    readr::read_csv("../02.inputs/derived/review2-store-hits.csv", col_types = readr::cols(.default = "c")),
+    readr::read_csv("../02.inputs/derived/review2-s2-hits.csv", col_types = readr::cols(.default = "c")),
+    readr::read_csv("../02.inputs/derived/review2-crossref-hits.csv", col_types = readr::cols(.default = "c")),
+    readr::read_csv("../02.inputs/derived/review2-chase-hits.csv", col_types = readr::cols(.default = "c")) |> dplyr::filter(!is.na(title)) |> dplyr::mutate(question = "chase")
+  ) |>
+    dplyr::mutate(id = dplyr::coalesce(stringr::str_to_lower(doi), stringr::str_squish(stringr::str_to_lower(stringr::str_replace_all(title, "[^[:alnum:] ]", " "))))) |>
+    dplyr::summarise(.by = id, doi = dplyr::first(stats::na.omit(doi)), title = dplyr::first(title), year = dplyr::first(stats::na.omit(year)), venue = dplyr::first(stats::na.omit(venue)), citations = suppressWarnings(max(as.integer(citations), na.rm = TRUE)), abstract = dplyr::first(stats::na.omit(abstract)), questions = paste(sort(unique(question)), collapse = " "), routes = paste(sort(unique(route)), collapse = " "), duplicates_merged = dplyr::n(), key = dplyr::first(stats::na.omit(key)), source_note = dplyr::first(stats::na.omit(source_note))) |>
+    dplyr::mutate(citations = dplyr::if_else(is.finite(citations), citations, NA_integer_)) |>
+    dplyr::left_join(first, by = "id") |>
+    dplyr::mutate(routes = dplyr::if_else(is.na(first_decision), routes, paste(routes, "first-review")),
+                  decision = first_decision, reason = first_reason, full_text = first_full_text) |>
+    dplyr::select(-dplyr::starts_with("first_")) |>
+    readr::write_csv("../02.inputs/derived/review2-records.csv", na = "")
+}
+```
+
+```{r}
+#| label: review2-counts
+#| echo: !expr knitr::is_html_output()
+records2 <- readr::read_csv("../02.inputs/derived/review2-records.csv", show_col_types = FALSE)
+search_log2 <- readr::read_csv("../02.inputs/derived/review2-search-log.csv", show_col_types = FALSE)
+review2_counts <- tibble::tibble(
+  Stage = c("Records retrieved", "Unique after removing duplicates", "Excluded on title and abstract", "Read in full", "Retained"),
+  Records = c(sum(search_log2$retrieved, na.rm = TRUE), nrow(records2), sum(records2$decision == "exclude" & records2$full_text != "yes", na.rm = TRUE), sum(records2$full_text == "yes", na.rm = TRUE), sum(records2$decision == "include", na.rm = TRUE))
+)
+```

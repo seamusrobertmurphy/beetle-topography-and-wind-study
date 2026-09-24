@@ -1,0 +1,57 @@
+term,source,question,concept
+mountain pine beetle,request,q1 q2 q3 q4 q5 q6,beetle
+dendroctonus ponderosae,field,q1 q2 q3 q4 q5 q6,beetle
+seasonal,request,q1,season
+phenolog*,field,q1,season
+voltinism,field,q1,season
+life cycle,field,q1,season
+emergence,field,q1,season
+flight period,field,q1,season
+development rate,field,q1,season
+overwinter*,field,q1,season
+cold tolerance,field,q1,season
+mass attack,request,q2,attack
+aggregation,field,q2,attack
+pheromone*,field,q2,attack
+attack density,field,q2,attack
+verbenone,field,q2,attack
+epidemic,field,q2,attack
+endemic,field,q2,attack
+movement,request,q3,spread
+spread,field,q3,spread
+dispersal,field,q3,spread
+range expansion,field,q3,spread
+synchrony,field,q3,spread
+spatiotemporal,field,q3,spread
+spatial pattern*,field,q3,spread
+regional,request,q3,spread
+landscape,request,q3,spread
+topograph*,request,q4,terrain
+geomorpholog*,request,q4,terrain
+landform*,field,q4,terrain
+terrain,field,q4,terrain
+elevation,field,q4,terrain
+aspect,field,q4,terrain
+slope,field,q4,terrain
+microclimate,field,q4,terrain
+microsite,field,q4,terrain
+defen*,request,q5,defence
+biochemical,request,q5,defence
+resin,field,q5,defence
+terpen*,field,q5,defence
+monoterpen*,field,q5,defence
+phloem chemistry,field,q5,defence
+induced resistance,field,q5,defence
+blue-stain,field,q5,defence
+ophiostom*,field,q5,defence
+grosmannia,field,q5,defence
+susceptib*,field,q6,balance
+resistance,field,q6,balance
+vigo*,field,q6,balance
+drought,field,q6,balance
+water stress,field,q6,balance
+tree size,field,q6,balance
+diameter,field,q6,balance
+stand density,field,q6,balance
+threshold*,field,q6,balance
+eruptive,field,q6,balance

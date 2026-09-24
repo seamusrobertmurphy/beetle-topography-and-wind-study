@@ -98,6 +98,8 @@ USE_VRI_TIMESERIES <- TRUE
 
 {{< include _sections/_review.qmd >}}
 
+{{< include _sections/_review-2.qmd >}}
+
 ```{r}
 #| label: vri-refit
 #| echo: false
