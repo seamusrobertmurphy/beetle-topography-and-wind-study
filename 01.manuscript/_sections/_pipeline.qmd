@@ -2723,6 +2723,61 @@ cat(sprintf("\nepoch table: %d rows, %d epochs, %d years, %d with a within-seaso
 }
 ```
 
+```{r}
+#| label: pipeline-45b-epoch-models
+#| eval: false
+#| echo: false
+#| output: false
+#| warning: false
+#| message: false
+
+## The sixteen-day density by wind models, fitted in the order of Aukema et al. (2008).
+## Every model carries an epoch effect, so wind is read within an epoch across the grid,
+## where the terrain-resolved field varies. Stage 1 compares dependence terms on AIC over
+## the epochs that have a predecessor in the same season: the cell's state in the
+## previous epoch, the share of cells attacked within 90 m in the previous epoch, and the
+## share of the eight adjacent cells attacked in the same epoch. Stage 2 fits the
+## environmental terms of the annual final model with stem density, standing volume,
+## epoch mean wind and epoch calm-hour share, and the interactions of both stand terms
+## with both wind terms, first without dependence on all epochs, then without and with
+## dependence on the epochs that have a predecessor, so that the dependence terms and the
+## change of rows are separated. The interactions are tested together by likelihood ratio.
+ROOT <- here::here("02.inputs", "beetle")
+OUT  <- file.path(ROOT, "model-data-redstage")
+EPM  <- file.path(OUT, "epoch_models.csv")
+if (!file.exists(EPM)) {
+  d <- read.csv(file.path(OUT, "epoch_model_table.csv"))
+  fin <- read.csv(file.path(OUT, "final_model.csv"))
+  ENV <- intersect(fin$term, names(d))
+  STAND <- c("VRI_LIVE_STEMS_PER_HA", "LIVE_STAND_VOLUME_125"); WIND <- c("ep_wind_mean", "ep_wind_calm")
+  ENV <- setdiff(ENV, STAND)
+  for (v in c(ENV, STAND, WIND)) d[[v]] <- (d[[v]] - mean(d[[v]], na.rm = TRUE)) / sd(d[[v]], na.rm = TRUE)
+  d$t <- factor(d$t)
+  INT <- as.vector(outer(STAND, WIND, paste, sep = ":"))
+  DEP <- c("ep_lag_self", "ep_lag_nbr90", "ep_nbr_now42")
+  dl <- d[stats::complete.cases(d[, DEP]), ]
+  ## stage 1, dependence on the epochs with a predecessor
+  s1 <- do.call(rbind, lapply(list(character(0), "ep_lag_self", c("ep_lag_self", "ep_lag_nbr90"), "ep_nbr_now42", DEP), function(tt) {
+    g <- glm(reformulate(c("t", tt), "redstage"), data = dl, family = binomial)
+    data.frame(stage = 1, rows = "with predecessor", model = paste(c("t", tt), collapse = " + "), n = nrow(dl), aic = AIC(g))
+  }))
+  ## stage 2, the interaction test
+  fitset <- function(dat, dep, lab) {
+    full <- glm(reformulate(c("t", ENV, STAND, WIND, INT, if (dep) DEP), "redstage"), data = dat, family = binomial)
+    main <- update(full, as.formula(paste(". ~ . -", paste(INT, collapse = " - "))))
+    lr <- anova(main, full, test = "LRT")
+    cf <- summary(full)$coefficients
+    k <- rownames(cf) %in% c(ENV, STAND, WIND, INT, DEP)
+    data.frame(stage = 2, rows = lab, model = if (dep) "with dependence" else "without dependence", n = nrow(dat), aic = AIC(full),
+               term = rownames(cf)[k], estimate = cf[k, 1], se = cf[k, 2], z_ratio = cf[k, 3], p = cf[k, 4],
+               interactions_lr_chisq = lr$Deviance[2], interactions_lr_df = lr$Df[2], interactions_lr_p = lr$`Pr(>Chi)`[2])
+  }
+  s2 <- rbind(fitset(d, FALSE, "all epochs"), fitset(dl, FALSE, "with predecessor"), fitset(dl, TRUE, "with predecessor"))
+  write.csv(s1, file.path(OUT, "epoch_dependence_selection.csv"), row.names = FALSE)
+  write.csv(s2, EPM, row.names = FALSE)
+}
+```
+
 ```{python}
 #| label: pipeline-46-fetch-basemap
 #| eval: false

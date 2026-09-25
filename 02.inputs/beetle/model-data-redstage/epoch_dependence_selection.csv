@@ -1,0 +1,6 @@
+"stage","rows","model","n","aic"
+1,"with predecessor","t",33237,44847.9840490712
+1,"with predecessor","t + ep_lag_self",33237,40299.1646686542
+1,"with predecessor","t + ep_lag_self + ep_lag_nbr90",33237,38468.252364834
+1,"with predecessor","t + ep_nbr_now42",33237,28480.8566707161
+1,"with predecessor","t + ep_lag_self + ep_lag_nbr90 + ep_nbr_now42",33237,28070.059848426
