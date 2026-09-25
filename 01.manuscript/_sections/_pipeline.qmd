@@ -2089,6 +2089,72 @@ if (!file.exists(DEP)) {
 ```
 
 ```{r}
+#| label: pipeline-39c-dependence-selection
+#| eval: false
+#| echo: false
+#| output: false
+#| warning: false
+#| message: false
+
+## Neighbourhood and lag selection, the first model-building stage of Aukema et al.
+## (2008), who "determined an appropriate spatial neighborhood structure(s) and time
+## lag(s) to account for spatial and temporal dependencies" before any environmental
+## variable entered. Autologistic regressions of red-stage attack in a cell are fitted with
+## a year effect and dependence terms only, and compared on AIC.
+##   self_lag1, self_lag2  the cell's own state one and two outbreak years before
+##   nbr_now_r             the share of cells within r attacked in the same year,
+##                         the focal cell excluded, the first-order spatial term
+##   nbr_prev_r            the same share in the previous outbreak year, the spread term
+## Radii run from the eight adjacent cells, 42 m, through 90, 150, 210, 510, 1,050 and
+## 2,010 m. 2012 is absent from the study, so the lag after 2011 is 2013 and is two
+## calendar years, and years without two predecessors, 2006 and 2007, are not fitted.
+suppressPackageStartupMessages({library(terra)})
+ROOT <- here::here("02.inputs", "beetle")
+OUT  <- file.path(ROOT, "model-data-redstage")
+SEL  <- file.path(OUT, "dependence_selection.csv")
+OY   <- c(2006:2011, 2013, 2014)
+RADII <- c(42, 90, 150, 210, 510, 1050, 2010)
+if (!file.exists(SEL)) {
+  m <- rast(file.path(ROOT, "study-area", "perimeter_mask.tif"))
+  st <- rast(lapply(OY, function(y) mask(project(ifel(as.numeric(rast(file.path(ROOT, "red-stage-darkwoods",
+            sprintf("redstage_%d.tif", y)))) == 2, 1, 0), m, method = "near"), m)))
+  names(st) <- OY
+  share <- function(r, rad) {
+    w <- focalMat(r, rad, "circle"); w[w > 0] <- 1; w[ceiling(nrow(w) / 2), ceiling(ncol(w) / 2)] <- 0
+    values(focal(r, w, fun = "mean", na.rm = TRUE), mat = FALSE)
+  }
+  rows <- list()
+  for (i in 3:length(OY)) {
+    now <- values(st[[i]], mat = FALSE)
+    d <- data.frame(year = OY[i], y = now, self_lag1 = values(st[[i - 1]], mat = FALSE), self_lag2 = values(st[[i - 2]], mat = FALSE))
+    for (rad in RADII) {
+      d[[paste0("nbr_now_", rad)]]  <- share(st[[i]], rad)
+      d[[paste0("nbr_prev_", rad)]] <- share(st[[i - 1]], rad)
+    }
+    rows[[length(rows) + 1]] <- d[!is.na(now), ]
+  }
+  d <- do.call(rbind, rows); d$year <- factor(d$year)
+  d <- d[stats::complete.cases(d), ]
+  fit <- function(terms) {
+    g <- glm(reformulate(c("year", terms), "y"), data = d, family = binomial)
+    data.frame(terms = paste(terms, collapse = " + "), k = length(coef(g)), aic = AIC(g), deviance = deviance(g))
+  }
+  res <- rbind(
+    fit(character(0)),
+    fit("self_lag1"),
+    fit(c("self_lag1", "self_lag2")),
+    do.call(rbind, lapply(RADII, function(r) fit(c("self_lag1", "self_lag2", paste0("nbr_prev_", r))))),
+    do.call(rbind, lapply(RADII, function(r) fit(c("self_lag1", "self_lag2", paste0("nbr_now_", r))))))
+  best_prev <- RADII[which.min(res$aic[grepl("nbr_prev_", res$terms)])]
+  best_now  <- RADII[which.min(res$aic[grepl("nbr_now_", res$terms)])]
+  res <- rbind(res, fit(c("self_lag1", "self_lag2", paste0("nbr_prev_", best_prev), paste0("nbr_now_", best_now))))
+  res$delta_aic <- res$aic - min(res$aic)
+  res$n <- nrow(d)
+  write.csv(res, SEL, row.names = FALSE)
+}
+```
+
+```{r}
 #| label: pipeline-42-cube-grid-ee
 #| eval: false
 #| echo: false
