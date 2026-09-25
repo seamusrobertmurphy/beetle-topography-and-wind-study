@@ -1592,18 +1592,21 @@ print(round(t(sapply(d, function(x) c(min = min(x, na.rm = TRUE),
 suppressPackageStartupMessages({library(terra)})
 ROOT <- here::here("02.inputs", "beetle")
 SA   <- file.path(ROOT, "study-area")
-OUT  <- file.path(ROOT, "lag-covariates"); dir.create(OUT, showWarnings = FALSE)
+## From 2026-09-24 the response is the red-stage map of chunk 24e and the outputs go to
+## lag-covariates-redstage, leaving the earlier folder untouched until the rebuild is done.
+OUT  <- file.path(ROOT, "lag-covariates-redstage"); dir.create(OUT, showWarnings = FALSE)
 OY   <- c(2006:2011, 2013, 2014)
 RADII <- c(90, 510)     # metres: the local spread peak, and a stand-scale neighbourhood
 
 msk <- rast(file.path(SA, "perimeter_mask.tif"))
 get <- function(y) {
-  r <- rast(file.path(ROOT, "red-stage-darkwoods", sprintf("modhigh_%d.tif", y)))
+  r <- rast(file.path(ROOT, "red-stage-darkwoods", sprintf("redstage_%d.tif", y)))
   mask(project(ifel(as.numeric(r) == 2, 1, 0), msk, method = "near"), msk)
 }
 
 for (i in 2:length(OY)) {
   y <- OY[i]; yp <- OY[i-1]
+  if (file.exists(file.path(OUT, sprintf("lag_%d.tif", y)))) next
   prev <- get(yp)
   lay <- list(setNames(prev, "lag_self"))
   for (rad in RADII) {
@@ -1836,7 +1839,7 @@ print(sm, row.names = FALSE)
 ## geomorphometry, the stand structure and the wind metrics onto one 30 m EPSG:3153
 ## grid inside the perimeter, and writes a single table the manuscript reads.
 ##
-## The response is annual moderate-to-high beetle disturbance from 24-modhigh-binary-svm.R,
+## The response is annual red-stage attack from chunk 24e,
 ## never unioned across years: unioning destroys the year-to-year spread this study is
 ## about, and the union layer covered 73 per cent of the landscape, which is not credible.
 ##
@@ -1848,7 +1851,10 @@ suppressPackageStartupMessages({library(terra)})
 set.seed(42)
 ROOT <- here::here("02.inputs", "beetle")
 SA   <- file.path(ROOT, "study-area")
-OUT  <- file.path(ROOT, "model-data"); dir.create(OUT, showWarnings = FALSE)
+## From 2026-09-24 the response is red-stage attack from chunk 24e, written to
+## model-data-redstage beside the earlier table, which stays until the rebuild is done.
+OUT  <- file.path(ROOT, "model-data-redstage"); dir.create(OUT, showWarnings = FALSE)
+if (!file.exists(file.path(OUT, "model_table.csv"))) {
 OY   <- c(2006:2011, 2013, 2014)
 
 m   <- rast(file.path(SA, "perimeter_mask.tif"))
@@ -1860,17 +1866,17 @@ cat(sprintf("static covariates: %d layers on %d cells\n", nlyr(static), sum(!is.
 
 rows <- list()
 for (y in OY) {
-  f <- file.path(ROOT, "red-stage-darkwoods", sprintf("modhigh_%d.tif", y))
+  f <- file.path(ROOT, "red-stage-darkwoods", sprintf("redstage_%d.tif", y))
   if (!file.exists(f)) { cat("missing response", y, "\n"); next }
   r <- rast(f)
   ## The classification is categorical; freq() on it returns the LABEL in `value`, not
   ## the code, which once reported 100 per cent of the landscape attacked. It is
   ## converted to a plain 0/1 numeric here and never compared as a string again.
-  ## Levels are value 1 = "other", 2 = "modhigh". Drop the category table and compare
+  ## Levels are value 1 = "none", 2 = "redstage". Drop the category table and compare
   ## the code, never the label.
   b <- ifel(as.numeric(r) == 2, 1, 0)
   b <- project(b, m, method = "near")
-  names(b) <- "modhigh"
+  names(b) <- "redstage"
 
   w <- project(rast(file.path(ROOT, "covariates", "wind-hourly",
                               sprintf("wind_metrics_%d.tif", y))), m, method = "bilinear")
@@ -1883,7 +1889,7 @@ for (y in OY) {
   mmf <- file.path(ROOT, "covariates", "wind-micromet", sprintf("micromet_%d.tif", y))
   mm <- if (file.exists(mmf)) rast(mmf) else NULL
 
-  lf <- file.path(ROOT, "lag-covariates", sprintf("lag_%d.tif", y))
+  lf <- file.path(ROOT, "lag-covariates-redstage", sprintf("lag_%d.tif", y))
   lg <- if (file.exists(lf)) rast(lf) else {
     z <- rast(m); z <- c(z, z, z); names(z) <- c("lag_self","lag_nbr90","lag_nbr510")
     values(z) <- NA; z }
@@ -1891,8 +1897,8 @@ for (y in OY) {
   d <- as.data.frame(s, na.rm = FALSE, xy = TRUE)
   d$year <- y
   rows[[length(rows)+1]] <- d
-  cat(sprintf("%d  cells %d  moderate-to-high %.1f%%\n", y, sum(!is.na(d$modhigh)),
-              100*mean(d$modhigh, na.rm = TRUE)))
+  cat(sprintf("%d  cells %d  red stage %.1f%%\n", y, sum(!is.na(d$redstage)),
+              100*mean(d$redstage, na.rm = TRUE)))
 }
 d <- do.call(rbind, rows)
 ## Complete cases are required on everything EXCEPT the lag columns, so 2006 survives in
@@ -1901,10 +1907,11 @@ env <- setdiff(names(d), c("lag_self","lag_nbr90","lag_nbr510"))
 d <- d[stats::complete.cases(d[, env]), ]
 write.csv(d, file.path(OUT, "model_table.csv"), row.names = FALSE)
 cat(sprintf("\nmodel table: %d rows, %d columns, %d years, prevalence %.3f\n",
-            nrow(d), ncol(d), length(unique(d$year)), mean(d$modhigh)))
+            nrow(d), ncol(d), length(unique(d$year)), mean(d$redstage)))
 cat(sprintf("rows with a previous year: %d of %d\n",
             sum(!is.na(d$lag_self)), nrow(d)))
 cat("columns:\n"); print(names(d))
+}
 ```
 
 ```{r}
@@ -1945,14 +1952,15 @@ suppressPackageStartupMessages({library(terra)})
 set.seed(42)
 ROOT <- here::here("02.inputs", "beetle")
 SA   <- file.path(ROOT, "study-area")
-OUT  <- file.path(ROOT, "model-data")
+OUT  <- file.path(ROOT, "model-data-redstage")
+if (!file.exists(file.path(OUT, "neighbourhood_pressure.csv"))) {
 OY   <- c(2006:2011, 2013, 2014)
 RADII <- c(90, 210, 510, 1050, 2010)          # metres, odd cell counts at 30 m
 
 msk <- rast(file.path(SA, "perimeter_mask.tif"))
 lyr <- list()
 for (y in OY) {
-  r <- rast(file.path(ROOT, "red-stage-darkwoods", sprintf("modhigh_%d.tif", y)))
+  r <- rast(file.path(ROOT, "red-stage-darkwoods", sprintf("redstage_%d.tif", y)))
   b <- project(ifel(as.numeric(r) == 2, 1, 0), msk, method = "near")
   lyr[[as.character(y)]] <- mask(b, msk)
 }
@@ -2003,6 +2011,7 @@ cat(sprintf("\nmodel table %d rows\n", nrow(d)))
 write.csv(lag1, file.path(OUT, "lag1_persistence.csv"), row.names = FALSE)
 write.csv(nb,   file.path(OUT, "neighbourhood_pressure.csv"), row.names = FALSE)
 cat("\nwrote lag1_persistence.csv and neighbourhood_pressure.csv\n")
+}
 ```
 
 ```{r}
