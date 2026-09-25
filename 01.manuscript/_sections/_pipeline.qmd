@@ -600,6 +600,65 @@ if (!"ndmi_2005" %in% names(bp)) {
 ```
 
 ```{r}
+#| label: pipeline-24d-redstage-classifier
+#| echo: false
+#| output: false
+#| warning: false
+#| message: false
+
+## Red-stage classifier on the change in NDMI from 2005, as Seamus ruled on 2026-09-24.
+## Each plot enters with its change in its worst year, the year the attack signature is
+## strongest on a field plot and the hardest test on an undisturbed one. Random forest,
+## radial support vector machine and gradient boosting are compared under Monte Carlo
+## cross-validation, 100 stratified random splits of 75 per cent training and 25 per cent
+## test, with fixed hyperparameters so that every split is scored the same way. The model
+## with the highest mean test kappa is refitted on all plots and saved for the maps.
+suppressPackageStartupMessages({library(caret); library(randomForest); library(kernlab); library(gbm)})
+LOC <- here::here("02.inputs", "beetle", "plot-locations")
+OUT <- here::here("02.inputs", "beetle", "red-stage-darkwoods")
+MCCV <- file.path(OUT, "classifier_mccv.csv")
+if (!file.exists(MCCV)) {
+  set.seed(123)
+  bp <- read.csv(file.path(LOC, "beetle_plots_coordinates_ndmi_killed_basal_area.csv"))
+  tr <- data.frame(dndmi = bp$dndmi_min,
+                   cls = factor(ifelse(bp$source == "field", "redstage", "undisturbed"), levels = c("undisturbed", "redstage")))
+  models <- list(
+    rf  = list(method = "rf", grid = data.frame(mtry = 1), args = list(ntree = 1000)),
+    svm = list(method = "svmRadial", grid = data.frame(sigma = 1, C = 1), args = list()),
+    gbm = list(method = "gbm", grid = data.frame(n.trees = 100, interaction.depth = 2, shrinkage = 0.1, n.minobsinnode = 5),
+               args = list(verbose = FALSE)))
+  splits <- createDataPartition(tr$cls, p = 0.75, times = 100)
+  fit1 <- function(m, d) do.call(train, c(list(cls ~ dndmi, data = d, method = m$method, tuneGrid = m$grid,
+                                               trControl = trainControl(method = "none"), preProcess = c("center", "scale")), m$args))
+  runs <- do.call(rbind, lapply(seq_along(splits), function(i) {
+    trn <- tr[splits[[i]], ]; tst <- tr[-splits[[i]], ]
+    do.call(rbind, lapply(names(models), function(k) {
+      cm <- confusionMatrix(predict(fit1(models[[k]], trn), tst), tst$cls, positive = "redstage")
+      data.frame(split = i, model = k, accuracy = cm$overall[["Accuracy"]], kappa = cm$overall[["Kappa"]],
+                 sensitivity = cm$byClass[["Sensitivity"]], specificity = cm$byClass[["Specificity"]])
+    }))
+  }))
+  write.csv(runs, file.path(OUT, "classifier_mccv_splits.csv"), row.names = FALSE)
+  smry <- do.call(rbind, lapply(split(runs, runs$model), function(r) data.frame(
+    model = r$model[1], n_plots = nrow(tr), n_splits = nrow(r),
+    accuracy_mean = mean(r$accuracy), accuracy_sd = sd(r$accuracy),
+    accuracy_lo = quantile(r$accuracy, 0.025), accuracy_hi = quantile(r$accuracy, 0.975),
+    kappa_mean = mean(r$kappa), kappa_sd = sd(r$kappa),
+    kappa_lo = quantile(r$kappa, 0.025), kappa_hi = quantile(r$kappa, 0.975),
+    sensitivity_mean = mean(r$sensitivity), specificity_mean = mean(r$specificity))))
+  smry$chosen <- smry$kappa_mean == max(smry$kappa_mean)
+  best <- smry$model[smry$chosen][1]
+  final <- fit1(models[[best]], tr)
+  saveRDS(final, file.path(OUT, "redstage_classifier.rds"))
+  ## the dNDMI at which the final model's prediction changes, for comparison with the parent's map
+  g <- data.frame(dndmi = seq(-0.6, 0.1, by = 0.0005))
+  g$p <- predict(final, g) == "redstage"
+  smry$switch_dndmi <- if (any(g$p) && any(!g$p)) max(g$dndmi[g$p]) else NA
+  write.csv(smry, MCCV, row.names = FALSE)
+}
+```
+
+```{r}
 #| label: pipeline-25-terrain-wind-covariates
 #| eval: false
 #| echo: false
