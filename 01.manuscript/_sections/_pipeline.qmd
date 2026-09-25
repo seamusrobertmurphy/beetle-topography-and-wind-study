@@ -2025,12 +2025,15 @@ cat("\nwrote lag1_persistence.csv and neighbourhood_pressure.csv\n")
 ## Dependence first, the first stage of Aukema et al. (2008), measured with the toolkit of
 ## Murphy et al. (2026). Each year's red-stage cells inside the perimeter are a point
 ## pattern. For each year the chunk records the likelihood cross-validated bandwidth
-## (bw.ppl) and the mean-square-error bandwidth of Diggle and Berman (bw.diggle); the
+## (bw.ppl, searched from 20 to 300 m in 5 m steps, because the default grid is coarse
+## enough to return 62 m in seven of eight years) and the mean-square-error bandwidth of
+## Berman and Diggle (bw.diggle); the
 ## Clark-Evans aggregation index against complete spatial randomness, and against a
 ## lattice null in which the same number of cells is drawn at random from the 61,923
 ## perimeter cells, because the cells sit on a 30 m grid and continuous randomness
-## misstates nearest-neighbour distances on a grid; and the inhomogeneous K function
-## against 999 simulations of an inhomogeneous Poisson process with global envelopes, the
+## misstates nearest-neighbour distances on a grid; and the inhomogeneous L function
+## against 999 simulations of an inhomogeneous Poisson process with global envelopes built
+## on L, whose variance is stable across distance so the band has an even width, the
 ## intensity smoothed at spatstat's default bandwidth as in the seedlings analysis. The largest
 ## distance at which the observed L function lies above the envelope is the clustering
 ## range reported for that year.
@@ -2060,22 +2063,21 @@ if (!file.exists(DEP)) {
     ## window's frame, and re-estimated from each simulated pattern at the same bandwidth
     s0 <- min(diff(W$xrange), diff(W$yrange)) / 8
     lam <- density(X, sigma = s0)
-    ev <- envelope(X, Kinhom, sigma = s0, simulate = expression(rpoispp(lam)), nsim = 999, global = TRUE,
+    ev <- envelope(X, Linhom, sigma = s0, simulate = expression(rpoispp(lam)), nsim = 999, global = TRUE,
                    correction = "border", r = RR, verbose = FALSE, savefuns = FALSE)
-    ## K can dip below zero at the shortest distances under border correction, so L is taken on max(K, 0)
-    L <- sqrt(pmax(ev$obs, 0) / pi); Lhi <- sqrt(pmax(ev$hi, 0) / pi)
+    L <- ev$obs; Lhi <- ev$hi
     above <- ev$r[L > Lhi & ev$r > 0]
     rows[[length(rows) + 1]] <- data.frame(
-      year = y, n_cells = npoints(X), bw_ppl = as.numeric(bw.ppl(X)), bw_diggle = as.numeric(bw.diggle(X)),
+      year = y, n_cells = npoints(X), bw_ppl = as.numeric(bw.ppl(X, srange = c(20, 300), ns = 57)), bw_diggle = as.numeric(bw.diggle(X)),
       clark_evans_R = unname(ce$statistic), clark_evans_p = ce$p.value,
       nn_mean_obs = nn_obs, nn_mean_lattice = mean(nn_sim),
       lattice_p = (1 + sum(nn_sim <= nn_obs)) / (1 + length(nn_sim)),
       cluster_range_m = if (length(above)) max(above) else 0)
-    envs[[length(envs) + 1]] <- data.frame(year = y, r = ev$r, L_obs = L, L_lo = sqrt(pmax(ev$lo, 0) / pi), L_hi = Lhi, L_theo = ev$r)
+    envs[[length(envs) + 1]] <- data.frame(year = y, r = ev$r, L_obs = L, L_lo = ev$lo, L_hi = Lhi, L_theo = ev$r)
   }
   env <- do.call(rbind, envs)
-  write.csv(env, file.path(OUT, "kinhom_envelopes.csv"), row.names = FALSE)
-  png(file.path(FIG, "kinhom-envelopes.png"), width = 2400, height = 1200, res = 200)
+  write.csv(env, file.path(OUT, "linhom_envelopes.csv"), row.names = FALSE)
+  png(file.path(FIG, "linhom-envelopes.png"), width = 2400, height = 1200, res = 200)
   op <- par(mfrow = c(2, 4), mar = c(4, 4, 2, 1))
   for (y in OY) {
     e <- env[env$year == y, ]
