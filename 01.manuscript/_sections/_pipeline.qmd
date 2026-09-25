@@ -2155,6 +2155,73 @@ if (!file.exists(SEL)) {
 ```
 
 ```{r}
+#| label: pipeline-39d-single-covariate
+#| eval: false
+#| echo: false
+#| output: false
+#| warning: false
+#| message: false
+
+## Each environmental variable alone beside the dependence terms, the second stage of
+## Aukema et al. (2008), who incorporated the spatial and temporal variables "into models
+## with only one environmental variable at a time to evaluate the effect of each covariate
+## separately", and screened by the likelihood-ratio test of Murphy et al. (2026), here
+## against the dependence-only model rather than the intercept-only one. The dependence
+## terms are the set chunk 39c chose, with a year effect. Each continuous variable is
+## standardised, so its estimate is the change in log-odds per standard deviation, and
+## its Z-ratio is the estimate over its standard error. The table with the dependence
+## columns joined is saved for the later stages.
+suppressPackageStartupMessages({library(terra)})
+ROOT <- here::here("02.inputs", "beetle")
+OUT  <- file.path(ROOT, "model-data-redstage")
+ONE  <- file.path(OUT, "single_covariate.csv")
+DEPT <- file.path(OUT, "model_table_dependence.rds")
+OY   <- c(2006:2011, 2013, 2014)
+if (!file.exists(ONE)) {
+  sel <- read.csv(file.path(OUT, "dependence_selection.csv"))
+  best <- sel$terms[which.min(sel$aic)]
+  r_prev <- as.integer(sub(".*nbr_prev_(\\d+).*", "\\1", best)); r_now <- as.integer(sub(".*nbr_now_(\\d+).*", "\\1", best))
+  m <- rast(file.path(ROOT, "study-area", "perimeter_mask.tif"))
+  st <- rast(lapply(OY, function(y) mask(project(ifel(as.numeric(rast(file.path(ROOT, "red-stage-darkwoods",
+            sprintf("redstage_%d.tif", y)))) == 2, 1, 0), m, method = "near"), m)))
+  share <- function(r, rad) {
+    w <- focalMat(r, rad, "circle"); w[w > 0] <- 1; w[ceiling(nrow(w) / 2), ceiling(ncol(w) / 2)] <- 0
+    values(focal(r, w, fun = "mean", na.rm = TRUE), mat = FALSE)
+  }
+  xy <- xyFromCell(m, seq_len(ncell(m)))
+  dep <- do.call(rbind, lapply(3:length(OY), function(i) data.frame(
+    x = xy[, 1], y = xy[, 2], year = OY[i], self_lag1 = values(st[[i - 1]], mat = FALSE),
+    self_lag2 = values(st[[i - 2]], mat = FALSE), nbr_prev = share(st[[i - 1]], r_prev), nbr_now = share(st[[i]], r_now))))
+  dep <- dep[stats::complete.cases(dep), ]
+  mt <- read.csv(file.path(OUT, "model_table.csv"))
+  mt <- mt[mt$year %in% OY[-(1:2)], setdiff(names(mt), c("lag_self", "lag_nbr90", "lag_nbr510"))]
+  d <- merge(mt, dep, by = c("x", "y", "year"))
+  stopifnot(nrow(d) > 0.99 * nrow(mt))
+  d$year <- factor(d$year)
+  saveRDS(d, DEPT)
+  DEPS <- c("year", "self_lag1", "self_lag2", "nbr_prev", "nbr_now")
+  base <- glm(reformulate(DEPS, "redstage"), data = d, family = binomial)
+  cand <- setdiff(names(d), c("x", "y", "redstage", DEPS))
+  res <- do.call(rbind, lapply(cand, function(v) {
+    z <- d[[v]]
+    if (v == "geomorphons") z <- factor(z) else z <- (z - mean(z)) / sd(z)
+    dd <- d; dd$z <- z
+    g <- glm(reformulate(c(DEPS, "z"), "redstage"), data = dd, family = binomial)
+    lr <- anova(base, g, test = "LRT")
+    cf <- summary(g)$coefficients
+    est <- if ("z" %in% rownames(cf)) cf["z", ] else rep(NA, 4)
+    data.frame(variable = v, df = lr$Df[2], lr_chisq = lr$Deviance[2], lr_p = lr$`Pr(>Chi)`[2],
+               estimate = est[1], se = est[2], z_ratio = est[3], aic = AIC(g),
+               within_year_sd_share = mean(tapply(d[[v]], d$year, function(q) sd(as.numeric(q)))) / sd(as.numeric(d[[v]])))
+  }))
+  res$delta_aic_vs_dependence <- res$aic - AIC(base)
+  res$n <- nrow(d)
+  res <- res[order(res$delta_aic_vs_dependence), ]
+  write.csv(res, ONE, row.names = FALSE)
+}
+```
+
+```{r}
 #| label: pipeline-42-cube-grid-ee
 #| eval: false
 #| echo: false
