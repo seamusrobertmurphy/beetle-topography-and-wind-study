@@ -2015,6 +2015,80 @@ cat("\nwrote lag1_persistence.csv and neighbourhood_pressure.csv\n")
 ```
 
 ```{r}
+#| label: pipeline-39b-dependence-point-patterns
+#| eval: false
+#| echo: false
+#| output: false
+#| warning: false
+#| message: false
+
+## Dependence first, the first stage of Aukema et al. (2008), measured with the toolkit of
+## Murphy et al. (2026). Each year's red-stage cells inside the perimeter are a point
+## pattern. For each year the chunk records the likelihood cross-validated bandwidth
+## (bw.ppl) and the mean-square-error bandwidth of Diggle and Berman (bw.diggle); the
+## Clark-Evans aggregation index against complete spatial randomness, and against a
+## lattice null in which the same number of cells is drawn at random from the 61,923
+## perimeter cells, because the cells sit on a 30 m grid and continuous randomness
+## misstates nearest-neighbour distances on a grid; and the inhomogeneous K function
+## against 999 simulations of an inhomogeneous Poisson process with global envelopes, the
+## intensity smoothed at spatstat's default bandwidth as in the seedlings analysis. The largest
+## distance at which the observed L function lies above the envelope is the clustering
+## range reported for that year.
+suppressPackageStartupMessages({library(terra); library(spatstat)})
+ROOT <- here::here("02.inputs", "beetle")
+OUT  <- file.path(ROOT, "model-data-redstage")
+FIG  <- here::here("03.outputs", "FIG-redstage"); dir.create(FIG, showWarnings = FALSE, recursive = TRUE)
+DEP  <- file.path(OUT, "dependence_by_year.csv")
+OY   <- c(2006:2011, 2013, 2014)
+if (!file.exists(DEP)) {
+  set.seed(123)
+  m <- rast(file.path(ROOT, "study-area", "perimeter_mask.tif"))
+  W <- as.owin(im(as.matrix(m, wide = TRUE)[nrow(m):1, ], xrange = ext(m)[1:2], yrange = ext(m)[3:4]))
+  cells <- crds(m, na.rm = TRUE)
+  RR <- seq(0, 1500, by = 15)
+  rows <- list(); envs <- list()
+  for (y in OY) {
+    r <- rast(file.path(ROOT, "red-stage-darkwoods", sprintf("redstage_%d.tif", y)))
+    b <- mask(project(ifel(as.numeric(r) == 2, 1, 0), m, method = "near"), m)
+    xy <- crds(b, na.rm = TRUE)[values(b, na.rm = TRUE) == 1, ]
+    X <- ppp(xy[, 1], xy[, 2], window = W, check = FALSE)
+    ce <- clarkevans.test(X, correction = "cdf", nsim = 999)
+    ## lattice null, the same number of cells drawn from the perimeter grid
+    nn_obs <- mean(nndist(X))
+    nn_sim <- replicate(999, { k <- sample(nrow(cells), npoints(X)); mean(nndist(cells[k, 1], cells[k, 2])) })
+    ## intensity smoothed at spatstat's default, one eighth of the shorter side of the
+    ## window's frame, and re-estimated from each simulated pattern at the same bandwidth
+    s0 <- min(diff(W$xrange), diff(W$yrange)) / 8
+    lam <- density(X, sigma = s0)
+    ev <- envelope(X, Kinhom, sigma = s0, simulate = expression(rpoispp(lam)), nsim = 999, global = TRUE,
+                   correction = "border", r = RR, verbose = FALSE, savefuns = FALSE)
+    ## K can dip below zero at the shortest distances under border correction, so L is taken on max(K, 0)
+    L <- sqrt(pmax(ev$obs, 0) / pi); Lhi <- sqrt(pmax(ev$hi, 0) / pi)
+    above <- ev$r[L > Lhi & ev$r > 0]
+    rows[[length(rows) + 1]] <- data.frame(
+      year = y, n_cells = npoints(X), bw_ppl = as.numeric(bw.ppl(X)), bw_diggle = as.numeric(bw.diggle(X)),
+      clark_evans_R = unname(ce$statistic), clark_evans_p = ce$p.value,
+      nn_mean_obs = nn_obs, nn_mean_lattice = mean(nn_sim),
+      lattice_p = (1 + sum(nn_sim <= nn_obs)) / (1 + length(nn_sim)),
+      cluster_range_m = if (length(above)) max(above) else 0)
+    envs[[length(envs) + 1]] <- data.frame(year = y, r = ev$r, L_obs = L, L_lo = sqrt(pmax(ev$lo, 0) / pi), L_hi = Lhi, L_theo = ev$r)
+  }
+  env <- do.call(rbind, envs)
+  write.csv(env, file.path(OUT, "kinhom_envelopes.csv"), row.names = FALSE)
+  png(file.path(FIG, "kinhom-envelopes.png"), width = 2400, height = 1200, res = 200)
+  op <- par(mfrow = c(2, 4), mar = c(4, 4, 2, 1))
+  for (y in OY) {
+    e <- env[env$year == y, ]
+    plot(e$r, e$L_obs - e$r, type = "n", ylim = range(c(e$L_obs, e$L_lo, e$L_hi) - e$r, finite = TRUE), xlab = "Distance (m)", ylab = "L(r) - r", main = y)
+    polygon(c(e$r, rev(e$r)), c(e$L_lo - e$r, rev(e$L_hi - e$r)), col = "grey85", border = NA)
+    lines(e$r, e$L_theo - e$r, lty = 2); lines(e$r, e$L_obs - e$r, lwd = 2)
+  }
+  par(op); dev.off()
+  write.csv(do.call(rbind, rows), DEP, row.names = FALSE)
+}
+```
+
+```{r}
 #| label: pipeline-42-cube-grid-ee
 #| eval: false
 #| echo: false
