@@ -659,6 +659,62 @@ if (!file.exists(MCCV)) {
 ```
 
 ```{r}
+#| label: pipeline-24e-redstage-maps
+#| echo: false
+#| output: false
+#| warning: false
+#| message: false
+
+## Annual red-stage maps from the chosen classifier, one per outbreak year, never unioned.
+## The classifier has one input, so its prediction is a function of dNDMI alone. It is
+## evaluated once on a fine sequence of dNDMI, checked to change class exactly once, and
+## applied to each year's raster as that rule, which gives the model's own prediction at
+## every cell without running 1,000 trees over 2.95 million cells eight times. A sample of
+## cells is then predicted directly by the model and must agree in every cell. Maps are
+## written for the full grid and for the perimeter box used downstream, water masked.
+suppressPackageStartupMessages({library(terra); library(sf); library(caret); library(randomForest)})
+ROOT <- here::here("02.inputs", "beetle")
+IN  <- file.path(ROOT, "ndmi-darkwoods"); SA <- file.path(ROOT, "study-area"); OUT <- file.path(ROOT, "red-stage-darkwoods")
+AREA <- file.path(OUT, "redstage_by_year.csv")
+OY <- c(2006:2011, 2013, 2014)
+if (!file.exists(AREA)) {
+  set.seed(123)
+  final <- readRDS(file.path(OUT, "redstage_classifier.rds"))
+  g <- data.frame(dndmi = seq(-1, 1, by = 0.0001))
+  g$p <- predict(final, g) == "redstage"
+  stopifnot(sum(diff(g$p) != 0) == 1, g$p[1], !g$p[nrow(g)])
+  cut_at <- max(g$dndmi[g$p])
+  per <- st_transform(st_read(file.path(SA, "study_perimeter.gpkg"), quiet = TRUE), 32611)
+  watv <- vect(st_transform(st_read(file.path(SA, "basemap_water.geojson"), quiet = TRUE), 32611))
+  bb <- ext(vect(st_buffer(per, 2000)))
+  base <- rast(file.path(IN, "ndmi_2005.tif"))
+  lv <- data.frame(value = 1:2, class = c("none", "redstage"))
+  res <- list()
+  for (y in OY) {
+    d <- rast(file.path(IN, sprintf("ndmi_%d.tif", y))) - base
+    d <- mask(d, watv, inverse = TRUE)
+    cl <- ifel(d <= cut_at, 2, 1); levels(cl) <- lv; names(cl) <- "class"
+    ## direct check against the model on 2,000 cells
+    s <- spatSample(c(d, cl), 2000, method = "random", na.rm = TRUE, values = TRUE)
+    names(s) <- c("dndmi", "class")
+    stopifnot(all((predict(final, s["dndmi"]) == "redstage") == (as.character(s$class) == "redstage")))
+    writeRaster(cl, file.path(OUT, sprintf("redstage_full_%d.tif", y)), overwrite = TRUE,
+                wopt = list(datatype = "INT1U", gdal = "COMPRESS=DEFLATE"))
+    cb <- crop(cl, bb)
+    writeRaster(cb, file.path(OUT, sprintf("redstage_%d.tif", y)), overwrite = TRUE,
+                wopt = list(datatype = "INT1U", gdal = "COMPRESS=DEFLATE"))
+    for (dom in c("full", "box")) {
+      v <- values(if (dom == "full") cl else cb, mat = FALSE); v <- v[!is.na(v)]
+      res[[length(res) + 1]] <- data.frame(year = y, domain = dom, dndmi_cut = cut_at, valid = length(v),
+                                           redstage_cells = sum(v == 2), redstage_pc = 100 * mean(v == 2),
+                                           redstage_ha = sum(v == 2) * 900 / 1e4)
+    }
+  }
+  write.csv(do.call(rbind, res), AREA, row.names = FALSE)
+}
+```
+
+```{r}
 #| label: pipeline-25-terrain-wind-covariates
 #| eval: false
 #| echo: false
