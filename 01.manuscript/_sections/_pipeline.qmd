@@ -2233,7 +2233,8 @@ if (!file.exists(ONE)) {
 ## of candidate variables from a full model" after an elastic-net screen as in Murphy et al.
 ## (2026). Candidates are the variables that passed the likelihood-ratio test of chunk 39d
 ## at p < 0.05, less the station wind metrics, whose within-year standard deviation is
-## under a fifth of their total and which the year effect therefore absorbs. The elastic
+## under a fifth of their total and which the year effect therefore absorbs, and less the
+## members of collinear clusters that the screen below removes. The elastic
 ## net, alpha 0.5, keeps year and the dependence terms unpenalised, and its selections are
 ## recorded at the lambda of minimum cross-validated deviance and at one standard error
 ## above it. The model itself is built as Aukema et al. (2008) built theirs, from all
@@ -2249,6 +2250,17 @@ if (!file.exists(FIN)) {
   one <- read.csv(file.path(OUT, "single_covariate.csv"))
   cand <- one$variable[one$lr_p < 0.05 & one$within_year_sd_share > 0.2]
   cont <- setdiff(cand, "geomorphons")
+  ## collinearity screen, the rule the manuscript's selection already uses: clusters at
+  ## |r| >= 0.75 keep the member with the largest likelihood-ratio statistic from chunk
+  ## 39d, then the member with the largest variance inflation factor is dropped until all
+  ## are under 5
+  cm <- cor(d[, cont])
+  cl <- cutree(hclust(as.dist(1 - abs(cm)), method = "average"), h = 0.25)
+  cont <- unname(sapply(split(names(cl), cl), function(vs) vs[which.max(one$lr_chisq[match(vs, one$variable)])]))
+  vif <- function(vs) sapply(vs, function(v) 1 / (1 - summary(lm(reformulate(setdiff(vs, v), v), data = d))$r.squared))
+  repeat { vf <- vif(cont); if (max(vf) < 5) break; cont <- setdiff(cont, names(which.max(vf))) }
+  write.csv(data.frame(variable = names(vf), vif = vf), file.path(OUT, "final_model_vif.csv"), row.names = FALSE)
+  cand <- c(cont, intersect(cand, "geomorphons"))
   for (v in cont) d[[v]] <- (d[[v]] - mean(d[[v]])) / sd(d[[v]])
   if ("geomorphons" %in% cand) d$geomorphons <- factor(d$geomorphons)
   DEPS <- c("year", "self_lag1", "self_lag2", "nbr_prev", "nbr_now")

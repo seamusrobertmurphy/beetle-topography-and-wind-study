@@ -1,0 +1,15 @@
+"candidate","elastic_net_lambda_min","elastic_net_lambda_1se","in_final"
+"wind_afh",TRUE,FALSE,TRUE
+"PINE_BA",TRUE,FALSE,TRUE
+"height_valley_floor",FALSE,FALSE,FALSE
+"eastness",TRUE,FALSE,TRUE
+"mm_flight_calm",TRUE,FALSE,TRUE
+"tri",TRUE,FALSE,TRUE
+"tpi",FALSE,FALSE,FALSE
+"PROJ_AGE_1",TRUE,FALSE,TRUE
+"northness",TRUE,FALSE,FALSE
+"LIVE_STAND_VOLUME_125",TRUE,FALSE,TRUE
+"valley_depth",FALSE,FALSE,TRUE
+"vrm",FALSE,FALSE,FALSE
+"curv_plan",FALSE,FALSE,FALSE
+"geomorphons",TRUE,FALSE,FALSE
