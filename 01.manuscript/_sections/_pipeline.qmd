@@ -2282,6 +2282,10 @@ if (!file.exists(FIN)) {
                     odds_ratio = exp(cf[, 1]), ci_lo = exp(cf[, 1] - 1.96 * cf[, 2]), ci_hi = exp(cf[, 1] + 1.96 * cf[, 2]))
   res$aic <- AIC(g); res$n <- nrow(d)
   res$auc <- as.numeric(pROC::auc(pROC::roc(d$redstage, fitted(g), quiet = TRUE)))
+  ## the dependence-only model on the same rows, for a comparison on equal data
+  g0 <- glm(reformulate(DEPS, "redstage"), data = d, family = binomial)
+  res$aic_dependence_only <- AIC(g0)
+  res$auc_dependence_only <- as.numeric(pROC::auc(pROC::roc(d$redstage, fitted(g0), quiet = TRUE)))
   write.csv(data.frame(candidate = cand, elastic_net_lambda_min = cand %in% kept_min,
                        elastic_net_lambda_1se = cand %in% kept_1se, in_final = cand %in% cur),
             file.path(OUT, "final_model_screen.csv"), row.names = FALSE)
