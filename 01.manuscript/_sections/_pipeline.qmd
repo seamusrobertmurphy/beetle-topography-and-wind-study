@@ -2222,6 +2222,63 @@ if (!file.exists(ONE)) {
 ```
 
 ```{r}
+#| label: pipeline-39e-final-model
+#| eval: false
+#| echo: false
+#| output: false
+#| warning: false
+#| message: false
+
+## The full model, the third stage of Aukema et al. (2008), built by "backward elimination
+## of candidate variables from a full model" after an elastic-net screen as in Murphy et al.
+## (2026). Candidates are the variables that passed the likelihood-ratio test of chunk 39d
+## at p < 0.05, less the station wind metrics, whose within-year standard deviation is
+## under a fifth of their total and which the year effect therefore absorbs. The elastic
+## net, alpha 0.5, keeps year and the dependence terms unpenalised, and its selections are
+## recorded at the lambda of minimum cross-validated deviance and at one standard error
+## above it. The model itself is built as Aukema et al. (2008) built theirs, from all
+## candidates, removing terms one at a time while AIC falls, so the elastic net reports
+## beside the elimination rather than deciding it.
+suppressPackageStartupMessages({library(glmnet)})
+ROOT <- here::here("02.inputs", "beetle")
+OUT  <- file.path(ROOT, "model-data-redstage")
+FIN  <- file.path(OUT, "final_model.csv")
+if (!file.exists(FIN)) {
+  set.seed(123)
+  d <- readRDS(file.path(OUT, "model_table_dependence.rds"))
+  one <- read.csv(file.path(OUT, "single_covariate.csv"))
+  cand <- one$variable[one$lr_p < 0.05 & one$within_year_sd_share > 0.2]
+  cont <- setdiff(cand, "geomorphons")
+  for (v in cont) d[[v]] <- (d[[v]] - mean(d[[v]])) / sd(d[[v]])
+  if ("geomorphons" %in% cand) d$geomorphons <- factor(d$geomorphons)
+  DEPS <- c("year", "self_lag1", "self_lag2", "nbr_prev", "nbr_now")
+  X <- model.matrix(reformulate(c(DEPS, cand)), d)[, -1]
+  pf <- ifelse(grepl(paste0("^(", paste(DEPS, collapse = "|"), ")"), colnames(X)), 0, 1)
+  cv <- cv.glmnet(X, d$redstage, family = "binomial", alpha = 0.5, nfolds = 10, penalty.factor = pf)
+  kept_at <- function(s) { b <- coef(cv, s = s)[, 1]; cand[sapply(cand, function(v) any(b[grepl(paste0("^", v), names(b))] != 0))] }
+  kept_min <- kept_at("lambda.min"); kept_1se <- kept_at("lambda.1se")
+  path <- list(); cur <- cand
+  repeat {
+    g <- glm(reformulate(c(DEPS, cur), "redstage"), data = d, family = binomial)
+    path[[length(path) + 1]] <- data.frame(step = length(path), removed = if (length(path)) attr(cur, "removed") else "", n_terms = length(cur), aic = AIC(g))
+    drops <- sapply(cur, function(v) AIC(update(g, as.formula(paste(". ~ . -", v)))))
+    if (!length(drops) || min(drops) >= AIC(g)) break
+    out <- names(which.min(drops)); cur <- setdiff(cur, out); attr(cur, "removed") <- out
+  }
+  cf <- summary(g)$coefficients
+  res <- data.frame(term = rownames(cf), estimate = cf[, 1], se = cf[, 2], z_ratio = cf[, 3], p = cf[, 4],
+                    odds_ratio = exp(cf[, 1]), ci_lo = exp(cf[, 1] - 1.96 * cf[, 2]), ci_hi = exp(cf[, 1] + 1.96 * cf[, 2]))
+  res$aic <- AIC(g); res$n <- nrow(d)
+  res$auc <- as.numeric(pROC::auc(pROC::roc(d$redstage, fitted(g), quiet = TRUE)))
+  write.csv(data.frame(candidate = cand, elastic_net_lambda_min = cand %in% kept_min,
+                       elastic_net_lambda_1se = cand %in% kept_1se, in_final = cand %in% cur),
+            file.path(OUT, "final_model_screen.csv"), row.names = FALSE)
+  write.csv(do.call(rbind, path), file.path(OUT, "final_model_elimination.csv"), row.names = FALSE)
+  write.csv(res, FIN, row.names = FALSE)
+}
+```
+
+```{r}
 #| label: pipeline-42-cube-grid-ee
 #| eval: false
 #| echo: false
