@@ -2279,6 +2279,70 @@ if (!file.exists(FIN)) {
 ```
 
 ```{r}
+#| label: pipeline-39f-grain-test
+#| eval: false
+#| echo: false
+#| output: false
+#| warning: false
+#| message: false
+
+## Grain test. The environmental terms of the final model are refitted with the cell
+## coarsened from 30 m to 90, 270 and 1,000 m, to test whether an inference made at one
+## grain holds at another, the question Aukema et al. (2008) raised in working on 12 km
+## cells. A coarse cell is attacked if any 30 m cell inside it is attacked, Aukema's
+## definition of presence in a cell, and each continuous covariate is the mean of its 30 m
+## cells. The dependence terms are rebuilt at each grain in Aukema's first-order form, the
+## cell's own state one and two outbreak years before and the share of its eight
+## neighbours attacked in the same and in the previous year. Each grain is fitted twice,
+## with and without the dependence terms, so the change in each environmental estimate
+## can be read against the dependence it sits beside.
+suppressPackageStartupMessages({library(terra)})
+ROOT <- here::here("02.inputs", "beetle")
+OUT  <- file.path(ROOT, "model-data-redstage")
+GRT  <- file.path(OUT, "grain_test.csv")
+GRAINS <- c(30, 90, 270, 1000)
+if (!file.exists(GRT) && file.exists(file.path(OUT, "final_model.csv"))) {
+  d <- readRDS(file.path(OUT, "model_table_dependence.rds"))
+  fin <- read.csv(file.path(OUT, "final_model.csv"))
+  env <- intersect(names(d), sub("^geomorphons.*", "geomorphons", fin$term))
+  env <- setdiff(env, c("year", "self_lag1", "self_lag2", "nbr_prev", "nbr_now", "geomorphons"))
+  mt <- read.csv(file.path(OUT, "model_table.csv"))[, c("x", "y", "year", "redstage", env)]
+  x0 <- min(mt$x) - 15; y0 <- min(mt$y) - 15
+  res <- list()
+  for (g in GRAINS) {
+    mt$gx <- floor((mt$x - x0) / g); mt$gy <- floor((mt$y - y0) / g)
+    a <- aggregate(mt[, c("redstage", env)], by = list(gx = mt$gx, gy = mt$gy, year = mt$year), FUN = mean)
+    a$redstage <- as.integer(a$redstage > 0)
+    yrs <- sort(unique(a$year)); nx <- max(a$gx) + 1; ny <- max(a$gy) + 1
+    grid <- function(yr) { z <- matrix(NA_real_, ny, nx); k <- a$year == yr; z[cbind(a$gy[k] + 1, a$gx[k] + 1)] <- a$redstage[k]; z }
+    nb8 <- function(z) {
+      p <- matrix(NA_real_, ny + 2, nx + 2); p[2:(ny + 1), 2:(nx + 1)] <- z; s <- 0; n <- 0
+      for (dy in -1:1) for (dx in -1:1) if (dx | dy) { q <- p[2:(ny + 1) + dy, 2:(nx + 1) + dx]; s <- s + ifelse(is.na(q), 0, q); n <- n + !is.na(q) }
+      ifelse(n > 0, s / n, NA)
+    }
+    G <- lapply(yrs, grid); names(G) <- yrs
+    a$self_lag1 <- a$self_lag2 <- a$nbr_prev <- a$nbr_now <- NA_real_
+    for (i in 3:length(yrs)) {
+      k <- a$year == yrs[i]; ij <- cbind(a$gy[k] + 1, a$gx[k] + 1)
+      a$self_lag1[k] <- G[[i - 1]][ij]; a$self_lag2[k] <- G[[i - 2]][ij]
+      a$nbr_prev[k] <- nb8(G[[i - 1]])[ij]; a$nbr_now[k] <- nb8(G[[i]])[ij]
+    }
+    a <- a[a$year >= 2008 & stats::complete.cases(a), ]
+    for (v in env) a[[v]] <- (a[[v]] - mean(a[[v]])) / sd(a[[v]])
+    a$year <- factor(a$year)
+    for (withdep in c(FALSE, TRUE)) {
+      f <- reformulate(c("year", if (withdep) c("self_lag1", "self_lag2", "nbr_prev", "nbr_now"), env), "redstage")
+      cf <- summary(glm(f, data = a, family = binomial))$coefficients
+      cf <- cf[rownames(cf) %in% env, , drop = FALSE]
+      res[[length(res) + 1]] <- data.frame(grain_m = g, dependence = withdep, n = nrow(a), prevalence = mean(a$redstage),
+                                           term = rownames(cf), estimate = cf[, 1], se = cf[, 2], z_ratio = cf[, 3], p = cf[, 4])
+    }
+  }
+  write.csv(do.call(rbind, res), GRT, row.names = FALSE)
+}
+```
+
+```{r}
 #| label: pipeline-42-cube-grid-ee
 #| eval: false
 #| echo: false
