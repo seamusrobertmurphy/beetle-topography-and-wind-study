@@ -2352,6 +2352,23 @@ if (!file.exists(GRT) && file.exists(file.path(OUT, "final_model.csv"))) {
   }
   write.csv(do.call(rbind, res), GRT, row.names = FALSE)
 }
+## figure, each environmental estimate with its 95 per cent interval against grain
+GFIG <- here::here("03.outputs", "FIG-redstage", "grain-test.png")
+if (file.exists(GRT) && !file.exists(GFIG)) {
+  dir.create(dirname(GFIG), showWarnings = FALSE, recursive = TRUE)
+  gt <- read.csv(GRT); terms <- sort(unique(gt$term))
+  png(GFIG, width = 2400, height = 1400, res = 200)
+  op <- par(mfrow = c(2, ceiling(length(terms) / 2)), mar = c(4, 4, 2, 1))
+  for (v in terms) {
+    e <- gt[gt$term == v, ]; gx <- log10(e$grain_m) + ifelse(e$dependence, 0.03, -0.03)
+    lo <- e$estimate - 1.96 * e$se; hi <- e$estimate + 1.96 * e$se
+    plot(gx, e$estimate, ylim = range(c(lo, hi, 0)), xaxt = "n", pch = ifelse(e$dependence, 19, 1),
+         xlab = "Grain (m)", ylab = "Log-odds per SD", main = v)
+    axis(1, at = log10(c(30, 90, 270, 1000)), labels = c(30, 90, 270, 1000))
+    segments(gx, lo, gx, hi); abline(h = 0, lty = 2)
+  }
+  par(op); dev.off()
+}
 ```
 
 ```{r}
