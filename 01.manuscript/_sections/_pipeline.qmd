@@ -526,7 +526,6 @@ cat(sprintf("\nwrote annual rasters modhigh_YYYY.tif and %s\n",
 ## sampled from the imagery in forest whose NDMI never fell by more than 0.05 below 2005 in
 ## any outbreak year, at least 120 m from every other plot and off water. Runs only when the
 ## plot file holds fewer than 28 undisturbed plots; chunk 24c then adds the NDMI columns.
-suppressPackageStartupMessages({library(terra); library(sf); library(readxl)})
 ROOT <- here::here("02.inputs", "beetle")
 IN   <- file.path(ROOT, "ndmi-darkwoods"); SA <- file.path(ROOT, "study-area")
 LOC  <- file.path(ROOT, "plot-locations")
@@ -535,6 +534,7 @@ N_UNDIST <- 28L; MIN_SEP <- 120; STABLE <- -0.05
 OY <- c(2006:2011, 2013, 2014)
 rd <- function(nm, y) rast(file.path(IN, sprintf("%s_%d.tif", nm, y)))
 if (!file.exists(BPF) || sum(read.csv(BPF)$source == "derived") < N_UNDIST) {
+  suppressPackageStartupMessages({library(terra); library(sf); library(readxl)})
   set.seed(42)
   ## field plots, from the parent study's workbook
   fp <- as.data.frame(read_excel(file.path(LOC, "2.1.darkwoods_beetle_ground_plots_ndmi.xlsx")))
@@ -581,10 +581,10 @@ if (!file.exists(BPF) || sum(read.csv(BPF)$source == "derived") < N_UNDIST) {
 ## red-stage mountain pine beetle mortality in July and August 2020, and the undisturbed
 ## plots added from the imagery, with coordinates in EPSG:32611, killed basal area, and
 ## NDMI in every year with its change from 2005. Runs only when the NDMI columns are missing.
-suppressPackageStartupMessages(library(terra))
 BP <- here::here("02.inputs", "beetle", "plot-locations", "beetle_plots_coordinates_ndmi_killed_basal_area.csv")
 bp <- read.csv(BP)
 if (!"ndmi_2005" %in% names(bp)) {
+  suppressPackageStartupMessages(library(terra))
   NY <- c(2005:2011, 2013, 2014, 2020)
   # Landsat Collection 2 Level-2 surface reflectance, https://www.usgs.gov/landsat-missions/landsat-collection-2-level-2-science-products
   nd <- rast(file.path(here::here("02.inputs", "beetle", "ndmi-darkwoods"), sprintf("ndmi_%d.tif", NY)))
@@ -613,11 +613,11 @@ if (!"ndmi_2005" %in% names(bp)) {
 ## cross-validation, 100 stratified random splits of 75 per cent training and 25 per cent
 ## test, with fixed hyperparameters so that every split is scored the same way. The model
 ## with the highest mean test kappa is refitted on all plots and saved for the maps.
-suppressPackageStartupMessages({library(caret); library(randomForest); library(kernlab); library(gbm)})
 LOC <- here::here("02.inputs", "beetle", "plot-locations")
 OUT <- here::here("02.inputs", "beetle", "red-stage-darkwoods")
 MCCV <- file.path(OUT, "classifier_mccv.csv")
 if (!file.exists(MCCV)) {
+  suppressPackageStartupMessages({library(caret); library(randomForest); library(kernlab); library(gbm)})
   set.seed(123)
   bp <- read.csv(file.path(LOC, "beetle_plots_coordinates_ndmi_killed_basal_area.csv"))
   tr <- data.frame(dndmi = bp$dndmi_min,
@@ -672,12 +672,12 @@ if (!file.exists(MCCV)) {
 ## every cell without running 1,000 trees over 2.95 million cells eight times. A sample of
 ## cells is then predicted directly by the model and must agree in every cell. Maps are
 ## written for the full grid and for the perimeter box used downstream, water masked.
-suppressPackageStartupMessages({library(terra); library(sf); library(caret); library(randomForest)})
 ROOT <- here::here("02.inputs", "beetle")
 IN  <- file.path(ROOT, "ndmi-darkwoods"); SA <- file.path(ROOT, "study-area"); OUT <- file.path(ROOT, "red-stage-darkwoods")
 AREA <- file.path(OUT, "redstage_by_year.csv")
 OY <- c(2006:2011, 2013, 2014)
 if (!file.exists(AREA)) {
+  suppressPackageStartupMessages({library(terra); library(sf); library(caret); library(randomForest)})
   set.seed(123)
   final <- readRDS(file.path(OUT, "redstage_classifier.rds"))
   g <- data.frame(dndmi = seq(-1, 1, by = 0.0001))
