@@ -2355,6 +2355,39 @@ if (!file.exists(AWS)) {
 }
 ```
 
+```{r}
+#| label: degree-days
+## degree-days above 5.5 degrees C from August of the previous year to July of the map's year, the heat sum of Aukema et al. (2008), at each 30 m cell,
+## from the daily mean temperature of the stations moved to the cell's elevation at the lapse rate the stations gave within each day
+DDS <- here::here("02.inputs/beetle/covariates/degree-days/degree_day_summary.csv")
+if (!file.exists(DDS)) {
+  suppressPackageStartupMessages({library(terra); library(sf); library(dplyr); library(weathercan)})
+  dir.create(dirname(DDS), recursive = TRUE, showWarnings = FALSE)
+  msk <- rast(here::here("02.inputs/beetle/study-area/perimeter_mask.tif"))
+  z <- values(mask(rast(here::here("02.inputs/beetle/study-area/elevation.tif")), msk))[, 1]; ok <- which(!is.na(z)); zc <- z[ok]
+  ctr <- st_coordinates(st_transform(st_sfc(st_point(c(mean(ext(msk)[1:2]), mean(ext(msk)[3:4]))), crs = crs(msk)), 4326))
+  sl <- stations_search(coords = c(ctr[2], ctr[1]), interval = "day", dist = 150)
+  ids <- unique(sl$station_id[!is.na(sl$start) & sl$start <= 2014 & !is.na(sl$end) & sl$end >= 2005])
+  # Environment and Climate Change Canada daily climate observations, retrieved with weathercan,
+  # https://api.weather.gc.ca/collections/climate-daily/items
+  w <- weather_dl(station_ids = ids, interval = "day", start = "2005-08-01", end = "2014-07-31") |> filter(!is.na(mean_temp), !is.na(elev)) |>
+    group_by(date) |> filter(n() >= 3) |> mutate(tc = mean_temp - mean(mean_temp), ec = elev - mean(elev)) |> ungroup()
+  lapse <- coef(lm(tc ~ 0 + ec, data = w))[["ec"]]
+  t0 <- w |> group_by(date) |> summarise(t0 = mean(mean_temp - lapse * elev), stations = n(), .groups = "drop")
+  rows <- list()
+  for (y in c(2006:2011, 2013, 2014)) {
+    d <- t0[t0$date >= as.Date(sprintf("%d-08-01", y - 1)) & t0$date <= as.Date(sprintf("%d-07-31", y)), ]
+    dd <- Reduce(`+`, lapply(d$t0, function(tt) pmax(tt + lapse * zc - 5.5, 0)))
+    r <- rast(msk); r[ok] <- dd; names(r) <- "degree_days"
+    writeRaster(r, file.path(dirname(DDS), sprintf("dd_%d.tif", y)), overwrite = TRUE, datatype = "FLT4S", gdal = "COMPRESS=DEFLATE")
+    rows[[length(rows) + 1]] <- data.frame(year = y, days = nrow(d), stations_median = median(d$stations), stations = length(unique(w$station_id)),
+                                           lapse_c_per_km = 1000 * lapse, station_elev_min = min(w$elev), station_elev_max = max(w$elev),
+                                           dd_min = min(dd), dd_max = max(dd), below_833 = mean(dd < 833))
+  }
+  write.csv(do.call(rbind, rows), DDS, row.names = FALSE)
+}
+```
+
 The response for the first and third questions was red-stage attack in each of `r spellnum(nrow(ARS))` outbreak years, 2006 to 2011, 2013 and 2014, excluding 2012, when Landsat 7 was the only sensor and its scan-line corrector had failed. The index and baseline followed @murphy2026, who mapped red-stage mortality on this ground as the fall in the normalised difference moisture index (NDMI), an index used to detect forest disturbance in Landsat time series [@jin2005], against 2005, and validated the map against 28 field plots of 20 by 20 m in which beetle-killed pine was confirmed from pitch tubes, frass and gallery architecture. Each annual image was the median of the cloud-masked Collection 2 Level-2 scenes from 1 June to 31 August, from Landsat 5 for 2005 to 2011 and Landsat 8 for 2013 and 2014, the Landsat 8 years adjusted by the band-pass coefficients of @roy2016 and then matched to the Landsat 5 range over forest that showed no attack. Each year was mapped on its own with lakes and rivers masked, and attack covered from `r num(100*min(ARS$prevalence), "%.1f")` to `r num(100*max(ARS$prevalence), "%.1f")` per cent of the perimeter by year (Table S2).
 
 The response for the second question was red-stage attack in each sixteen-day period, the Landsat revisit interval, from 1 May to 22 September of the same years, NDMI being the median of the scenes in each period differenced against the same period of 2005 so that the seasonal course of leaf moisture did not enter the difference. Periods in which the imagery saw less than a tenth of the perimeter were dropped, which left `r N_EP` periods over `r spellnum(EP_YRS)` years.
@@ -2964,6 +2997,35 @@ if (!file.exists(ADM)) {
                        step_from = tab$attacked_pc[i[1]], step_to = tab$attacked_pc[i[2]], step_diff = diff(tab$attacked_pc[i]),
                        step_ci_lo = -100 * step$conf.int[2], step_ci_hi = -100 * step$conf.int[1], step_p = step$p.value),
             file.path(MA, "annual_diameter_tests.csv"), row.names = FALSE)
+}
+```
+
+```{r}
+#| label: annual-degree-days
+## degree-days beside M3, in place of elevation and together with it, over all years and with the dependence terms, and attack in the cells
+## below the 833 degree-days that Aukema et al. (2008) took as enough heat for a one-year generation
+ADDM <- file.path(MA, "degree_day_models.csv")
+if (!file.exists(ADDM)) {
+  suppressPackageStartupMessages(library(terra))
+  add_dd <- function(b) { b$degree_days <- NA_real_
+    for (y in unique(b$year)) { ix <- b$year == y
+      b$degree_days[ix] <- terra::extract(rast(here::here("02.inputs/beetle/covariates/degree-days", sprintf("dd_%d.tif", y))), as.matrix(b[ix, c("x", "y")]))[["degree_days"]] }
+    b }
+  res <- list()
+  for (dep in c(FALSE, TRUE)) {
+    b <- add_dd(annual_data(if (dep) "with previous year" else "all years")); r_dd <- cor(b$degree_days, b$elevation); b$degree_days <- as.numeric(scale(b$degree_days))
+    for (v in c("M3", "M3 degree-days for elevation", "M3 with degree-days")) {
+      tt <- switch(v, M3 = M_TERMS$M3, `M3 degree-days for elevation` = sub("^elevation$", "degree_days", M_TERMS$M3), `M3 with degree-days` = c(M_TERMS$M3, "degree_days"))
+      m <- glm(reformulate(c(tt, "geomorphon", if (dep) ADEP()), "modhigh"), data = b, family = binomial); cf <- summary(m)$coefficients
+      res[[length(res) + 1]] <- data.frame(model = v, dependence = dep, term = rownames(cf), estimate = cf[, 1], se = cf[, 2], p = cf[, 4], aic = AIC(m),
+                                           r_dd_elevation = r_dd, row.names = NULL)
+    }
+  }
+  write.csv(do.call(rbind, res), ADDM, row.names = FALSE)
+  d <- add_dd(readRDS(AMT))
+  write.csv(do.call(rbind, lapply(split(d, d$year), function(g) data.frame(year = g$year[1], cells = nrow(g), dd_min = min(g$degree_days), dd_max = max(g$degree_days),
+    below_833 = mean(g$degree_days < 833), attack_below = mean(g$modhigh[g$degree_days < 833]), attack_above = mean(g$modhigh[g$degree_days >= 833]),
+    r_elevation = cor(g$degree_days, g$elevation)))), file.path(MA, "degree_day_attack.csv"), row.names = FALSE)
 }
 ```
 
