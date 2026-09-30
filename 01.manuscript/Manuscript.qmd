@@ -2008,6 +2008,31 @@ if (!file.exists(file.path(VRA, "vri_year_source.csv"))) {
 ```
 
 ```{r}
+#| label: annual-maps
+## annual red-stage maps, the fall in annual NDMI against 2005 at the classifier's cut, water masked, on the perimeter grid
+RSA <- here::here("02.inputs/beetle/red-stage-annual/redstage_summary.csv")
+if (!file.exists(RSA)) {
+  suppressPackageStartupMessages({library(terra); library(sf)})
+  dir.create(dirname(RSA), showWarnings = FALSE)
+  cut_at <- with(read.csv(here::here("02.inputs/beetle/red-stage-darkwoods/classifier_blocked_mccv.csv")), cut_dndmi[chosen])
+  msk <- rast(here::here("02.inputs/beetle/study-area/perimeter_mask.tif"))
+  # British Columbia Freshwater Atlas lakes and rivers, WHSE_BASEMAPPING.FWA_LAKES_POLY and FWA_RIVERS_POLY,
+  # https://openmaps.gov.bc.ca/geo/pub/WHSE_BASEMAPPING.FWA_LAKES_POLY/ows
+  wat <- vect(st_transform(st_read(here::here("02.inputs/beetle/study-area/basemap_water.geojson"), quiet = TRUE), 3153))
+  # Landsat Collection 2 Level-2 surface reflectance, annual NDMI built in chunk 17-ndmi-annual-darkwoods,
+  # https://www.usgs.gov/landsat-missions/landsat-collection-2-level-2-science-products
+  nd <- function(y) rast(here::here("02.inputs/beetle/ndmi-darkwoods", sprintf("ndmi_%d.tif", y)))
+  rs <- do.call(rbind, lapply(c(2006:2011, 2013, 2014), function(y) {
+    b <- mask(mask(ifel(project(nd(y) - nd(2005), msk, method = "near") <= cut_at, 1, 0), msk), wat, inverse = TRUE)
+    writeRaster(b, file.path(dirname(RSA), sprintf("redstage_%d.tif", y)), overwrite = TRUE, datatype = "INT1U", gdal = "COMPRESS=DEFLATE")
+    data.frame(year = y, dndmi_cut = cut_at, valid_cells = global(!is.na(b), "sum")[[1]], attacked = global(b, "sum", na.rm = TRUE)[[1]])
+  }))
+  rs$prevalence <- rs$attacked / rs$valid_cells
+  write.csv(rs, RSA, row.names = FALSE)
+}
+```
+
+```{r}
 #| label: wind-direction-value
 WDIR <- as.numeric(readLines(file.path(BC, "covariates", "wind_direction_pooled.txt")))
 ```
@@ -2159,6 +2184,44 @@ CLIM_YRS   <- length(unique(clim_h$year))
 ```
 
 ```{r}
+#| label: 30-wind-hourly-metrics
+## station wind interpolated to the grid by inverse distance weighting, monthly means for June to August and flight-window metrics for 1 July to 15 August
+WHS <- here::here("02.inputs/beetle/covariates/wind-hourly/wind_hourly_summary.csv")
+if (!file.exists(WHS)) {
+  suppressPackageStartupMessages({library(weathercan); library(gstat); library(sf); library(terra); library(dplyr)})
+  g <- rast(here::here("02.inputs/beetle/ndmi-darkwoods/analysis_grid.tif"))
+  ctr <- st_coordinates(st_transform(st_sfc(st_point(c(mean(ext(g)[1:2]), mean(ext(g)[3:4]))), crs = 32611), 4326))
+  sl <- stations_search(coords = c(ctr[2], ctr[1]), interval = "hour", dist = 150)
+  ids <- unique(sl$station_id[!is.na(sl$start) & sl$start <= 2014 & !is.na(sl$end) & sl$end >= 2005])
+  idw <- function(df, col) {
+    p <- st_transform(st_as_sf(df, coords = c("lon", "lat"), crs = 4326), 32611)
+    xy <- cbind(as.data.frame(st_coordinates(p)), v = p[[col]]); xy <- xy[!is.na(xy$v), ]
+    if (nrow(xy) < 4) return(NULL)
+    interpolate(g, gstat(formula = v ~ 1, locations = ~X + Y, data = xy, nmax = 8, set = list(idp = 2)), xyNames = c("X", "Y"))[[1]]
+  }
+  vars <- c("jun", "jul", "aug", "flight_mean", "flight_p95", "flight_calm", "flight_windy")
+  summ <- list()
+  for (y in c(2005:2011, 2013, 2014)) {
+    # Environment and Climate Change Canada hourly climate observations, retrieved with weathercan,
+    # https://api.weather.gc.ca/collections/climate-hourly/items
+    w <- weather_dl(station_ids = ids, interval = "hour", start = sprintf("%d-06-01", y), end = sprintf("%d-08-31", y)) |>
+      filter(!is.na(wind_spd), !is.na(lat), !is.na(lon)) |>
+      mutate(mon = as.integer(format(as.Date(date), "%m")), fl = as.Date(date) >= as.Date(sprintf("%d-07-01", y)) & as.Date(date) <= as.Date(sprintf("%d-08-15", y)))
+    st <- w |> group_by(station_id, lat, lon) |>
+      summarise(hours = n(), jun = mean(wind_spd[mon == 6]), jul = mean(wind_spd[mon == 7]), aug = mean(wind_spd[mon == 8]),
+                flight_mean = mean(wind_spd[fl]), flight_p95 = as.numeric(quantile(wind_spd[fl], 0.95)), flight_calm = mean(wind_spd[fl] < 5),
+                flight_windy = mean(wind_spd[fl] > 15), flight_hours = sum(fl), .groups = "drop") |>
+      filter(hours >= 500, flight_hours >= 200)
+    if (nrow(st) < 4) next
+    rs <- rast(Filter(Negate(is.null), lapply(vars, function(v) { r <- idw(st, v); if (!is.null(r)) names(r) <- v; r })))
+    writeRaster(rs, file.path(dirname(WHS), sprintf("wind_metrics_%d.tif", y)), overwrite = TRUE, datatype = "FLT4S", gdal = c("COMPRESS=DEFLATE", "PREDICTOR=3"))
+    summ[[length(summ) + 1]] <- data.frame(year = y, stations = nrow(st), hours = sum(st$hours), t(colMeans(st[, vars], na.rm = TRUE)))
+  }
+  write.csv(do.call(rbind, summ), WHS, row.names = FALSE)
+}
+```
+
+```{r}
 #| label: micromet-wind
 ## MicroMet terrain weighting, equations 12 to 18 of Liston and Elder (2006), on the context grid
 WW <- here::here("02.inputs/beetle/covariates/micromet-context/wind_weight_by_direction.tif")
@@ -2228,6 +2291,37 @@ if (!file.exists(EWS)) {
   }
   write.csv(do.call(rbind, rows), EWS, row.names = FALSE)
 }
+
+## hourly station wind in the flight window, 1 July to 15 August and 12:00 to 17:00, weighted by the terrain surface of each hour's sector, one field per outbreak year
+AWS <- here::here("02.inputs/beetle/covariates/wind-annual-context/annual_wind_summary.csv")
+if (!file.exists(AWS)) {
+  suppressPackageStartupMessages({library(terra); library(sf); library(dplyr); library(weathercan)})
+  dir.create(dirname(AWS), recursive = TRUE, showWarnings = FALSE)
+  Ww <- rast(WW); msk <- rast(here::here("02.inputs/beetle/study-area/perimeter_mask.tif"))
+  cells <- !is.na(values(msk)); wv <- lapply(1:16, function(b) values(Ww[[b]])[cells])
+  put <- function(v) { r <- msk; r[cells] <- v; r }
+  ctr <- st_coordinates(st_transform(st_sfc(st_point(c(mean(ext(msk)[1:2]), mean(ext(msk)[3:4]))), crs = crs(msk)), 4326))
+  sl <- stations_search(coords = c(ctr[2], ctr[1]), interval = "hour", dist = 150)
+  ids <- unique(sl$station_id[!is.na(sl$start) & sl$start <= 2014 & !is.na(sl$end) & sl$end >= 2005])
+  rows <- list()
+  for (y in c(2006:2011, 2013, 2014)) {
+    # Environment and Climate Change Canada hourly climate observations, retrieved with weathercan,
+    # https://api.weather.gc.ca/collections/climate-hourly/items
+    w <- weather_dl(station_ids = ids, interval = "hour", start = sprintf("%d-07-01", y), end = sprintf("%d-08-15", y))
+    h <- w |> filter(!is.na(wind_spd), !is.na(wind_dir)) |>
+      mutate(th = wind_dir * 10 * pi / 180, u = -wind_spd * sin(th), v = -wind_spd * cos(th), hr = as.integer(format(time, "%H"))) |>
+      filter(hr >= 12, hr < 17) |> group_by(time) |> summarise(u = mean(u), v = mean(v), .groups = "drop") |>
+      mutate(W = sqrt(u^2 + v^2), bin = (round(((atan2(-u, -v) * 180 / pi) %% 360) / 22.5) %% 16) + 1L)
+    acc <- rep(0, sum(cells)); calm <- acc
+    for (b in sort(unique(h$bin))) { sp <- sort(h$W[h$bin == b]); acc <- acc + wv[[b]] * sum(sp); calm <- calm + findInterval(5 / wv[[b]], sp) }
+    s <- c(put(acc / nrow(h)), put(calm / nrow(h))); names(s) <- c("mm_flight_mean", "mm_flight_calm")
+    writeRaster(s, file.path(dirname(AWS), sprintf("wind_%d.tif", y)), overwrite = TRUE, datatype = "FLT4S", gdal = "COMPRESS=DEFLATE")
+    rows[[length(rows) + 1]] <- data.frame(year = y, hours = nrow(h), stations = length(unique(w$station_id[!is.na(w$wind_spd)])),
+                                           cells = global(!is.na(s[[1]]), "sum")[[1]], wind_mean = global(s[[1]], "mean", na.rm = TRUE)[[1]],
+                                           wind_range = diff(as.numeric(global(s[[1]], "range", na.rm = TRUE))), calm_mean = global(s[[2]], "mean", na.rm = TRUE)[[1]])
+  }
+  write.csv(do.call(rbind, rows), AWS, row.names = FALSE)
+}
 ```
 
 The response was red-stage attack in each sixteen-day period, the Landsat revisit interval, from 1 May to 22 September of 2006 to 2014, excluding 2012, when Landsat 7 was the only sensor and its scan-line corrector had failed. The index and baseline followed @murphy2026, who mapped red-stage mortality on this ground as the fall in the normalised difference moisture index (NDMI), an index used to detect forest disturbance in Landsat time series [@jin2005], against 2005, and validated the map against 28 field plots of 20 by 20 m in which beetle-killed pine was confirmed from pitch tubes, frass and gallery architecture. NDMI was the median of the cloud-masked Collection 2 Level-2 scenes in each period, from Landsat 5 for 2005 to 2011 and Landsat 8 for 2013 and 2014 after the band-pass adjustment of @roy2016, differenced against the same period of 2005 so that the seasonal course of leaf moisture did not enter the difference.
@@ -2277,6 +2371,38 @@ if (!file.exists(PPT)) {
   }
   file.rename(envf, file.path(MD, "l_envelopes.csv"))
   file.rename(part, PPT)
+}
+
+## attacked cells of each annual map as a point pattern in the window of cells the map covers, the same tests at 999 relabellings
+MA <- here::here("02.inputs/beetle/model-data-annual")
+APP <- file.path(MA, "point_patterns.csv")
+if (!file.exists(APP)) {
+  suppressPackageStartupMessages({library(terra); library(spatstat)})
+  dir.create(MA, showWarnings = FALSE)
+  part <- file.path(MA, "point_patterns_partial.csv"); envf <- file.path(MA, "l_envelopes_partial.csv")
+  done <- if (file.exists(part)) read.csv(part)$year else integer(0)
+  RR <- seq(0, 1500, 30)
+  for (y in setdiff(c(2006:2011, 2013, 2014), done)) {
+    set.seed(123)
+    b <- rast(here::here("02.inputs/beetle/red-stage-annual", sprintf("redstage_%d.tif", y)))
+    v <- as.data.frame(b, xy = TRUE, na.rm = TRUE); names(v)[3] <- "a"
+    W <- owin(mask = as.matrix(!is.na(b), wide = TRUE)[nrow(b):1, ], xrange = ext(b)[1:2], yrange = ext(b)[3:4])
+    X <- ppp(v$x[v$a == 1], v$y[v$a == 1], window = W, check = FALSE)
+    relabel <- expression({ k <- sample(nrow(v), npoints(X)); ppp(v$x[k], v$y[k], window = W, check = FALSE) })
+    nn_obs <- mean(nndist(X))
+    nn_sim <- replicate(NSIM, { k <- sample(nrow(v), npoints(X)); mean(nndist(v$x[k], v$y[k])) })
+    ev <- envelope(X, Lest, nsim = NSIM, simulate = relabel, global = TRUE, correction = "border", r = RR, verbose = FALSE)
+    above <- ev$r[which(ev$obs > ev$hi & ev$r > 0)]
+    row <- data.frame(year = y, cells_seen = nrow(v), cells_attacked = npoints(X), bw_ppl = as.numeric(bw.ppl(X, srange = c(20, 300), ns = 57)),
+                      clark_evans_R = unname(clarkevans(X, correction = "none")), nn_mean_obs = nn_obs, nn_mean_null = mean(nn_sim),
+                      nn_ratio = nn_obs / mean(nn_sim), nn_p = (1 + sum(nn_sim <= nn_obs)) / (1 + NSIM),
+                      cluster_range_m = if (length(above)) max(above) else 0, clustered = length(above) > 0)
+    write.table(row, part, sep = ",", row.names = FALSE, col.names = !file.exists(part), append = file.exists(part))
+    write.table(data.frame(year = y, r = ev$r, L_obs = ev$obs, L_lo = ev$lo, L_hi = ev$hi), envf, sep = ",",
+                row.names = FALSE, col.names = !file.exists(envf), append = file.exists(envf))
+  }
+  file.rename(envf, file.path(MA, "l_envelopes.csv"))
+  file.rename(part, APP)
 }
 ```
 
@@ -2340,6 +2466,40 @@ if (!file.exists(EMT)) {
     rows[[length(rows) + 1]] <- dd
   }
   saveRDS(do.call(rbind, rows), EMT)
+}
+
+## the annual model table, one row per cell and year, with the cell's own state and the share attacked around it in the previous outbreak year,
+## at fixed radii and by a Gaussian kernel at the likelihood cross-validated bandwidth of the previous year's map
+AMT <- file.path(MA, "annual_model_table.rds")
+if (!file.exists(AMT)) {
+  suppressPackageStartupMessages(library(terra))
+  YRS <- c(2006:2011, 2013, 2014); RADII <- c(42, 90, 150, 210, 510, 1050)
+  msk <- rast(here::here("02.inputs/beetle/study-area/perimeter_mask.tif"))
+  src <- read.csv(file.path(VRA, "vri_year_source.csv")); BW <- read.csv(APP)
+  # Natural Resources Canada High Resolution Digital Elevation Model and its SAGA derivatives from chunk 37-geomorphometry,
+  # https://open.canada.ca/data/en/dataset/957782bf-847c-4644-a757-e383c0057995
+  static <- c(rast(here::here("02.inputs/beetle/study-area/elevation.tif")), rast(here::here("02.inputs/beetle/geomorphometry/geomorphometry.tif")))
+  mp <- function(y) rast(here::here("02.inputs/beetle/red-stage-annual", sprintf("redstage_%d.tif", y)))
+  share <- function(r, rad) { w <- focalMat(r, rad, "circle"); w[w > 0] <- 1; w[ceiling(nrow(w) / 2), ceiling(ncol(w) / 2)] <- 0; focal(r, w, fun = "mean", na.rm = TRUE) }
+  kern <- function(r, sigma) { w <- focalMat(r, sigma, "Gauss"); w[ceiling(nrow(w) / 2), ceiling(ncol(w) / 2)] <- 0
+    focal(r, w, fun = "sum", na.rm = TRUE) / focal(!is.na(r), w, fun = "sum", na.rm = TRUE) }
+  rows <- lapply(seq_along(YRS), function(i) {
+    y <- YRS[i]; yp <- if (i > 1) YRS[i - 1] else NA
+    lag <- if (is.na(yp)) { z <- rep(msk, 2 + length(RADII)); values(z) <- NA; z } else { p <- mp(yp); c(p, rast(lapply(RADII, function(rad) share(p, rad))), kern(p, BW$bw_ppl[BW$year == yp])) }
+    names(lag) <- paste0("lagyr", c("_self", paste0("_nbr", RADII), "_kern"))
+    # Environment and Climate Change Canada hourly station wind, interpolated in chunk 30-wind-hourly-metrics and terrain-resolved in chunk micromet-wind,
+    # https://api.weather.gc.ca/collections/climate-hourly/items
+    st <- project(rast(here::here("02.inputs/beetle/covariates/wind-hourly", sprintf("wind_metrics_%d.tif", y))), msk, method = "bilinear")
+    mm <- rast(here::here("02.inputs/beetle/covariates/wind-annual-context", sprintf("wind_%d.tif", y)))
+    # British Columbia Vegetation Resources Inventory, historical annual releases, rasterised in chunk period-maps,
+    # https://catalogue.data.gov.bc.ca/dataset/vri-historical-vegetation-resource-inventory-2002-2024-
+    vri <- rast(file.path(VRA, sprintf("vri_%d.tif", src$vri_year[src$year == y])))
+    d <- as.data.frame(mask(c(setNames(mp(y), "modhigh"), static, vri, st, mm, lag), msk), xy = TRUE, na.rm = FALSE)
+    d <- d[!is.na(d$modhigh), ]; d$year <- y; d$lag_from <- yp; d
+  })
+  d <- do.call(rbind, rows)
+  env <- setdiff(names(d), c(grep("^lagyr", names(d), value = TRUE), "lag_from"))
+  saveRDS(d[stats::complete.cases(d[, env]), ], AMT)
 }
 ```
 
@@ -2574,6 +2734,195 @@ if (!file.exists(GRT)) {
     }
   }
   write.csv(do.call(rbind, res), GRT, row.names = FALSE)
+}
+```
+
+```{r}
+#| label: annual-models
+## the annual models in the submitted order, M0 host size, shading and landform, M1 stand density, M2 terrain and flight-window radiation,
+## M3 the interactions, on the variables the submitted selection kept, of which terrain-resolved wind entered none of M0 to M3
+SUB <- list(hostsize = c("PINE_BA", "PROJ_AGE_1", "QUAD_DIAM_125"), shading = c("sky_view", "northness"), landform = "elevation", density = "BASAL_AREA",
+            wind_geo = "wind_shelter", shape = c("tpi", "convergence", "curv_prof"), flightsun = "solar_flight_direct", wind_t = c("jul", "jun"))
+M_TERMS <- with(SUB, list(
+  M0 = c(hostsize, shading, landform),
+  M1 = c(hostsize, shading, landform, density),
+  M2 = c(hostsize, shading, landform, density, wind_geo, shape, flightsun),
+  M3 = c(hostsize, shading, landform, density, wind_geo, shape, flightsun, wind_t, "BASAL_AREA:wind_shelter", "BASAL_AREA:jul", "BASAL_AREA:solar_flight_direct"),
+  `M3 without radiation` = c(hostsize, shading, landform, density, wind_geo, shape, wind_t, "BASAL_AREA:wind_shelter", "BASAL_AREA:jul")))
+GEO_LAB <- c("flat", "peak", "ridge", "shoulder", "spur", "slope", "hollow", "footslope", "valley", "pit")
+geo_factor <- function(x) { g <- factor(GEO_LAB[round(x)], levels = GEO_LAB); levels(g)[levels(g) == "shoulder"] <- "ridge"
+  g <- droplevels(g); relevel(g, ref = names(which.max(table(g)))) }
+simple_slopes <- function(m, ints) { b <- coef(m); V <- vcov(m)
+  do.call(rbind, lapply(ints, function(k) { p <- strsplit(k, ":")[[1]]; kk <- intersect(c(k, paste(rev(p), collapse = ":")), names(b))[1]
+    do.call(rbind, lapply(1:2, function(j) do.call(rbind, lapply(c(-1, 1), function(z) {
+      f <- p[j]; s <- b[f] + z * b[kk]; se <- sqrt(V[f, f] + z^2 * V[kk, kk] + 2 * z * V[f, kk])
+      data.frame(interaction = k, focal = f, moderator = p[3 - j], at = z, slope = unname(s), se = unname(se), p = unname(2 * pnorm(-abs(s / se)))) })))) })) }
+
+## 4,000 cells of each class in each year, the submitted balance
+ASM <- file.path(MA, "annual_sample.rds")
+if (!file.exists(ASM)) {
+  set.seed(42)
+  d <- readRDS(AMT)
+  saveRDS(do.call(rbind, lapply(split(d, list(d$year, d$modhigh)), function(g) g[sample(nrow(g), min(nrow(g), 4000)), ])), ASM)
+}
+
+## dependence terms first, the cell's own state last year with the share attacked around it at each radius or at the bandwidth, compared on AIC
+ADS <- file.path(MA, "dependence_selection.csv")
+if (!file.exists(ADS)) {
+  b <- readRDS(ASM); b <- b[!is.na(b$lagyr_self), ]
+  fit <- function(tt) { g <- glm(reformulate(if (length(tt)) tt else "1", "modhigh"), data = b, family = binomial)
+    data.frame(terms = paste(c("intercept", tt), collapse = " + "), k = length(coef(g)), aic = AIC(g), deviance = deviance(g)) }
+  res <- rbind(fit(character(0)), fit("lagyr_self"),
+               do.call(rbind, lapply(c(paste0("lagyr_nbr", c(42, 90, 150, 210, 510, 1050)), "lagyr_kern"), function(v) fit(c("lagyr_self", v)))))
+  res$delta_aic <- res$aic - min(res$aic); res$n <- nrow(b)
+  write.csv(res, ADS, row.names = FALSE)
+}
+ADEP <- function() { s <- read.csv(ADS); s <- s[grepl("nbr|kern", s$terms), ]; c("lagyr_self", sub(".*\\+ ", "", s$terms[which.min(s$aic)])) }
+
+## every variable standardised on the whole balanced sample, then the years with a previous map taken from it
+annual_data <- function(sample) {
+  b <- readRDS(ASM); for (v in unlist(SUB)) b[[v]] <- as.numeric(scale(b[[v]]))
+  if (sample != "all years") b <- b[!is.na(b$lagyr_self), ]
+  b$geomorphon <- geo_factor(b$geomorphons); b
+}
+afit <- function(model, dependence, b) glm(reformulate(c(M_TERMS[[model]], "geomorphon", if (dependence) ADEP()), "modhigh"), data = b, family = binomial)
+RUNS <- rbind(data.frame(sample = "all years", dependence = FALSE, model = names(M_TERMS)),
+              expand.grid(sample = "with previous year", dependence = c(FALSE, TRUE), model = names(M_TERMS), stringsAsFactors = FALSE))
+
+ACF <- file.path(MA, "annual_coefficients.csv")
+if (!file.exists(ACF)) {
+  out <- lapply(seq_len(nrow(RUNS)), function(i) {
+    b <- annual_data(RUNS$sample[i]); m <- afit(RUNS$model[i], RUNS$dependence[i], b)
+    cf <- summary(m)$coefficients; p <- fitted(m); y <- m$y; ints <- grep(":", M_TERMS[[RUNS$model[i]]], value = TRUE)
+    list(coef = data.frame(RUNS[i, ], term = rownames(cf), estimate = cf[, 1], se = cf[, 2], z_ratio = cf[, 3], p = cf[, 4], row.names = NULL),
+         fit = data.frame(RUNS[i, ], n = nrow(b), k = length(coef(m)), aic = AIC(m), auc = as.numeric(pROC::auc(pROC::roc(y, p, quiet = TRUE))),
+                          rmse = sqrt(mean((y - p)^2)), mae = mean(abs(y - p)), brier_skill = 1 - mean((y - p)^2) / mean((y - mean(y))^2), row.names = NULL),
+         slopes = if (length(ints)) data.frame(RUNS[i, ], simple_slopes(m, ints), row.names = NULL))
+  })
+  write.csv(do.call(rbind, lapply(out, `[[`, "coef")), ACF, row.names = FALSE)
+  write.csv(do.call(rbind, lapply(out, `[[`, "fit")), file.path(MA, "annual_fit.csv"), row.names = FALSE)
+  write.csv(do.call(rbind, lapply(out, `[[`, "slopes")), file.path(MA, "annual_simple_slopes.csv"), row.names = FALSE)
+}
+```
+
+```{r}
+#| label: annual-spatial
+## Moran's I of the deviance residuals within each year for every annual model, on the eight nearest sampled cells
+moran_yr <- function(r, b) do.call(rbind, lapply(split(seq_len(nrow(b)), b$year), function(ix) {
+  mt <- spdep::moran.test(r[ix], spdep::nb2listw(spdep::knn2nb(spdep::knearneigh(as.matrix(b[ix, c("x", "y")]), k = 8)), style = "W"), randomisation = TRUE)
+  data.frame(year = b$year[ix[1]], moran_i = unname(mt$estimate[1]), p = mt$p.value) }))
+AMO <- file.path(MA, "annual_residual_moran.csv")
+if (!file.exists(AMO)) {
+  write.csv(do.call(rbind, lapply(seq_len(nrow(RUNS)), function(i) { b <- annual_data(RUNS$sample[i])
+    data.frame(RUNS[i, ], moran_yr(residuals(afit(RUNS$model[i], RUNS$dependence[i], b), type = "deviance"), b), row.names = NULL) })), AMO, row.names = FALSE)
+}
+
+## M3 with the dependence terms refitted with a latent Gaussian field whose Matern range is the median annual clustering range
+ASF <- file.path(MA, "annual_spatial_refit.csv")
+if (!file.exists(ASF)) {
+  suppressPackageStartupMessages(library(mgcv))
+  b <- annual_data("with previous year")
+  RANGE <- with(read.csv(APP), median(cluster_range_m[clustered]))
+  f0 <- reformulate(c(M_TERMS$M3, "geomorphon", ADEP()), "modhigh")
+  g0 <- bam(f0, data = b, family = binomial, discrete = TRUE)
+  g1 <- bam(update(f0, . ~ . + s(x, y, bs = "gp", k = 200, m = c(3, RANGE))), data = b, family = binomial, discrete = TRUE)
+  cf <- function(m, lab) { s <- summary(m)$p.table
+    data.frame(model = lab, term = rownames(s), estimate = s[, 1], se = s[, 2], z_ratio = s[, 3], p = s[, 4], aic = AIC(m), row.names = NULL) }
+  out <- rbind(cf(g0, "without spatial field"), cf(g1, "with spatial field"))
+  out$edf_field <- sum(g1$edf[grepl("s\\(x,y\\)", names(g1$edf))]); out$field_range_m <- RANGE
+  write.csv(out, ASF, row.names = FALSE)
+  write.csv(rbind(data.frame(model = "without spatial field", moran_yr(residuals(g0, type = "deviance"), b)),
+                  data.frame(model = "with spatial field", moran_yr(residuals(g1, type = "deviance"), b))), file.path(MA, "annual_spatial_moran.csv"), row.names = FALSE)
+}
+```
+
+```{r}
+#| label: annual-grain
+## grain test, M3 refitted with the cell coarsened from 30 m to 90, 270 and 990 m, a coarse cell attacked if any 30 m cell inside it was,
+## with the previous year's state and the share of its eight neighbours rebuilt at each grain
+AGR <- file.path(MA, "annual_grain_test.csv")
+if (!file.exists(AGR)) {
+  suppressPackageStartupMessages(library(terra))
+  set.seed(123)
+  YRS <- c(2006:2011, 2013, 2014)
+  msk <- rast(here::here("02.inputs/beetle/study-area/perimeter_mask.tif"))
+  src <- read.csv(file.path(VRA, "vri_year_source.csv"))
+  env <- unique(unlist(strsplit(M_TERMS$M3, ":")))
+  static <- c(rast(here::here("02.inputs/beetle/study-area/elevation.tif")), rast(here::here("02.inputs/beetle/geomorphometry/geomorphometry.tif")))
+  mp <- function(y) rast(here::here("02.inputs/beetle/red-stage-annual", sprintf("redstage_%d.tif", y)))
+  nb8 <- function(r) focal(r, matrix(c(1, 1, 1, 1, 0, 1, 1, 1, 1), 3), fun = "mean", na.rm = TRUE)
+  res <- list()
+  for (f in c(1, 3, 9, 33)) {
+    agg <- function(r, fun) if (f == 1) r else aggregate(r, f, fun = fun, na.rm = TRUE)
+    a <- do.call(rbind, lapply(2:length(YRS), function(i) {
+      y <- YRS[i]; prv <- agg(mp(YRS[i - 1]), "max")
+      cov <- c(static, rast(file.path(VRA, sprintf("vri_%d.tif", src$vri_year[src$year == y]))),
+               project(rast(here::here("02.inputs/beetle/covariates/wind-hourly", sprintf("wind_metrics_%d.tif", y))), msk, method = "bilinear"))
+      dd <- as.data.frame(c(setNames(agg(mp(y), "max"), "modhigh"), setNames(prv, "lagyr_self"), setNames(nb8(prv), "lagyr_nbr"),
+                            agg(cov[[env]], "mean"), agg(cov[["geomorphons"]], "modal")), na.rm = TRUE)
+      if (f <= 3) { k1 <- which(dd$modhigh == 1); k0 <- which(dd$modhigh == 0)
+        dd <- dd[c(k1[sample.int(length(k1), min(length(k1), 4000))], k0[sample.int(length(k0), min(length(k0), 4000))]), ] }
+      dd$year <- y; dd }))
+    for (v in env) a[[v]] <- as.numeric(scale(a[[v]]))
+    a$geomorphon <- geo_factor(a$geomorphons)
+    for (withdep in c(FALSE, TRUE)) {
+      m <- glm(reformulate(c(M_TERMS$M3, "geomorphon", if (withdep) c("lagyr_self", "lagyr_nbr")), "modhigh"), data = a, family = binomial)
+      cf <- summary(m)$coefficients; cf <- cf[rownames(cf) %in% M_TERMS$M3, , drop = FALSE]
+      res[[length(res) + 1]] <- data.frame(grain_m = 30 * f, dependence = withdep, n = nrow(a), prevalence = mean(a$modhigh), term = rownames(cf),
+                                           estimate = cf[, 1], se = cf[, 2], z_ratio = cf[, 3], p = cf[, 4], row.names = NULL)
+    }
+  }
+  write.csv(do.call(rbind, res), AGR, row.names = FALSE)
+}
+```
+
+```{r}
+#| label: wind16-models
+## the submitted sixteen-day models on the repaired wind field, E1 without dependence terms, E2 with the previous period's state and the share
+## attacked around it at the bandwidth, E3 adding the same period of the previous year, and E1 again on all-hours wind as the submitted code used
+EMD <- here::here("02.inputs/beetle/model-data-wind16")
+ECF <- file.path(EMD, "wind16_coefficients.csv")
+if (!file.exists(ECF)) {
+  dir.create(EMD, showWarnings = FALSE)
+  EV <- c("elevation", "PINE_BA", "LIVE_STAND_VOLUME_125", "VRI_LIVE_STEMS_PER_HA", "QUAD_DIAM_125", "CROWN_CLOSURE", "tri", "vrm", "tpi",
+          "midslope_position", "valley_depth", "curv_prof", "solar_season_direct", "solar_flight_direct", "wind_effect")
+  SPEC <- list(E1 = list(w = "ep_wind_flight", dep = character(0)), `E1 all hours` = list(w = "ep_wind_all", dep = character(0)),
+               E2 = list(w = "ep_wind_flight", dep = c("lag1_self", "lag1_kern")),
+               E3 = list(w = "ep_wind_flight", dep = c("lag1_self", "lag1_kern", "lagyr_self", "lagyr_kern")))
+  d <- readRDS(file.path(MD, "epoch_model_table.rds"))
+  d <- d[stats::complete.cases(d[, c(EV, "ep_wind_flight", "ep_wind_all", "geomorphons")]), ]
+  for (v in c(EV, "ep_wind_flight", "ep_wind_all")) d[[v]] <- as.numeric(scale(d[[v]]))
+  out <- lapply(names(SPEC), function(k) {
+    s <- SPEC[[k]]; b <- d[stats::complete.cases(d[, c("redstage", s$dep)]), ]; b$geomorphon <- geo_factor(b$geomorphons)
+    ints <- paste0(c("VRI_LIVE_STEMS_PER_HA", "LIVE_STAND_VOLUME_125"), ":", s$w)
+    m <- glm(reformulate(c(EV, s$w, "geomorphon", s$dep, ints), "redstage"), data = b, family = binomial)
+    cf <- summary(m)$coefficients
+    list(coef = data.frame(model = k, term = rownames(cf), estimate = cf[, 1], se = cf[, 2], z_ratio = cf[, 3], p = cf[, 4], n = nrow(b), aic = AIC(m),
+                           auc = as.numeric(pROC::auc(pROC::roc(m$y, fitted(m), quiet = TRUE))), row.names = NULL),
+         slopes = data.frame(model = k, simple_slopes(m, ints)))
+  })
+  write.csv(do.call(rbind, lapply(out, `[[`, "coef")), ECF, row.names = FALSE)
+  write.csv(do.call(rbind, lapply(out, `[[`, "slopes")), file.path(EMD, "wind16_simple_slopes.csv"), row.names = FALSE)
+}
+```
+
+```{r}
+#| label: annual-diameter
+## attack by quadratic mean diameter class on the balanced annual sample, with the test across classes and the step across the 25 cm boundary
+ADM <- file.path(MA, "annual_diameter.csv")
+if (!file.exists(ADM)) {
+  b <- readRDS(ASM)
+  b$bin <- cut(b$QUAD_DIAM_125, c(0, 15, 20, 25, 30, 40, Inf), labels = c("<15", "15-20", "20-25", "25-30", "30-40", ">40"))
+  tab <- do.call(rbind, lapply(split(b, b$bin, drop = TRUE), function(g) { ci <- prop.test(sum(g$modhigh), nrow(g), correct = FALSE)$conf.int
+    data.frame(bin = as.character(g$bin[1]), n = nrow(g), attacked = sum(g$modhigh), attacked_pc = 100 * mean(g$modhigh), ci_lo = 100 * ci[1], ci_hi = 100 * ci[2],
+               pine_ba = mean(g$PINE_BA), basal_area = mean(g$BASAL_AREA)) }))
+  chi <- chisq.test(cbind(tab$attacked, tab$n - tab$attacked))
+  i <- match(c("20-25", "25-30"), tab$bin); step <- prop.test(tab$attacked[i], tab$n[i], correct = FALSE)
+  write.csv(tab, ADM, row.names = FALSE)
+  write.csv(data.frame(chisq = unname(chi$statistic), df = unname(chi$parameter), p = chi$p.value, cramers_v = sqrt(unname(chi$statistic) / sum(tab$n)),
+                       step_from = tab$attacked_pc[i[1]], step_to = tab$attacked_pc[i[2]], step_diff = diff(tab$attacked_pc[i]),
+                       step_ci_lo = -100 * step$conf.int[2], step_ci_hi = -100 * step$conf.int[1], step_p = step$p.value),
+            file.path(MA, "annual_diameter_tests.csv"), row.names = FALSE)
 }
 ```
 
