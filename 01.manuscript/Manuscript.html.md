@@ -251,7 +251,7 @@ ELEV_R  <- as.vector(minmax(elev))
 
 # Abstract {.unnumbered}
 
-1. Disturbance refugia from mountain pine beetle (*Dendroctonus ponderosae*) outbreaks have been proposed in thin stands of small trees, on shaded ground and where wind disrupts the aggregation pheromone, but these mechanisms have not been tested together at the interval over which attack and wind vary.
+1. Disturbance refugia from mountain pine beetle (*Dendroctonus ponderosae*) outbreaks have been proposed in thin stands of small trees, on shaded ground and where wind disrupts the aggregation pheromone, but little is known about how they act together at the interval over which attack and wind vary.
 2. This study mapped red-stage attack in 47 sixteen-day Landsat periods over eight outbreak years across 5,573 ha of the Selkirk Mountains, British Columbia, with a classifier validated on field plots, and modelled it on annual forest inventory, terrain and a terrain-resolved wind field, entering attack nearby and earlier first.
 3. Attack was clustered within a median of 750 m, and attack within 90 m in the previous period and year dominated every model.
 4. Beside those terms attack rose with stand basal area (+0.190 log-odds per standard deviation, p < 0.001) and on open ground, while tree diameter and shading had no protective effect. Wind interacted with standing volume in the direction plume disruption predicts, but wind did not lower attack detectably within thin stands.

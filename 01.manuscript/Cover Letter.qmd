@@ -3,14 +3,32 @@ format:
   docx:
     reference-doc: ../04.references/style-formal.docx
     number-sections: false
+execute:
+  echo: false
+  warning: false
+  message: false
 ---
+
+```{r}
+#| label: letter-values
+#| output: false
+BC <- here::here("02.inputs/beetle")
+fmt <- function(x) formatC(x, format = "d", big.mark = ",")
+refs <- function(f) { x <- system2("pandoc", c(shQuote(f), "-t", "plain", "--wrap=none"), stdout = TRUE, stderr = FALSE)
+  i <- grep("^References", x)[1]; j <- grep("^(Acknowledgements|Tables|Statements)", x); j <- min(j[j > i], length(x))
+  sum(grepl("\\([0-9]{4}[a-z]?\\)\\.", x[i:j])) }
+REF_OLD <- refs(here::here("01.manuscript/AFE-Review/Manuscript-as-submitted-2026-09-16.docx"))
+REF_NEW <- refs(here::here("01.manuscript/Manuscript.docx"))
+rec <- read.csv(here::here("02.inputs/derived/review-records.csv"))
+EP <- read.csv(file.path(BC, "epoch-redstage/epoch_summary.csv"))
+```
 
 Dr Seamus Murphy\
 TÜV SÜD, 2187 Comox Ave, Comox, British Columbia V9M 1P5, Canada\
 seamusrobertmurphy@gmail.com\
 ORCID 0000-0002-1792-0351
 
-23 September 2026
+`r format(Sys.Date(), "%e %B %Y")`
 
 Dr Christopher Ranger\
 Editor-in-Chief\
@@ -21,15 +39,13 @@ RE: Resubmission of AFE(2026)5804 as a new manuscript
 
 Dear Dr Ranger,
 
-Thank you for your decision of 22 September 2026 on manuscript AFE(2026)5804, "Testing the wind disruption and disturbance refugia hypothesis for mountain pine beetle outbreaks (*Dendroctonus ponderosae*)", and for the invitation to resubmit it as a new manuscript. You asked that the Introduction and Discussion be thoroughly revised to include the existing literature, that the novelty of the study be stated explicitly, and that I write to you explaining what was done. The Associate Editor, Dr MacQuarrie, found the arguments in the Introduction and Discussion not well supported or linked to the literature on this beetle, found that the Discussion reiterated the Results, and asked that the revised Discussion link the findings to the biology, ecology or management of the system. I have taken each of those points in turn.
+Thank you for the decision of 22 September 2026 on manuscript AFE(2026)5804, "Testing the wind disruption and disturbance refugia hypothesis for mountain pine beetle outbreaks (*Dendroctonus ponderosae*)", and for the invitation to resubmit it as a new manuscript. You asked that the Introduction and Discussion be revised to include the existing literature and that the novelty of the study be stated explicitly, and Dr MacQuarrie asked that the Discussion link the findings to the biology, ecology or management of the beetle rather than restate the Results. The attached author response quotes each comment and gives the section of the revised manuscript where it is addressed. In brief, the literature was assembled under a written protocol that screened `r fmt(nrow(rec))` unique records, the reference list grew from `r REF_OLD` to `r REF_NEW` works, the Introduction was rewritten on that literature, and the Discussion was rewritten from the start around dispersal, host defence, crown fade, landing and management.
 
-The literature. The submitted manuscript cited 30 works and introduced its central mechanism, wind in a thin stand disrupting attack, through a refugia paper rather than through the studies that established it. For the resubmission I ran a structured search of Semantic Scholar, Crossref and my own reading store on 23 September 2026 under a written protocol, with one review question for each of the paper's three questions and a fourth on precedent, screened 1,257 unique records and read 26 papers in full, with the rest of the retained set read by abstract. The Introduction now sets the study inside the landscape modelling of the outbreak from Aukema et al. (2006, 2008), Robertson et al. (2007), Chen and Walton (2011), Chapman et al. (2012), Preisler et al. (2012), Simard et al. (2011), Walter and Platt (2013), Wulder et al. (2006) and Kunegel-Lion and Lewis (2020), grounds the density and wind mechanism in the thinning trials and microclimate measurements of Mitchell et al. (1983), Waring and Pitman (1985), Amman et al. (1988), Bartos and Amman (1989), Schmid et al. (1992) and Preisler and Mitchell (1993) and in the plume measurements of Thistle et al. (2004), and sets the aspect and elevation expectations against Amman (1973), Kaiser et al. (2012) and Nelson et al. (2007). The reference list has grown from 30 to about 80 works, and the Methods now report the search, its criteria and its counts in three sentences.
+The analysis was also rebuilt during the revision, and I want you to know before the manuscript is read that several findings changed. Attack is now mapped in `r nrow(EP)` sixteen-day Landsat periods with a classifier tested on field plots held out whole, the models are built in the order of Aukema et al. (2008) with attack nearby and earlier entered first, and the result is checked under a latent spatial field and at four grains. In the revised analysis refugia were stands with little host. The wind interaction took the direction plume disruption predicts but was too weak to establish it, and open ground had more attack, the pattern deposition of wind-borne beetles predicts. The author response lists every change of this kind.
 
-The Discussion. It is rewritten in five sections, wind and density, terrain and landing, host size, measurement lessons, and limits and management, and each opens with the finding in one clause, sets it against the prior estimate or claim by name, says whether they agree, and closes with what that means for the beetle. The density by wind interaction is compared with the stand-scale measurements of Bartos and Amman (1989) and the plume dilution of Thistle et al. (2004), and set against Preisler and Mitchell (1993), who found that wide spacing did not stop attacks switching between trees. The aspect result is read against Kaiser et al. (2012) and Nelson et al. (2007), who found the beetle reached warm and dry ground first, so that shaded ground appears as the ground the outbreak reached last rather than as the refugium the hypothesis named. The host size threshold is read against Boone et al. (2011) and the susceptibility rating of Shore et al. (2000). The management paragraph now rests on Fettig et al. (2007), Shore et al. (2000) and Six et al. (2014). No coefficient is repeated in the Discussion except beside the number it is compared with.
+The novelty of the study is what it did. It entered a terrain-resolved wind field at the sixteen-day interval of the response together with stand density and explicit terms for nearby and earlier attack, so that the terrain main effect deposition predicts could be told apart from the density by wind interaction plume disruption predicts, and it tested the three refugia mechanisms of Krawchuk et al. (2020) beside that contagion.
 
-The novelty. It is stated in the same words in the abstract, at the end of the Introduction and at the opening of the Discussion, as what the study did rather than as a claim about what no one else has done. The landscape models cited above entered terrain as elevation, slope and aspect and weather as temperature and precipitation, one machine-learning model of the Alberta outbreak entered a seasonal mean station wind, and the transport models of the beetle's flight above the canopy resolved the wind over terrain without the stand beneath it. This study entered a terrain-resolved wind field at the sixteen-day interval of the response together with stand density, so that a terrain main effect could be told apart from a density by wind interaction, which are the two signatures that deposition of wind-borne beetles and disruption of the pheromone plume predict.
-
-The study's origin is my companion study of forest regeneration on the same ground, Murphy, Leslie, Wilson and Banks (2026), Forest Ecology and Management 618, 123985, whose ground plots of beetle-killed pine are the ground truth for the attack maps and whose co-authors are acknowledged on the title page. The work is original, is not published or under consideration elsewhere, and received no external funding. I am the sole author, I declare no conflict of interest, there is no dispute over the ownership of the data presented, and every contribution has been attributed by authorship or acknowledgement. The derived data and the complete analysis code are public on GitHub and will be deposited in Dryad with the revised manuscript.
+The study grew out of my companion study of forest regeneration on the same ground, Murphy, Leslie, Wilson and Banks (2026), Forest Ecology and Management 618, 123985, whose field plots of beetle-killed pine are the ground truth for the attack maps and whose co-authors are acknowledged on the title page. The work is original, is not published or under consideration elsewhere, and received no external funding. I am the sole author, I declare no conflict of interest, there is no dispute over the ownership of the data presented, and every contribution has been attributed by authorship or acknowledgement. The derived data and the complete analysis code are public on GitHub.
 
 Yours sincerely,
 

@@ -1,0 +1,79 @@
+---
+title: "Response to the Editor and Associate Editor"
+subtitle: "AFE(2026)5804, resubmitted as a new manuscript"
+format:
+  docx:
+    reference-doc: ../04.references/style-formal.docx
+    number-sections: false
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r}
+#| label: response-values
+#| output: false
+BC <- here::here("02.inputs/beetle"); MD <- file.path(BC, "model-data-epoch")
+fmt <- function(x, d = 0) formatC(x, format = "f", digits = d, big.mark = ",")
+refs <- function(f) { x <- system2("pandoc", c(shQuote(f), "-t", "plain", "--wrap=none"), stdout = TRUE, stderr = FALSE)
+  i <- grep("^References", x)[1]; j <- grep("^(Acknowledgements|Tables|Statements)", x); j <- min(j[j > i], length(x))
+  sum(grepl("\\([0-9]{4}[a-z]?\\)\\.", x[i:j])) }
+REF_OLD <- refs(here::here("01.manuscript/AFE-Review/Manuscript-as-submitted-2026-09-16.docx"))
+REF_NEW <- refs(here::here("01.manuscript/Manuscript.docx"))
+rec <- read.csv(here::here("02.inputs/derived/review-records.csv")); slog <- read.csv(here::here("02.inputs/derived/review-search-log.csv"))
+EP <- read.csv(file.path(BC, "epoch-redstage/epoch_summary.csv"))
+CLS <- read.csv(file.path(BC, "red-stage-darkwoods/classifier_blocked_mccv.csv")); CB <- CLS[CLS$chosen, ]
+PP <- read.csv(file.path(MD, "point_patterns.csv"))
+suppressPackageStartupMessages(library(terra))
+N_CELL <- global(!is.na(rast(file.path(BC, "study-area/perimeter_mask.tif"))), "sum")[[1]]
+OLD_WIND <- global(!is.na(rast(file.path(BC, "covariates/wind-micromet/wind_weight_by_direction.tif"))[[1]]), "sum")[[1]]
+```
+
+Dear Dr Ranger and Dr MacQuarrie,
+
+Thank you for the decision of 22 September 2026 and for the invitation to resubmit. Each comment is quoted below as it appeared in the decision email, followed by what was done and where in the revised manuscript it can be found. Section numbers refer to the revised manuscript. The analysis was also rebuilt during the revision, and several findings changed as a result. Those changes are set out after the responses so that nothing in the new manuscript arrives unannounced.
+
+# Editor-in-Chief
+
+**Comment 1.** "I agree with the Associate Editor that the manuscript is within the scope of AFE, but the Introduction and Discussion need to be thoroughly revised to include existing literature."
+
+**Response.** The literature was assembled under a written protocol, frozen before the first search, with one review question for each of the study's three questions and a fourth on whether the design had a precedent. Two indexes and my reading store were searched on 23 September 2026, and one round of citation chasing followed. The searches returned `r fmt(sum(slog$retrieved, na.rm = TRUE))` records, `r fmt(nrow(rec))` after duplicates were removed, of which `r fmt(sum(rec$decision == "include", na.rm = TRUE))` were retained and `r fmt(sum(rec$full_text == "yes", na.rm = TRUE))` were read in full. The protocol and counts are reported in section 2.1. The reference list grew from `r REF_OLD` works to `r REF_NEW`.
+
+The Introduction (section 1) was rewritten on that literature in five paragraphs. The first sets the study inside the landscape modelling of the outbreak, from Aukema et al. (2006, 2008), Robertson et al. (2007), Chen and Walton (2011), Chapman et al. (2012), Preisler et al. (2012), Simard et al. (2011) and Walter and Platt (2013). The second grounds the density and wind mechanism in the thinning trials and stand measurements that established it, Mitchell et al. (1983), Waring and Pitman (1985), Amman et al. (1988), Bartos and Amman (1989), Schmid et al. (1992), Preisler and Mitchell (1993) and Thistle et al. (2004), and states the within-stand evidence against it. The third sets out the landing and deposition literature, Hynum and Berryman (1980), Byers (2000), de la Giroday et al. (2011) and Plattner et al. (2004). The fourth places the study against its companion study (Murphy et al., 2026) and against the models that entered wind, and the fifth states the three questions. The Discussion was rewritten from the start, as described under the Associate Editor's comments.
+
+**Comment 2.** "In addition, the novelty of the study needs to be explicitly stated since numerous modelling papers are submitted to AFE and we have limited room."
+
+**Response.** The novelty is stated as what the study did rather than as a claim about what no one else has done. The last paragraph of the Introduction (section 1) states that the landscape models of the outbreak entered terrain as elevation, slope and aspect and weather as temperature and precipitation, that one machine-learning model of the Alberta outbreak entered a seasonal mean station wind (Ramazi et al., 2021), and that the transport models of flight above the canopy resolved wind over terrain without the stand beneath it (Jackson et al., 2008; Ainslie and Jackson, 2010). It then states that this study entered a terrain-resolved wind field at the sixteen-day interval of the response together with stand density, so that the terrain main effect deposition predicts could be told apart from the density by wind interaction plume disruption predicts. The first statement of the abstract names the gap as how little is known about the three mechanisms acting together at the interval over which attack and wind vary. The revision added a second element of novelty, which is that the three refugia mechanisms of Krawchuk et al. (2020) were tested beside explicit terms for attack nearby and earlier, built in the order of Aukema et al. (2008), and then checked under a latent spatial field and at four grains (sections 2.8, 3.3, 3.7 and 3.8).
+
+# Associate Editor
+
+**Comment 3.** "I am, however, concerned that the arguments in the introduction and discussion are not well supported or linked to the (admittedly vast) literature on MPB."
+
+**Response.** Every argument in the Introduction now rests on a named study of this beetle, as set out under comment 1. Each hypothesis the models test is derived there from that literature rather than asserted beside it. The density by wind interaction follows from Bartos and Amman (1989) and Thistle et al. (2004), the terrain main effect from Hynum and Berryman (1980) and de la Giroday et al. (2011), and the dependence terms from Aukema et al. (2008) and Robertson et al. (2007).
+
+**Comment 4.** "My initial impression is that the Discussion reiterates what has already been stated in the results."
+
+**Response.** The Discussion (section 4) was rewritten in six sections, each of which sets a result against prior work on this beetle, and coefficients are repeated only where the argument needs them. Section 4.1 reads the dominance of nearby and earlier attack as the landscape trace of dispersal under the canopy (Robertson et al., 2007; Chen and Walton, 2011; Safranyik et al., 1992), against the provincial scale of Aukema et al. (2008). Section 4.2 reads the host result against the susceptibility rating of Shore et al. (2000), the thinning trials and the source-sink threshold of Carroll and Safranyik (2004). Section 4.3 reads the wind interaction against the stand measurements of Bartos and Amman (1989) and Thistle et al. (2004), and explains why a sixteen-day wind field could not show more, citing the timing of crown fade given by Safranyik and Carroll (2006, p. 11). Section 4.4 reads the openness result as deposition (Byers, 2000; de la Giroday et al., 2011) and the aspect result against Kaiser et al. (2012) and Nelson et al. (2007). Section 4.5 takes up the scale of inference Aukema et al. (2008) raised, and section 4.6 the limits and management.
+
+**Comment 5.** "Their revised discussion should link the author's findings to the biology, ecology or management of the MPB system."
+
+**Response.** Each section of the Discussion closes on the beetle rather than on the model. The biology appears in sections 4.1, 4.3 and 4.4, through dispersal distance, the fade of attacked crowns the summer after attack and the settling of beetles where the flow slows. The ecology appears in section 4.2, through host defences at eruptive population levels (Boone et al., 2011; Raffa et al., 2008). Management appears in section 4.6, which states that refugia on this landscape were stands with little host, the structure thinning produces, that terrain maps alone could not locate them, and that the field evidence for thinning during an outbreak is weaker than policy has assumed (Six et al., 2014).
+
+# Changes beyond the comments
+
+The analysis was rebuilt during the revision, and the reader of the new manuscript should know what changed.
+
+1. The response is now red-stage attack in each of `r nrow(EP)` sixteen-day Landsat periods over `r c("one","two","three","four","five","six","seven","eight","nine")[length(unique(EP$year))]` outbreak years, and every stage of the analysis runs on those periods (section 2.3).
+2. The classifier that sets the fall in NDMI counted as attack was retrained on the 112 Landsat pixels of the 28 field plots against 84 points of undisturbed forest digitised for the companion study, and tested by cross-validation that held out whole plots and 100 m blocks. It reached kappa `r sprintf("%.3f", CB$kappa_mean)` ± `r sprintf("%.3f", CB$kappa_sd)` (section 3.1, Table 2).
+3. The terrain-resolved wind field was recomputed on an elevation model extending beyond the study area. In the submitted analysis its curvature term reached past the edge of an elevation model cut to the study area, so the field covered `r fmt(OLD_WIND)` of the `r fmt(N_CELL)` cells, and it now covers all of them (section 2.4).
+4. Spatial pattern is now described before any model is fitted, with the point pattern methods of the companion study, and attack was clustered in `r sum(PP$clustered)` of `r nrow(PP)` periods (sections 2.7 and 3.2).
+5. The models were rebuilt in the order of Aukema et al. (2008), dependence terms first, then each environmental variable alone, then backward elimination, and the final model was refitted with a latent spatial field and at four grains (sections 2.8 and 3.3 to 3.8).
+
+Several findings changed as a result. Stand density acted through basal area and volume rather than stem count. The scarcity of large hosts, supported as a threshold in the submitted manuscript, was not supported. The density by wind interaction was reported as supporting plume disruption in the submitted manuscript. In the revision it takes the direction plume disruption predicts, but wind could not be shown to lower attack within thin stands, and section 4.3 treats it as consistent with the mechanism and too weak to establish it. The terrain result now rests on open ground alone, since the wind shelter index no longer differed from zero, and it is read as deposition with the alternative of faster development stated beside it. The abstract, Results and Discussion report the rebuilt analysis throughout.
+
+Every number in the manuscript is computed by code in the manuscript file itself, and the file, the derived data and the analysis code are public at <https://github.com/seamusrobertmurphy/beetle-topography-and-wind-study>.
+
+Yours sincerely,
+
+Dr Seamus Murphy
