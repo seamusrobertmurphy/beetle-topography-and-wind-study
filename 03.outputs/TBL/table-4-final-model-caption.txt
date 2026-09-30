@@ -1,0 +1,1 @@
+Coefficients of the final model, without and with a latent spatial field. Environmental coefficients were changes in log-odds per standard deviation and dependence coefficients were per unit of the term. Significance was marked * p ≤ 0.05, ** p ≤ 0.01, *** p ≤ 0.001, **** p ≤ 0.0001.

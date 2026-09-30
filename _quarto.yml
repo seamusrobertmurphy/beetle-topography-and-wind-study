@@ -16,10 +16,6 @@ project:
   # over it, point these four lines back at _tools and delete _hooks.
   pre-render:
     - "python3 01.manuscript/_hooks/clean-appledouble.py"
-    # The shared preamble is included before the Abstract, so a chunk in it that prints
-    # appears at the top of every document. That is how the dataset inventory table came
-    # to render above the abstract in a submission package on 2026-08-28.
-    - "python3 01.manuscript/_hooks/check-preamble-silent.py"
   post-render:
     - "python3 01.manuscript/_hooks/clean-appledouble.py"
     # Table geometry a reference doc cannot carry: 16.5 cm width, 1.1 cm

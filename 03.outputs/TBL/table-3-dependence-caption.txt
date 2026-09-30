@@ -1,0 +1,1 @@
+Dependence terms compared on AIC over 46,124 cell-periods, every model carrying a fixed effect for each period. Previous period meant the preceding sixteen-day period of the same season and previous year the same period of the preceding outbreak year. Delta AIC was the difference from the lowest.

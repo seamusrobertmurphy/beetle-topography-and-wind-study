@@ -1,0 +1,4 @@
+"Model","Accuracy","Accuracy 95%","Kappa","Kappa 95%","Sensitivity","Specificity","Chosen"
+"gradient boosting","0.912 ± 0.049","0.820 to 1.000","0.810 ± 0.106","0.614 to 1.000","0.920","0.899",""
+"random forest","0.898 ± 0.046","0.810 to 0.976","0.778 ± 0.099","0.585 to 0.948","0.925","0.854",""
+"radial support vector machine","0.934 ± 0.037","0.859 to 1.000","0.859 ± 0.081","0.682 to 1.000","0.913","0.968","yes"

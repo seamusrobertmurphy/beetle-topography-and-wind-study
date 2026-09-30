@@ -6,8 +6,6 @@ format:
     number-sections: false
 bibliography: ../04.references/references-beetle.bib
 csl: ../04.references/apa.csl
-## The bibliography is declared so the citations inside Table 2's rationale column resolve.
-## It is suppressed because the reference list belongs in the main document, not here.
 suppress-bibliography: true
 execute:
   echo: false
@@ -16,89 +14,50 @@ execute:
 ---
 
 ```{r}
-#| label: setup
-#| echo: false
-#| output: false
-
-## The tables are kept as one editable file beside the article, in the numbering the
-## article uses; the four tables moved to the Supporting Information on 2026-09-16 are
-## read by Supporting Information.qmd. These are read back from the CSVs the manuscript
-## wrote as it rendered, not recomputed, so this file cannot report a different number
-## from the article it accompanies. If a CSV is missing, render
-## 01.manuscript/Manuscript.qmd first.
-##
-## Audited 2026-08-28. Three faults were fixed here at once, all of which shipped to the
-## package on that date:
-##   1. The numbering was one behind the main document, because the data-inventory table
-##      was added as Table 1 after this file was written and everything else kept its old
-##      number. The CSV names have been renumbered in the manuscript to match.
-##   2. Tables 1 and 9 were missing entirely, so the editor received seven of nine.
-##   3. No bibliography or CSL was declared, so Table 2 printed its raw citation keys,
-##      "[@krawchuk2020; @cartwright2018; @powell2014]", into a submission document.
-## The captions below are the manuscript's own, in full. The abridged versions used here
-## previously dropped the abbreviation definitions the journal requires: it states that
-## "the table, legend, and footnotes must be understandable without reference to the text"
-## and that "All abbreviations must be defined in footnotes".
 library(knitr)
 TBL <- here::here("03.outputs", "TBL")
 get <- function(n) {
   f <- file.path(TBL, paste0(n, ".csv"))
-  if (!file.exists(f))
-    stop("missing ", f,
-         ". Render 01.manuscript/Manuscript.qmd first.")
+  if (!file.exists(f)) stop("missing ", f, ". Render 01.manuscript/Manuscript.qmd first.")
   read.csv(f, check.names = FALSE)
 }
-## Caption numbers the manuscript wrote beside the CSVs, so a caption here cannot carry a
-## count the article does not.
-txt <- function(n) {
-  f <- file.path(TBL, paste0(n, ".txt"))
-  if (!file.exists(f)) stop("missing ", f, ". Render 01.manuscript/Manuscript.qmd first.")
-  readLines(f, warn = FALSE)
-}
-fmt <- function(x) formatC(as.numeric(x), format = "d", big.mark = ",")
+cap <- function(n) readLines(file.path(TBL, paste0(n, "-caption.txt")), warn = FALSE)
 ```
-
-<!-- Footnote symbols follow the journal's rule: dagger, double dagger, section and
-     pilcrow in that order, with asterisks reserved for P-values. Statistical measures
-     are named in the column headings, as the guidelines require. -->
 
 # Table 1
 
-Stand structure across the study perimeter, from the Vegetation Resources Inventory, over `r fmt(txt("table-1-cell-years"))` cell-years. SD was the standard deviation across the landscape and SE the standard error of the mean, which was small at this sample size by construction and measured the precision of the landscape mean rather than of any one cell. Skewness and kurtosis were the bias-corrected third and fourth standardised moments, kurtosis being excess, so that 0 was Gaussian and a positive value heavy-tailed.
+`r cap("table-1-stand-structure")`
 
 ```{r}
 kable(get("table-1-stand-structure"), booktabs = TRUE, align = "lrrrrrrrr")
 ```
 
+{{< pagebreak >}}
+
 # Table 2
 
-The variables that entered the models after selection, the pathway each served, and the direction expected of it from the mechanism named in the Introduction. AUC was the area under the receiver operating characteristic curve of the univariate fit, with the asterisks beside it marking its significance, * P ≤ 0.05, ** P ≤ 0.01, *** P ≤ 0.001, **** P ≤ 0.0001.
+`r cap("table-2-classifier")`
 
 ```{r}
-kable(get("table-2-variables"), booktabs = TRUE, align = "lllr")
+kable(get("table-2-classifier"), booktabs = TRUE, align = "lrrrrrrl")
 ```
+
+{{< pagebreak >}}
 
 # Table 3
 
-Comparison of the four annual models, each adding one mechanism to the one before. RMSE was the root mean squared error and MAE the mean absolute error, both on the fitted probabilities, and AUC the area under the receiver operating characteristic curve. Brier skill was the improvement over predicting the prevalence for every cell, where 0 was no better than that base rate.
+`r cap("table-3-dependence")`
 
 ```{r}
-kable(get("table-3-model-comparison"), booktabs = TRUE, align = "lrrrrrr")
+kable(get("table-3-dependence"), booktabs = TRUE, align = "lrrr")
 ```
+
+{{< pagebreak >}}
 
 # Table 4
 
-Coefficients of the full annual model M3, continuous terms ordered by absolute size. Each coefficient was the change in log-odds per standard deviation of its variable, fitted on a class-balanced sample, so the intercept was not the landscape prevalence. SE was the standard error and z the Wald statistic. Significance was marked * P ≤ 0.05, ** P ≤ 0.01, *** P ≤ 0.001, **** P ≤ 0.0001. The geomorphon landform classes of the same model were reported in Table S5 of the Supporting Information.
+`r cap("table-4-final-model")`
 
 ```{r}
-kable(get("table-4-full-model"), booktabs = TRUE, align = "lrrr")
+kable(get("table-4-final-model"), booktabs = TRUE, align = "lrrrr")
 ```
-
-# Table 5
-
-Moderate-to-high beetle disturbance by quadratic mean diameter class, on the balanced sample. QMD was quadratic mean diameter over stems 12.5 cm and up. The 25 cm boundary was the source-sink threshold of the species' bionomics. Intervals were Wilson score intervals on the class proportion, which is why they were asymmetric in the smallest class. Because 30 m cells in a spreading outbreak were not independent, the tests reported in the main text were anti-conservative.
-
-```{r}
-kable(get("table-5-diameter-class"), booktabs = TRUE, align = "lrr")
-```
-
