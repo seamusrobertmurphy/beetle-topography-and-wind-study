@@ -98,6 +98,15 @@ stars <- function(p) ifelse(is.na(p), "", ifelse(p <= 1e-4, "****", ifelse(p <= 
 spellnum <- function(n) { w <- c("one", "two", "three", "four", "five", "six", "seven", "eight", "nine")
   if (length(n) == 1 && !is.na(n) && n >= 1 && n <= 9) w[n] else fmt(n) }
 orpc <- function(beta) num(100 * (exp(beta) - 1), "%.1f")
+nb_rows <- function(prefix) {
+  other <- setdiff(c("lag1", "lagyr"), prefix)
+  r <- SEL[grepl(paste0(prefix, "_(nbr|kern)"), SEL$terms) & !grepl(paste0(other, "_(nbr|kern)"), SEL$terms), ]
+  r$term <- sub(".*\\+ ", "", r$terms); r
+}
+nb_best <- function(prefix) { r <- nb_rows(prefix); r$term[which.min(r$aic)] }
+nb_aic <- function(prefix, term) fmt(nb_rows(prefix)$aic[nb_rows(prefix)$term == term])
+nb_rad <- function(prefix) { r <- nb_rows(prefix); r <- r[!grepl("kern", r$term), ]; r$term[which.min(r$aic)] }
+nb_label <- function(t) if (grepl("kern", t)) "the share weighted by a kernel at the bandwidth" else paste0("the share within ", sub(".*nbr", "", t), " m")
 
 PENDING <- FALSE
 rd <- function(f) if (file.exists(f)) read.csv(f) else { PENDING <<- TRUE; NULL }
@@ -119,7 +128,8 @@ VRI_LABELS <- c(
   solar_season_direct = "Growing-season direct radiation (kWh/m²)", solar_season_total = "Growing-season total radiation (kWh/m²)",
   ep_wind_flight = "Flight-hour wind (km/h)", ep_calm_flight = "Flight-hour calm share",
   lag1_self = "Attack in the same cell, previous period", lag1_nbr90 = "Attack within 90 m, previous period",
-  lagyr_self = "Attack in the same cell, previous year", lagyr_nbr90 = "Attack within 90 m, previous year")
+  lagyr_self = "Attack in the same cell, previous year", lagyr_nbr90 = "Attack within 90 m, previous year",
+  lag1_kern = "Attack nearby at the bandwidth, previous period", lagyr_kern = "Attack nearby at the bandwidth, previous year")
 pretty_terms <- function(x) {
   out <- VRI_LABELS[x]; ix <- grepl(":", x, fixed = TRUE)
   if (any(ix)) out[ix] <- vapply(strsplit(x[ix], ":", fixed = TRUE), function(p) {
@@ -244,7 +254,7 @@ ELEV_R  <- as.vector(minmax(elev))
 
 1. Disturbance refugia from mountain pine beetle (*Dendroctonus ponderosae*) outbreaks have been proposed in thin stands of small trees, on shaded ground and where wind disrupts the aggregation pheromone, but little is known about how they act together at the interval over which attack and wind vary.
 2. This study mapped red-stage attack in `r N_EP` sixteen-day Landsat periods over `r spellnum(EP_YRS)` outbreak years across `r fmt(AREA_HA)` ha of the Selkirk Mountains, British Columbia, with a classifier validated on field plots, and modelled it on annual forest inventory, terrain and a terrain-resolved wind field, entering attack nearby and earlier first.
-3. Attack was clustered within a median of `r fmt(median(PP$cluster_range_m[PP$clustered]))` m, and attack within 90 m in the previous period and year dominated every model.
+3. Attack was clustered within a median of `r fmt(median(PP$cluster_range_m[PP$clustered]))` m with a median kernel bandwidth of `r fmt(median(PP$bw_ppl))` m, and attack nearby in the previous period and year dominated every model.
 4. Beside those terms attack rose with stand basal area (`r qb("mechanism BASAL_AREA", "BASAL_AREA")` log-odds per standard deviation, `r qp("mechanism BASAL_AREA", "BASAL_AREA")`) and on open ground, while tree diameter and shading had no protective effect. Wind interacted with standing volume in the direction plume disruption predicts, but wind did not lower attack detectably within thin stands.
 5. Refugia here were stands with little host, and terrain and wind added small, scale-dependent modifiers to an outbreak whose spread was mostly contagion.
 
@@ -2286,7 +2296,7 @@ if (!file.exists(PPT)) {
 }
 ```
 
-Spatial pattern was described before any model was fitted, with the point pattern methods of @murphy2026. In each period the attacked cells were treated as a point pattern inside the window of cells the imagery saw. Clustering was tested against random relabelling, in which the same number of cells was drawn at random from the cells seen in that period, 999 times, because the cells sit on a 30 m grid inside a window with holes and a continuous null would misstate distances on it. Three statistics were compared with that null, the Clark-Evans aggregation index [@clark1954distance], the mean nearest-neighbour distance and the L function, the variance-stabilised form of Ripley's K [@ripley1977], against a global envelope [@baddeley2015]. The largest distance at which the observed L function lay above the envelope was taken as the clustering range of that period. The kernel bandwidth was chosen by likelihood cross-validation over 20 to 300 m, the procedure @murphy2026 used to set the bandwidth of their Cox process model.
+Spatial pattern was described before any model was fitted, with the point pattern methods of @murphy2026. In each period the attacked cells were treated as a point pattern inside the window of cells the imagery saw. Clustering was tested against random relabelling, in which the same number of cells was drawn at random from the cells seen in that period, 999 times, because the cells sit on a 30 m grid inside a window with holes and a continuous null would misstate distances on it. Three statistics were compared with that null, the Clark-Evans aggregation index [@clark1954distance], the mean nearest-neighbour distance and the L function, the variance-stabilised form of Ripley's K [@ripley1977], against a global envelope [@baddeley2015]. The largest distance at which the observed L function lay above the envelope was taken as the clustering range of that period. The kernel bandwidth of each period was chosen by likelihood cross-validation over 20 to 300 m, the procedure @murphy2026 used to set the bandwidth of their Cox process model. Both distances were estimated before any model was fitted and both entered the models, the bandwidth as the scale of a neighbourhood term and the clustering range as the range of the latent spatial field.
 
 ## Model building
 
@@ -2311,10 +2321,18 @@ if (!file.exists(EMT)) {
     w <- focalMat(r, rad, "circle"); w[w > 0] <- 1; w[ceiling(nrow(w) / 2), ceiling(ncol(w) / 2)] <- 0
     focal(r, w, fun = "mean", na.rm = TRUE)
   }
-  lagset <- function(p, tag) {
-    if (is.null(p)) { z <- rep(msk, 1 + length(RADII)); values(z) <- NA } else z <- c(p, rast(lapply(RADII, function(rad) share(p, rad))))
-    names(z) <- paste0(tag, c("_self", paste0("_nbr", RADII))); z
+  ## the share of attacked cells weighted by a Gaussian kernel whose standard deviation is the
+  ## likelihood cross-validated bandwidth of the period the share is taken from, chunk point-patterns
+  BW <- read.csv(here::here("02.inputs/beetle/model-data-epoch/point_patterns.csv"))
+  kern <- function(r, sigma) {
+    w <- focalMat(r, sigma, "Gauss"); w[ceiling(nrow(w) / 2), ceiling(ncol(w) / 2)] <- 0
+    focal(r, w, fun = "sum", na.rm = TRUE) / focal(!is.na(r), w, fun = "sum", na.rm = TRUE)
   }
+  lagset <- function(p, tag, sigma) {
+    if (is.null(p)) { z <- rep(msk, 2 + length(RADII)); values(z) <- NA } else z <- c(p, rast(lapply(RADII, function(rad) share(p, rad))), kern(p, sigma))
+    names(z) <- paste0(tag, c("_self", paste0("_nbr", RADII), "_kern")); z
+  }
+  bw_of <- function(y, e) BW$bw_ppl[BW$map == sprintf("redstage_%d_e%02d.tif", y, e)]
   rows <- list()
   for (i in seq_len(nrow(ep))) {
     y <- ep$year[i]; e <- ep$epoch[i]
@@ -2324,13 +2342,13 @@ if (!file.exists(EMT)) {
     if (!file.exists(wf)) next
     b <- setNames(mp(y, e), "redstage")
     pe <- ep[ep$year == y & ep$epoch < e, ]
-    p1 <- if (nrow(pe)) mp(y, max(pe$epoch)) else NULL
+    p1 <- if (nrow(pe)) mp(y, max(pe$epoch)) else NULL; s1 <- if (nrow(pe)) bw_of(y, max(pe$epoch)) else NA
     p2 <- if (nrow(pe) > 1) mp(y, sort(pe$epoch, decreasing = TRUE)[2]) else NULL
     py <- ep[ep$year < y & ep$epoch == e, ]
-    pyr <- if (nrow(py)) mp(max(py$year), e) else NULL
+    pyr <- if (nrow(py)) mp(max(py$year), e) else NULL; sy <- if (nrow(py)) bw_of(max(py$year), e) else NA
     s <- c(b, static, rast(file.path(VRA, sprintf("vri_%d.tif", src$vri_year[src$year == y]))), rast(wf),
-           lagset(p1, "lag1"), setNames(if (is.null(p2)) { z <- msk; values(z) <- NA; z } else p2, "lag2_self"),
-           lagset(pyr, "lagyr"))
+           lagset(p1, "lag1", s1), setNames(if (is.null(p2)) { z <- msk; values(z) <- NA; z } else p2, "lag2_self"),
+           lagset(pyr, "lagyr", sy))
     dd <- as.data.frame(mask(s, msk), xy = TRUE, na.rm = FALSE)
     dd <- dd[!is.na(dd$redstage), ]
     a <- dd[dd$redstage == 1, ]; o <- dd[dd$redstage == 0, ]
@@ -2358,16 +2376,16 @@ DEPCOLS <- function(d) grep("^lag", names(d), value = TRUE)
 SEL <- file.path(MD, "dependence_selection.csv")
 if (!file.exists(SEL)) {
   d <- readRDS(file.path(MD, "epoch_model_table.rds"))
-  d <- d[stats::complete.cases(d[, c("lag1_self", paste0("lag1_nbr", RADII), "lagyr_self", paste0("lagyr_nbr", RADII))]), ]
+  NB1 <- c(paste0("lag1_nbr", RADII), "lag1_kern"); NBY <- c(paste0("lagyr_nbr", RADII), "lagyr_kern")
+  d <- d[stats::complete.cases(d[, c("lag1_self", "lagyr_self", NB1, NBY)]), ]
   fit <- function(tt) {
     g <- glm(reformulate(c("t", tt), "redstage"), data = d, family = binomial)
     data.frame(terms = paste(c("epoch", tt), collapse = " + "), k = length(coef(g)), aic = AIC(g), deviance = deviance(g))
   }
-  res <- rbind(fit(character(0)), fit("lag1_self"), fit("lagyr_self"), fit(c("lag1_self", "lagyr_self")),
-               do.call(rbind, lapply(RADII, function(r) fit(c("lag1_self", "lagyr_self", paste0("lag1_nbr", r))))),
-               do.call(rbind, lapply(RADII, function(r) fit(c("lag1_self", "lagyr_self", paste0("lagyr_nbr", r))))))
-  r1 <- RADII[which.min(res$aic[grepl("lag1_nbr", res$terms)])]; ry <- RADII[which.min(res$aic[grepl("lagyr_nbr", res$terms)])]
-  res <- rbind(res, fit(c("lag1_self", "lagyr_self", paste0("lag1_nbr", r1), paste0("lagyr_nbr", ry))))
+  one1 <- do.call(rbind, lapply(NB1, function(v) cbind(fit(c("lag1_self", "lagyr_self", v)), term = v)))
+  oneY <- do.call(rbind, lapply(NBY, function(v) cbind(fit(c("lag1_self", "lagyr_self", v)), term = v)))
+  res <- rbind(fit(character(0)), fit("lag1_self"), fit("lagyr_self"), fit(c("lag1_self", "lagyr_self")), one1[, 1:4], oneY[, 1:4])
+  res <- rbind(res, fit(c("lag1_self", "lagyr_self", one1$term[which.min(one1$aic)], oneY$term[which.min(oneY$aic)])))
   res$delta_aic <- res$aic - min(res$aic); res$n <- nrow(d); res$epochs <- length(unique(d$t))
   write.csv(res, SEL, row.names = FALSE)
 }
@@ -2506,7 +2524,9 @@ if (!file.exists(SPF)) {
   for (v in ENV) d[[v]] <- as.numeric(scale(d[[v]]))
   f0 <- reformulate(c("t", DEP, ENV), "redstage")
   g0 <- bam(f0, data = d, family = binomial, discrete = TRUE)
-  g1 <- bam(update(f0, . ~ . + s(x, y, bs = "gp", k = 200)), data = d, family = binomial, discrete = TRUE)
+  ## the field's Matern range is the median clustering range of the L functions, chunk point-patterns
+  pp <- read.csv(file.path(MD, "point_patterns.csv")); RANGE <- median(pp$cluster_range_m[pp$clustered])
+  g1 <- bam(update(f0, . ~ . + s(x, y, bs = "gp", k = 200, m = c(3, RANGE))), data = d, family = binomial, discrete = TRUE)
   moran <- function(m) {
     r <- residuals(m, type = "deviance")
     do.call(rbind, lapply(split(seq_len(nrow(d)), d$t), function(ix) {
@@ -2520,7 +2540,7 @@ if (!file.exists(SPF)) {
   cf <- function(m, lab) { s <- summary(m)$p.table; s <- s[rownames(s) %in% c(DEP, ENV), , drop = FALSE]
     data.frame(model = lab, term = rownames(s), estimate = s[, 1], se = s[, 2], z_ratio = s[, 3], p = s[, 4], aic = AIC(m)) }
   out <- rbind(cf(g0, "without spatial field"), cf(g1, "with spatial field"))
-  out$edf_field <- sum(g1$edf[grepl("s\\(x,y\\)", names(g1$edf))])
+  out$edf_field <- sum(g1$edf[grepl("s\\(x,y\\)", names(g1$edf))]); out$field_range_m <- RANGE
   out$moran_median <- ifelse(out$model == "with spatial field", median(m1$moran_i), median(m0$moran_i))
   out$moran_share_p05 <- ifelse(out$model == "with spatial field", mean(m1$p < 0.05), mean(m0$p < 0.05))
   write.csv(out, SPF, row.names = FALSE)
@@ -2622,11 +2642,11 @@ gr <- function(v, g, col = "estimate") { x <- GRT[GRT$term == v & GRT$grain_m ==
 
 Models were built in the order of @aukema2008, who "determined an appropriate spatial neighborhood structure(s) and time lag(s) to account for spatial and temporal dependencies" before any environmental variable entered, then tested each environmental variable alone beside those terms and built the full model by backward elimination. Every model was a logistic regression of attack in a cell and period with a fixed effect for each period. Within each period the model table took every attacked cell up to 2,000 and the same number of unattacked cells, so that the period effect absorbed the sampling rate and every other coefficient was unaffected by it.
 
-The dependence terms were the cell's own state in the previous period of the same season and in the same period of the previous outbreak year, and the share of cells attacked within a radius of 42, 90, 150, 210, 510 or 1,050 m in each, compared on AIC. The environmental variables were then entered one at a time beside the chosen dependence terms, each standardised so that its coefficient was the change in log-odds per standard deviation, and tested against the dependence-only model by likelihood ratio, the screen @murphy2026 used against the intercept-only model. Variables that passed at p < 0.05 were grouped where their absolute correlation reached 0.75, keeping the member with the largest likelihood-ratio statistic, and removed one at a time until every variance inflation factor was below 5. An elastic net with the dependence terms unpenalised [@zou2005; @friedman2010] was fitted beside the elimination and is reported with it (Table S4), and the final model was reached by removing terms one at a time while AIC fell.
+The dependence terms were the cell's own state in the previous period of the same season and in the same period of the previous outbreak year, and the share of cells attacked around it in each. That share was measured two ways, within a fixed radius of 42, 90, 150, 210, 510 or 1,050 m, and weighted by a Gaussian kernel whose standard deviation was the likelihood cross-validated bandwidth of the period the share was taken from. All candidates were compared on AIC, so that the bandwidth was tested against the fixed radii rather than assumed. The environmental variables were then entered one at a time beside the chosen dependence terms, each standardised so that its coefficient was the change in log-odds per standard deviation, and tested against the dependence-only model by likelihood ratio, the screen @murphy2026 used against the intercept-only model. Variables that passed at p < 0.05 were grouped where their absolute correlation reached 0.75, keeping the member with the largest likelihood-ratio statistic, and removed one at a time until every variance inflation factor was below 5. An elastic net with the dependence terms unpenalised [@zou2005; @friedman2010] was fitted beside the elimination and is reported with it (Table S4), and the final model was reached by removing terms one at a time while AIC fell.
 
 The three questions were tested as additions to the final model. The mechanisms of @krawchuk2020 were tested term by term, stand density as live stems, standing volume and basal area, large hosts as quadratic mean diameter, and shading as growing-season radiation and northness. Plume disruption was tested as the interactions of stem density and standing volume with mean flight-hour wind. Calm share correlated `r num(WIND_R, "%.2f")` with mean wind, so by the correlation rule of the screen only the mean entered. Deposition was tested as the main effects of the wind shelter index of @plattner2004 and sky view, with their interactions with density tested next. Each set was compared with the model without it by likelihood ratio, and each interaction was read as the slope of one term at one standard deviation below and above the mean of the other.
 
-Two checks tested the scale of the inference. The final model was refitted with a Gaussian process smooth of easting and northing, a latent spatial field of the kind the Cox process model of @murphy2026 carried [@wood2017], and Moran's I [@moran1950] of the deviance residuals was computed within each period on the eight nearest sampled cells, with and without the field. The final model's environmental terms were also refitted with the cell coarsened from 30 m to 90, 270 and 990 m, a coarse cell being attacked if any 30 m cell inside it was, the definition of presence @aukema2008 used on 12 km cells, with the dependence terms rebuilt at each grain from the cell's own state and the share of its eight neighbours attacked.
+Two checks tested the scale of the inference. The final model was refitted with a Gaussian process smooth of easting and northing, a latent spatial field of the kind the Cox process model of @murphy2026 carried [@wood2017], with a Matérn correlation whose range was set to the median clustering range of the L functions, `r fmt(median(PP$cluster_range_m[PP$clustered]))` m, and Moran's I [@moran1950] of the deviance residuals was computed within each period on the eight nearest sampled cells, with and without the field. The final model's environmental terms were also refitted with the cell coarsened from 30 m to 90, 270 and 990 m, a coarse cell being attacked if any 30 m cell inside it was, the definition of presence @aukema2008 used on 12 km cells, with the dependence terms rebuilt at each grain from the cell's own state and the share of its eight neighbours attacked.
 
 # Results {#sec-results}
 
@@ -2640,7 +2660,7 @@ Attack was clustered in almost every period. The mean distance from an attacked 
 
 ## Dependence terms
 
-Attack in a cell depended on attack nearby and before, by a margin that set the scale of everything after it. On the `r fmt(SEL$n[1])` cell-periods with a predecessor in the season and in the previous year, AIC fell from `r fmt(SEL$aic[1])` with the period effect alone to `r fmt(min(SEL$aic))` with the four dependence terms (@tbl-dependence). Of the radii tested, attack within 90 m was the best neighbourhood term both within the season and between years, and it declined as the radius grew. In the final model the odds of attack were `r num(FIN$odds_ratio[FIN$term == "lagyr_self"], "%.1f")` times higher in a cell attacked in the same period of the previous year and `r num(FIN$odds_ratio[FIN$term == "lag1_self"], "%.1f")` times higher in a cell attacked in the previous period.
+Attack in a cell depended on attack nearby and before, by a margin that set the scale of everything after it. On the `r fmt(SEL$n[1])` cell-periods with a predecessor in the season and in the previous year, AIC fell from `r fmt(SEL$aic[1])` with the period effect alone to `r fmt(min(SEL$aic))` with the four dependence terms (@tbl-dependence). The neighbourhood share weighted by a kernel at each period's own bandwidth fitted as well as the best fixed radius within the season and better than every fixed radius between years. Within the season its AIC was `r nb_aic("lag1", "lag1_kern")` against `r nb_aic("lag1", nb_rad("lag1"))` for the best radius, `r sub(".*nbr", "", nb_rad("lag1"))` m, a difference too small to separate them, and between years it was `r nb_aic("lagyr", "lagyr_kern")` against `r nb_aic("lagyr", nb_rad("lagyr"))` for `r sub(".*nbr", "", nb_rad("lagyr"))` m, so the two kernel shares were the dependence terms carried into every later model. Among the fixed radii the fit worsened as the radius grew beyond `r sub(".*nbr", "", nb_rad("lag1"))` m. In the final model the odds of attack were `r num(FIN$odds_ratio[FIN$term == "lagyr_self"], "%.1f")` times higher in a cell attacked in the same period of the previous year and `r num(FIN$odds_ratio[FIN$term == "lag1_self"], "%.1f")` times higher in a cell attacked in the previous period.
 
 ## Environmental terms
 
@@ -2668,7 +2688,7 @@ The inference held at 90 m and weakened beyond it (@fig-grain). With the depende
 
 ## Dependence first
 
-Attack in a 30 m cell was predicted first by attack within 90 m, in the previous sixteen-day period and in the same period of the previous year, and every environmental term was read beside those terms rather than instead of them. That order was the one @aukema2008 argued for, having found that outbreaking populations within 18 km in the same year and within 6 km in the two years before explained more of the outbreak's movement across British Columbia than climate did. The scale here was far finer and the pattern the same. Dispersal under the canopy over tens of metres carried most of the spread once a stand was infested [@robertson2007mountain; @chen2011mountain; @safranyik1992], and the bandwidth of the red-stage cells, a median of `r fmt(median(PP$bw_ppl))` m, was the landscape trace of that short-range dispersal. Models of the western United States that entered previous attack beside weather and stand attributes found the same ordering [@chapman2012spatiotemporal; @preisler2012climate]. The consequence for every other result was that the environmental terms added little discrimination once dependence was in the model, AUC rising from `r num(FIN$auc_dependence_only[1])` to `r num(FIN$auc[1])`, so the refugia mechanisms were tested as small modifiers of an outbreak whose spread was mostly contagion.
+Attack in a 30 m cell was predicted first by attack in the cells around it, in the previous sixteen-day period and in the same period of the previous year, and every environmental term was read beside those terms rather than instead of them. That order was the one @aukema2008 argued for, having found that outbreaking populations within 18 km in the same year and within 6 km in the two years before explained more of the outbreak's movement across British Columbia than climate did. The scale here was far finer and the pattern the same. Dispersal under the canopy over tens of metres carried most of the spread once a stand was infested [@robertson2007mountain; @chen2011mountain; @safranyik1992], and the bandwidth of the red-stage cells, a median of `r fmt(median(PP$bw_ppl))` m, was the landscape trace of that short-range dispersal, since a neighbourhood term weighted at that bandwidth fitted as well as the best of six fixed radii. Models of the western United States that entered previous attack beside weather and stand attributes found the same ordering [@chapman2012spatiotemporal; @preisler2012climate]. The consequence for every other result was that the environmental terms added little discrimination once dependence was in the model, AUC rising from `r num(FIN$auc_dependence_only[1])` to `r num(FIN$auc[1])`, so the refugia mechanisms were tested as small modifiers of an outbreak whose spread was mostly contagion.
 
 ## Host and density
 
@@ -2737,7 +2757,7 @@ CLS |>
 #| label: tbl-dependence
 #| tbl-cap: !expr paste0("Dependence terms compared on AIC over ", fmt(SEL$n[1]), " cell-periods, every model carrying a fixed effect for each period. Previous period meant the preceding sixteen-day period of the same season and previous year the same period of the preceding outbreak year. Delta AIC was the difference from the lowest.")
 SEL |>
-  transmute(Terms = gsub("_", " ", gsub("lag1", "previous period", gsub("lagyr", "previous year", terms))), k, AIC = fmt(aic), `Delta AIC` = fmt(delta_aic, 1)) |>
+  transmute(Terms = gsub("_", " ", gsub("kern", "within bandwidth", gsub("nbr([0-9]+)", "within \\1 m", gsub("lag1", "previous period", gsub("lagyr", "previous year", terms))))), k, AIC = fmt(aic), `Delta AIC` = fmt(delta_aic, 1)) |>
   save_tbl("table-3-dependence") |>
   kable(booktabs = TRUE, align = "lrrr", row.names = FALSE)
 ```

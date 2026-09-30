@@ -98,6 +98,15 @@ stars <- function(p) ifelse(is.na(p), "", ifelse(p <= 1e-4, "****", ifelse(p <= 
 spellnum <- function(n) { w <- c("one", "two", "three", "four", "five", "six", "seven", "eight", "nine")
   if (length(n) == 1 && !is.na(n) && n >= 1 && n <= 9) w[n] else fmt(n) }
 orpc <- function(beta) num(100 * (exp(beta) - 1), "%.1f")
+nb_rows <- function(prefix) {
+  other <- setdiff(c("lag1", "lagyr"), prefix)
+  r <- SEL[grepl(paste0(prefix, "_(nbr|kern)"), SEL$terms) & !grepl(paste0(other, "_(nbr|kern)"), SEL$terms), ]
+  r$term <- sub(".*\\+ ", "", r$terms); r
+}
+nb_best <- function(prefix) { r <- nb_rows(prefix); r$term[which.min(r$aic)] }
+nb_aic <- function(prefix, term) fmt(nb_rows(prefix)$aic[nb_rows(prefix)$term == term])
+nb_rad <- function(prefix) { r <- nb_rows(prefix); r <- r[!grepl("kern", r$term), ]; r$term[which.min(r$aic)] }
+nb_label <- function(t) if (grepl("kern", t)) "the share weighted by a kernel at the bandwidth" else paste0("the share within ", sub(".*nbr", "", t), " m")
 
 PENDING <- FALSE
 rd <- function(f) if (file.exists(f)) read.csv(f) else { PENDING <<- TRUE; NULL }
@@ -119,7 +128,8 @@ VRI_LABELS <- c(
   solar_season_direct = "Growing-season direct radiation (kWh/m²)", solar_season_total = "Growing-season total radiation (kWh/m²)",
   ep_wind_flight = "Flight-hour wind (km/h)", ep_calm_flight = "Flight-hour calm share",
   lag1_self = "Attack in the same cell, previous period", lag1_nbr90 = "Attack within 90 m, previous period",
-  lagyr_self = "Attack in the same cell, previous year", lagyr_nbr90 = "Attack within 90 m, previous year")
+  lagyr_self = "Attack in the same cell, previous year", lagyr_nbr90 = "Attack within 90 m, previous year",
+  lag1_kern = "Attack nearby at the bandwidth, previous period", lagyr_kern = "Attack nearby at the bandwidth, previous year")
 pretty_terms <- function(x) {
   out <- VRI_LABELS[x]; ix <- grepl(":", x, fixed = TRUE)
   if (any(ix)) out[ix] <- vapply(strsplit(x[ix], ":", fixed = TRUE), function(p) {
@@ -253,8 +263,8 @@ ELEV_R  <- as.vector(minmax(elev))
 
 1. Disturbance refugia from mountain pine beetle (*Dendroctonus ponderosae*) outbreaks have been proposed in thin stands of small trees, on shaded ground and where wind disrupts the aggregation pheromone, but little is known about how they act together at the interval over which attack and wind vary.
 2. This study mapped red-stage attack in 47 sixteen-day Landsat periods over eight outbreak years across 5,573 ha of the Selkirk Mountains, British Columbia, with a classifier validated on field plots, and modelled it on annual forest inventory, terrain and a terrain-resolved wind field, entering attack nearby and earlier first.
-3. Attack was clustered within a median of 750 m, and attack within 90 m in the previous period and year dominated every model.
-4. Beside those terms attack rose with stand basal area (+0.190 log-odds per standard deviation, p < 0.001) and on open ground, while tree diameter and shading had no protective effect. Wind interacted with standing volume in the direction plume disruption predicts, but wind did not lower attack detectably within thin stands.
+3. Attack was clustered within a median of 750 m with a median kernel bandwidth of 67 m, and attack nearby in the previous period and year dominated every model.
+4. Beside those terms attack rose with stand basal area (+0.242 log-odds per standard deviation, p < 0.001) and on open ground, while tree diameter and shading had no protective effect. Wind interacted with standing volume in the direction plume disruption predicts, but wind did not lower attack detectably within thin stands.
 5. Refugia here were stands with little host, and terrain and wind added small, scale-dependent modifiers to an outbreak whose spread was mostly contagion.
 
 # Introduction
@@ -2412,7 +2422,7 @@ if (!file.exists(PPT)) {
 :::
 
 
-Spatial pattern was described before any model was fitted, with the point pattern methods of @murphy2026. In each period the attacked cells were treated as a point pattern inside the window of cells the imagery saw. Clustering was tested against random relabelling, in which the same number of cells was drawn at random from the cells seen in that period, 999 times, because the cells sit on a 30 m grid inside a window with holes and a continuous null would misstate distances on it. Three statistics were compared with that null, the Clark-Evans aggregation index [@clark1954distance], the mean nearest-neighbour distance and the L function, the variance-stabilised form of Ripley's K [@ripley1977], against a global envelope [@baddeley2015]. The largest distance at which the observed L function lay above the envelope was taken as the clustering range of that period. The kernel bandwidth was chosen by likelihood cross-validation over 20 to 300 m, the procedure @murphy2026 used to set the bandwidth of their Cox process model.
+Spatial pattern was described before any model was fitted, with the point pattern methods of @murphy2026. In each period the attacked cells were treated as a point pattern inside the window of cells the imagery saw. Clustering was tested against random relabelling, in which the same number of cells was drawn at random from the cells seen in that period, 999 times, because the cells sit on a 30 m grid inside a window with holes and a continuous null would misstate distances on it. Three statistics were compared with that null, the Clark-Evans aggregation index [@clark1954distance], the mean nearest-neighbour distance and the L function, the variance-stabilised form of Ripley's K [@ripley1977], against a global envelope [@baddeley2015]. The largest distance at which the observed L function lay above the envelope was taken as the clustering range of that period. The kernel bandwidth of each period was chosen by likelihood cross-validation over 20 to 300 m, the procedure @murphy2026 used to set the bandwidth of their Cox process model. Both distances were estimated before any model was fitted and both entered the models, the bandwidth as the scale of a neighbourhood term and the clustering range as the range of the latent spatial field.
 
 ## Model building
 
@@ -2439,10 +2449,18 @@ if (!file.exists(EMT)) {
     w <- focalMat(r, rad, "circle"); w[w > 0] <- 1; w[ceiling(nrow(w) / 2), ceiling(ncol(w) / 2)] <- 0
     focal(r, w, fun = "mean", na.rm = TRUE)
   }
-  lagset <- function(p, tag) {
-    if (is.null(p)) { z <- rep(msk, 1 + length(RADII)); values(z) <- NA } else z <- c(p, rast(lapply(RADII, function(rad) share(p, rad))))
-    names(z) <- paste0(tag, c("_self", paste0("_nbr", RADII))); z
+  ## the share of attacked cells weighted by a Gaussian kernel whose standard deviation is the
+  ## likelihood cross-validated bandwidth of the period the share is taken from, chunk point-patterns
+  BW <- read.csv(here::here("02.inputs/beetle/model-data-epoch/point_patterns.csv"))
+  kern <- function(r, sigma) {
+    w <- focalMat(r, sigma, "Gauss"); w[ceiling(nrow(w) / 2), ceiling(ncol(w) / 2)] <- 0
+    focal(r, w, fun = "sum", na.rm = TRUE) / focal(!is.na(r), w, fun = "sum", na.rm = TRUE)
   }
+  lagset <- function(p, tag, sigma) {
+    if (is.null(p)) { z <- rep(msk, 2 + length(RADII)); values(z) <- NA } else z <- c(p, rast(lapply(RADII, function(rad) share(p, rad))), kern(p, sigma))
+    names(z) <- paste0(tag, c("_self", paste0("_nbr", RADII), "_kern")); z
+  }
+  bw_of <- function(y, e) BW$bw_ppl[BW$map == sprintf("redstage_%d_e%02d.tif", y, e)]
   rows <- list()
   for (i in seq_len(nrow(ep))) {
     y <- ep$year[i]; e <- ep$epoch[i]
@@ -2452,13 +2470,13 @@ if (!file.exists(EMT)) {
     if (!file.exists(wf)) next
     b <- setNames(mp(y, e), "redstage")
     pe <- ep[ep$year == y & ep$epoch < e, ]
-    p1 <- if (nrow(pe)) mp(y, max(pe$epoch)) else NULL
+    p1 <- if (nrow(pe)) mp(y, max(pe$epoch)) else NULL; s1 <- if (nrow(pe)) bw_of(y, max(pe$epoch)) else NA
     p2 <- if (nrow(pe) > 1) mp(y, sort(pe$epoch, decreasing = TRUE)[2]) else NULL
     py <- ep[ep$year < y & ep$epoch == e, ]
-    pyr <- if (nrow(py)) mp(max(py$year), e) else NULL
+    pyr <- if (nrow(py)) mp(max(py$year), e) else NULL; sy <- if (nrow(py)) bw_of(max(py$year), e) else NA
     s <- c(b, static, rast(file.path(VRA, sprintf("vri_%d.tif", src$vri_year[src$year == y]))), rast(wf),
-           lagset(p1, "lag1"), setNames(if (is.null(p2)) { z <- msk; values(z) <- NA; z } else p2, "lag2_self"),
-           lagset(pyr, "lagyr"))
+           lagset(p1, "lag1", s1), setNames(if (is.null(p2)) { z <- msk; values(z) <- NA; z } else p2, "lag2_self"),
+           lagset(pyr, "lagyr", sy))
     dd <- as.data.frame(mask(s, msk), xy = TRUE, na.rm = FALSE)
     dd <- dd[!is.na(dd$redstage), ]
     a <- dd[dd$redstage == 1, ]; o <- dd[dd$redstage == 0, ]
@@ -2490,16 +2508,16 @@ DEPCOLS <- function(d) grep("^lag", names(d), value = TRUE)
 SEL <- file.path(MD, "dependence_selection.csv")
 if (!file.exists(SEL)) {
   d <- readRDS(file.path(MD, "epoch_model_table.rds"))
-  d <- d[stats::complete.cases(d[, c("lag1_self", paste0("lag1_nbr", RADII), "lagyr_self", paste0("lagyr_nbr", RADII))]), ]
+  NB1 <- c(paste0("lag1_nbr", RADII), "lag1_kern"); NBY <- c(paste0("lagyr_nbr", RADII), "lagyr_kern")
+  d <- d[stats::complete.cases(d[, c("lag1_self", "lagyr_self", NB1, NBY)]), ]
   fit <- function(tt) {
     g <- glm(reformulate(c("t", tt), "redstage"), data = d, family = binomial)
     data.frame(terms = paste(c("epoch", tt), collapse = " + "), k = length(coef(g)), aic = AIC(g), deviance = deviance(g))
   }
-  res <- rbind(fit(character(0)), fit("lag1_self"), fit("lagyr_self"), fit(c("lag1_self", "lagyr_self")),
-               do.call(rbind, lapply(RADII, function(r) fit(c("lag1_self", "lagyr_self", paste0("lag1_nbr", r))))),
-               do.call(rbind, lapply(RADII, function(r) fit(c("lag1_self", "lagyr_self", paste0("lagyr_nbr", r))))))
-  r1 <- RADII[which.min(res$aic[grepl("lag1_nbr", res$terms)])]; ry <- RADII[which.min(res$aic[grepl("lagyr_nbr", res$terms)])]
-  res <- rbind(res, fit(c("lag1_self", "lagyr_self", paste0("lag1_nbr", r1), paste0("lagyr_nbr", ry))))
+  one1 <- do.call(rbind, lapply(NB1, function(v) cbind(fit(c("lag1_self", "lagyr_self", v)), term = v)))
+  oneY <- do.call(rbind, lapply(NBY, function(v) cbind(fit(c("lag1_self", "lagyr_self", v)), term = v)))
+  res <- rbind(fit(character(0)), fit("lag1_self"), fit("lagyr_self"), fit(c("lag1_self", "lagyr_self")), one1[, 1:4], oneY[, 1:4])
+  res <- rbind(res, fit(c("lag1_self", "lagyr_self", one1$term[which.min(one1$aic)], oneY$term[which.min(oneY$aic)])))
   res$delta_aic <- res$aic - min(res$aic); res$n <- nrow(d); res$epochs <- length(unique(d$t))
   write.csv(res, SEL, row.names = FALSE)
 }
@@ -2638,7 +2656,9 @@ if (!file.exists(SPF)) {
   for (v in ENV) d[[v]] <- as.numeric(scale(d[[v]]))
   f0 <- reformulate(c("t", DEP, ENV), "redstage")
   g0 <- bam(f0, data = d, family = binomial, discrete = TRUE)
-  g1 <- bam(update(f0, . ~ . + s(x, y, bs = "gp", k = 200)), data = d, family = binomial, discrete = TRUE)
+  ## the field's Matern range is the median clustering range of the L functions, chunk point-patterns
+  pp <- read.csv(file.path(MD, "point_patterns.csv")); RANGE <- median(pp$cluster_range_m[pp$clustered])
+  g1 <- bam(update(f0, . ~ . + s(x, y, bs = "gp", k = 200, m = c(3, RANGE))), data = d, family = binomial, discrete = TRUE)
   moran <- function(m) {
     r <- residuals(m, type = "deviance")
     do.call(rbind, lapply(split(seq_len(nrow(d)), d$t), function(ix) {
@@ -2652,7 +2672,7 @@ if (!file.exists(SPF)) {
   cf <- function(m, lab) { s <- summary(m)$p.table; s <- s[rownames(s) %in% c(DEP, ENV), , drop = FALSE]
     data.frame(model = lab, term = rownames(s), estimate = s[, 1], se = s[, 2], z_ratio = s[, 3], p = s[, 4], aic = AIC(m)) }
   out <- rbind(cf(g0, "without spatial field"), cf(g1, "with spatial field"))
-  out$edf_field <- sum(g1$edf[grepl("s\\(x,y\\)", names(g1$edf))])
+  out$edf_field <- sum(g1$edf[grepl("s\\(x,y\\)", names(g1$edf))]); out$field_range_m <- RANGE
   out$moran_median <- ifelse(out$model == "with spatial field", median(m1$moran_i), median(m0$moran_i))
   out$moran_share_p05 <- ifelse(out$model == "with spatial field", mean(m1$p < 0.05), mean(m0$p < 0.05))
   write.csv(out, SPF, row.names = FALSE)
@@ -2763,11 +2783,11 @@ gr <- function(v, g, col = "estimate") { x <- GRT[GRT$term == v & GRT$grain_m ==
 
 Models were built in the order of @aukema2008, who "determined an appropriate spatial neighborhood structure(s) and time lag(s) to account for spatial and temporal dependencies" before any environmental variable entered, then tested each environmental variable alone beside those terms and built the full model by backward elimination. Every model was a logistic regression of attack in a cell and period with a fixed effect for each period. Within each period the model table took every attacked cell up to 2,000 and the same number of unattacked cells, so that the period effect absorbed the sampling rate and every other coefficient was unaffected by it.
 
-The dependence terms were the cell's own state in the previous period of the same season and in the same period of the previous outbreak year, and the share of cells attacked within a radius of 42, 90, 150, 210, 510 or 1,050 m in each, compared on AIC. The environmental variables were then entered one at a time beside the chosen dependence terms, each standardised so that its coefficient was the change in log-odds per standard deviation, and tested against the dependence-only model by likelihood ratio, the screen @murphy2026 used against the intercept-only model. Variables that passed at p < 0.05 were grouped where their absolute correlation reached 0.75, keeping the member with the largest likelihood-ratio statistic, and removed one at a time until every variance inflation factor was below 5. An elastic net with the dependence terms unpenalised [@zou2005; @friedman2010] was fitted beside the elimination and is reported with it (Table S4), and the final model was reached by removing terms one at a time while AIC fell.
+The dependence terms were the cell's own state in the previous period of the same season and in the same period of the previous outbreak year, and the share of cells attacked around it in each. That share was measured two ways, within a fixed radius of 42, 90, 150, 210, 510 or 1,050 m, and weighted by a Gaussian kernel whose standard deviation was the likelihood cross-validated bandwidth of the period the share was taken from. All candidates were compared on AIC, so that the bandwidth was tested against the fixed radii rather than assumed. The environmental variables were then entered one at a time beside the chosen dependence terms, each standardised so that its coefficient was the change in log-odds per standard deviation, and tested against the dependence-only model by likelihood ratio, the screen @murphy2026 used against the intercept-only model. Variables that passed at p < 0.05 were grouped where their absolute correlation reached 0.75, keeping the member with the largest likelihood-ratio statistic, and removed one at a time until every variance inflation factor was below 5. An elastic net with the dependence terms unpenalised [@zou2005; @friedman2010] was fitted beside the elimination and is reported with it (Table S4), and the final model was reached by removing terms one at a time while AIC fell.
 
 The three questions were tested as additions to the final model. The mechanisms of @krawchuk2020 were tested term by term, stand density as live stems, standing volume and basal area, large hosts as quadratic mean diameter, and shading as growing-season radiation and northness. Plume disruption was tested as the interactions of stem density and standing volume with mean flight-hour wind. Calm share correlated -0.94 with mean wind, so by the correlation rule of the screen only the mean entered. Deposition was tested as the main effects of the wind shelter index of @plattner2004 and sky view, with their interactions with density tested next. Each set was compared with the model without it by likelihood ratio, and each interaction was read as the slope of one term at one standard deviation below and above the mean of the other.
 
-Two checks tested the scale of the inference. The final model was refitted with a Gaussian process smooth of easting and northing, a latent spatial field of the kind the Cox process model of @murphy2026 carried [@wood2017], and Moran's I [@moran1950] of the deviance residuals was computed within each period on the eight nearest sampled cells, with and without the field. The final model's environmental terms were also refitted with the cell coarsened from 30 m to 90, 270 and 990 m, a coarse cell being attacked if any 30 m cell inside it was, the definition of presence @aukema2008 used on 12 km cells, with the dependence terms rebuilt at each grain from the cell's own state and the share of its eight neighbours attacked.
+Two checks tested the scale of the inference. The final model was refitted with a Gaussian process smooth of easting and northing, a latent spatial field of the kind the Cox process model of @murphy2026 carried [@wood2017], with a Matérn correlation whose range was set to the median clustering range of the L functions, 750 m, and Moran's I [@moran1950] of the deviance residuals was computed within each period on the eight nearest sampled cells, with and without the field. The final model's environmental terms were also refitted with the cell coarsened from 30 m to 90, 270 and 990 m, a coarse cell being attacked if any 30 m cell inside it was, the definition of presence @aukema2008 used on 12 km cells, with the dependence terms rebuilt at each grain from the cell's own state and the share of its eight neighbours attacked.
 
 # Results {#sec-results}
 
@@ -2781,35 +2801,35 @@ Attack was clustered in almost every period. The mean distance from an attacked 
 
 ## Dependence terms
 
-Attack in a cell depended on attack nearby and before, by a margin that set the scale of everything after it. On the 46,124 cell-periods with a predecessor in the season and in the previous year, AIC fell from 63,232 with the period effect alone to 44,124 with the four dependence terms (@tbl-dependence). Of the radii tested, attack within 90 m was the best neighbourhood term both within the season and between years, and it declined as the radius grew. In the final model the odds of attack were 6.2 times higher in a cell attacked in the same period of the previous year and 2.2 times higher in a cell attacked in the previous period.
+Attack in a cell depended on attack nearby and before, by a margin that set the scale of everything after it. On the 46,124 cell-periods with a predecessor in the season and in the previous year, AIC fell from 63,232 with the period effect alone to 44,152 with the four dependence terms (@tbl-dependence). The neighbourhood share weighted by a kernel at each period's own bandwidth fitted as well as the best fixed radius within the season and better than every fixed radius between years. Within the season its AIC was 44,555 against 44,556 for the best radius, 90 m, a difference too small to separate them, and between years it was 45,588 against 45,615 for 90 m, so the two kernel shares were the dependence terms carried into every later model. Among the fixed radii the fit worsened as the radius grew beyond 90 m. In the final model the odds of attack were 6.3 times higher in a cell attacked in the same period of the previous year and 2.2 times higher in a cell attacked in the previous period.
 
 ## Environmental terms
 
-Beside the dependence terms, 33 of 39 environmental variables improved the fit at p < 0.05 (Table S3). The largest likelihood-ratio statistics were for position in the terrain, with less attack high above the valley floor, -0.211 log-odds per standard deviation, and more at higher elevation, +0.221, followed by sky view, +0.196, crown closure, +0.173, and basal area, +0.164. After the collinearity screen and backward elimination the final model kept 11 environmental terms (@tbl-final). Attack was higher in older stands, +0.109 (p < 0.001), under closed canopy, +0.139 (p < 0.001), with more susceptible pine basal area, +0.069 (p < 0.001), at higher elevation and on wetter ground, and it was lower high above the valley floor, -0.174 (p < 0.001). The environmental terms lowered AIC from 36,848 for the dependence terms alone to 36,231, while AUC rose only from 0.848 to 0.853.
+Beside the dependence terms, 33 of 39 environmental variables improved the fit at p < 0.05 (Table S3). The largest likelihood-ratio statistics were for position in the terrain, with less attack high above the valley floor, -0.201 log-odds per standard deviation, and more at higher elevation, +0.205, followed by sky view, +0.188, crown closure, +0.171, and basal area, +0.160. After the collinearity screen and backward elimination the final model kept 11 environmental terms (@tbl-final). Attack was higher in older stands, +0.118 (p < 0.001), under closed canopy, +0.130 (p < 0.001), with more susceptible pine basal area, +0.064 (p < 0.001), at higher elevation and on wetter ground, and it was lower high above the valley floor, -0.178 (p < 0.001). The environmental terms lowered AIC from 36,822 for the dependence terms alone to 36,250, while AUC rose only from 0.848 to 0.853.
 
-Of the three mechanisms of @krawchuk2020, stand density was supported through the amount of host rather than the number of stems. Added to the final model, basal area entered at +0.190 (p < 0.001) and standing volume at +0.131 (p < 0.001), whereas live stems, +0.022 (p = 0.200), and quadratic mean diameter, +0.006 (p = 0.823), could not be told from zero, so the scarcity of large hosts was not supported. Shading was not supported either. Growing-season radiation entered at -0.010 (p = 0.750), and north-facing ground had more attack rather than less, +0.045 (p = 0.003).
+Of the three mechanisms of @krawchuk2020, stand density was supported through the amount of host rather than the number of stems. Added to the final model, basal area entered at +0.242 (p < 0.001) and standing volume at +0.131 (p < 0.001), whereas live stems, +0.026 (p = 0.137), and quadratic mean diameter, +0.015 (p = 0.550), could not be told from zero, so the scarcity of large hosts was not supported. Shading was not supported either. Growing-season radiation entered at -0.001 (p = 0.962), and north-facing ground had more attack rather than less, +0.039 (p = 0.011).
 
 ## Wind and density
 
-Stand density and flight-hour wind interacted [likelihood-ratio χ²(2) = 13.02, p = 0.001], through standing volume at +0.041 (p = 0.008) rather than stems at +0.020 (p = 0.166). The direction was the one plume disruption predicts. In stands one standard deviation below the mean of volume, attack fell with flight-hour wind, -0.082 log-odds per standard deviation of wind, while in stands one standard deviation above it the slope was +0.000. Neither slope could be told from zero on its own (p = 0.168 and p = 0.999), so the interaction described a difference between thin and dense stands in how wind acted, not a protective effect of wind that could be shown within thin stands alone (@fig-interaction).
+Stand density and flight-hour wind interacted [likelihood-ratio χ²(2) = 13.18, p = 0.001], through standing volume at +0.041 (p = 0.008) rather than stems at +0.020 (p = 0.154). The direction was the one plume disruption predicts. In stands one standard deviation below the mean of volume, attack fell with flight-hour wind, -0.089 log-odds per standard deviation of wind, while in stands one standard deviation above it the slope was -0.008. Neither slope could be told from zero on its own (p = 0.130 and p = 0.904), so the interaction described a difference between thin and dense stands in how wind acted, not a protective effect of wind that could be shown within thin stands alone (@fig-interaction).
 
 ## Terrain shelter
 
-Terrain openness acted as a main effect and not through density. Added to the final model, the wind shelter index and sky view improved the fit [likelihood-ratio χ²(2) = 9.52, p = 0.009], through sky view at +0.058 (p = 0.004) while the shelter index was +0.023 (p = 0.126), so open, gently sloping ground had more attack. Their interactions with density did not improve the fit [likelihood-ratio χ²(4) = 8.75, p = 0.068], which is the pattern deposition predicts and plume disruption does not.
+Terrain openness acted as a main effect and not through density. Added to the final model, the wind shelter index and sky view improved the fit [likelihood-ratio χ²(2) = 10.97, p = 0.004], through sky view at +0.060 (p = 0.002) while the shelter index was +0.026 (p = 0.085), so open, gently sloping ground had more attack. Their interactions with density did not improve the fit [likelihood-ratio χ²(4) = 8.59, p = 0.072], which is the pattern deposition predicts and plume disruption does not.
 
 ## Spatial field
 
-A latent spatial field lowered AIC from 36,231 to 35,349 and changed which terrain terms could be told from zero (@tbl-final). Stand age, susceptible pine basal area, crown closure and northness held, whereas height above the valley floor moved from -0.174 to +0.009 and wetness and stand height lost significance, so the valley terms described where attack clustered as much as a property of the ground. The field did not remove the fine-scale dependence among neighbouring cells, since the median Moran's I of the residuals within a period moved only from 0.302 to 0.285, and it remained significant at p < 0.05 in 100 per cent of periods.
+A latent spatial field lowered AIC from 36,250 to 35,382 and changed which terrain terms could be told from zero (@tbl-final). Stand age, susceptible pine basal area, crown closure and northness held, whereas height above the valley floor moved from -0.178 to +0.007 and wetness and stand height lost significance, so the valley terms described where attack clustered as much as a property of the ground. The field did not remove the fine-scale dependence among neighbouring cells, since the median Moran's I of the residuals within a period moved only from 0.312 to 0.285, and it remained significant at p < 0.05 in 100 per cent of periods.
 
 ## Across grains
 
-The inference held at 90 m and weakened beyond it (@fig-grain). With the dependence terms rebuilt at each grain, elevation, crown closure, susceptible pine basal area and stand age remained positive and significant at 270 m, elevation at +0.235 (p < 0.001), while height above the valley floor lost significance and northness reversed sign to -0.113. At 990 m, 91 per cent of coarse cells held an attacked cell and no environmental term could be told from zero.
+The inference held at 90 m and weakened beyond it (@fig-grain). With the dependence terms rebuilt at each grain, elevation, crown closure, susceptible pine basal area and stand age remained positive and significant at 270 m, elevation at +0.239 (p < 0.001), while height above the valley floor lost significance and northness reversed sign to -0.115. At 990 m, 91 per cent of coarse cells held an attacked cell and no environmental term could be told from zero.
 
 # Discussion
 
 ## Dependence first
 
-Attack in a 30 m cell was predicted first by attack within 90 m, in the previous sixteen-day period and in the same period of the previous year, and every environmental term was read beside those terms rather than instead of them. That order was the one @aukema2008 argued for, having found that outbreaking populations within 18 km in the same year and within 6 km in the two years before explained more of the outbreak's movement across British Columbia than climate did. The scale here was far finer and the pattern the same. Dispersal under the canopy over tens of metres carried most of the spread once a stand was infested [@robertson2007mountain; @chen2011mountain; @safranyik1992], and the bandwidth of the red-stage cells, a median of 67 m, was the landscape trace of that short-range dispersal. Models of the western United States that entered previous attack beside weather and stand attributes found the same ordering [@chapman2012spatiotemporal; @preisler2012climate]. The consequence for every other result was that the environmental terms added little discrimination once dependence was in the model, AUC rising from 0.848 to 0.853, so the refugia mechanisms were tested as small modifiers of an outbreak whose spread was mostly contagion.
+Attack in a 30 m cell was predicted first by attack in the cells around it, in the previous sixteen-day period and in the same period of the previous year, and every environmental term was read beside those terms rather than instead of them. That order was the one @aukema2008 argued for, having found that outbreaking populations within 18 km in the same year and within 6 km in the two years before explained more of the outbreak's movement across British Columbia than climate did. The scale here was far finer and the pattern the same. Dispersal under the canopy over tens of metres carried most of the spread once a stand was infested [@robertson2007mountain; @chen2011mountain; @safranyik1992], and the bandwidth of the red-stage cells, a median of 67 m, was the landscape trace of that short-range dispersal, since a neighbourhood term weighted at that bandwidth fitted as well as the best of six fixed radii. Models of the western United States that entered previous attack beside weather and stand attributes found the same ordering [@chapman2012spatiotemporal; @preisler2012climate]. The consequence for every other result was that the environmental terms added little discrimination once dependence was in the model, AUC rising from 0.848 to 0.853, so the refugia mechanisms were tested as small modifiers of an outbreak whose spread was mostly contagion.
 
 ## Host and density
 
@@ -2821,7 +2841,7 @@ The interaction of standing volume with flight-hour wind took the direction plum
 
 ## Terrain and landing
 
-Open ground had more attack as a main effect, and openness did not act through stand density. Sky view factor, high on gentle, open ground, entered at +0.058, while its interactions with density added nothing. That was the signature deposition predicts, since a beetle descending through slowing air settles where the flow decelerates [@byers2000], and @giroday2011 found landscape features that met the wind acting as surfaces that intercepted dispersing beetles. It was also a pattern that faster development on warm, open ground would produce [@sambaraju2021], and no beetle was tracked to the ground here. Shading was not supported. North-facing ground had more attack at 30 m, the reverse of the prediction that cool ground relieves water stress, and the sign reversed at 270 m, so aspect here measured something other than shade, most likely where lodgepole pine grew on this range [@kaiser2012ecohydrology; @nelson2007environmental]. Attack was highest in valley bottoms, the draws and gullies where infested groups are commonly reported [@safranyik2006chap1], but that term vanished under a spatial field.
+Open ground had more attack as a main effect, and openness did not act through stand density. Sky view factor, high on gentle, open ground, entered at +0.060, while its interactions with density added nothing. That was the signature deposition predicts, since a beetle descending through slowing air settles where the flow decelerates [@byers2000], and @giroday2011 found landscape features that met the wind acting as surfaces that intercepted dispersing beetles. It was also a pattern that faster development on warm, open ground would produce [@sambaraju2021], and no beetle was tracked to the ground here. Shading was not supported. North-facing ground had more attack at 30 m, the reverse of the prediction that cool ground relieves water stress, and the sign reversed at 270 m, so aspect here measured something other than shade, most likely where lodgepole pine grew on this range [@kaiser2012ecohydrology; @nelson2007environmental]. Attack was highest in valley bottoms, the draws and gullies where infested groups are commonly reported [@safranyik2006chap1], but that term vanished under a spatial field.
 
 ## Scale of inference
 
@@ -2915,7 +2935,7 @@ CLS |>
 
 ```{.r .cell-code}
 SEL |>
-  transmute(Terms = gsub("_", " ", gsub("lag1", "previous period", gsub("lagyr", "previous year", terms))), k, AIC = fmt(aic), `Delta AIC` = fmt(delta_aic, 1)) |>
+  transmute(Terms = gsub("_", " ", gsub("kern", "within bandwidth", gsub("nbr([0-9]+)", "within \\1 m", gsub("lag1", "previous period", gsub("lagyr", "previous year", terms))))), k, AIC = fmt(aic), `Delta AIC` = fmt(delta_aic, 1)) |>
   save_tbl("table-3-dependence") |>
   kable(booktabs = TRUE, align = "lrrr", row.names = FALSE)
 ```
@@ -2923,25 +2943,27 @@ SEL |>
 ::: {.cell-output-display}
 
 
-|Terms                                                                                           |  k|    AIC| Delta AIC|
-|:-----------------------------------------------------------------------------------------------|--:|------:|---------:|
-|epoch                                                                                           | 32| 63,232|  19,107.5|
-|epoch + previous period self                                                                    | 33| 53,602|   9,478.1|
-|epoch + previous year self                                                                      | 33| 51,494|   7,370.1|
-|epoch + previous period self + previous year self                                               | 34| 46,575|   2,450.8|
-|epoch + previous period self + previous year self + previous period nbr42                       | 35| 44,848|     723.8|
-|epoch + previous period self + previous year self + previous period nbr90                       | 35| 44,556|     431.8|
-|epoch + previous period self + previous year self + previous period nbr150                      | 35| 44,751|     626.5|
-|epoch + previous period self + previous year self + previous period nbr210                      | 35| 44,975|     851.1|
-|epoch + previous period self + previous year self + previous period nbr510                      | 35| 45,726|   1,601.9|
-|epoch + previous period self + previous year self + previous period nbr1050                     | 35| 46,152|   2,027.5|
-|epoch + previous period self + previous year self + previous year nbr42                         | 35| 45,942|   1,817.7|
-|epoch + previous period self + previous year self + previous year nbr90                         | 35| 45,615|   1,491.2|
-|epoch + previous period self + previous year self + previous year nbr150                        | 35| 45,623|   1,499.1|
-|epoch + previous period self + previous year self + previous year nbr210                        | 35| 45,696|   1,571.4|
-|epoch + previous period self + previous year self + previous year nbr510                        | 35| 46,063|   1,939.2|
-|epoch + previous period self + previous year self + previous year nbr1050                       | 35| 46,270|   2,145.9|
-|epoch + previous period self + previous year self + previous period nbr90 + previous year nbr90 | 36| 44,124|       0.0|
+|Terms                                                                                                                 |  k|    AIC| Delta AIC|
+|:---------------------------------------------------------------------------------------------------------------------|--:|------:|---------:|
+|epoch                                                                                                                 | 32| 63,232|  19,079.7|
+|epoch + previous period self                                                                                          | 33| 53,602|   9,450.3|
+|epoch + previous year self                                                                                            | 33| 51,494|   7,342.3|
+|epoch + previous period self + previous year self                                                                     | 34| 46,575|   2,423.1|
+|epoch + previous period self + previous year self + previous period within 42 m                                       | 35| 44,848|     696.1|
+|epoch + previous period self + previous year self + previous period within 90 m                                       | 35| 44,556|     404.0|
+|epoch + previous period self + previous year self + previous period within 150 m                                      | 35| 44,751|     598.8|
+|epoch + previous period self + previous year self + previous period within 210 m                                      | 35| 44,975|     823.3|
+|epoch + previous period self + previous year self + previous period within 510 m                                      | 35| 45,726|   1,574.1|
+|epoch + previous period self + previous year self + previous period within 1050 m                                     | 35| 46,152|   1,999.7|
+|epoch + previous period self + previous year self + previous period within bandwidth                                  | 35| 44,555|     402.7|
+|epoch + previous period self + previous year self + previous year within 42 m                                         | 35| 45,942|   1,790.0|
+|epoch + previous period self + previous year self + previous year within 90 m                                         | 35| 45,615|   1,463.4|
+|epoch + previous period self + previous year self + previous year within 150 m                                        | 35| 45,623|   1,471.4|
+|epoch + previous period self + previous year self + previous year within 210 m                                        | 35| 45,696|   1,543.6|
+|epoch + previous period self + previous year self + previous year within 510 m                                        | 35| 46,063|   1,911.5|
+|epoch + previous period self + previous year self + previous year within 1050 m                                       | 35| 46,270|   2,118.2|
+|epoch + previous period self + previous year self + previous year within bandwidth                                    | 35| 45,588|   1,436.2|
+|epoch + previous period self + previous year self + previous period within bandwidth + previous year within bandwidth | 36| 44,152|       0.0|
 
 
 :::
@@ -2966,23 +2988,23 @@ FIN |>
 ::: {.cell-output-display}
 
 
-|Term                                     |   Estimate|    SE|  Odds ratio (95% CI)| With spatial field|
-|:----------------------------------------|----------:|-----:|--------------------:|------------------:|
-|Attack in the same cell, previous period | +0.780****| 0.044|  2.18 (2.00 to 2.38)|         +0.787****|
-|Attack in the same cell, previous year   | +1.816****| 0.044|  6.15 (5.65 to 6.70)|         +1.875****|
-|Attack within 90 m, previous period      | +2.278****| 0.075| 9.76 (8.43 to 11.31)|         +1.966****|
-|Attack within 90 m, previous year        | +1.294****| 0.078|  3.65 (3.13 to 4.25)|         +1.155****|
-|Height above valley floor (m)            | -0.174****| 0.027|  0.84 (0.80 to 0.89)|             +0.009|
-|Elevation (m)                            | +0.102****| 0.019|  1.11 (1.07 to 1.15)|            +0.371*|
-|Crown closure (%)                        | +0.139****| 0.016|  1.15 (1.11 to 1.19)|           +0.056**|
-|Susceptible pine basal area (m² ha⁻¹)    | +0.069****| 0.017|  1.07 (1.04 to 1.11)|         +0.106****|
-|Normalised height                        |     +0.040| 0.021|  1.04 (1.00 to 1.08)|             +0.078|
-|Stand age (years)                        | +0.109****| 0.015|  1.12 (1.08 to 1.15)|         +0.114****|
-|Vector ruggedness measure                |     -0.021| 0.014|  0.98 (0.95 to 1.01)|             -0.003|
-|Northness                                |   +0.045**| 0.015|  1.05 (1.02 to 1.08)|            +0.077*|
-|Stand height (m)                         | -0.067****| 0.016|  0.94 (0.91 to 0.97)|             -0.016|
-|Topographic wetness index                | +0.087****| 0.021|  1.09 (1.05 to 1.14)|             +0.007|
-|Plan curvature                           |     +0.022| 0.014|  1.02 (0.99 to 1.05)|             +0.006|
+|Term                                            |   Estimate|    SE|   Odds ratio (95% CI)| With spatial field|
+|:-----------------------------------------------|----------:|-----:|---------------------:|------------------:|
+|Attack in the same cell, previous period        | +0.806****| 0.043|   2.24 (2.06 to 2.44)|         +0.818****|
+|Attack in the same cell, previous year          | +1.846****| 0.043|   6.33 (5.82 to 6.89)|         +1.907****|
+|Attack nearby at the bandwidth, previous period | +2.419****| 0.080| 11.23 (9.59 to 13.15)|         +2.078****|
+|Attack nearby at the bandwidth, previous year   | +1.383****| 0.085|   3.99 (3.37 to 4.71)|         +1.223****|
+|Height above valley floor (m)                   | -0.178****| 0.027|   0.84 (0.79 to 0.88)|             +0.007|
+|Elevation (m)                                   | +0.085****| 0.020|   1.09 (1.05 to 1.13)|            +0.261*|
+|Crown closure (%)                               | +0.130****| 0.018|   1.14 (1.10 to 1.18)|            +0.050*|
+|Susceptible pine basal area (m² ha⁻¹)           |  +0.064***| 0.017|   1.07 (1.03 to 1.10)|         +0.104****|
+|Normalised height                               |     +0.037| 0.021|   1.04 (1.00 to 1.08)|            +0.090*|
+|Stand age (years)                               | +0.118****| 0.016|   1.12 (1.09 to 1.16)|         +0.124****|
+|Live stems (n/ha)                               |     +0.026| 0.017|   1.03 (0.99 to 1.06)|             +0.026|
+|Northness                                       |    +0.039*| 0.015|   1.04 (1.01 to 1.07)|            +0.073*|
+|Stand height (m)                                | -0.067****| 0.016|   0.94 (0.91 to 0.97)|             -0.018|
+|Topographic wetness index                       | +0.087****| 0.021|   1.09 (1.05 to 1.14)|             +0.011|
+|Plan curvature                                  |     +0.026| 0.014|   1.03 (1.00 to 1.05)|             +0.009|
 
 
 :::
