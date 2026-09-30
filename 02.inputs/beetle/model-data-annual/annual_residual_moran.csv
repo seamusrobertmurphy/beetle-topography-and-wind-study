@@ -1,0 +1,111 @@
+"sample","dependence","model","year","moran_i","p"
+"all years",FALSE,"M0",2006,0.374718225970175,0
+"all years",FALSE,"M0",2007,0.378902308951332,0
+"all years",FALSE,"M0",2008,0.481672008069061,0
+"all years",FALSE,"M0",2009,0.424924479321526,0
+"all years",FALSE,"M0",2010,0.491157627828837,0
+"all years",FALSE,"M0",2011,0.438008120420381,0
+"all years",FALSE,"M0",2013,0.531717904452459,0
+"all years",FALSE,"M0",2014,0.487960806957438,0
+"all years",FALSE,"M1",2006,0.372419104389633,0
+"all years",FALSE,"M1",2007,0.376388538790837,0
+"all years",FALSE,"M1",2008,0.475910258750977,0
+"all years",FALSE,"M1",2009,0.419664882429373,0
+"all years",FALSE,"M1",2010,0.484105102035394,0
+"all years",FALSE,"M1",2011,0.437353360122285,0
+"all years",FALSE,"M1",2013,0.528219232402188,0
+"all years",FALSE,"M1",2014,0.482216638884021,0
+"all years",FALSE,"M2",2006,0.372706867930192,0
+"all years",FALSE,"M2",2007,0.375984740005259,0
+"all years",FALSE,"M2",2008,0.476328735697512,0
+"all years",FALSE,"M2",2009,0.418724590118316,0
+"all years",FALSE,"M2",2010,0.483467966072168,0
+"all years",FALSE,"M2",2011,0.436589314051668,0
+"all years",FALSE,"M2",2013,0.527937174184697,0
+"all years",FALSE,"M2",2014,0.482069050820738,0
+"all years",FALSE,"M3",2006,0.372124850655404,0
+"all years",FALSE,"M3",2007,0.375453878916407,0
+"all years",FALSE,"M3",2008,0.47571824205831,0
+"all years",FALSE,"M3",2009,0.418359171341823,0
+"all years",FALSE,"M3",2010,0.481826804973601,0
+"all years",FALSE,"M3",2011,0.436504525203027,0
+"all years",FALSE,"M3",2013,0.526796191235904,0
+"all years",FALSE,"M3",2014,0.48061657844679,0
+"all years",FALSE,"M3 without radiation",2006,0.373260954585444,0
+"all years",FALSE,"M3 without radiation",2007,0.375910209673611,0
+"all years",FALSE,"M3 without radiation",2008,0.476270049918702,0
+"all years",FALSE,"M3 without radiation",2009,0.418868861632769,0
+"all years",FALSE,"M3 without radiation",2010,0.481928007438694,0
+"all years",FALSE,"M3 without radiation",2011,0.43609847777774,0
+"all years",FALSE,"M3 without radiation",2013,0.528455210328351,0
+"all years",FALSE,"M3 without radiation",2014,0.481430668888923,0
+"with previous year",FALSE,"M0",2007,0.37853541746366,0
+"with previous year",FALSE,"M0",2008,0.481998737873623,0
+"with previous year",FALSE,"M0",2009,0.422877751913567,0
+"with previous year",FALSE,"M0",2010,0.489153945353299,0
+"with previous year",FALSE,"M0",2011,0.433690369743213,0
+"with previous year",FALSE,"M0",2013,0.530375143091792,0
+"with previous year",FALSE,"M0",2014,0.486346459348343,0
+"with previous year",TRUE,"M0",2007,0.328011436468288,0
+"with previous year",TRUE,"M0",2008,0.431861403391479,0
+"with previous year",TRUE,"M0",2009,0.384851149523134,0
+"with previous year",TRUE,"M0",2010,0.414111448203641,0
+"with previous year",TRUE,"M0",2011,0.346187216127923,0
+"with previous year",TRUE,"M0",2013,0.478831756531767,0
+"with previous year",TRUE,"M0",2014,0.336680080035227,0
+"with previous year",FALSE,"M1",2007,0.375814805348309,0
+"with previous year",FALSE,"M1",2008,0.475935641691414,0
+"with previous year",FALSE,"M1",2009,0.417554546780094,0
+"with previous year",FALSE,"M1",2010,0.481532170404791,0
+"with previous year",FALSE,"M1",2011,0.432662398613923,0
+"with previous year",FALSE,"M1",2013,0.526805928737704,0
+"with previous year",FALSE,"M1",2014,0.480496297818365,0
+"with previous year",TRUE,"M1",2007,0.326781671784462,0
+"with previous year",TRUE,"M1",2008,0.428548379074521,0
+"with previous year",TRUE,"M1",2009,0.385750606682666,0
+"with previous year",TRUE,"M1",2010,0.410435936931143,0
+"with previous year",TRUE,"M1",2011,0.346030295758296,0
+"with previous year",TRUE,"M1",2013,0.476110034172824,0
+"with previous year",TRUE,"M1",2014,0.335925704593085,0
+"with previous year",FALSE,"M2",2007,0.374740828586631,0
+"with previous year",FALSE,"M2",2008,0.475922690423795,0
+"with previous year",FALSE,"M2",2009,0.416261256155169,0
+"with previous year",FALSE,"M2",2010,0.480586271958871,0
+"with previous year",FALSE,"M2",2011,0.431746777414199,0
+"with previous year",FALSE,"M2",2013,0.527496408962495,0
+"with previous year",FALSE,"M2",2014,0.481031378398663,0
+"with previous year",TRUE,"M2",2007,0.327117467749113,0
+"with previous year",TRUE,"M2",2008,0.428980171500704,0
+"with previous year",TRUE,"M2",2009,0.385005637765462,0
+"with previous year",TRUE,"M2",2010,0.410281500670503,0
+"with previous year",TRUE,"M2",2011,0.345075042313902,0
+"with previous year",TRUE,"M2",2013,0.475655538748359,0
+"with previous year",TRUE,"M2",2014,0.335269746363612,0
+"with previous year",FALSE,"M3",2007,0.373915972594901,0
+"with previous year",FALSE,"M3",2008,0.475002047163103,0
+"with previous year",FALSE,"M3",2009,0.416125873627088,0
+"with previous year",FALSE,"M3",2010,0.478405514941352,0
+"with previous year",FALSE,"M3",2011,0.431499569442548,0
+"with previous year",FALSE,"M3",2013,0.525977768761526,0
+"with previous year",FALSE,"M3",2014,0.479659946951772,0
+"with previous year",TRUE,"M3",2007,0.327351498663294,0
+"with previous year",TRUE,"M3",2008,0.426434966180479,0
+"with previous year",TRUE,"M3",2009,0.384847695400081,0
+"with previous year",TRUE,"M3",2010,0.408743104460046,0
+"with previous year",TRUE,"M3",2011,0.34397553037172,0
+"with previous year",TRUE,"M3",2013,0.469071530481013,0
+"with previous year",TRUE,"M3",2014,0.328772959085156,0
+"with previous year",FALSE,"M3 without radiation",2007,0.374435373863918,0
+"with previous year",FALSE,"M3 without radiation",2008,0.475596208808046,0
+"with previous year",FALSE,"M3 without radiation",2009,0.416653345424821,0
+"with previous year",FALSE,"M3 without radiation",2010,0.478574339063164,0
+"with previous year",FALSE,"M3 without radiation",2011,0.430910545686785,0
+"with previous year",FALSE,"M3 without radiation",2013,0.527333344686938,0
+"with previous year",FALSE,"M3 without radiation",2014,0.480224479512538,0
+"with previous year",TRUE,"M3 without radiation",2007,0.327272269964363,0
+"with previous year",TRUE,"M3 without radiation",2008,0.426842940613222,0
+"with previous year",TRUE,"M3 without radiation",2009,0.384961810747288,0
+"with previous year",TRUE,"M3 without radiation",2010,0.408916531988101,0
+"with previous year",TRUE,"M3 without radiation",2011,0.344295353670532,0
+"with previous year",TRUE,"M3 without radiation",2013,0.470968081467091,0
+"with previous year",TRUE,"M3 without radiation",2014,0.329900834662142,0

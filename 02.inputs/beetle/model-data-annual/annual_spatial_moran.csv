@@ -1,0 +1,15 @@
+"model","year","moran_i","p"
+"without spatial field",2007,0.327355401376471,0
+"without spatial field",2008,0.426435073436957,0
+"without spatial field",2009,0.384847858490963,0
+"without spatial field",2010,0.408743104462768,0
+"without spatial field",2011,0.343975530375781,0
+"without spatial field",2013,0.469071530488008,0
+"without spatial field",2014,0.328772959101954,0
+"with spatial field",2007,0.261041164686939,0
+"with spatial field",2008,0.391681598528706,0
+"with spatial field",2009,0.322565031979075,0
+"with spatial field",2010,0.384809491417648,0
+"with spatial field",2011,0.304762429965547,0
+"with spatial field",2013,0.426644651021388,0
+"with spatial field",2014,0.331469738700813,0
