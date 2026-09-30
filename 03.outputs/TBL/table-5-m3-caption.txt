@@ -1,0 +1,1 @@
+Coefficients of M3 over all eight years, with the dependence terms over the seven years with a previous map, and with a latent spatial field as well. Continuous terms were changes in log-odds per standard deviation and dependence terms per unit, and the geomorphon classes are not shown. Significance was marked * p ≤ 0.05, ** p ≤ 0.01, *** p ≤ 0.001, **** p ≤ 0.0001.
