@@ -115,19 +115,109 @@ df-print: kable
 
 # Introduction
 
-Mountain pine beetle (*Dendroctonus ponderosae* Hopkins [Coleoptera: Curculionidae: Scolytinae]) has impacted more lodgepole pine (*Pinus contorta* Douglas ex Loudon) stands across British Columbia than any other disturbance event on record [@taylor2003; @sambaraju2021]. The outbreak was eruptive, in that host defences constrained the beetle while its populations were low and stopped constraining it once stand densities passed a threshold [@boone2011efficacy; @raffa2008cross] and warming raised its survival across the west of the continent [@bentz2010climate; @sambaraju2012climate]. Where the outbreak went once it had erupted has been modelled at the landscape scale for two decades. In British Columbia it began in the west-central interior and spread east, with further eruptions in disjunct areas of the south [@aukema2006landscape]. The presence of outbreaking populations within 18 km in the same year and within 6 km in the two years before explained more of its movement than climate did [@aukema2008]. Dispersal under the canopy over tens of metres carried most of the spread once an area was infested, while transport above the canopy started infestations in new ground [@robertson2007mountain; @chen2011mountain]. Models of the same kind in the western United States and in Saskatchewan entered weather, topography, previous attack and stand attributes together [@chapman2012spatiotemporal; @preisler2012climate; @simard2011what; @walter2013; @kunegel2020factors], and stand structure alone mapped susceptibility across the region [@shore2000susceptibility; @hicke2008mapping]. Where elevation entered a model of red attack, its sign followed the host's distribution rather than the beetle's preference [@wulder2006red]. Mortality never fell evenly, and the stands that survive supply the structure and seed from which the next forest develops, and are termed disturbance refugia, places buffered from disturbance over time [@krawchuk2020]. A refugium is explained by a mechanism linking survival to a measurable property of the site [@cartwright2018]. @krawchuk2020 proposed such a mechanism, that refugia could occur "in areas with cooler temperatures (eg from topographic shading) that protect trees from water stress; in areas with lower host density, allowing for greater wind disruption of beetle pheromone communication and more vigorous tree growth and chemical defenses; and in areas with fewer large-diameter host trees" (p. 239). These are three testable claims. Topographic shading reduces attack by relieving water stress on cool ground. Low host density reduces attack by admitting the wind that disperses the aggregation pheromone. A scarcity of large-diameter hosts reduces attack by limiting brood production, because stems under 25 cm in diameter are sinks for the beetle and stems above it are sources [@carroll2004bionomics], and attack cannot occur where the host is absent, so a cell without pine is not a refugium [@cartwright2018]. Two of the three act through terrain. This study fitted the three together on one landscape, following @cartwright2018, who modelled the controls on an insect refugium in stands of low basal area, and @maher2021, who tested refugia from this beetle on transects at alpine treeline.
+Mountain pine beetle (*Dendroctonus ponderosae* Hopkins [Coleoptera: Curculionidae: Scolytinae]) has impacted more lodgepole pine (*Pinus contorta* Douglas ex Loudon) stands across British Columbia than any other disturbance event on record [@taylor2003; @sambaraju2021], and it turned the forests of the affected region from a small carbon sink into a large source [@kurz2008]. The outbreak was eruptive, in that host defences constrained the beetle while its populations were low and stopped constraining it once stand densities passed a threshold [@boone2011efficacy; @raffa2008cross] and warming raised its survival across the west of the continent [@logan2001; @bentz2010climate; @sambaraju2012climate]. Within a single tree the threshold was about 40 galleries per square metre of bark, beyond which the tree's defensive capacity was exhausted [@raffa1983]. Where the outbreak went once it had erupted has been modelled at the landscape scale for two decades. In British Columbia it began in the west-central interior and spread east, with further eruptions in disjunct areas of the south [@aukema2006landscape]. The presence of outbreaking populations within 18 km in the same year and within 6 km in the two years before explained more of its movement than climate did [@aukema2008]. Dispersal under the canopy over tens of metres carried most of the spread once an area was infested, while transport above the canopy, aided by wind [@chen2017], started infestations in new ground [@robertson2007mountain; @chen2011mountain] and carried the outbreak across the northern Rocky Mountains [@giroday2012]. Within a stand, the direction in which beetles searched for attractive trees followed the wind [@safranyik1989; @safranyik1992]. Models of the same kind in the western United States and in Saskatchewan entered weather, topography, previous attack and stand attributes together [@chapman2012spatiotemporal; @preisler2012climate; @simard2011what; @walter2013; @kunegel2020factors], and stand structure alone mapped susceptibility across the region [@shore2000susceptibility; @hicke2008mapping]. Where elevation entered a model of red attack, its sign followed the host's distribution rather than the beetle's preference [@wulder2006red]. Mortality never fell evenly, and the stands that survive supply the structure and seed from which the next forest develops, and are termed disturbance refugia, places buffered from disturbance over time [@krawchuk2020]. A refugium is explained by a mechanism linking survival to a measurable property of the site [@cartwright2018]. @krawchuk2020 proposed such a mechanism, that refugia could occur "in areas with cooler temperatures (eg from topographic shading) that protect trees from water stress; in areas with lower host density, allowing for greater wind disruption of beetle pheromone communication and more vigorous tree growth and chemical defenses; and in areas with fewer large-diameter host trees" (p. 239). These are three testable claims. Topographic shading reduces attack by relieving water stress on cool ground. Low host density reduces attack by admitting the wind that disperses the aggregation pheromone. A scarcity of large-diameter hosts reduces attack by limiting brood production, because stems under 25 cm in diameter are sinks for the beetle and stems above it are sources [@carroll2004bionomics], and attack cannot occur where the host is absent, so a cell without pine is not a refugium [@cartwright2018]. Two of the three act through terrain. This study fitted the three together on one landscape, following @cartwright2018, who modelled the controls on an insect refugium in stands of low basal area, and @maher2021, who tested refugia from this beetle on transects at alpine treeline.
 
-The claim that a thin stand admits wind that disrupts attack is older than the refugia hypothesis and rests on the thinning trials of the 1970s and 1980s. Thinned stands of lodgepole and ponderosa pine lost fewer trees to the beetle wherever the comparison was made [@mitchell1983thinning; @amman1988susceptibility; @fettig2007effectiveness; @hood2016fortifying], and two explanations were offered. @waring1985modifying attributed the effect to vigour, having shown that trees released from competition grew and resisted attack. @bartos1989 attributed it to microclimate, having measured higher wind, light and temperature in a thinned stand before the residual trees could have gained vigour, a pheromone trap catch there of 5 per cent of the adjacent unthinned stand's, and 2 per cent of trees killed against 16. @amman1988susceptibility found the same low infestation in partially cut stands whose residual trees had not grown, while partial cutting warmed the bark by day [@schmid1992bark; @bartos1994effects]. A tracer gas standing in for pheromone diluted fastest in the most open of three canopies [@thistle2004surrogate; @edburg2010simple]. Within a stand the beetle's own behaviour complicated the picture, since wide spacing did not stop attacks switching between trees in thinned plots [@preisler1993colonization], attack probability rose with stocking and tree size [@anhold1987potential; @negron2018biological], and the response to lures depended on population density [@klutsch2020density]. @cartwright2018 and @krawchuk2020 restated the microclimate explanation as a refugia mechanism, and @powell2014 gave its converse as a condition for outbreak. Stand density was therefore kept in every model fitted here, since a model that removes it and then reads a terrain coefficient as a wind effect has removed the pathway it set out to test. On the same reasoning, ground exposed to the wind and periods of stronger flight-period wind should both have less attack [@krawchuk2020; @jones2019]. Two constraints set the interval over which such a wind term can be measured. Flight is confined to a temperature window, between 19 and 41 degrees C, on bright afternoons when "peak flight is in the early to mid-afternoon" [@mccambridge1971; @gray1972; @safranyik2006chap1; @bleiker2016flight]. A daily or monthly mean wind therefore averages across many hours in which no beetle flies, and radiation during the flight window is a different quantity from the season's total, which is the quantity the shading pathway concerns. Mass attack is also a threshold phenomenon, the irruption threshold being "the population density at which endemic populations may transition towards the epidemic state" [@cooke2025; @howe2022; @trzcinski2009intrinsic]. Attack in one year is thus not independent of attack in the year before, which is why previous-year and neighbourhood pressure enter the models, and an environmental variable regulates that threshold rather than adding to attack. A wind effect through the plume is then expected as an interaction with host density and not as a main effect. Shade and vigour both predict less attack on cool ground by routes this design cannot separate, since cool sites slow development [@sambaraju2021] while water stress does not act on defence in one direction [@netherer2021]. Where attack was traced against site moisture and aspect, the beetle reached south-facing and drier ground first [@kaiser2012ecohydrology; @nelson2007environmental].
+The claim that a thin stand admits wind that disrupts attack is older than the refugia hypothesis and rests on the thinning trials of the 1970s and 1980s. Thinned stands of lodgepole and ponderosa pine lost fewer trees to the beetle wherever the comparison was made [@mitchell1983thinning; @amman1988susceptibility; @fettig2007effectiveness; @hood2016fortifying], and two explanations were offered. @waring1985modifying attributed the effect to vigour, having shown that trees released from competition grew and resisted attack. @bartos1989 attributed it to microclimate, having measured higher wind, light and temperature in a thinned stand before the residual trees could have gained vigour, a pheromone trap catch there of 5 per cent of the adjacent unthinned stand's, and 2 per cent of trees killed against 16. @amman1988susceptibility found the same low infestation in partially cut stands whose residual trees had not grown, while partial cutting warmed the bark by day [@schmid1992bark; @bartos1994effects]. A tracer gas standing in for pheromone diluted fastest in the most open of three canopies [@thistle2004surrogate; @edburg2010simple]. Within a stand the beetle's own behaviour complicated the picture, since wide spacing did not stop attacks switching between trees in thinned plots [@preisler1993colonization], attack probability rose with stocking and tree size [@anhold1987potential; @negron2004; @negron2018biological], and the response to lures depended on population density [@klutsch2020density]. @cartwright2018 and @krawchuk2020 restated the microclimate explanation as a refugia mechanism, and @powell2014 gave its converse as a condition for outbreak. Stand density was therefore kept in every model fitted here, since a model that removes it and then reads a terrain coefficient as a wind effect has removed the pathway it set out to test. On the same reasoning, ground exposed to the wind and periods of stronger flight-period wind should both have less attack [@krawchuk2020; @jones2019]. Two constraints set the interval over which such a wind term can be measured. Flight is confined to a temperature window, between 19 and 41 degrees C, on bright afternoons when "peak flight is in the early to mid-afternoon" [@mccambridge1971; @gray1972; @safranyik2006chap1; @bleiker2016flight]. A daily or monthly mean wind therefore averages across many hours in which no beetle flies, and radiation during the flight window is a different quantity from the season's total, which is the quantity the shading pathway concerns. Mass attack is also a threshold phenomenon, the irruption threshold being "the population density at which endemic populations may transition towards the epidemic state" [@cooke2025; @howe2022; @trzcinski2009intrinsic]. Attack in one year is thus not independent of attack in the year before, which is why previous-year and neighbourhood pressure enter the models, and an environmental variable regulates that threshold rather than adding to attack. A wind effect through the plume is then expected as an interaction with host density and not as a main effect. Shade and vigour both predict less attack on cool ground by routes this design cannot separate, since cool sites slow development [@sambaraju2021] while water stress does not act on defence in one direction [@netherer2021]. Where attack was traced against site moisture and aspect, the beetle reached south-facing and drier ground first [@kaiser2012ecohydrology; @nelson2007environmental].
 
 Where a dispersing beetle comes down changes what a terrain main effect can mean. @hynum1980 monitored landing on lodgepole pine with landing traps and found that beetles "were unable to distinguish between hosts, dead hosts and nonhosts during landing". Where a beetle lands is decided by its transport rather than by the tree beneath it, and a beetle descending from transport above the canopy arrives as a wind-borne particle, which is how @byers2000 simulated dispersal through a forest. @giroday2011 set out what follows, that landscape features "provide impactive surfaces for interception of insects" and that settlement rises "in areas where wind speed is reduced". The ground where the flow slows, the lee of ridges and sheltered slopes, is where such a beetle should come to rest, which is the pattern the wind shelter index of @plattner2004 was built to predict for snow. Deposition and plume disruption thus make different predictions, and the difference is what this design can test. Deposition acts before any host is chosen and predicts a main effect of terrain shelter that does not depend on stand density, whereas plume disruption acts on an aggregation already under way and predicts an interaction between stand density and wind with no requirement that shelter act alone. A terrain coefficient read without this distinction is assigned to a mechanism it may not belong to. Landform enters for a different reason, in that infested groups are reported in draws and gullies and deep snow insulates overwintering brood [@safranyik2006chap1]. Elevation enters as a composite of temperature, snowpack, season length and host distribution that this design cannot separate [@sambaraju2021; @amman1973population], and its weight among the predictors of attack changed through the course of an outbreak elsewhere [@walter2013].
 
 This study grew out of a companion study of conifer regeneration after the 2015 Mt Midgeley fire on the same ground [@murphy2026], which fitted point process models of seedling intensity to distance from seed source, burn severity, beetle mortality, aspect, wind and terrain ruggedness. The present study took from it the 28 field plots of 20 by 20 m in which beetle-killed basal area was measured, its 30 m Landsat grid and its perimeter. In that model terrain ruggedness was the largest terrain effect on seedling intensity, +0.626 (P < 0.001), a coefficient that says the shape of the ground governed what survived without saying which property of that shape the beetle responded to. The present study turned the beetle outbreak that model treated as a covariate into the response and replaced the single ruggedness index with the four terrain properties the beetle's biology names, exposure to the prevailing wind, openness to the sky, position on the slope and depth of the valley. The landscape models cited above entered terrain as elevation, slope and aspect and weather as temperature and precipitation. A machine-learning model of the Alberta outbreak entered a July to August mean daily wind speed from stations [@ramazi2021outbreaks], and the transport models of the beetle's flight above the canopy resolved the wind over terrain without the stand beneath it [@jackson2008; @ainslie2010]. This study entered a terrain-resolved wind field at the sixteen-day interval of the response together with stand density, so that a terrain main effect could be told apart from a density by wind interaction, which are the two signatures deposition and plume disruption predict.
 
-The study addressed three questions. Do the three mechanisms @krawchuk2020 named, stand density, topographic shading and the scarcity of large hosts, predict red-stage attack once host, terrain and previous attack are in the model? Does wind act on attack through stand density, which is the form plume disruption takes, and only where wind varies in time? Does terrain shelter act as a main effect, which is what deposition of wind-borne beetles predicts, or only through stand density, which is what plume disruption predicts?
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+:::
+
+
+The literature above was assembled under a written protocol, frozen before the first search, from two indexes, the author's reading store and one round of citation chasing, which returned 1,257 unique records, of which 198 were retained and 35 read in full. The study addressed three questions. Do the three mechanisms @krawchuk2020 named, stand density, topographic shading and the scarcity of large hosts, predict red-stage attack once host, terrain and previous attack are in the model? Does wind act on attack through stand density, which is the form plume disruption takes, and only where wind varies in time? Does terrain shelter act as a main effect, which is what deposition of wind-borne beetles predicts, or only through stand density, which is what plume disruption predicts?
 
 # Methods
 
-## Literature review
+## Site terrain
 
 
 ::: {.cell}
@@ -189,69 +279,17 @@ The study addressed three questions. Do the three mechanisms @krawchuk2020 named
 :::
 
 
+The study area covered 5,573 ha of the Selkirk Mountains in southeastern British Columbia, 61,923 cells of 30 m from 830 to 1,744 m in elevation, on the grid of @murphy2026 so that the results compared directly with theirs. It was centred on their site, the 2015 Mt Midgeley fire, and extended beyond its 480 ha of burned area by a 5 km buffer cut to the elevation band of that site, which took in the range of stand density the pheromone mechanism needed while keeping the added ground comparable. The response was measured every sixteen days, the inventory once a year, the station winds every hour and the terrain once (Table S1).
 
-::: {.cell}
+Stand structure came from the provincial Vegetation Resources Inventory, taking for each study year the snapshot the province published for that year, rasterised to the 30 m grid (@tbl-vri). The attributes were basal area, crown closure, live stems per hectare, quadratic mean diameter of stems of 12.5 cm and larger, stand age, stand height, standing volume and susceptible pine basal area, the product of basal area and pine cover. The 2007 snapshot omitted basal area and live stems, so the 2006 snapshot stood in for it. The inventory is a projection rather than a census, and polygons interpreted from late-outbreak photography described stands the beetle had already attacked.
 
-:::
-
-
-
-::: {.cell}
-
-:::
-
-
-
-::: {.cell}
-
-:::
-
-
-
-::: {.cell}
-
-:::
-
-
-
-::: {.cell}
-
-:::
-
-
-The literature the Introduction rests on was assembled under a written protocol frozen by commit before the first query ran, with a review question for each of the three study questions and a fourth asking whether the study's design had a precedent. Two indexes and the author's reading store were searched on 23 September 2026 with terms drawn from the title and keywords, one round of citation chasing ran from eight central papers, and titles were screened against the criteria of the protocol, which admitted any year and any peer-reviewed or agency source on the beetle. The searches returned 1,636 records, 1,257 after duplicates were removed, of which 198 were retained and 35 were read in full. One reader screened and read, and a record without an accessible full text was used from its abstract alone, which the synthesis records.
-
-## Study area
-
-
-::: {.cell}
-
-:::
-
-
-
-::: {.cell}
-
-:::
-
-
-
-::: {.cell}
-
-:::
-
-
-
-::: {.cell}
-
-:::
-
-
-The study area covered 5,573 ha of the Selkirk Mountains in southeastern British Columbia, 61,923 cells of 30 m spanning 830 to 1,744 m, 914 m of relief, on the grid of the parent study, so that results compared directly with it. The perimeter was centred on the 2015 Mt Midgeley fire, the parent study's site, and extended beyond its 480 ha of burned area to take in the range of stand density the pheromone mechanism needed. The extension was constrained rather than arbitrary. The burn was buffered by 5 km and the buffer was then cut to the elevation band of the parent study's site, so that the ground added was comparable to the ground it was added to. Table S1 lists the datasets the study combined and the spatial and temporal resolution of each. Those resolutions were uneven, and the analysis depended on that unevenness. The response was measured every sixteen days, the inventory once a year and the station winds every hour, and the terrain was measured once.
+Terrain surfaces were computed with SAGA GIS over an elevation model extending beyond the perimeter, so that search radii near the edge fell on measured ground. They separated the ruggedness index of @murphy2026 into the properties the beetle's biology points to, with ruggedness kept as a candidate so that the separation was tested rather than assumed. Exposure entered as the windward-leeward index, effective air flow height, the wind exposition index and the wind shelter index of @plattner2004, "the maximum gradient within a given radius in upwind direction", together with topographic openness and sky view. Shape entered as ruggedness, topographic position, convergence, slope, curvature and geomorphon class, and landform as wetness, valley depth and height above the valley floor, because infested groups are reported in draws and gullies and deep snow insulates overwintering brood [@safranyik2006chap1; @kautz2023]. Aspect entered as northness, eastness and the heat load index of @mccune2002. Radiation was computed twice, because flight and shading depend on different quantities, once over the flight window of 1 July to 15 August from 12:00 to 17:00 and once over the whole growing season from 1 May to 30 September, the quantity the shading mechanism of @krawchuk2020 concerns. The first varied 15-fold across the ground and the second 2.9-fold. Every candidate is listed in Table S3.
 
 *@fig-study-area near here*
 
-## Beetle disturbance
+*@tbl-vri near here*
+
+## Beetle outbreak
 
 
 ::: {.cell}
@@ -283,13 +321,33 @@ The study area covered 5,573 ha of the Selkirk Mountains in southeastern British
 :::
 
 
-The response was red-stage beetle attack in each sixteen-day period from 1 May to 22 September of the outbreak years 2006 to 2014, excluding 2012, when Landsat 7 was the only sensor and its scan-line corrector had failed. The index and baseline followed @murphy2026, who mapped red-stage mortality on this ground as the fall in the normalised difference moisture index (NDMI) against the 2005 pre-outbreak image and validated the map against 28 field plots of 20 by 20 m in which beetle-killed pine was confirmed from pitch tubes, frass and gallery architecture and measured as the fraction of plot basal area killed. Sixteen days is the Landsat revisit interval. NDMI was composited as the median of the cloud-masked Collection 2 Level-2 scenes in each period, from Landsat 5 for 2005 to 2011 and from Landsat 8 for 2013 and 2014 after the band-pass adjustment of @roy2016, and each period was differenced against the same period of 2005, so that the seasonal rise and fall of leaf moisture did not enter the difference.
 
-The fall in NDMI that counted as attack was set by a classifier trained on two classes of Landsat pixel. The attacked class was the four pixels nearest the centre of each of the 28 field plots, 112 pixels. The undisturbed class was the 84 points of forest without beetle mortality that @murphy2026 digitised on the 2020 Landsat 8 scene, which fell in 68 distinct 30 m cells of the study grid. Each pixel entered with its deepest annual fall in NDMI against 2005. Random forest, a radial support vector machine and gradient boosting were compared under Monte Carlo cross-validation, 100 random splits that each held out a quarter of the groups of each class, a group being the four pixels of one field plot or the undisturbed pixels within one 100 m block, so that neighbouring pixels never fell on both sides of a split. The model with the highest mean kappa set the cut, the fall in NDMI at which its prediction changed class, and a cell was classed as attacked in a period where its fall reached the cut. Periods in which the imagery saw less than a tenth of the perimeter were dropped, which left 47 periods over eight years (Table S2). The undisturbed pixels came from one patch of about 230 by 455 m, so the cross-validation measured separation of the field plots from that patch rather than from undisturbed forest across the landscape.
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+:::
+
+
+The response was red-stage attack in each sixteen-day period, the Landsat revisit interval, from 1 May to 22 September of 2006 to 2014, excluding 2012, when Landsat 7 was the only sensor and its scan-line corrector had failed. The index and baseline followed @murphy2026, who mapped red-stage mortality on this ground as the fall in the normalised difference moisture index (NDMI), an index used to detect forest disturbance in Landsat time series [@jin2005], against 2005, and validated the map against 28 field plots of 20 by 20 m in which beetle-killed pine was confirmed from pitch tubes, frass and gallery architecture. NDMI was the median of the cloud-masked Collection 2 Level-2 scenes in each period, from Landsat 5 for 2005 to 2011 and Landsat 8 for 2013 and 2014 after the band-pass adjustment of @roy2016, differenced against the same period of 2005 so that the seasonal course of leaf moisture did not enter the difference.
+
+The fall in NDMI that counted as attack was set by a classifier trained on the four pixels nearest the centre of each field plot, 112 pixels, against the 84 points of undisturbed forest that @murphy2026 digitised on the 2020 Landsat 8 scene, which fell in 68 distinct cells. Each pixel entered with its deepest annual fall in NDMI against 2005. Random forest, a radial support vector machine and gradient boosting were compared over 100 random splits, each holding out a quarter of the field plots and of the 100 m blocks of undisturbed pixels, so that neighbouring pixels never fell on both sides of a split. The model with the highest mean kappa set the cut, the fall in NDMI at which its prediction changed class. Periods in which the imagery saw less than a tenth of the perimeter were dropped, which left 47 periods over eight years (Table S2). The undisturbed pixels came from one patch of about 230 by 455 m, so the cross-validation measured separation of the plots from that patch rather than from undisturbed forest across the landscape.
+
+Wind was summarised over the flight hours of 12:00 to 17:00, following the flight period @safranyik2006chap1 give for this region, where "peak flight is in the early to mid afternoon", and the 11:00 to 14:00 emergence peak of @gray1972. In 236,079 hourly station records from May to September, 89.5 per cent of afternoon hours inside the flight window fell within the 19 to 41 degrees C flight range against 51.4 per cent outside it (Figure S1). Hourly speed and direction from Environment and Climate Change Canada stations within 150 km were combined as vector components and adjusted for terrain with the MicroMet model of @liston2006, which weights each observation by the slope in the wind direction and the curvature of the ground. The adjustment depends on direction and not on speed, so it was computed once for each of 16 sectors of 22.5 degrees over an elevation model extending beyond the perimeter, with a curvature length scale of 600 m. Each period was summarised by its mean flight-hour wind and its share of flight hours below 5 km/h. Mean flight-hour wind ran from 4.0 to 8.6 km/h between periods and varied by up to 5.1 km/h across the grid within a period.
 
 *@fig-spread near here*
 
-## Flight-period wind
+## Model design
 
 
 ::: {.cell}
@@ -321,91 +379,15 @@ The fall in NDMI that counted as attack was set by a classifier trained on two c
 :::
 
 
-The flight window was 1 July to 15 August and the hours 12:00 to 17:00. Neither bound was chosen from these data. The dates were the flight period @safranyik2006chap1 give for this region, and the hours followed their "peak flight is in the early to mid afternoon" together with the 11:00 to 14:00 emergence peak of @gray1972. The window was checked against 236,079 hourly station records from May to September of the study years (Figure S1). Inside it, 89.5 per cent of afternoon hours fell within the 19 to 41 degrees C flight range against 51.4 per cent outside it, and mean wind peaked in the same hours as temperature.
+Spatial pattern was described before any model was fitted, with the point pattern methods of @murphy2026. In each period the attacked cells were a point pattern inside the window of cells the imagery saw, and clustering was tested against 999 random relabellings of those cells, because the cells sit on a 30 m grid inside a window with holes. The Clark-Evans index [@clark1954distance], the mean nearest-neighbour distance and the L function, the variance-stabilised form of Ripley's K [@ripley1977], were compared with that null, the last against a global envelope [@baddeley2015], and the largest distance at which the L function lay above the envelope was the clustering range. The kernel bandwidth of each period was chosen by likelihood cross-validation over 20 to 300 m [@vanes1991], as @murphy2026 set the bandwidth of their Cox process model. The bandwidth then set the scale of a neighbourhood term and the clustering range the range of the latent spatial field.
 
-Wind entered as a field that varied across the terrain at 30 m, computed with the MicroMet model of @liston2006, whose terrain adjustment weights each hourly station observation by the slope in the wind direction and the curvature of the ground. The adjustment depends on direction and not on speed, so it was computed once for each of 16 sectors of 22.5 degrees and each hourly observation was multiplied by the surface for its own sector. Slope and curvature were computed over an elevation model extending beyond the perimeter, so that the curvature length scale of 600 m was defined at the edge of the study area. Hourly speed and direction from Environment and Climate Change Canada stations within 150 km were combined as vector components, and each sixteen-day period was summarised by its mean wind and by the share of hours below 5 km/h, both over the flight hours of 12:00 to 17:00. Across periods the mean flight-hour wind ran from 4.0 to 8.6 km/h and within a period it varied across the grid by up to 5.1 km/h.
+Models were built in the order of @aukema2008, who "determined an appropriate spatial neighborhood structure(s) and time lag(s) to account for spatial and temporal dependencies" before any environmental variable entered, then tested each variable alone and built the full model by backward elimination. Every model was a logistic regression of attack in a cell and period with a fixed effect for each period. Each period contributed every attacked cell up to 2,000 and the same number of unattacked cells, so the period effect absorbed the sampling rate.
 
-## Stand structure
+The dependence terms were the cell's own state in the previous period of the season and in the same period of the previous year, and the share of cells attacked around it in each, measured within fixed radii of 42, 90, 150, 210, 510 and 1,050 m and by a Gaussian kernel at the bandwidth of the period the share came from. All were compared on AIC, so the bandwidth was tested against the fixed radii rather than assumed. Each standardised environmental variable was then entered alone beside the chosen dependence terms and tested by likelihood ratio, the screen @murphy2026 applied against the intercept-only model. Variables passing at p < 0.05 were grouped where their absolute correlation reached 0.75, keeping the member with the largest statistic, and removed until every variance inflation factor was below 5. The final model was reached by removing terms one at a time while AIC fell, with an elastic net fitted alongside [@zou2005; @friedman2010] (Table S4).
 
+The questions were tested as additions to the final model, each compared with the model without it by likelihood ratio. The mechanisms of @krawchuk2020 were tested term by term, density as live stems, standing volume and basal area, large hosts as quadratic mean diameter, and shading as growing-season radiation and northness. Plume disruption was tested as the interactions of stems and standing volume with mean flight-hour wind, which correlated -0.94 with calm share, so only the mean entered. Deposition was tested as the main effects of the wind shelter index and sky view, then their interactions with density. Each interaction was read as the slope of one term at one standard deviation either side of the mean of the other.
 
-::: {.cell}
-
-:::
-
-
-Stand structure came from the provincial Vegetation Resources Inventory, taking for each study year the snapshot the province published for that year, depleted for harvest and projected for growth to it, rasterised to the 30 m grid. Six of its attributes covered the mechanisms, total basal area, crown closure, live stems per hectare, quadratic mean diameter over stems of 12.5 cm and larger, stand age and susceptible pine basal area, formed as basal area times the pine share of cover, with stand height and standing volume. The 2007 snapshot omitted basal area and live stems, so the 2006 snapshot stood in for it. The inventory is a projected operational product rather than a census, and a polygon interpreted from late-outbreak photography described a stand the beetle had already attacked, so basal area and pine cover were post-attack over part of the study window (@tbl-vri).
-
-*@tbl-vri near here*
-
-## Geomorphometry
-
-
-::: {.cell}
-
-:::
-
-
-
-::: {.cell}
-
-:::
-
-
-
-::: {.cell}
-
-:::
-
-
-Terrain was described by surfaces computed with SAGA GIS over the full reprojected elevation model and clipped afterwards, so that a search radius near the boundary still fell on measured ground. The set separated the single ruggedness index of @murphy2026 into the properties the beetle's biology points to, while ruggedness itself was kept as a candidate so that the separation was tested against it rather than assumed.
-
-Radiation was computed twice because two mechanisms require different quantities. Flight-window radiation was the direct and diffuse total over 1 July to 15 August restricted to 12:00 to 17:00, the hours identified as the flight peak [@safranyik2006chap1], while growing-season radiation was the whole-day total from 1 May to 30 September, the shading quantity the first mechanism of @krawchuk2020 concerns. A single annual heat index cannot separate the two, flight-window direct radiation spanning a 15-fold range here against 2.9-fold for the season total.
-
-Exposure entered as the windward-leeward index, effective air flow height, the wind exposition index and the wind shelter index of @plattner2004, which is "the maximum gradient within a given radius in upwind direction", with topographic openness and sky view. Shape entered as ruggedness, topographic position, convergence, slope, curvature and geomorphon class, a landform class read from the horizons visible around a cell, and landform as wetness, valley depth and height above the valley floor, because infested groups are reported in draws and gullies and deep snow insulates overwintering brood [@safranyik2006chap1; @kautz2023]. Aspect entered as its northward and eastward components with the heat load index of @mccune2002. Every candidate is listed in Table S3.
-
-## Spatial pattern
-
-
-::: {.cell}
-
-:::
-
-
-Spatial pattern was described before any model was fitted, with the point pattern methods of @murphy2026. In each period the attacked cells were treated as a point pattern inside the window of cells the imagery saw. Clustering was tested against random relabelling, in which the same number of cells was drawn at random from the cells seen in that period, 999 times, because the cells sit on a 30 m grid inside a window with holes and a continuous null would misstate distances on it. Three statistics were compared with that null, the Clark-Evans aggregation index [@clark1954distance], the mean nearest-neighbour distance and the L function, the variance-stabilised form of Ripley's K [@ripley1977], against a global envelope [@baddeley2015]. The largest distance at which the observed L function lay above the envelope was taken as the clustering range of that period. The kernel bandwidth of each period was chosen by likelihood cross-validation over 20 to 300 m, the procedure @murphy2026 used to set the bandwidth of their Cox process model. Both distances were estimated before any model was fitted and both entered the models, the bandwidth as the scale of a neighbourhood term and the clustering range as the range of the latent spatial field.
-
-## Model building
-
-
-::: {.cell}
-
-:::
-
-
-
-::: {.cell}
-
-:::
-
-
-
-::: {.cell}
-
-:::
-
-
-
-::: {.cell}
-
-:::
-
-
-Models were built in the order of @aukema2008, who "determined an appropriate spatial neighborhood structure(s) and time lag(s) to account for spatial and temporal dependencies" before any environmental variable entered, then tested each environmental variable alone beside those terms and built the full model by backward elimination. Every model was a logistic regression of attack in a cell and period with a fixed effect for each period. Within each period the model table took every attacked cell up to 2,000 and the same number of unattacked cells, so that the period effect absorbed the sampling rate and every other coefficient was unaffected by it.
-
-The dependence terms were the cell's own state in the previous period of the same season and in the same period of the previous outbreak year, and the share of cells attacked around it in each. That share was measured two ways, within a fixed radius of 42, 90, 150, 210, 510 or 1,050 m, and weighted by a Gaussian kernel whose standard deviation was the likelihood cross-validated bandwidth of the period the share was taken from. All candidates were compared on AIC, so that the bandwidth was tested against the fixed radii rather than assumed. The environmental variables were then entered one at a time beside the chosen dependence terms, each standardised so that its coefficient was the change in log-odds per standard deviation, and tested against the dependence-only model by likelihood ratio, the screen @murphy2026 used against the intercept-only model. Variables that passed at p < 0.05 were grouped where their absolute correlation reached 0.75, keeping the member with the largest likelihood-ratio statistic, and removed one at a time until every variance inflation factor was below 5. An elastic net with the dependence terms unpenalised [@zou2005; @friedman2010] was fitted beside the elimination and is reported with it (Table S4), and the final model was reached by removing terms one at a time while AIC fell.
-
-The three questions were tested as additions to the final model. The mechanisms of @krawchuk2020 were tested term by term, stand density as live stems, standing volume and basal area, large hosts as quadratic mean diameter, and shading as growing-season radiation and northness. Plume disruption was tested as the interactions of stem density and standing volume with mean flight-hour wind. Calm share correlated -0.94 with mean wind, so by the correlation rule of the screen only the mean entered. Deposition was tested as the main effects of the wind shelter index of @plattner2004 and sky view, with their interactions with density tested next. Each set was compared with the model without it by likelihood ratio, and each interaction was read as the slope of one term at one standard deviation below and above the mean of the other.
-
-Two checks tested the scale of the inference. The final model was refitted with a Gaussian process smooth of easting and northing, a latent spatial field of the kind the Cox process model of @murphy2026 carried [@wood2017], with a Matérn correlation whose range was set to the median clustering range of the L functions, 750 m, and Moran's I [@moran1950] of the deviance residuals was computed within each period on the eight nearest sampled cells, with and without the field. The final model's environmental terms were also refitted with the cell coarsened from 30 m to 90, 270 and 990 m, a coarse cell being attacked if any 30 m cell inside it was, the definition of presence @aukema2008 used on 12 km cells, with the dependence terms rebuilt at each grain from the cell's own state and the share of its eight neighbours attacked.
+Two checks tested the scale of the inference. The final model was refitted with a Gaussian process smooth of easting and northing [@wood2017], a latent spatial field of the kind the Cox process model of @murphy2026 carried, with a Matérn range set to the median clustering range, 750 m, and Moran's I [@moran1950] of the deviance residuals was computed within each period on the eight nearest sampled cells with and without the field. The environmental terms were also refitted with the cell coarsened to 90, 270 and 990 m, a coarse cell being attacked if any 30 m cell inside it was, the definition @aukema2008 used on 12 km cells, with the dependence terms rebuilt at each grain from the cell's own state and its eight neighbours.
 
 # Results {#sec-results}
 
@@ -447,15 +429,15 @@ The inference held at 90 m and weakened beyond it (@fig-grain). With the depende
 
 ## Dependence first
 
-Attack in a 30 m cell was predicted first by attack in the cells around it, in the previous sixteen-day period and in the same period of the previous year, and every environmental term was read beside those terms rather than instead of them. That order was the one @aukema2008 argued for, having found that outbreaking populations within 18 km in the same year and within 6 km in the two years before explained more of the outbreak's movement across British Columbia than climate did. The scale here was far finer and the pattern the same. Dispersal under the canopy over tens of metres carried most of the spread once a stand was infested [@robertson2007mountain; @chen2011mountain; @safranyik1992], and the bandwidth of the red-stage cells, a median of 67 m, was the landscape trace of that short-range dispersal, since a neighbourhood term weighted at that bandwidth fitted as well as the best of six fixed radii. Models of the western United States that entered previous attack beside weather and stand attributes found the same ordering [@chapman2012spatiotemporal; @preisler2012climate]. The consequence for every other result was that the environmental terms added little discrimination once dependence was in the model, AUC rising from 0.848 to 0.853, so the refugia mechanisms were tested as small modifiers of an outbreak whose spread was mostly contagion.
+Attack in a 30 m cell was predicted first by attack in the cells around it, in the previous sixteen-day period and in the same period of the previous year, and every environmental term was read beside those terms rather than instead of them. That order was the one @aukema2008 argued for, having found that outbreaking populations within 18 km in the same year and within 6 km in the two years before explained more of the outbreak's movement across British Columbia than climate did. The scale here was far finer and the pattern the same. Dispersal under the canopy over tens of metres carried most of the spread once a stand was infested [@robertson2007mountain; @chen2011mountain; @safranyik1992], and within a stand the probability that a tree was colonised depended on the trees attacked around it in the same year [@mitchell1991]. The bandwidth of the red-stage cells, a median of 67 m, was the landscape trace of that short-range dispersal, since a neighbourhood term weighted at that bandwidth fitted as well as the best of six fixed radii. Models of the western United States that entered previous attack beside weather and stand attributes found the same ordering [@chapman2012spatiotemporal; @preisler2012climate]. The consequence for every other result was that the environmental terms added little discrimination once dependence was in the model, AUC rising from 0.848 to 0.853, so the refugia mechanisms were tested as small modifiers of an outbreak whose spread was mostly contagion.
 
 ## Host and density
 
-Attack rose with the amount of host, basal area, standing volume, susceptible pine basal area and stand age, and not with the number of stems or their diameter. Stands with little host were therefore the refugia this landscape showed, which agrees with the susceptibility rating of @shore2000susceptibility, built on age, density and pine basal area, and with the thinning trials in which stands reduced in basal area lost fewer trees [@mitchell1983thinning; @amman1988susceptibility; @fettig2007effectiveness; @hood2016fortifying]. The absence of a diameter effect did not match the source-sink boundary of @carroll2004bionomics, under which stems below 25 cm produce too few brood to sustain a population. The inventory records the quadratic mean diameter of a polygon, not the distribution of stem sizes within it, and once populations were eruptive the beetle attacked smaller hosts as well [@boone2011efficacy; @raffa2008cross], so a stand-level mean may be too coarse a measure of that threshold at the height of an outbreak.
+Attack rose with the amount of host, basal area, standing volume, susceptible pine basal area and stand age, and not with the number of stems or their diameter. Stands with little host were therefore the refugia this landscape showed, which agrees with the susceptibility rating of @shore2000susceptibility, built on age, density and pine basal area, and with the thinning trials in which stands reduced in basal area lost fewer trees [@mitchell1983thinning; @amman1988susceptibility; @fettig2007effectiveness; @hood2016fortifying]. The absence of a diameter effect did not match the source-sink boundary of @carroll2004bionomics, under which stems below 25 cm produce too few brood to sustain a population, nor the underlying biology, since brood production rose with phloem thickness from an average of 16 to 94 beetles in the range @amman1972 tested, and larger trees were more likely to be colonised while trees of 23 cm and more remained abundant [@mitchell1991]. The inventory records the quadratic mean diameter of a polygon, not the distribution of stem sizes within it, and once populations were eruptive the beetle attacked smaller hosts as well [@boone2011efficacy; @raffa2008cross], so a stand-level mean may be too coarse a measure of that threshold at the height of an outbreak.
 
 ## Wind and density
 
-The interaction of standing volume with flight-hour wind took the direction plume disruption predicts, with attack falling as wind rose in stands of low volume and not in dense ones. That was the pattern @bartos1989 measured at the stand scale, where a thinned stand had higher wind and a pheromone trap catch of 5 per cent of the adjacent unthinned stand's, and the one the tracer plumes of @thistle2004surrogate imply, which diluted fastest in the most open canopy. The effect was small, and within thin stands alone wind could not be shown to lower attack. Two features of the design limited what it could detect. The wind field was station wind adjusted for terrain, varying across the grid by a few kilometres per hour, whereas the contrast @bartos1989 measured was inside the canopy between managed and unmanaged stands, a difference the inventory and a terrain model cannot resolve. The timing also did not align, because the foliage of an attacked tree stays green "usually until May and June of the year following attack" [@safranyik2006chap1, p. 11], so red crowns seen in a sixteen-day period recorded the flight of the previous summer. The result was consistent with plume disruption and too weak to establish it.
+The interaction of standing volume with flight-hour wind took the direction plume disruption predicts, with attack falling as wind rose in stands of low volume and not in dense ones. That was the pattern @bartos1989 measured at the stand scale, where a thinned stand had higher wind and a pheromone trap catch of 5 per cent of the adjacent unthinned stand's, and the one the tracer plumes of @thistle2004surrogate imply, which diluted fastest in the most open canopy. The effect was small, and within thin stands alone wind could not be shown to lower attack. Two features of the design limited what it could detect. The wind field was station wind adjusted for terrain, varying across the grid by a few kilometres per hour, whereas the contrast @bartos1989 measured was inside the canopy between managed and unmanaged stands, a difference the inventory and a terrain model cannot resolve. The timing also did not align, because the foliage of an attacked tree stays green "usually until May and June of the year following attack" [@safranyik2006chap1, p. 11], so red crowns seen in a sixteen-day period recorded the flight of the previous summer. Wind speed may also matter less than its direction. @safranyik1989 found that "wind speed had negligible effect on the fit of the model for relative directional distribution of beetles" within a stand, while wind above the canopy carries beetles into new stands [@jackson2008; @chen2017], which predicts more attack with wind rather than less. The result was consistent with plume disruption and too weak to establish it.
 
 ## Terrain and landing
 
@@ -467,7 +449,7 @@ The environmental results depended on the scale at which they were read, which i
 
 ## Limits and management
 
-The response was classified rather than observed. The classifier separated the field plots from one patch of undisturbed forest, so its accuracy measured that separation and not agreement with ground mortality across the landscape. The inventory postdated part of the outbreak, since polygons interpreted after the beetle passed described the stand it left. The study covered one mountain range over eight outbreak years. For management the result gave a narrow answer. Refugia on this landscape were stands with little host, which is the structure thinning produces, and terrain maps alone could not locate them. The field evidence that thinning protects stands during an outbreak is weaker than policy has assumed [@six2014management], and this study added only weak evidence that wind strengthens that protection.
+The response was classified rather than observed. The classifier separated the field plots from one patch of undisturbed forest, so its accuracy measured that separation and not agreement with ground mortality across the landscape. Landsat classifications of red stage elsewhere reached kappa of 0.86 to 0.88 against fine-resolution reference imagery [@meddens2013], and high spatial resolution imagery has been assessed for detecting red attack directly [@coops2006], which would give an independent test of these maps. The inventory postdated part of the outbreak, since polygons interpreted after the beetle passed described the stand it left. The study covered one mountain range over eight outbreak years. For management the result gave a narrow answer. Refugia on this landscape were stands with little host, which is the structure thinning produces, and terrain maps alone could not locate them. The field evidence that thinning protects stands during an outbreak is weaker than policy has assumed [@six2014management], and this study added only weak evidence that wind strengthens that protection.
 
 # References {.unnumbered}
 

@@ -268,12 +268,6 @@ Where a dispersing beetle comes down changes what a terrain main effect can mean
 
 This study grew out of a companion study of conifer regeneration after the 2015 Mt Midgeley fire on the same ground [@murphy2026], which fitted point process models of seedling intensity to distance from seed source, burn severity, beetle mortality, aspect, wind and terrain ruggedness. The present study took from it the 28 field plots of 20 by 20 m in which beetle-killed basal area was measured, its 30 m Landsat grid and its perimeter. In that model terrain ruggedness was the largest terrain effect on seedling intensity, +0.626 (P < 0.001), a coefficient that says the shape of the ground governed what survived without saying which property of that shape the beetle responded to. The present study turned the beetle outbreak that model treated as a covariate into the response and replaced the single ruggedness index with the four terrain properties the beetle's biology names, exposure to the prevailing wind, openness to the sky, position on the slope and depth of the valley. The landscape models cited above entered terrain as elevation, slope and aspect and weather as temperature and precipitation. A machine-learning model of the Alberta outbreak entered a July to August mean daily wind speed from stations [@ramazi2021outbreaks], and the transport models of the beetle's flight above the canopy resolved the wind over terrain without the stand beneath it [@jackson2008; @ainslie2010]. This study entered a terrain-resolved wind field at the sixteen-day interval of the response together with stand density, so that a terrain main effect could be told apart from a density by wind interaction, which are the two signatures deposition and plume disruption predict.
 
-The study addressed three questions. Do the three mechanisms @krawchuk2020 named, stand density, topographic shading and the scarcity of large hosts, predict red-stage attack once host, terrain and previous attack are in the model? Does wind act on attack through stand density, which is the form plume disruption takes, and only where wind varies in time? Does terrain shelter act as a main effect, which is what deposition of wind-borne beetles predicts, or only through stand density, which is what plume disruption predicts?
-
-# Methods
-
-## Literature review
-
 ```{r}
 #| label: review-terms
 #| echo: !expr knitr::is_html_output()
@@ -702,9 +696,11 @@ review2_counts <- tibble::tibble(
 )
 ```
 
-The literature the Introduction rests on was assembled under a written protocol frozen by commit before the first query ran, with a review question for each of the three study questions and a fourth asking whether the study's design had a precedent. Two indexes and the author's reading store were searched on 23 September 2026 with terms drawn from the title and keywords, one round of citation chasing ran from eight central papers, and titles were screened against the criteria of the protocol, which admitted any year and any peer-reviewed or agency source on the beetle. The searches returned `r fmt(review_counts$Records[1])` records, `r fmt(review_counts$Records[2])` after duplicates were removed, of which `r fmt(review_counts$Records[5])` were retained and `r fmt(review_counts$Records[4])` were read in full. One reader screened and read, and a record without an accessible full text was used from its abstract alone, which the synthesis records.
+The literature above was assembled under a written protocol, frozen before the first search, from two indexes, the author's reading store and one round of citation chasing, which returned `r fmt(review_counts$Records[2])` unique records, of which `r fmt(review_counts$Records[5])` were retained and `r fmt(review_counts$Records[4])` read in full. The study addressed three questions. Do the three mechanisms @krawchuk2020 named, stand density, topographic shading and the scarcity of large hosts, predict red-stage attack once host, terrain and previous attack are in the model? Does wind act on attack through stand density, which is the form plume disruption takes, and only where wind varies in time? Does terrain shelter act as a main effect, which is what deposition of wind-borne beetles predicts, or only through stand density, which is what plume disruption predicts?
 
-## Study area
+# Methods
+
+## Site terrain
 
 ```{r}
 #| label: 00-make-directories
@@ -956,12 +952,6 @@ cat("Attribution required in the caption: Esri World Shaded Relief.\n")
 }
 ```
 
-The study area covered `r fmt(AREA_HA)` ha of the Selkirk Mountains in southeastern British Columbia, `r fmt(N_CELL)` cells of 30 m spanning `r fmt(ELEV_R[1])` to `r fmt(ELEV_R[2])` m, `r fmt(diff(ELEV_R))` m of relief, on the grid of the parent study, so that results compared directly with it. The perimeter was centred on the 2015 Mt Midgeley fire, the parent study's site, and extended beyond its `r fmt(BURN_HA)` ha of burned area to take in the range of stand density the pheromone mechanism needed. The extension was constrained rather than arbitrary. The burn was buffered by 5 km and the buffer was then cut to the elevation band of the parent study's site, so that the ground added was comparable to the ground it was added to. Table S1 lists the datasets the study combined and the spatial and temporal resolution of each. Those resolutions were uneven, and the analysis depended on that unevenness. The response was measured every sixteen days, the inventory once a year and the station winds every hour, and the terrain was measured once.
-
-*@fig-study-area near here*
-
-## Beetle disturbance
-
 ```{r}
 #| label: 17-ndmi-annual-darkwoods
 if (!file.exists(here::here("02.inputs/beetle/ndmi-darkwoods/ndmi_2020.tif"))) {
@@ -1053,333 +1043,6 @@ for (y in YEARS) {
 ```
 
 ```{r}
-#| label: 22-harmonise-landsat8
-if (!file.exists(here::here("02.inputs/beetle/ndmi-darkwoods/ndmi_2020_l8raw.tif"))) {
-
-## Put the Landsat 8 years onto the Landsat 5 scale, empirically.
-##
-## The problem. The Roy et al. (2016) coefficients are applied to reflectance in
-## 17- and 20-, and they are still not enough: differenced against a 2005 Landsat 5
-## baseline, the two Landsat 8 years classified 52.0 and 54.2 per cent of Darkwoods as
-## attacked against 13.2 to 32.4 per cent for the Landsat 5 outbreak years. Half the
-## training set, 483 of 1000 plots and 151 of the 250 high-severity plots, takes its
-## worst year from 2013 or 2014, so this bias is inside the labels as well as the map.
-##
-## The fix. Relative radiometric normalisation against stable ground. Landsat 5 ends in
-## 2011 and Landsat 8 begins in 2013, so there is no overlapping year and no
-## pseudo-invariant scene pair. Instead, stable forest is identified from the Landsat 5
-## era alone as cells that are forested in 2005 and whose deepest NDMI drop across
-## 2006-2011 stays above -0.05, then each Landsat 8 index is rescaled by a gain and
-## offset that match its median and median absolute deviation over those cells to the
-## 2011 image's. Stable forest should not differ between 2011 and 2013 in these indices,
-## so any difference over it is instrument, not ground.
-##
-## What this cannot do, stated so it is not over-read: it also removes any genuine
-## landscape-wide change between 2011 and 2013 that happens to fall on those cells,
-## including beetle attack in 2012, the year with no usable imagery. The correction is
-## therefore conservative against detecting 2012-2013 attack.
-##
-## Originals are preserved as <index>_<year>_l8raw.tif and the corrected raster takes
-## the original filename, so 19- and 21- read the corrected series without change.
-
-suppressPackageStartupMessages(library(terra))
-ROOT <- here::here("02.inputs", "beetle")
-IN   <- file.path(ROOT, "ndmi-darkwoods")
-L8   <- c(2013, 2014, 2020); L5REF <- 2011
-IDX  <- c("ndmi","ndvi","nbr","tcw")
-rd <- function(nm, y, raw = FALSE)
-  rast(file.path(IN, sprintf("%s_%d%s.tif", nm, y, if (raw) "_l8raw" else "")))
-
-## stable forest, defined entirely within the Landsat 5 era
-base <- rd("ndmi", 2005)
-forest <- base > 0.20
-dmin <- min(rast(lapply(2006:2011, function(y) rd("ndmi", y) - base)))
-stable <- mask(forest & (dmin > -0.05), forest, maskvalues = c(0, NA))
-stable[stable == 0] <- NA
-ns <- global(stable, "sum", na.rm = TRUE)[[1]]
-cat(sprintf("stable forest cells: %.0f (%.1f%% of grid)\n", ns, 100*ns/ncell(base)))
-
-for (nm in IDX) {
-  ref <- values(mask(rd(nm, L5REF), stable)); ref <- ref[!is.na(ref)]
-  mr <- median(ref); ar <- mad(ref)
-  cat(sprintf("\n%s  reference %d over stable forest: median %+.4f  MAD %.4f\n",
-              toupper(nm), L5REF, mr, ar))
-  for (y in L8) {
-    raw <- file.path(IN, sprintf("%s_%d_l8raw.tif", nm, y))
-    cur <- file.path(IN, sprintf("%s_%d.tif", nm, y))
-    if (!file.exists(raw)) file.copy(cur, raw)
-    r  <- rast(raw)
-    v  <- values(mask(r, stable)); v <- v[!is.na(v)]
-    my <- median(v); ay <- mad(v)
-    g  <- ar / ay; o <- mr - g * my
-    out <- r * g + o; names(out) <- sprintf("%s_%d", toupper(nm), y)
-    writeRaster(out, cur, overwrite = TRUE, datatype = "FLT4S",
-                gdal = c("COMPRESS=DEFLATE","PREDICTOR=3"))
-    vc <- values(mask(out, stable)); vc <- vc[!is.na(vc)]
-    cat(sprintf("  %d raw median %+.4f MAD %.4f -> gain %.4f offset %+.4f -> median %+.4f MAD %.4f\n",
-                y, my, ay, g, o, median(vc), mad(vc)))
-  }
-}
-}
-```
-
-```{r}
-#| label: 42-cube-grid-ee
-if (!file.exists(here::here("02.inputs/beetle/cube-16day/ndmi_2005_e05.tif"))) {
-
-## A 16-day Landsat cube over the study perimeter, built in Google Earth Engine.
-##
-## Why Earth Engine and why 16 days. The annual classification collapses a whole growing
-## season into one map, which leaves eight observations in time and makes any wind test a
-## comparison between summers. Landsat's repeat is 16 days, so the finest cadence the
-## sensor supports is roughly ten steps per growing season, not one. Building that over
-## 62,000 cells for eight years is 80 composites, which is what Earth Engine is for: the
-## compositing happens on their side and only the finished epoch grids are downloaded.
-##
-## 06-build-cube.R already built this cadence, but sampled it at 28 plot points rather than
-## over a grid. This script is that cube as rasters.
-##
-## Grid: EPSG:3153 at 30 m, the parent study's grid, over the perimeter from
-## 33-study-perimeter.R. Epochs: fixed 16-day windows on a common calendar from 1 May, so
-## every year is sampled on the same dates rather than on whatever the cloud allowed.
-##
-## Three traps, all recorded in project memory and all guarded here:
-##   1. A GeoTIFF written from an Earth Engine integer image takes zero as nodata, so a
-##      value that can legitimately be zero is silently turned into NA. NDMI is therefore
-##      exported scaled by 10,000 and offset by 20,000, well away from zero, and undone
-##      locally.
-##   2. getDownloadURL with crsTransform and no dimensions makes Earth Engine compute over
-##      the whole CRS extent and fail against the 50 MB cap. Use scale plus region.
-##   3. Landsat 8 must be put on the ETM+ scale with the Roy et al. (2016) band-pass
-##      coefficients before it is differenced against Landsat 5 years.
-
-Sys.setenv(RETICULATE_PYTHON = path.expand("~/.virtualenvs/rgee/bin/python"))
-suppressPackageStartupMessages({library(reticulate); library(rgee); library(sf); library(terra)})
-ROOT <- here::here("02.inputs", "beetle")
-SA   <- file.path(ROOT, "study-area")
-OUT  <- file.path(ROOT, "cube-16day"); dir.create(OUT, showWarnings = FALSE)
-ee_Initialize(project = "murphys-deforisk", drive = FALSE)
-
-YEARS   <- c(2005:2011, 2013, 2014)
-EPOCH_D <- 16L
-DOY0    <- 121L                    # 1 May
-NEPOCH  <- 9L                      # 9 x 16 days = 144 days, 1 May to 22 September
-SCALE   <- 10000; OFFSET <- 20000  # keep exported integers away from zero
-
-msk <- rast(file.path(SA, "perimeter_mask.tif"))
-per <- st_transform(st_as_sf(as.polygons(ext(msk), crs = crs(msk))), 4326)
-region <- sf_as_ee(per)
-
-## Roy et al. (2016) OLI to ETM+ band-pass coefficients, as in 06-build-cube.R.
-ROY_S <- c(BLUE=0.8474, GREEN=0.8483, RED=0.9047, NIR=0.8462, SWIR1=0.8937, SWIR2=0.9071)
-ROY_I <- c(BLUE=0.0003, GREEN=0.0088, RED=0.0061, NIR=0.0412, SWIR1=0.0254, SWIR2=0.0172)
-
-prep <- function(ic, bands, l8) {
-  ic$map(ee_utils_pyfunc(function(im) {
-    sr <- im$select(bands, c("BLUE","GREEN","RED","NIR","SWIR1","SWIR2"))$
-            multiply(0.0000275)$add(-0.2)
-    if (l8) sr <- sr$multiply(ee$Image$constant(unname(ROY_S)))$
-                     add(ee$Image$constant(unname(ROY_I)))
-    qa <- im$select("QA_PIXEL")
-    clear <- qa$bitwiseAnd(strtoi("11000", base = 2))$eq(0)
-    sr$updateMask(clear)$copyProperties(im, list("system:time_start"))
-  }))
-}
-
-for (y in YEARS) {
-  l5 <- prep(ee$ImageCollection("LANDSAT/LT05/C02/T1_L2")$filterBounds(region),
-             c("SR_B1","SR_B2","SR_B3","SR_B4","SR_B5","SR_B7"), FALSE)
-  l7 <- prep(ee$ImageCollection("LANDSAT/LE07/C02/T1_L2")$filterBounds(region),
-             c("SR_B1","SR_B2","SR_B3","SR_B4","SR_B5","SR_B7"), FALSE)
-  l8 <- prep(ee$ImageCollection("LANDSAT/LC08/C02/T1_L2")$filterBounds(region),
-             c("SR_B2","SR_B3","SR_B4","SR_B5","SR_B6","SR_B7"), TRUE)
-  ## 2012 is excluded from the study; Landsat 7 is used only where it is the sole sensor
-  ## and never in a year that has another, because the scan-line corrector has been off
-  ## since May 2003.
-  col <- if (y <= 2011) l5 else l8
-
-  for (e in seq_len(NEPOCH)) {
-    d0 <- as.Date(sprintf("%d-01-01", y)) + (DOY0 - 1) + (e - 1) * EPOCH_D
-    d1 <- d0 + EPOCH_D
-    f  <- file.path(OUT, sprintf("ndmi_%d_e%02d.tif", y, e))
-    if (file.exists(f)) next
-    im <- col$filterDate(format(d0), format(d1))$median()
-    ndmi <- im$normalizedDifference(c("NIR","SWIR1"))$rename("ndmi")
-    out  <- ndmi$multiply(SCALE)$add(OFFSET)$toInt32()
-    url <- try(out$getDownloadURL(list(scale = 30, region = region$geometry(),
-                                       crs = "EPSG:3153", format = "GEO_TIFF")), silent = TRUE)
-    if (inherits(url, "try-error")) { cat("skip", y, e, "\n"); next }
-    tmp <- tempfile(fileext = ".tif")
-    ok <- try(download.file(url, tmp, quiet = TRUE, mode = "wb"), silent = TRUE)
-    if (inherits(ok, "try-error")) { cat("download failed", y, e, "\n"); next }
-    r <- try(rast(tmp), silent = TRUE)
-    if (inherits(r, "try-error")) { cat("unreadable", y, e, "\n"); next }
-    r <- (r - OFFSET) / SCALE
-    r <- mask(resample(r, msk, method = "near"), msk)
-    names(r) <- sprintf("ndmi_%d_e%02d", y, e)
-    writeRaster(r, f, overwrite = TRUE, datatype = "FLT4S", gdal = c("COMPRESS=DEFLATE"))
-    cat(sprintf("%d epoch %02d  %s to %s  valid %5.1f%%  median %.3f\n", y, e,
-                format(d0), format(d1), 100*mean(!is.na(values(r))),
-                median(values(r), na.rm = TRUE)))
-  }
-}
-fs <- list.files(OUT, "\\.tif$")
-cat(sprintf("\n%d epoch rasters written to %s\n", length(fs), OUT))
-}
-```
-
-```{r}
-#| label: classifier
-PIX <- here::here("02.inputs/beetle/red-stage-darkwoods/classifier_pixels.csv")
-if (!file.exists(PIX)) {
-  suppressPackageStartupMessages({library(terra); library(sf); library(readxl)})
-  # Landsat Collection 2 Level-2 surface reflectance, annual NDMI built in chunk pipeline-17,
-  # https://www.usgs.gov/landsat-missions/landsat-collection-2-level-2-science-products
-  nd <- rast(here::here("02.inputs/beetle/ndmi-darkwoods", sprintf("ndmi_%d.tif", c(2005:2011, 2013, 2014))))
-  names(nd) <- paste0("ndmi_", c(2005:2011, 2013, 2014))
-  # Field plots of Murphy et al. (2026), 28 plots of 20 by 20 m measured July and August 2020,
-  # https://doi.org/10.1016/j.foreco.2026.123985
-  fp <- read_excel(here::here("02.inputs/beetle/plot-locations/2.1.darkwoods_beetle_ground_plots_ndmi.xlsx"))
-  cc <- xyFromCell(nd, cellFromXY(nd, cbind(fp$easting, fp$northing)))
-  sx <- ifelse(fp$easting >= cc[, 1], 30, -30); sy <- ifelse(fp$northing >= cc[, 2], 30, -30)
-  field <- data.frame(plot = rep(fp$plot, 4), killed_ba = rep(fp$pi_mpb_killed, 4),
-                      x = c(cc[, 1], cc[, 1] + sx, cc[, 1], cc[, 1] + sx),
-                      y = c(cc[, 2], cc[, 2], cc[, 2] + sy, cc[, 2] + sy))
-  field$group <- paste0("plot", field$plot)
-  # Undisturbed forest digitised on the 2020 Landsat 8 scene for Murphy et al. (2026),
-  # Google Drive folder Data Collection, id 1ixV1Xi1Ou1xwqpBSObMzZb93_AJkm9hl
-  un <- st_coordinates(st_read(here::here("02.inputs/beetle/plot-locations/beetle_nonplots_undisturbed.shp"), quiet = TRUE))
-  uc <- unique(cellFromXY(nd, un[, 1:2]))
-  ux <- xyFromCell(nd, uc)
-  undist <- data.frame(plot = NA, killed_ba = 0, x = ux[, 1], y = ux[, 2],
-                       group = paste0("block", floor(ux[, 1] / 100), "_", floor(ux[, 2] / 100)))
-  px <- rbind(cbind(class = "redstage", field), cbind(class = "undisturbed", undist))
-  ex <- terra::extract(nd, px[, c("x", "y")])[, -1]
-  dn <- ex[, -1] - ex[, 1]
-  px$dndmi_min <- apply(dn, 1, min)
-  px$worst_year <- c(2006:2011, 2013, 2014)[apply(dn, 1, which.min)]
-  px <- cbind(px, ex)
-  write.csv(px, PIX, row.names = FALSE)
-}
-
-MCCV <- here::here("02.inputs/beetle/red-stage-darkwoods/classifier_blocked_mccv.csv")
-if (!file.exists(MCCV)) {
-  suppressPackageStartupMessages({library(caret); library(randomForest); library(kernlab); library(gbm)})
-  set.seed(123)
-  px <- read.csv(PIX)
-  px$cls <- factor(px$class, levels = c("undisturbed", "redstage"))
-  models <- list(
-    rf  = list(method = "rf", grid = data.frame(mtry = 1), args = list(ntree = 1000)),
-    svm = list(method = "svmRadial", grid = data.frame(sigma = 1, C = 1), args = list()),
-    gbm = list(method = "gbm", grid = data.frame(n.trees = 100, interaction.depth = 2, shrinkage = 0.1, n.minobsinnode = 5),
-               args = list(verbose = FALSE)))
-  fit1 <- function(m, d) do.call(train, c(list(cls ~ dndmi_min, data = d, method = m$method, tuneGrid = m$grid,
-                                               trControl = trainControl(method = "none"), preProcess = c("center", "scale")), m$args))
-  grp <- split(unique(px$group), unique(px[, c("group", "class")])$class)
-  runs <- do.call(rbind, lapply(1:100, function(i) {
-    test_groups <- unlist(lapply(grp, function(g) sample(g, max(1, round(0.25 * length(g))))))
-    trn <- px[!px$group %in% test_groups, ]; tst <- px[px$group %in% test_groups, ]
-    do.call(rbind, lapply(names(models), function(k) {
-      cm <- confusionMatrix(predict(fit1(models[[k]], trn), tst), tst$cls, positive = "redstage")
-      data.frame(split = i, model = k, n_test = nrow(tst), accuracy = cm$overall[["Accuracy"]], kappa = cm$overall[["Kappa"]],
-                 sensitivity = cm$byClass[["Sensitivity"]], specificity = cm$byClass[["Specificity"]])
-    }))
-  }))
-  write.csv(runs, here::here("02.inputs/beetle/red-stage-darkwoods/classifier_blocked_mccv_splits.csv"), row.names = FALSE)
-  smry <- do.call(rbind, lapply(split(runs, runs$model), function(r) data.frame(
-    model = r$model[1], n_pixels = nrow(px), n_redstage = sum(px$class == "redstage"), n_undisturbed = sum(px$class == "undisturbed"),
-    n_groups = length(unique(px$group)), n_splits = nrow(r),
-    accuracy_mean = mean(r$accuracy), accuracy_sd = sd(r$accuracy),
-    accuracy_lo = unname(quantile(r$accuracy, 0.025)), accuracy_hi = unname(quantile(r$accuracy, 0.975)),
-    kappa_mean = mean(r$kappa), kappa_sd = sd(r$kappa),
-    kappa_lo = unname(quantile(r$kappa, 0.025)), kappa_hi = unname(quantile(r$kappa, 0.975)),
-    sensitivity_mean = mean(r$sensitivity), specificity_mean = mean(r$specificity))))
-  smry$chosen <- smry$kappa_mean == max(smry$kappa_mean)
-  final <- fit1(models[[smry$model[smry$chosen][1]]], px)
-  saveRDS(final, here::here("02.inputs/beetle/red-stage-darkwoods/redstage_classifier_blocked.rds"))
-  g <- data.frame(dndmi_min = seq(-0.6, 0.2, by = 0.0001))
-  g$p <- predict(final, g) == "redstage"
-  smry$n_switches <- sum(diff(g$p) != 0)
-  smry$cut_dndmi <- if (any(g$p) && any(!g$p)) max(g$dndmi_min[g$p & cumsum(!g$p) == 0]) else NA
-  write.csv(smry, MCCV, row.names = FALSE)
-}
-```
-
-```{r}
-#| label: period-maps
-## sixteen-day red-stage maps
-EPS <- here::here("02.inputs/beetle/epoch-redstage/epoch_summary.csv")
-if (!file.exists(EPS)) {
-  suppressPackageStartupMessages(library(terra))
-  dir.create(dirname(EPS), showWarnings = FALSE)
-  cut_at <- with(read.csv(here::here("02.inputs/beetle/red-stage-darkwoods/classifier_blocked_mccv.csv")), cut_dndmi[chosen])
-  msk <- rast(here::here("02.inputs/beetle/study-area/perimeter_mask.tif"))
-  # Landsat Collection 2 Level-2 surface reflectance, sixteen-day NDMI composites from chunk pipeline-42,
-  # https://www.usgs.gov/landsat-missions/landsat-collection-2-level-2-science-products
-  cube <- function(y, e) here::here("02.inputs/beetle/cube-16day", sprintf("ndmi_%d_e%02d.tif", y, e))
-  rows <- list()
-  for (y in c(2006:2011, 2013, 2014)) for (e in 1:9) {
-    if (!file.exists(cube(y, e)) || !file.exists(cube(2005, e))) next
-    d <- rast(cube(y, e)) - rast(cube(2005, e))
-    b <- mask(ifel(d <= cut_at, 1, 0), msk)
-    n <- global(!is.na(b), "sum")[[1]]
-    if (n < 0.1 * global(!is.na(msk), "sum")[[1]]) next
-    writeRaster(b, file.path(dirname(EPS), sprintf("redstage_%d_e%02d.tif", y, e)), overwrite = TRUE,
-                datatype = "INT1U", gdal = "COMPRESS=DEFLATE")
-    d0 <- as.Date(sprintf("%d-05-01", y)) + (e - 1) * 16
-    rows[[length(rows) + 1]] <- data.frame(year = y, epoch = e, start = format(d0), end = format(d0 + 16),
-                                           dndmi_cut = cut_at, valid_cells = n, attacked = global(b, "sum", na.rm = TRUE)[[1]])
-  }
-  ep <- do.call(rbind, rows)
-  ep$prevalence <- ep$attacked / ep$valid_cells
-  write.csv(ep, EPS, row.names = FALSE)
-}
-
-## annualized stand structure on the perimeter grid, one raster per study year
-VRA <- here::here("02.inputs/beetle/study-area/vri-annual")
-if (!file.exists(file.path(VRA, "vri_year_source.csv"))) {
-  suppressPackageStartupMessages({library(terra); library(sf)})
-  dir.create(VRA, showWarnings = FALSE)
-  HOST <- c("BASAL_AREA", "CROWN_CLOSURE", "VRI_LIVE_STEMS_PER_HA", "QUAD_DIAM_125", "PROJ_AGE_1", "PROJ_HEIGHT_1", "LIVE_STAND_VOLUME_125")
-  msk <- rast(here::here("02.inputs/beetle/study-area/perimeter_mask.tif"))
-  # British Columbia Vegetation Resources Inventory, historical annual releases 2002 to 2024,
-  # https://catalogue.data.gov.bc.ca/dataset/vri-historical-vegetation-resource-inventory-2002-2024-
-  snap <- function(y) {
-    v <- st_read(here::here("02.inputs/beetle/study-area/vri-timeseries", sprintf("vri_%d.gpkg", y)), quiet = TRUE)
-    for (k in HOST) v[[k]] <- if (k %in% names(v)) suppressWarnings(as.numeric(v[[k]])) else NA_real_
-    v
-  }
-  filled <- sapply(c(2005:2011, 2013, 2014), function(y) min(colMeans(!is.na(st_drop_geometry(snap(y))[, HOST]))))
-  have <- c(2005:2011, 2013, 2014)[filled >= 0.2]
-  src <- data.frame(year = c(2005:2011, 2013, 2014))
-  src$vri_year <- sapply(src$year, function(y) if (y %in% have) y else max(have[have < y]))
-  src$substituted <- src$year != src$vri_year
-  for (y in unique(src$vri_year)) {
-    v <- st_transform(snap(y), crs(msk))
-    sp <- grep("^SPECIES_CD_|^SPEC_CD_", names(v), value = TRUE); pc <- grep("^SPECIES_PCT_|^SPEC_PCT_", names(v), value = TRUE)
-    v$PinePct <- 0
-    for (k in seq_len(min(length(sp), length(pc)))) {
-      add <- suppressWarnings(as.numeric(v[[pc[k]]])); add[is.na(add)] <- 0
-      v$PinePct <- v$PinePct + ifelse(grepl("^PL", as.character(v[[sp[k]]])), add, 0)
-    }
-    v$PINE_BA <- v$BASAL_AREA * v$PinePct / 100
-    r <- rast(lapply(c(HOST, "PinePct", "PINE_BA"), function(k) rasterize(vect(v), msk, field = k)))
-    names(r) <- c(HOST, "PinePct", "PINE_BA")
-    writeRaster(mask(r, msk), file.path(VRA, sprintf("vri_%d.tif", y)), overwrite = TRUE, gdal = "COMPRESS=DEFLATE")
-  }
-  write.csv(src, file.path(VRA, "vri_year_source.csv"), row.names = FALSE)
-}
-```
-
-The response was red-stage beetle attack in each sixteen-day period from 1 May to 22 September of the outbreak years 2006 to 2014, excluding 2012, when Landsat 7 was the only sensor and its scan-line corrector had failed. The index and baseline followed @murphy2026, who mapped red-stage mortality on this ground as the fall in the normalised difference moisture index (NDMI), an index used to detect forest disturbance in Landsat time series [@jin2005], against the 2005 pre-outbreak image and validated the map against 28 field plots of 20 by 20 m in which beetle-killed pine was confirmed from pitch tubes, frass and gallery architecture and measured as the fraction of plot basal area killed. Sixteen days is the Landsat revisit interval. NDMI was composited as the median of the cloud-masked Collection 2 Level-2 scenes in each period, from Landsat 5 for 2005 to 2011 and from Landsat 8 for 2013 and 2014 after the band-pass adjustment of @roy2016, and each period was differenced against the same period of 2005, so that the seasonal rise and fall of leaf moisture did not enter the difference.
-
-The fall in NDMI that counted as attack was set by a classifier trained on two classes of Landsat pixel. The attacked class was the four pixels nearest the centre of each of the 28 field plots, `r fmt(sum(PIXC$class == "redstage"))` pixels. The undisturbed class was the 84 points of forest without beetle mortality that @murphy2026 digitised on the 2020 Landsat 8 scene, which fell in `r fmt(sum(PIXC$class == "undisturbed"))` distinct 30 m cells of the study grid. Each pixel entered with its deepest annual fall in NDMI against 2005. Random forest, a radial support vector machine and gradient boosting were compared under Monte Carlo cross-validation, `r fmt(CB$n_splits)` random splits that each held out a quarter of the groups of each class, a group being the four pixels of one field plot or the undisturbed pixels within one 100 m block, so that neighbouring pixels never fell on both sides of a split. The model with the highest mean kappa set the cut, the fall in NDMI at which its prediction changed class, and a cell was classed as attacked in a period where its fall reached the cut. Periods in which the imagery saw less than a tenth of the perimeter were dropped, which left `r N_EP` periods over `r spellnum(EP_YRS)` years (Table S2). The undisturbed pixels came from one patch of about 230 by 455 m, so the cross-validation measured separation of the field plots from that patch rather than from undisturbed forest across the landscape.
-
-*@fig-spread near here*
-
-## Flight-period wind
-
-```{r}
 #| label: 36-wind-direction
 if (!file.exists(here::here("02.inputs/beetle/covariates/wind_direction_pooled.txt"))) {
 
@@ -1444,443 +1107,6 @@ cat(sprintf("between-year spread: %.1f to %.1f degrees\n",
             min(wd$prevailing_deg), max(wd$prevailing_deg)))
 }
 ```
-
-```{r}
-#| label: wind-direction-value
-WDIR <- as.numeric(readLines(file.path(BC, "covariates", "wind_direction_pooled.txt")))
-```
-
-```{r}
-#| label: 51-flight-window-climate
-if (!file.exists(here::here("02.inputs/beetle/covariates/flight-window/hourly_climate.csv"))) {
-
-## Hourly station climate through the flight season, for the flight-window figure.
-##
-## Why this exists. The manuscript restricts the flight window to 1 July to 15 August and
-## to the hours 12:00 to 17:00, citing a thermal gate of 19 to 41 degrees C and a flight
-## peak "in the early to mid afternoon" (Safranyik and Carroll 2006). Those are numbers
-## from the literature applied to this landscape without ever showing the reader the
-## landscape's own climate. A figure can show it: where the window sits inside the season,
-## how much of the season clears the thermal gate, and whether the afternoon really is when
-## it clears.
-##
-## The window is not fitted to these data. It comes from the bionomics and is held fixed;
-## this is the check on whether it is reasonable here, and it can fail.
-##
-## 30-wind-hourly-metrics.R fetches June to August and keeps only summary metrics, so
-## nothing on disk carries the within-season shape. This pulls May to September so the
-## window has season on both sides of it, and keeps the hourly records.
-##
-## Writes: covariates/flight-window/hourly_climate.csv   year, date, doy, hour, temp, wind
-##         covariates/flight-window/daily_climate.csv    per year and day of year
-##
-## Run:  /usr/local/bin/Rscript 02.inputs/beetle/51-flight-window-climate.R
-
-suppressPackageStartupMessages({
-  library(sf); library(terra); library(dplyr); library(weathercan)
-})
-
-ROOT <- here::here("02.inputs", "beetle")
-OUT  <- file.path(ROOT, "covariates", "flight-window")
-dir.create(OUT, recursive = TRUE, showWarnings = FALSE)
-
-YEARS <- c(2005:2011, 2013, 2014)
-## The flight envelope and the window the manuscript uses, stated once here so the figure
-## and the methods cannot disagree.
-T_MIN <- 19; T_MAX <- 41          # flight is gated between these, after Carroll et al.
-T_PEAK <- c(22, 32)               # most flight occurs in this narrower band
-HR <- c(12, 17)                   # the afternoon hours the window restricts to
-WIN <- c("07-01", "08-15")        # the flight window itself
-
-per <- st_read(file.path(ROOT, "study-area", "study_perimeter.gpkg"), quiet = TRUE)
-ctr <- st_transform(st_centroid(st_union(per)), 4326)
-cc  <- st_coordinates(ctr)
-sl  <- stations_search(coords = c(cc[2], cc[1]), interval = "hour", dist = 150)
-sl  <- sl[!is.na(sl$start) & sl$start <= 2014 & !is.na(sl$end) & sl$end >= 2005, ]
-ids <- unique(sl$station_id)
-cat(sprintf("hourly stations within 150 km overlapping 2005-2014: %d\n", length(ids)))
-
-all <- list()
-for (y in YEARS) {
-  w <- try(weather_dl(station_ids = ids, interval = "hour",
-                      start = sprintf("%d-05-01", y), end = sprintf("%d-09-30", y)),
-           silent = TRUE)
-  if (inherits(w, "try-error") || !nrow(w)) { cat(sprintf("  %d unavailable\n", y)); next }
-  w <- w |>
-    transmute(year = y,
-              date = as.Date(date),
-              doy  = as.integer(format(as.Date(date), "%j")),
-              hour = as.integer(substr(time, 12, 13)),
-              temp = temp,
-              wind = wind_spd) |>
-    filter(!is.na(temp) | !is.na(wind))
-  cat(sprintf("  %d: %d hourly records, %d days\n", y, nrow(w), length(unique(w$doy))))
-  all[[as.character(y)]] <- w
-}
-h <- bind_rows(all)
-if (!nrow(h)) stop("no hourly records returned")
-write.csv(h, file.path(OUT, "hourly_climate.csv"), row.names = FALSE)
-
-## Daily summary, with the two quantities the window turns on: how warm the afternoon gets,
-## and what share of afternoon hours actually sit inside the flight envelope.
-d <- h |>
-  group_by(year, doy) |>
-  summarise(
-    temp_mean = mean(temp, na.rm = TRUE),
-    temp_max  = suppressWarnings(max(temp, na.rm = TRUE)),
-    pm_temp   = mean(temp[hour >= HR[1] & hour <= HR[2]], na.rm = TRUE),
-    pm_in_gate  = mean(temp[hour >= HR[1] & hour <= HR[2]] >= T_MIN &
-                       temp[hour >= HR[1] & hour <= HR[2]] <= T_MAX, na.rm = TRUE),
-    pm_in_peak  = mean(temp[hour >= HR[1] & hour <= HR[2]] >= T_PEAK[1] &
-                       temp[hour >= HR[1] & hour <= HR[2]] <= T_PEAK[2], na.rm = TRUE),
-    wind_mean = mean(wind, na.rm = TRUE),
-    pm_wind   = mean(wind[hour >= HR[1] & hour <= HR[2]], na.rm = TRUE),
-    .groups = "drop") |>
-  mutate(across(where(is.numeric), ~ ifelse(is.finite(.x), .x, NA_real_)))
-write.csv(d, file.path(OUT, "daily_climate.csv"), row.names = FALSE)
-
-## The numbers the manuscript can quote about its own window, computed rather than asserted.
-wdoy <- function(y) as.integer(format(as.Date(sprintf("%d-%s", y, WIN)), "%j"))
-inwin <- d |> rowwise() |> mutate(inw = doy >= wdoy(year)[1] & doy <= wdoy(year)[2]) |> ungroup()
-s <- inwin |> group_by(inw) |>
-  summarise(days = dplyr::n(),
-            pm_temp = mean(pm_temp, na.rm = TRUE),
-            pm_in_gate = mean(pm_in_gate, na.rm = TRUE),
-            pm_in_peak = mean(pm_in_peak, na.rm = TRUE), .groups = "drop")
-cat("\nafternoon hours inside the 19-41 C flight gate:\n")
-print(as.data.frame(s), row.names = FALSE, digits = 3)
-
-## in_gate is computed BEFORE the mean that shares its name. summarise() evaluates its
-## arguments in order and later ones see the columns the earlier ones created, so
-## `mean(temp >= T_MIN)` written after `temp = mean(temp)` tests the single hourly mean
-## and returns 0 or 1 rather than a share. The first build of this file did exactly that.
-by_hour <- h |> group_by(hour) |>
-  summarise(in_gate = mean(temp >= T_MIN & temp <= T_MAX, na.rm = TRUE),
-            in_peak = mean(temp >= T_PEAK[1] & temp <= T_PEAK[2], na.rm = TRUE),
-            wind    = mean(wind, na.rm = TRUE),
-            temp    = mean(temp, na.rm = TRUE),
-            .groups = "drop") |>
-  filter(!is.na(hour))
-write.csv(by_hour, file.path(OUT, "diurnal_climate.csv"), row.names = FALSE)
-cat(sprintf("\nwarmest hour of the day: %02d:00 at %.1f C; gate cleared most often at %02d:00\n",
-            by_hour$hour[which.max(by_hour$temp)], max(by_hour$temp, na.rm = TRUE),
-            by_hour$hour[which.max(by_hour$in_gate)]))
-cat(sprintf("wrote %s\n", OUT))
-}
-```
-
-```{r}
-#| label: flight-window-climate
-## The flight window is fixed a priori from the bionomics. These are the numbers that
-## check it against this landscape's own climate, from 51-flight-window-climate.R. If the
-## window were arbitrary here they would say so: the comparison is between afternoon hours
-## inside the window and afternoon hours in the rest of the May-to-September season.
-FW <- file.path(BC, "covariates", "flight-window")
-clim_h <- read.csv(file.path(FW, "hourly_climate.csv"))
-clim_d <- read.csv(file.path(FW, "daily_climate.csv"))
-clim_x <- read.csv(file.path(FW, "diurnal_climate.csv"))
-
-T_GATE <- c(19, 41); T_PEAK <- c(22, 32); FW_HR <- c(12, 17)
-win_doy <- function(y) as.integer(format(as.Date(sprintf("%d-%s", y, c("07-01","08-15"))), "%j"))
-clim_d$inwin <- mapply(function(y, d) {
-  w <- win_doy(y); d >= w[1] && d <= w[2] }, clim_d$year, clim_d$doy)
-
-CLIM_N     <- nrow(clim_h)
-CLIM_IN    <- mean(clim_d$pm_in_gate[clim_d$inwin],  na.rm = TRUE)
-CLIM_OUT   <- mean(clim_d$pm_in_gate[!clim_d$inwin], na.rm = TRUE)
-CLIM_T_IN  <- mean(clim_d$pm_temp[clim_d$inwin],  na.rm = TRUE)
-CLIM_T_OUT <- mean(clim_d$pm_temp[!clim_d$inwin], na.rm = TRUE)
-CLIM_W_MAX <- max(clim_x$wind, na.rm = TRUE)
-CLIM_W_MIN <- min(clim_x$wind, na.rm = TRUE)
-CLIM_HR_PK <- clim_x$hour[which.max(clim_x$temp)]
-CLIM_YRS   <- length(unique(clim_h$year))
-```
-
-```{r}
-#| label: micromet-wind
-## MicroMet terrain weighting, equations 12 to 18 of Liston and Elder (2006), on the context grid
-WW <- here::here("02.inputs/beetle/covariates/micromet-context/wind_weight_by_direction.tif")
-if (!file.exists(WW)) {
-  suppressPackageStartupMessages(library(terra))
-  dir.create(dirname(WW), recursive = TRUE, showWarnings = FALSE)
-  # Natural Resources Canada High Resolution Digital Elevation Model, 30 m, reprojected in chunk pipeline-47,
-  # https://open.canada.ca/data/en/dataset/957782bf-847c-4644-a757-e383c0057995
-  dem <- rast(here::here("02.inputs/beetle/study-area/dem_context.tif"))
-  msk <- rast(here::here("02.inputs/beetle/study-area/perimeter_mask.tif"))
-  g <- terrain(dem, v = c("slope", "aspect"), unit = "radians", neighbors = 8)
-  shift <- function(r, dx, dy) { m <- as.matrix(r, wide = TRUE); o <- matrix(NA_real_, nrow(m), ncol(m))
-    ri <- seq_len(nrow(m)) - dy; ci <- seq_len(ncol(m)) + dx; kr <- ri >= 1 & ri <= nrow(m); kc <- ci >= 1 & ci <= ncol(m)
-    o[kr, kc] <- m[ri[kr], ci[kc]]; setValues(rast(r), o) }
-  prof <- sapply(1:40, function(k) { a <- values(dem); b <- values(shift(dem, k, 0)); ok <- !is.na(a) & !is.na(b); cor(a[ok], b[ok]) })
-  k <- which(prof < 0.5)[1]; if (is.na(k)) k <- 20L
-  eta <- k * res(dem)[1]
-  lines <- rast(list(
-    (dem - 0.5 * (shift(dem, -k, 0) + shift(dem, k, 0))) / (2 * eta),
-    (dem - 0.5 * (shift(dem, 0, -k) + shift(dem, 0, k))) / (2 * eta),
-    (dem - 0.5 * (shift(dem, -k, -k) + shift(dem, k, k))) / (2 * sqrt(2) * eta),
-    (dem - 0.5 * (shift(dem, -k, k) + shift(dem, k, -k))) / (2 * sqrt(2) * eta)))
-  oc <- mean(lines, na.rm = TRUE)
-  s05 <- function(r) r / (2 * max(abs(values(r)), na.rm = TRUE))
-  OC <- s05(oc)
-  bins <- (0:15) * 22.5
-  Ww <- rast(lapply(bins, function(b) 1 + 0.5 * s05(g[["slope"]] * cos(b * pi / 180 - g[["aspect"]])) + 0.5 * OC))
-  Ww <- mask(crop(Ww, msk), msk); names(Ww) <- sprintf("bin_%03.0f", bins)
-  writeRaster(Ww, WW, overwrite = TRUE, datatype = "FLT4S", gdal = "COMPRESS=DEFLATE")
-  writeLines(sprintf("curvature length scale %d cells, %.0f m", k, eta), file.path(dirname(WW), "curvature_length_scale.txt"))
-}
-
-## hourly station wind by epoch, flight hours 12:00 to 17:00 and all hours, weighted by the terrain surface of each hour's sector
-EWS <- here::here("02.inputs/beetle/covariates/wind-epoch-context/epoch_wind_summary.csv")
-if (!file.exists(EWS)) {
-  suppressPackageStartupMessages({library(terra); library(sf); library(dplyr); library(weathercan)})
-  dir.create(dirname(EWS), recursive = TRUE, showWarnings = FALSE)
-  Ww <- rast(WW); msk <- rast(here::here("02.inputs/beetle/study-area/perimeter_mask.tif"))
-  cells <- !is.na(values(msk)); wv <- lapply(1:16, function(b) values(Ww[[b]])[cells])
-  put <- function(v) { r <- msk; r[cells] <- v; r }
-  ctr <- st_coordinates(st_transform(st_sfc(st_point(c(mean(ext(msk)[1:2]), mean(ext(msk)[3:4]))), crs = crs(msk)), 4326))
-  # Environment and Climate Change Canada hourly climate observations, retrieved with weathercan,
-  # https://api.weather.gc.ca/collections/climate-hourly/items
-  sl <- stations_search(coords = c(ctr[2], ctr[1]), interval = "hour", dist = 150)
-  ids <- unique(sl$station_id[!is.na(sl$start) & sl$start <= 2014 & !is.na(sl$end) & sl$end >= 2005])
-  ep <- read.csv(here::here("02.inputs/beetle/epoch-redstage/epoch_summary.csv"))
-  acc_field <- function(h) {
-    acc <- rep(0, sum(cells)); calm <- acc
-    for (b in sort(unique(h$bin))) { sp <- sort(h$W[h$bin == b]); acc <- acc + wv[[b]] * sum(sp); calm <- calm + findInterval(5 / wv[[b]], sp) }
-    c(put(acc / nrow(h)), put(calm / nrow(h)))
-  }
-  rows <- list()
-  for (i in seq_len(nrow(ep))) {
-    w <- weather_dl(station_ids = ids, interval = "hour", start = ep$start[i], end = ep$end[i])
-    h <- w |> filter(!is.na(wind_spd), !is.na(wind_dir)) |>
-      mutate(th = wind_dir * 10 * pi / 180, u = -wind_spd * sin(th), v = -wind_spd * cos(th), hr = as.integer(format(time, "%H"))) |>
-      group_by(time, hr) |> summarise(u = mean(u), v = mean(v), .groups = "drop") |>
-      mutate(W = sqrt(u^2 + v^2), bin = (round(((atan2(-u, -v) * 180 / pi) %% 360) / 22.5) %% 16) + 1L)
-    fl <- h[h$hr >= 12 & h$hr < 17, ]
-    s <- c(acc_field(fl), acc_field(h))
-    names(s) <- c("ep_wind_flight", "ep_calm_flight", "ep_wind_all", "ep_calm_all")
-    writeRaster(s, file.path(dirname(EWS), sprintf("wind_%d_e%02d.tif", ep$year[i], ep$epoch[i])), overwrite = TRUE,
-                datatype = "FLT4S", gdal = "COMPRESS=DEFLATE")
-    rows[[i]] <- data.frame(year = ep$year[i], epoch = ep$epoch[i], hours_all = nrow(h), hours_flight = nrow(fl), stations = length(unique(w$station_id[!is.na(w$wind_spd)])),
-                            wind_flight = global(s[[1]], "mean", na.rm = TRUE)[[1]], wind_flight_range = diff(as.numeric(global(s[[1]], "range", na.rm = TRUE))),
-                            calm_flight = global(s[[2]], "mean", na.rm = TRUE)[[1]], wind_all = global(s[[3]], "mean", na.rm = TRUE)[[1]])
-  }
-  write.csv(do.call(rbind, rows), EWS, row.names = FALSE)
-}
-```
-
-The flight window was 1 July to 15 August and the hours 12:00 to 17:00. Neither bound was chosen from these data. The dates were the flight period @safranyik2006chap1 give for this region, and the hours followed their "peak flight is in the early to mid afternoon" together with the 11:00 to 14:00 emergence peak of @gray1972. The window was checked against `r fmt(CLIM_N)` hourly station records from May to September of the study years (Figure S1). Inside it, `r num(100*CLIM_IN, "%.1f")` per cent of afternoon hours fell within the 19 to 41 degrees C flight range against `r num(100*CLIM_OUT, "%.1f")` per cent outside it, and mean wind peaked in the same hours as temperature.
-
-Wind entered as a field that varied across the terrain at 30 m, computed with the MicroMet model of @liston2006, whose terrain adjustment weights each hourly station observation by the slope in the wind direction and the curvature of the ground. The adjustment depends on direction and not on speed, so it was computed once for each of 16 sectors of 22.5 degrees and each hourly observation was multiplied by the surface for its own sector. Slope and curvature were computed over an elevation model extending beyond the perimeter, so that the curvature length scale of `r sub(".*cells, ", "", readLines(file.path(BC, "covariates/micromet-context/curvature_length_scale.txt")))` was defined at the edge of the study area. Hourly speed and direction from Environment and Climate Change Canada stations within 150 km were combined as vector components, and each sixteen-day period was summarised by its mean wind and by the share of hours below 5 km/h, both over the flight hours of 12:00 to 17:00. Across periods the mean flight-hour wind ran from `r num(min(EW$wind_flight), "%.1f")` to `r num(max(EW$wind_flight), "%.1f")` km/h and within a period it varied across the grid by up to `r num(max(EW$wind_flight_range), "%.1f")` km/h.
-
-## Stand structure
-
-```{r}
-#| label: 50-fetch-vri-timeseries
-if (!file.exists(here::here("02.inputs/beetle/study-area/vri-timeseries/vri_2014.gpkg"))) {
-
-## The annual Vegetation Resources Inventory, one snapshot per study year.
-##
-## Why this exists. Until 2026-08-28 the stand structure came from the live WFS layer
-## WHSE_FOREST_VEGETATION.VEG_COMP_LYR_R1_POLY, which is a single composite projected to
-## 2025. Every annual observation of a cell therefore carried the SAME basal area, volume,
-## stems and diameter, so the host terms had no time variation at all, and the attributes
-## had been grown forward through and past the outbreak they were meant to predict. On the
-## study perimeter that layer gives a mean basal area of 35.18 m2/ha; the annualized 2014
-## snapshot gives 30.0, with 787 stems per hectare against 670 and a quadratic mean
-## diameter of 26.74 cm against 30.13.
-##
-## The province publishes the correct thing: VRI - HISTORICAL Vegetation Resource
-## Inventory (2002 - 2024), catalogue id 02dba161-fdb7-48ae-a4bb-bd6ef017c36d, one File
-## Geodatabase per year, "updated for depletions, such as harvesting, and projected
-## annually for growth". Each year's PROJECTED_DATE is 31 December of the year before its
-## label, so the 2014 file is the stand as it stood entering 2014.
-##
-## Two things make this practical. The archives are about 3.9 GB each, so downloading all
-## nine would be 35 GB; GDAL can instead read them in place over HTTP and pull only the
-## byte ranges the spatial filter needs. But the server answers HEAD with 404, which
-## breaks vsicurl's size probe and makes the dataset look unopenable, so
-## CPL_VSIL_CURL_USE_HEAD=NO is required and is not optional.
-##
-## Writes: study-area/vri-timeseries/vri_<year>.gpkg, clipped to the map page in EPSG:3153
-##
-## Run:  /usr/local/bin/Rscript 02.inputs/beetle/50-fetch-vri-timeseries.R
-
-suppressPackageStartupMessages({library(sf); library(terra)})
-
-ROOT <- here::here("02.inputs", "beetle")
-SA   <- file.path(ROOT, "study-area")
-OUT  <- file.path(SA, "vri-timeseries"); dir.create(OUT, showWarnings = FALSE)
-BASE <- "https://pub.data.gov.bc.ca/datasets/02dba161-fdb7-48ae-a4bb-bd6ef017c36d"
-
-## The study years. 2012 is absent by design: it is the one year covered only by Landsat 7
-## with its scan-line corrector off, and it is excluded from the response as well.
-YEARS <- c(2005:2011, 2013, 2014)
-
-## Nothing about these archives is uniform, so nothing is guessed. Three things vary:
-##   the zip's file name        VRI2005_..._FINAL_DELIVERYV4.gdb.zip up to 2006, then
-##                              VEG_COMP_LYR_R1_POLY_<year>.gdb.zip
-##   the folder inside the zip  usually matches the zip stem, but where it does not GDAL
-##                              cannot descend into it and reports the whole archive as
-##                              "not recognized as being in a supported file format",
-##                              which reads as a corrupt download and is not one
-##   the layer inside the gdb   VEG_COMP_LYR_R1_POLY from 2007, but
-##                              VEG_COMP_LYR_R1_POLY_FINALV4 in 2005 and 2006
-## The first is read from the directory listing, the other two from the archive itself.
-
-GDALENV <- c("CPL_VSIL_CURL_USE_HEAD=NO", "GDAL_DISABLE_READDIR_ON_OPEN=EMPTY_DIR",
-             "GDAL_HTTP_TIMEOUT=600")
-
-zip_for <- function(y) {
-  h <- readLines(url(sprintf("%s/%d/", BASE, y)), warn = FALSE)
-  f <- unlist(regmatches(h, gregexpr('[A-Za-z0-9_]+\\.gdb\\.zip', h)))
-  f <- unique(f[grepl("R1_POLY", f)])
-  if (!length(f)) stop("no R1 polygon archive listed for ", y)
-  f[1]
-}
-
-## Descend into the zip and name the .gdb explicitly, then ask OGR for its layer. None of
-## the three is derivable from the year: the zip name changes after 2006, the folder inside
-## it is VRI2006_..._V4.gdb in 2006 but lowercase veg_comp_lyr_r1_poly.gdb in 2009 and
-## veg_comp_lyr_r1.gdb in 2011, and the layer is VEG_COMP_LYR_R1_POLY_FINALV4 before 2007.
-##
-## The listing is read with sf::gdal_utils("info") rather than by shelling out to Python,
-## which is what failed for 2009 and 2011: the answer arrived on a line the caller was not
-## reading and the year was reported as unresolvable when the archive was fine.
-source_for <- function(y) {
-  zf <- zip_for(y)
-  z  <- sprintf("/vsizip//vsicurl/%s/%d/%s", BASE, y, zf)
-  ## No listing API is used. Every inner-folder form the series has actually shown is
-  ## tried against ogrinfo, plus the bare archive, and whichever opens is the source.
-  ## Listing the zip was the fragile step: it worked for some years and returned nothing
-  ## for 2009 and 2011, which were then reported as unresolvable although both open fine.
-  stem <- sub("[.]gdb[.]zip$", "", zf)
-  cands <- c(z,
-             file.path(z, paste0(stem, ".gdb")),
-             file.path(z, "VEG_COMP_LYR_R1_POLY.gdb"),
-             file.path(z, "veg_comp_lyr_r1_poly.gdb"),
-             file.path(z, "veg_comp_lyr_r1.gdb"),
-             file.path(z, tolower(paste0(stem, ".gdb"))))
-  for (src in unique(cands)) {
-    info <- suppressWarnings(system2("ogrinfo", c("-ro", shQuote(src)), env = GDALENV,
-                                     stdout = TRUE, stderr = TRUE))
-    lyr <- grep("^Layer: ", info, value = TRUE)
-    if (length(lyr)) {
-      lyr <- trimws(sub("\\(.*$", "", sub("^Layer: ", "", lyr[1])))
-      if (nzchar(lyr)) return(list(src = src, layer = lyr))
-    }
-  }
-  stop("no readable layer for ", y)
-}
-
-## Field names are not stable across the series. 2007 and earlier use the older truncated
-## schema, so the same attribute arrives under a different name and a naive extract silently
-## returns a year with most of its columns missing. Standing volume is the one attribute
-## with no single equivalent before 2008: it exists only per species, VOLSP1_125 through
-## VOLSP6_125, which sum to it.
-FIELD_MAP <- list(
-  CROWN_CLOSURE         = c("CROWN_CLOSURE", "CR_CLOSURE"),
-  VRI_LIVE_STEMS_PER_HA = c("VRI_LIVE_STEMS_PER_HA", "LIVE_STEMS"),
-  QUAD_DIAM_125         = c("QUAD_DIAM_125", "Q_DIAM_125"),
-  PROJ_HEIGHT_1         = c("PROJ_HEIGHT_1", "PROJ_HT_1"),
-  SPECIES_CD_1          = c("SPECIES_CD_1", "SPEC_CD_1"),
-  SPECIES_PCT_1         = c("SPECIES_PCT_1", "SPEC_PCT_1"),
-  BASAL_AREA            = c("BASAL_AREA"),
-  PROJ_AGE_1            = c("PROJ_AGE_1"),
-  LIVE_STAND_VOLUME_125 = c("LIVE_STAND_VOLUME_125")
-)
-## Per-species volume carries three different names across the series: VOLSP1_125 in the
-## 2007 and earlier schema, VOL_PER_HA_SPP1_125 in 2008, and a single
-## LIVE_STAND_VOLUME_125 from 2009. All three are handled, because a year whose volume
-## column is merely renamed is not a year with missing volume.
-VOLSP <- c(sprintf("VOLSP%d_125", 1:6), sprintf("VOL_PER_HA_SPP%d_125", 1:6))
-
-## Rename what the map covers, and rebuild standing volume from the per-species columns
-## where the single column is absent. Returns the layer with the modern names.
-harmonise <- function(v) {
-  for (target in names(FIELD_MAP)) {
-    if (target %in% names(v)) next
-    alt <- FIELD_MAP[[target]][FIELD_MAP[[target]] %in% names(v)]
-    if (length(alt)) names(v)[names(v) == alt[1]] <- target
-  }
-  if (!"LIVE_STAND_VOLUME_125" %in% names(v)) {
-    have <- VOLSP[VOLSP %in% names(v)]
-    if (length(have)) {
-      m <- as.data.frame(sf::st_drop_geometry(v)[, have, drop = FALSE])
-      m[] <- lapply(m, function(x) { x <- as.numeric(x); x[!is.finite(x)] <- 0; x })
-      v$LIVE_STAND_VOLUME_125 <- rowSums(m)
-      attr(v, "volume_from") <- paste(have, collapse = "+")
-    }
-  }
-  v
-}
-
-g <- rast(file.path(SA, "geomorphometry_context.tif"))
-e <- unname(as.vector(ext(g)))
-cat(sprintf("clipping to the map page, EPSG:3153: %.0f %.0f %.0f %.0f\n",
-            e[1], e[3], e[2], e[4]))
-
-for (y in YEARS) {
-  out <- file.path(OUT, sprintf("vri_%d.gpkg", y))
-  if (file.exists(out)) { cat(sprintf("  %d already extracted\n", y)); next }
-  t0 <- Sys.time()
-  sl <- tryCatch(source_for(y), error = function(e) NULL)
-  if (is.null(sl)) { cat(sprintf("  %d: could not resolve archive or layer\n", y)); next }
-  cat(sprintf("  %d: layer %s\n", y, sl$layer))
-  st <- system2("ogr2ogr",
-    c("-f", "GPKG", shQuote(out), shQuote(sl$src), shQuote(sl$layer),
-      "-spat", e[1], e[3], e[2], e[4], "-spat_srs", "EPSG:3153",
-      "-t_srs", "EPSG:3153"),
-    env = GDALENV, stdout = TRUE, stderr = TRUE)
-  mins <- as.numeric(difftime(Sys.time(), t0, units = "mins"))
-  code <- attr(st, "status"); code <- if (is.null(code)) 0L else code
-  if (code != 0 || !file.exists(out)) {
-    cat(sprintf("  %d FAILED (%s) after %.1f min\n", y, code, mins))
-    cat(paste0("      ", head(st, 6)), sep = "\n")
-    unlink(out); next
-  }
-  v <- harmonise(st_read(out, quiet = TRUE))
-  st_write(v, out, delete_dsn = TRUE, quiet = TRUE)
-  miss <- setdiff(names(FIELD_MAP), names(v))
-  cat(sprintf("  %d: %5d polygons, projected %s, %.1f min%s%s\n", y, nrow(v),
-      if ("PROJECTED_DATE" %in% names(v)) substr(as.character(v$PROJECTED_DATE[1]),1,10) else "unstated",
-      mins,
-      if (!is.null(attr(v, "volume_from"))) paste0(", volume from ", attr(v, "volume_from")) else "",
-      if (length(miss)) paste0(", MISSING ", paste(miss, collapse=",")) else ""))
-}
-
-## A single summary so the series can be checked at a glance rather than opened file by
-## file. If basal area does not move across the nine years, the extraction is wrong.
-files <- list.files(OUT, pattern = "^vri_\\d{4}\\.gpkg$", full.names = TRUE)
-if (length(files)) {
-  ## A column absent from one delivery must not stop the summary. The province's 2007
-  ## snapshot carries no PROJECTED_DATE, and v$PROJECTED_DATE[1] on a missing column
-  ## returns NULL, which data.frame() refuses to recycle into a row. col() returns NA
-  ## instead, so the summary reports the gap rather than halting the render.
-  col <- function(v, nm) if (nm %in% names(v)) v[[nm]] else NA
-  s <- do.call(rbind, lapply(files, function(f) {
-    v <- st_read(f, quiet = TRUE)
-    pd <- col(v, "PROJECTED_DATE")
-    data.frame(year = as.integer(sub(".*vri_(\\d{4})\\.gpkg", "\\1", f)),
-               polygons = nrow(v),
-               projected = if (all(is.na(pd))) NA_character_
-                           else substr(as.character(pd[1]), 1, 10),
-               basal_area = mean(col(v, "BASAL_AREA"), na.rm = TRUE),
-               stems = mean(col(v, "VRI_LIVE_STEMS_PER_HA"), na.rm = TRUE),
-               qmd = mean(col(v, "QUAD_DIAM_125"), na.rm = TRUE),
-               volume = mean(col(v, "LIVE_STAND_VOLUME_125"), na.rm = TRUE))
-  }))
-  s <- s[order(s$year), ]
-  write.csv(s, file.path(OUT, "vri_timeseries_summary.csv"), row.names = FALSE)
-  print(s, row.names = FALSE, digits = 4)
-}
-}
-```
-
-Stand structure came from the provincial Vegetation Resources Inventory, taking for each study year the snapshot the province published for that year, depleted for harvest and projected for growth to it, rasterised to the 30 m grid. Six of its attributes covered the mechanisms, total basal area, crown closure, live stems per hectare, quadratic mean diameter over stems of 12.5 cm and larger, stand age and susceptible pine basal area, formed as basal area times the pine share of cover, with stand height and standing volume. `r if (!is.null(VSRC) && any(VSRC$substituted)) sprintf("The %d snapshot omitted basal area and live stems, so the %d snapshot stood in for it.", VSRC$year[VSRC$substituted][1], VSRC$vri_year[VSRC$substituted][1]) else ""` The inventory is a projected operational product rather than a census, and a polygon interpreted from late-outbreak photography described a stand the beetle had already attacked, so basal area and pine cover were post-attack over part of the study window (@tbl-vri).
-
-*@tbl-vri near here*
-
-## Geomorphometry
 
 ```{r}
 #| label: 37-geomorphometry
@@ -2244,17 +1470,775 @@ cat("wrote geomorphometry_context.tif, vri_context.tif and micromet_weight_conte
 ```
 
 ```{r}
+#| label: 50-fetch-vri-timeseries
+if (!file.exists(here::here("02.inputs/beetle/study-area/vri-timeseries/vri_2014.gpkg"))) {
+
+## The annual Vegetation Resources Inventory, one snapshot per study year.
+##
+## Why this exists. Until 2026-08-28 the stand structure came from the live WFS layer
+## WHSE_FOREST_VEGETATION.VEG_COMP_LYR_R1_POLY, which is a single composite projected to
+## 2025. Every annual observation of a cell therefore carried the SAME basal area, volume,
+## stems and diameter, so the host terms had no time variation at all, and the attributes
+## had been grown forward through and past the outbreak they were meant to predict. On the
+## study perimeter that layer gives a mean basal area of 35.18 m2/ha; the annualized 2014
+## snapshot gives 30.0, with 787 stems per hectare against 670 and a quadratic mean
+## diameter of 26.74 cm against 30.13.
+##
+## The province publishes the correct thing: VRI - HISTORICAL Vegetation Resource
+## Inventory (2002 - 2024), catalogue id 02dba161-fdb7-48ae-a4bb-bd6ef017c36d, one File
+## Geodatabase per year, "updated for depletions, such as harvesting, and projected
+## annually for growth". Each year's PROJECTED_DATE is 31 December of the year before its
+## label, so the 2014 file is the stand as it stood entering 2014.
+##
+## Two things make this practical. The archives are about 3.9 GB each, so downloading all
+## nine would be 35 GB; GDAL can instead read them in place over HTTP and pull only the
+## byte ranges the spatial filter needs. But the server answers HEAD with 404, which
+## breaks vsicurl's size probe and makes the dataset look unopenable, so
+## CPL_VSIL_CURL_USE_HEAD=NO is required and is not optional.
+##
+## Writes: study-area/vri-timeseries/vri_<year>.gpkg, clipped to the map page in EPSG:3153
+##
+## Run:  /usr/local/bin/Rscript 02.inputs/beetle/50-fetch-vri-timeseries.R
+
+suppressPackageStartupMessages({library(sf); library(terra)})
+
+ROOT <- here::here("02.inputs", "beetle")
+SA   <- file.path(ROOT, "study-area")
+OUT  <- file.path(SA, "vri-timeseries"); dir.create(OUT, showWarnings = FALSE)
+BASE <- "https://pub.data.gov.bc.ca/datasets/02dba161-fdb7-48ae-a4bb-bd6ef017c36d"
+
+## The study years. 2012 is absent by design: it is the one year covered only by Landsat 7
+## with its scan-line corrector off, and it is excluded from the response as well.
+YEARS <- c(2005:2011, 2013, 2014)
+
+## Nothing about these archives is uniform, so nothing is guessed. Three things vary:
+##   the zip's file name        VRI2005_..._FINAL_DELIVERYV4.gdb.zip up to 2006, then
+##                              VEG_COMP_LYR_R1_POLY_<year>.gdb.zip
+##   the folder inside the zip  usually matches the zip stem, but where it does not GDAL
+##                              cannot descend into it and reports the whole archive as
+##                              "not recognized as being in a supported file format",
+##                              which reads as a corrupt download and is not one
+##   the layer inside the gdb   VEG_COMP_LYR_R1_POLY from 2007, but
+##                              VEG_COMP_LYR_R1_POLY_FINALV4 in 2005 and 2006
+## The first is read from the directory listing, the other two from the archive itself.
+
+GDALENV <- c("CPL_VSIL_CURL_USE_HEAD=NO", "GDAL_DISABLE_READDIR_ON_OPEN=EMPTY_DIR",
+             "GDAL_HTTP_TIMEOUT=600")
+
+zip_for <- function(y) {
+  h <- readLines(url(sprintf("%s/%d/", BASE, y)), warn = FALSE)
+  f <- unlist(regmatches(h, gregexpr('[A-Za-z0-9_]+\\.gdb\\.zip', h)))
+  f <- unique(f[grepl("R1_POLY", f)])
+  if (!length(f)) stop("no R1 polygon archive listed for ", y)
+  f[1]
+}
+
+## Descend into the zip and name the .gdb explicitly, then ask OGR for its layer. None of
+## the three is derivable from the year: the zip name changes after 2006, the folder inside
+## it is VRI2006_..._V4.gdb in 2006 but lowercase veg_comp_lyr_r1_poly.gdb in 2009 and
+## veg_comp_lyr_r1.gdb in 2011, and the layer is VEG_COMP_LYR_R1_POLY_FINALV4 before 2007.
+##
+## The listing is read with sf::gdal_utils("info") rather than by shelling out to Python,
+## which is what failed for 2009 and 2011: the answer arrived on a line the caller was not
+## reading and the year was reported as unresolvable when the archive was fine.
+source_for <- function(y) {
+  zf <- zip_for(y)
+  z  <- sprintf("/vsizip//vsicurl/%s/%d/%s", BASE, y, zf)
+  ## No listing API is used. Every inner-folder form the series has actually shown is
+  ## tried against ogrinfo, plus the bare archive, and whichever opens is the source.
+  ## Listing the zip was the fragile step: it worked for some years and returned nothing
+  ## for 2009 and 2011, which were then reported as unresolvable although both open fine.
+  stem <- sub("[.]gdb[.]zip$", "", zf)
+  cands <- c(z,
+             file.path(z, paste0(stem, ".gdb")),
+             file.path(z, "VEG_COMP_LYR_R1_POLY.gdb"),
+             file.path(z, "veg_comp_lyr_r1_poly.gdb"),
+             file.path(z, "veg_comp_lyr_r1.gdb"),
+             file.path(z, tolower(paste0(stem, ".gdb"))))
+  for (src in unique(cands)) {
+    info <- suppressWarnings(system2("ogrinfo", c("-ro", shQuote(src)), env = GDALENV,
+                                     stdout = TRUE, stderr = TRUE))
+    lyr <- grep("^Layer: ", info, value = TRUE)
+    if (length(lyr)) {
+      lyr <- trimws(sub("\\(.*$", "", sub("^Layer: ", "", lyr[1])))
+      if (nzchar(lyr)) return(list(src = src, layer = lyr))
+    }
+  }
+  stop("no readable layer for ", y)
+}
+
+## Field names are not stable across the series. 2007 and earlier use the older truncated
+## schema, so the same attribute arrives under a different name and a naive extract silently
+## returns a year with most of its columns missing. Standing volume is the one attribute
+## with no single equivalent before 2008: it exists only per species, VOLSP1_125 through
+## VOLSP6_125, which sum to it.
+FIELD_MAP <- list(
+  CROWN_CLOSURE         = c("CROWN_CLOSURE", "CR_CLOSURE"),
+  VRI_LIVE_STEMS_PER_HA = c("VRI_LIVE_STEMS_PER_HA", "LIVE_STEMS"),
+  QUAD_DIAM_125         = c("QUAD_DIAM_125", "Q_DIAM_125"),
+  PROJ_HEIGHT_1         = c("PROJ_HEIGHT_1", "PROJ_HT_1"),
+  SPECIES_CD_1          = c("SPECIES_CD_1", "SPEC_CD_1"),
+  SPECIES_PCT_1         = c("SPECIES_PCT_1", "SPEC_PCT_1"),
+  BASAL_AREA            = c("BASAL_AREA"),
+  PROJ_AGE_1            = c("PROJ_AGE_1"),
+  LIVE_STAND_VOLUME_125 = c("LIVE_STAND_VOLUME_125")
+)
+## Per-species volume carries three different names across the series: VOLSP1_125 in the
+## 2007 and earlier schema, VOL_PER_HA_SPP1_125 in 2008, and a single
+## LIVE_STAND_VOLUME_125 from 2009. All three are handled, because a year whose volume
+## column is merely renamed is not a year with missing volume.
+VOLSP <- c(sprintf("VOLSP%d_125", 1:6), sprintf("VOL_PER_HA_SPP%d_125", 1:6))
+
+## Rename what the map covers, and rebuild standing volume from the per-species columns
+## where the single column is absent. Returns the layer with the modern names.
+harmonise <- function(v) {
+  for (target in names(FIELD_MAP)) {
+    if (target %in% names(v)) next
+    alt <- FIELD_MAP[[target]][FIELD_MAP[[target]] %in% names(v)]
+    if (length(alt)) names(v)[names(v) == alt[1]] <- target
+  }
+  if (!"LIVE_STAND_VOLUME_125" %in% names(v)) {
+    have <- VOLSP[VOLSP %in% names(v)]
+    if (length(have)) {
+      m <- as.data.frame(sf::st_drop_geometry(v)[, have, drop = FALSE])
+      m[] <- lapply(m, function(x) { x <- as.numeric(x); x[!is.finite(x)] <- 0; x })
+      v$LIVE_STAND_VOLUME_125 <- rowSums(m)
+      attr(v, "volume_from") <- paste(have, collapse = "+")
+    }
+  }
+  v
+}
+
+g <- rast(file.path(SA, "geomorphometry_context.tif"))
+e <- unname(as.vector(ext(g)))
+cat(sprintf("clipping to the map page, EPSG:3153: %.0f %.0f %.0f %.0f\n",
+            e[1], e[3], e[2], e[4]))
+
+for (y in YEARS) {
+  out <- file.path(OUT, sprintf("vri_%d.gpkg", y))
+  if (file.exists(out)) { cat(sprintf("  %d already extracted\n", y)); next }
+  t0 <- Sys.time()
+  sl <- tryCatch(source_for(y), error = function(e) NULL)
+  if (is.null(sl)) { cat(sprintf("  %d: could not resolve archive or layer\n", y)); next }
+  cat(sprintf("  %d: layer %s\n", y, sl$layer))
+  st <- system2("ogr2ogr",
+    c("-f", "GPKG", shQuote(out), shQuote(sl$src), shQuote(sl$layer),
+      "-spat", e[1], e[3], e[2], e[4], "-spat_srs", "EPSG:3153",
+      "-t_srs", "EPSG:3153"),
+    env = GDALENV, stdout = TRUE, stderr = TRUE)
+  mins <- as.numeric(difftime(Sys.time(), t0, units = "mins"))
+  code <- attr(st, "status"); code <- if (is.null(code)) 0L else code
+  if (code != 0 || !file.exists(out)) {
+    cat(sprintf("  %d FAILED (%s) after %.1f min\n", y, code, mins))
+    cat(paste0("      ", head(st, 6)), sep = "\n")
+    unlink(out); next
+  }
+  v <- harmonise(st_read(out, quiet = TRUE))
+  st_write(v, out, delete_dsn = TRUE, quiet = TRUE)
+  miss <- setdiff(names(FIELD_MAP), names(v))
+  cat(sprintf("  %d: %5d polygons, projected %s, %.1f min%s%s\n", y, nrow(v),
+      if ("PROJECTED_DATE" %in% names(v)) substr(as.character(v$PROJECTED_DATE[1]),1,10) else "unstated",
+      mins,
+      if (!is.null(attr(v, "volume_from"))) paste0(", volume from ", attr(v, "volume_from")) else "",
+      if (length(miss)) paste0(", MISSING ", paste(miss, collapse=",")) else ""))
+}
+
+## A single summary so the series can be checked at a glance rather than opened file by
+## file. If basal area does not move across the nine years, the extraction is wrong.
+files <- list.files(OUT, pattern = "^vri_\\d{4}\\.gpkg$", full.names = TRUE)
+if (length(files)) {
+  ## A column absent from one delivery must not stop the summary. The province's 2007
+  ## snapshot carries no PROJECTED_DATE, and v$PROJECTED_DATE[1] on a missing column
+  ## returns NULL, which data.frame() refuses to recycle into a row. col() returns NA
+  ## instead, so the summary reports the gap rather than halting the render.
+  col <- function(v, nm) if (nm %in% names(v)) v[[nm]] else NA
+  s <- do.call(rbind, lapply(files, function(f) {
+    v <- st_read(f, quiet = TRUE)
+    pd <- col(v, "PROJECTED_DATE")
+    data.frame(year = as.integer(sub(".*vri_(\\d{4})\\.gpkg", "\\1", f)),
+               polygons = nrow(v),
+               projected = if (all(is.na(pd))) NA_character_
+                           else substr(as.character(pd[1]), 1, 10),
+               basal_area = mean(col(v, "BASAL_AREA"), na.rm = TRUE),
+               stems = mean(col(v, "VRI_LIVE_STEMS_PER_HA"), na.rm = TRUE),
+               qmd = mean(col(v, "QUAD_DIAM_125"), na.rm = TRUE),
+               volume = mean(col(v, "LIVE_STAND_VOLUME_125"), na.rm = TRUE))
+  }))
+  s <- s[order(s$year), ]
+  write.csv(s, file.path(OUT, "vri_timeseries_summary.csv"), row.names = FALSE)
+  print(s, row.names = FALSE, digits = 4)
+}
+}
+```
+
+```{r}
 #| label: geo-values
 GEO_R <- as.data.frame(global(mask(rast(file.path(BC, "geomorphometry/geomorphometry.tif"))[[c("solar_flight_direct", "solar_season_total")]], msk), "range", na.rm = TRUE) |> t())
 ```
 
-Terrain was described by surfaces computed with SAGA GIS over the full reprojected elevation model and clipped afterwards, so that a search radius near the boundary still fell on measured ground. The set separated the single ruggedness index of @murphy2026 into the properties the beetle's biology points to, while ruggedness itself was kept as a candidate so that the separation was tested against it rather than assumed.
+The study area covered `r fmt(AREA_HA)` ha of the Selkirk Mountains in southeastern British Columbia, `r fmt(N_CELL)` cells of 30 m from `r fmt(ELEV_R[1])` to `r fmt(ELEV_R[2])` m in elevation, on the grid of @murphy2026 so that the results compared directly with theirs. It was centred on their site, the 2015 Mt Midgeley fire, and extended beyond its `r fmt(BURN_HA)` ha of burned area by a 5 km buffer cut to the elevation band of that site, which took in the range of stand density the pheromone mechanism needed while keeping the added ground comparable. The response was measured every sixteen days, the inventory once a year, the station winds every hour and the terrain once (Table S1).
 
-Radiation was computed twice because two mechanisms require different quantities. Flight-window radiation was the direct and diffuse total over 1 July to 15 August restricted to 12:00 to 17:00, the hours identified as the flight peak [@safranyik2006chap1], while growing-season radiation was the whole-day total from 1 May to 30 September, the shading quantity the first mechanism of @krawchuk2020 concerns. A single annual heat index cannot separate the two, flight-window direct radiation spanning a `r sprintf("%.0f", diff(log(GEO_R$solar_flight_direct)) |> exp())`-fold range here against `r sprintf("%.1f", diff(log(GEO_R$solar_season_total)) |> exp())`-fold for the season total.
+Stand structure came from the provincial Vegetation Resources Inventory, taking for each study year the snapshot the province published for that year, rasterised to the 30 m grid (@tbl-vri). The attributes were basal area, crown closure, live stems per hectare, quadratic mean diameter of stems of 12.5 cm and larger, stand age, stand height, standing volume and susceptible pine basal area, the product of basal area and pine cover. `r if (!is.null(VSRC) && any(VSRC$substituted)) sprintf("The %d snapshot omitted basal area and live stems, so the %d snapshot stood in for it.", VSRC$year[VSRC$substituted][1], VSRC$vri_year[VSRC$substituted][1]) else ""` The inventory is a projection rather than a census, and polygons interpreted from late-outbreak photography described stands the beetle had already attacked.
 
-Exposure entered as the windward-leeward index, effective air flow height, the wind exposition index and the wind shelter index of @plattner2004, which is "the maximum gradient within a given radius in upwind direction", with topographic openness and sky view. Shape entered as ruggedness, topographic position, convergence, slope, curvature and geomorphon class, a landform class read from the horizons visible around a cell, and landform as wetness, valley depth and height above the valley floor, because infested groups are reported in draws and gullies and deep snow insulates overwintering brood [@safranyik2006chap1; @kautz2023]. Aspect entered as its northward and eastward components with the heat load index of @mccune2002. Every candidate is listed in Table S3.
+Terrain surfaces were computed with SAGA GIS over an elevation model extending beyond the perimeter, so that search radii near the edge fell on measured ground. They separated the ruggedness index of @murphy2026 into the properties the beetle's biology points to, with ruggedness kept as a candidate so that the separation was tested rather than assumed. Exposure entered as the windward-leeward index, effective air flow height, the wind exposition index and the wind shelter index of @plattner2004, "the maximum gradient within a given radius in upwind direction", together with topographic openness and sky view. Shape entered as ruggedness, topographic position, convergence, slope, curvature and geomorphon class, and landform as wetness, valley depth and height above the valley floor, because infested groups are reported in draws and gullies and deep snow insulates overwintering brood [@safranyik2006chap1; @kautz2023]. Aspect entered as northness, eastness and the heat load index of @mccune2002. Radiation was computed twice, because flight and shading depend on different quantities, once over the flight window of 1 July to 15 August from 12:00 to 17:00 and once over the whole growing season from 1 May to 30 September, the quantity the shading mechanism of @krawchuk2020 concerns. The first varied `r sprintf("%.0f", diff(log(GEO_R$solar_flight_direct)) |> exp())`-fold across the ground and the second `r sprintf("%.1f", diff(log(GEO_R$solar_season_total)) |> exp())`-fold. Every candidate is listed in Table S3.
 
-## Spatial pattern
+*@fig-study-area near here*
+
+*@tbl-vri near here*
+
+## Beetle outbreak
+
+```{r}
+#| label: 22-harmonise-landsat8
+if (!file.exists(here::here("02.inputs/beetle/ndmi-darkwoods/ndmi_2020_l8raw.tif"))) {
+
+## Put the Landsat 8 years onto the Landsat 5 scale, empirically.
+##
+## The problem. The Roy et al. (2016) coefficients are applied to reflectance in
+## 17- and 20-, and they are still not enough: differenced against a 2005 Landsat 5
+## baseline, the two Landsat 8 years classified 52.0 and 54.2 per cent of Darkwoods as
+## attacked against 13.2 to 32.4 per cent for the Landsat 5 outbreak years. Half the
+## training set, 483 of 1000 plots and 151 of the 250 high-severity plots, takes its
+## worst year from 2013 or 2014, so this bias is inside the labels as well as the map.
+##
+## The fix. Relative radiometric normalisation against stable ground. Landsat 5 ends in
+## 2011 and Landsat 8 begins in 2013, so there is no overlapping year and no
+## pseudo-invariant scene pair. Instead, stable forest is identified from the Landsat 5
+## era alone as cells that are forested in 2005 and whose deepest NDMI drop across
+## 2006-2011 stays above -0.05, then each Landsat 8 index is rescaled by a gain and
+## offset that match its median and median absolute deviation over those cells to the
+## 2011 image's. Stable forest should not differ between 2011 and 2013 in these indices,
+## so any difference over it is instrument, not ground.
+##
+## What this cannot do, stated so it is not over-read: it also removes any genuine
+## landscape-wide change between 2011 and 2013 that happens to fall on those cells,
+## including beetle attack in 2012, the year with no usable imagery. The correction is
+## therefore conservative against detecting 2012-2013 attack.
+##
+## Originals are preserved as <index>_<year>_l8raw.tif and the corrected raster takes
+## the original filename, so 19- and 21- read the corrected series without change.
+
+suppressPackageStartupMessages(library(terra))
+ROOT <- here::here("02.inputs", "beetle")
+IN   <- file.path(ROOT, "ndmi-darkwoods")
+L8   <- c(2013, 2014, 2020); L5REF <- 2011
+IDX  <- c("ndmi","ndvi","nbr","tcw")
+rd <- function(nm, y, raw = FALSE)
+  rast(file.path(IN, sprintf("%s_%d%s.tif", nm, y, if (raw) "_l8raw" else "")))
+
+## stable forest, defined entirely within the Landsat 5 era
+base <- rd("ndmi", 2005)
+forest <- base > 0.20
+dmin <- min(rast(lapply(2006:2011, function(y) rd("ndmi", y) - base)))
+stable <- mask(forest & (dmin > -0.05), forest, maskvalues = c(0, NA))
+stable[stable == 0] <- NA
+ns <- global(stable, "sum", na.rm = TRUE)[[1]]
+cat(sprintf("stable forest cells: %.0f (%.1f%% of grid)\n", ns, 100*ns/ncell(base)))
+
+for (nm in IDX) {
+  ref <- values(mask(rd(nm, L5REF), stable)); ref <- ref[!is.na(ref)]
+  mr <- median(ref); ar <- mad(ref)
+  cat(sprintf("\n%s  reference %d over stable forest: median %+.4f  MAD %.4f\n",
+              toupper(nm), L5REF, mr, ar))
+  for (y in L8) {
+    raw <- file.path(IN, sprintf("%s_%d_l8raw.tif", nm, y))
+    cur <- file.path(IN, sprintf("%s_%d.tif", nm, y))
+    if (!file.exists(raw)) file.copy(cur, raw)
+    r  <- rast(raw)
+    v  <- values(mask(r, stable)); v <- v[!is.na(v)]
+    my <- median(v); ay <- mad(v)
+    g  <- ar / ay; o <- mr - g * my
+    out <- r * g + o; names(out) <- sprintf("%s_%d", toupper(nm), y)
+    writeRaster(out, cur, overwrite = TRUE, datatype = "FLT4S",
+                gdal = c("COMPRESS=DEFLATE","PREDICTOR=3"))
+    vc <- values(mask(out, stable)); vc <- vc[!is.na(vc)]
+    cat(sprintf("  %d raw median %+.4f MAD %.4f -> gain %.4f offset %+.4f -> median %+.4f MAD %.4f\n",
+                y, my, ay, g, o, median(vc), mad(vc)))
+  }
+}
+}
+```
+
+```{r}
+#| label: 42-cube-grid-ee
+if (!file.exists(here::here("02.inputs/beetle/cube-16day/ndmi_2005_e05.tif"))) {
+
+## A 16-day Landsat cube over the study perimeter, built in Google Earth Engine.
+##
+## Why Earth Engine and why 16 days. The annual classification collapses a whole growing
+## season into one map, which leaves eight observations in time and makes any wind test a
+## comparison between summers. Landsat's repeat is 16 days, so the finest cadence the
+## sensor supports is roughly ten steps per growing season, not one. Building that over
+## 62,000 cells for eight years is 80 composites, which is what Earth Engine is for: the
+## compositing happens on their side and only the finished epoch grids are downloaded.
+##
+## 06-build-cube.R already built this cadence, but sampled it at 28 plot points rather than
+## over a grid. This script is that cube as rasters.
+##
+## Grid: EPSG:3153 at 30 m, the parent study's grid, over the perimeter from
+## 33-study-perimeter.R. Epochs: fixed 16-day windows on a common calendar from 1 May, so
+## every year is sampled on the same dates rather than on whatever the cloud allowed.
+##
+## Three traps, all recorded in project memory and all guarded here:
+##   1. A GeoTIFF written from an Earth Engine integer image takes zero as nodata, so a
+##      value that can legitimately be zero is silently turned into NA. NDMI is therefore
+##      exported scaled by 10,000 and offset by 20,000, well away from zero, and undone
+##      locally.
+##   2. getDownloadURL with crsTransform and no dimensions makes Earth Engine compute over
+##      the whole CRS extent and fail against the 50 MB cap. Use scale plus region.
+##   3. Landsat 8 must be put on the ETM+ scale with the Roy et al. (2016) band-pass
+##      coefficients before it is differenced against Landsat 5 years.
+
+Sys.setenv(RETICULATE_PYTHON = path.expand("~/.virtualenvs/rgee/bin/python"))
+suppressPackageStartupMessages({library(reticulate); library(rgee); library(sf); library(terra)})
+ROOT <- here::here("02.inputs", "beetle")
+SA   <- file.path(ROOT, "study-area")
+OUT  <- file.path(ROOT, "cube-16day"); dir.create(OUT, showWarnings = FALSE)
+ee_Initialize(project = "murphys-deforisk", drive = FALSE)
+
+YEARS   <- c(2005:2011, 2013, 2014)
+EPOCH_D <- 16L
+DOY0    <- 121L                    # 1 May
+NEPOCH  <- 9L                      # 9 x 16 days = 144 days, 1 May to 22 September
+SCALE   <- 10000; OFFSET <- 20000  # keep exported integers away from zero
+
+msk <- rast(file.path(SA, "perimeter_mask.tif"))
+per <- st_transform(st_as_sf(as.polygons(ext(msk), crs = crs(msk))), 4326)
+region <- sf_as_ee(per)
+
+## Roy et al. (2016) OLI to ETM+ band-pass coefficients, as in 06-build-cube.R.
+ROY_S <- c(BLUE=0.8474, GREEN=0.8483, RED=0.9047, NIR=0.8462, SWIR1=0.8937, SWIR2=0.9071)
+ROY_I <- c(BLUE=0.0003, GREEN=0.0088, RED=0.0061, NIR=0.0412, SWIR1=0.0254, SWIR2=0.0172)
+
+prep <- function(ic, bands, l8) {
+  ic$map(ee_utils_pyfunc(function(im) {
+    sr <- im$select(bands, c("BLUE","GREEN","RED","NIR","SWIR1","SWIR2"))$
+            multiply(0.0000275)$add(-0.2)
+    if (l8) sr <- sr$multiply(ee$Image$constant(unname(ROY_S)))$
+                     add(ee$Image$constant(unname(ROY_I)))
+    qa <- im$select("QA_PIXEL")
+    clear <- qa$bitwiseAnd(strtoi("11000", base = 2))$eq(0)
+    sr$updateMask(clear)$copyProperties(im, list("system:time_start"))
+  }))
+}
+
+for (y in YEARS) {
+  l5 <- prep(ee$ImageCollection("LANDSAT/LT05/C02/T1_L2")$filterBounds(region),
+             c("SR_B1","SR_B2","SR_B3","SR_B4","SR_B5","SR_B7"), FALSE)
+  l7 <- prep(ee$ImageCollection("LANDSAT/LE07/C02/T1_L2")$filterBounds(region),
+             c("SR_B1","SR_B2","SR_B3","SR_B4","SR_B5","SR_B7"), FALSE)
+  l8 <- prep(ee$ImageCollection("LANDSAT/LC08/C02/T1_L2")$filterBounds(region),
+             c("SR_B2","SR_B3","SR_B4","SR_B5","SR_B6","SR_B7"), TRUE)
+  ## 2012 is excluded from the study; Landsat 7 is used only where it is the sole sensor
+  ## and never in a year that has another, because the scan-line corrector has been off
+  ## since May 2003.
+  col <- if (y <= 2011) l5 else l8
+
+  for (e in seq_len(NEPOCH)) {
+    d0 <- as.Date(sprintf("%d-01-01", y)) + (DOY0 - 1) + (e - 1) * EPOCH_D
+    d1 <- d0 + EPOCH_D
+    f  <- file.path(OUT, sprintf("ndmi_%d_e%02d.tif", y, e))
+    if (file.exists(f)) next
+    im <- col$filterDate(format(d0), format(d1))$median()
+    ndmi <- im$normalizedDifference(c("NIR","SWIR1"))$rename("ndmi")
+    out  <- ndmi$multiply(SCALE)$add(OFFSET)$toInt32()
+    url <- try(out$getDownloadURL(list(scale = 30, region = region$geometry(),
+                                       crs = "EPSG:3153", format = "GEO_TIFF")), silent = TRUE)
+    if (inherits(url, "try-error")) { cat("skip", y, e, "\n"); next }
+    tmp <- tempfile(fileext = ".tif")
+    ok <- try(download.file(url, tmp, quiet = TRUE, mode = "wb"), silent = TRUE)
+    if (inherits(ok, "try-error")) { cat("download failed", y, e, "\n"); next }
+    r <- try(rast(tmp), silent = TRUE)
+    if (inherits(r, "try-error")) { cat("unreadable", y, e, "\n"); next }
+    r <- (r - OFFSET) / SCALE
+    r <- mask(resample(r, msk, method = "near"), msk)
+    names(r) <- sprintf("ndmi_%d_e%02d", y, e)
+    writeRaster(r, f, overwrite = TRUE, datatype = "FLT4S", gdal = c("COMPRESS=DEFLATE"))
+    cat(sprintf("%d epoch %02d  %s to %s  valid %5.1f%%  median %.3f\n", y, e,
+                format(d0), format(d1), 100*mean(!is.na(values(r))),
+                median(values(r), na.rm = TRUE)))
+  }
+}
+fs <- list.files(OUT, "\\.tif$")
+cat(sprintf("\n%d epoch rasters written to %s\n", length(fs), OUT))
+}
+```
+
+```{r}
+#| label: classifier
+PIX <- here::here("02.inputs/beetle/red-stage-darkwoods/classifier_pixels.csv")
+if (!file.exists(PIX)) {
+  suppressPackageStartupMessages({library(terra); library(sf); library(readxl)})
+  # Landsat Collection 2 Level-2 surface reflectance, annual NDMI built in chunk pipeline-17,
+  # https://www.usgs.gov/landsat-missions/landsat-collection-2-level-2-science-products
+  nd <- rast(here::here("02.inputs/beetle/ndmi-darkwoods", sprintf("ndmi_%d.tif", c(2005:2011, 2013, 2014))))
+  names(nd) <- paste0("ndmi_", c(2005:2011, 2013, 2014))
+  # Field plots of Murphy et al. (2026), 28 plots of 20 by 20 m measured July and August 2020,
+  # https://doi.org/10.1016/j.foreco.2026.123985
+  fp <- read_excel(here::here("02.inputs/beetle/plot-locations/2.1.darkwoods_beetle_ground_plots_ndmi.xlsx"))
+  cc <- xyFromCell(nd, cellFromXY(nd, cbind(fp$easting, fp$northing)))
+  sx <- ifelse(fp$easting >= cc[, 1], 30, -30); sy <- ifelse(fp$northing >= cc[, 2], 30, -30)
+  field <- data.frame(plot = rep(fp$plot, 4), killed_ba = rep(fp$pi_mpb_killed, 4),
+                      x = c(cc[, 1], cc[, 1] + sx, cc[, 1], cc[, 1] + sx),
+                      y = c(cc[, 2], cc[, 2], cc[, 2] + sy, cc[, 2] + sy))
+  field$group <- paste0("plot", field$plot)
+  # Undisturbed forest digitised on the 2020 Landsat 8 scene for Murphy et al. (2026),
+  # Google Drive folder Data Collection, id 1ixV1Xi1Ou1xwqpBSObMzZb93_AJkm9hl
+  un <- st_coordinates(st_read(here::here("02.inputs/beetle/plot-locations/beetle_nonplots_undisturbed.shp"), quiet = TRUE))
+  uc <- unique(cellFromXY(nd, un[, 1:2]))
+  ux <- xyFromCell(nd, uc)
+  undist <- data.frame(plot = NA, killed_ba = 0, x = ux[, 1], y = ux[, 2],
+                       group = paste0("block", floor(ux[, 1] / 100), "_", floor(ux[, 2] / 100)))
+  px <- rbind(cbind(class = "redstage", field), cbind(class = "undisturbed", undist))
+  ex <- terra::extract(nd, px[, c("x", "y")])[, -1]
+  dn <- ex[, -1] - ex[, 1]
+  px$dndmi_min <- apply(dn, 1, min)
+  px$worst_year <- c(2006:2011, 2013, 2014)[apply(dn, 1, which.min)]
+  px <- cbind(px, ex)
+  write.csv(px, PIX, row.names = FALSE)
+}
+
+MCCV <- here::here("02.inputs/beetle/red-stage-darkwoods/classifier_blocked_mccv.csv")
+if (!file.exists(MCCV)) {
+  suppressPackageStartupMessages({library(caret); library(randomForest); library(kernlab); library(gbm)})
+  set.seed(123)
+  px <- read.csv(PIX)
+  px$cls <- factor(px$class, levels = c("undisturbed", "redstage"))
+  models <- list(
+    rf  = list(method = "rf", grid = data.frame(mtry = 1), args = list(ntree = 1000)),
+    svm = list(method = "svmRadial", grid = data.frame(sigma = 1, C = 1), args = list()),
+    gbm = list(method = "gbm", grid = data.frame(n.trees = 100, interaction.depth = 2, shrinkage = 0.1, n.minobsinnode = 5),
+               args = list(verbose = FALSE)))
+  fit1 <- function(m, d) do.call(train, c(list(cls ~ dndmi_min, data = d, method = m$method, tuneGrid = m$grid,
+                                               trControl = trainControl(method = "none"), preProcess = c("center", "scale")), m$args))
+  grp <- split(unique(px$group), unique(px[, c("group", "class")])$class)
+  runs <- do.call(rbind, lapply(1:100, function(i) {
+    test_groups <- unlist(lapply(grp, function(g) sample(g, max(1, round(0.25 * length(g))))))
+    trn <- px[!px$group %in% test_groups, ]; tst <- px[px$group %in% test_groups, ]
+    do.call(rbind, lapply(names(models), function(k) {
+      cm <- confusionMatrix(predict(fit1(models[[k]], trn), tst), tst$cls, positive = "redstage")
+      data.frame(split = i, model = k, n_test = nrow(tst), accuracy = cm$overall[["Accuracy"]], kappa = cm$overall[["Kappa"]],
+                 sensitivity = cm$byClass[["Sensitivity"]], specificity = cm$byClass[["Specificity"]])
+    }))
+  }))
+  write.csv(runs, here::here("02.inputs/beetle/red-stage-darkwoods/classifier_blocked_mccv_splits.csv"), row.names = FALSE)
+  smry <- do.call(rbind, lapply(split(runs, runs$model), function(r) data.frame(
+    model = r$model[1], n_pixels = nrow(px), n_redstage = sum(px$class == "redstage"), n_undisturbed = sum(px$class == "undisturbed"),
+    n_groups = length(unique(px$group)), n_splits = nrow(r),
+    accuracy_mean = mean(r$accuracy), accuracy_sd = sd(r$accuracy),
+    accuracy_lo = unname(quantile(r$accuracy, 0.025)), accuracy_hi = unname(quantile(r$accuracy, 0.975)),
+    kappa_mean = mean(r$kappa), kappa_sd = sd(r$kappa),
+    kappa_lo = unname(quantile(r$kappa, 0.025)), kappa_hi = unname(quantile(r$kappa, 0.975)),
+    sensitivity_mean = mean(r$sensitivity), specificity_mean = mean(r$specificity))))
+  smry$chosen <- smry$kappa_mean == max(smry$kappa_mean)
+  final <- fit1(models[[smry$model[smry$chosen][1]]], px)
+  saveRDS(final, here::here("02.inputs/beetle/red-stage-darkwoods/redstage_classifier_blocked.rds"))
+  g <- data.frame(dndmi_min = seq(-0.6, 0.2, by = 0.0001))
+  g$p <- predict(final, g) == "redstage"
+  smry$n_switches <- sum(diff(g$p) != 0)
+  smry$cut_dndmi <- if (any(g$p) && any(!g$p)) max(g$dndmi_min[g$p & cumsum(!g$p) == 0]) else NA
+  write.csv(smry, MCCV, row.names = FALSE)
+}
+```
+
+```{r}
+#| label: period-maps
+## sixteen-day red-stage maps
+EPS <- here::here("02.inputs/beetle/epoch-redstage/epoch_summary.csv")
+if (!file.exists(EPS)) {
+  suppressPackageStartupMessages(library(terra))
+  dir.create(dirname(EPS), showWarnings = FALSE)
+  cut_at <- with(read.csv(here::here("02.inputs/beetle/red-stage-darkwoods/classifier_blocked_mccv.csv")), cut_dndmi[chosen])
+  msk <- rast(here::here("02.inputs/beetle/study-area/perimeter_mask.tif"))
+  # Landsat Collection 2 Level-2 surface reflectance, sixteen-day NDMI composites from chunk pipeline-42,
+  # https://www.usgs.gov/landsat-missions/landsat-collection-2-level-2-science-products
+  cube <- function(y, e) here::here("02.inputs/beetle/cube-16day", sprintf("ndmi_%d_e%02d.tif", y, e))
+  rows <- list()
+  for (y in c(2006:2011, 2013, 2014)) for (e in 1:9) {
+    if (!file.exists(cube(y, e)) || !file.exists(cube(2005, e))) next
+    d <- rast(cube(y, e)) - rast(cube(2005, e))
+    b <- mask(ifel(d <= cut_at, 1, 0), msk)
+    n <- global(!is.na(b), "sum")[[1]]
+    if (n < 0.1 * global(!is.na(msk), "sum")[[1]]) next
+    writeRaster(b, file.path(dirname(EPS), sprintf("redstage_%d_e%02d.tif", y, e)), overwrite = TRUE,
+                datatype = "INT1U", gdal = "COMPRESS=DEFLATE")
+    d0 <- as.Date(sprintf("%d-05-01", y)) + (e - 1) * 16
+    rows[[length(rows) + 1]] <- data.frame(year = y, epoch = e, start = format(d0), end = format(d0 + 16),
+                                           dndmi_cut = cut_at, valid_cells = n, attacked = global(b, "sum", na.rm = TRUE)[[1]])
+  }
+  ep <- do.call(rbind, rows)
+  ep$prevalence <- ep$attacked / ep$valid_cells
+  write.csv(ep, EPS, row.names = FALSE)
+}
+
+## annualized stand structure on the perimeter grid, one raster per study year
+VRA <- here::here("02.inputs/beetle/study-area/vri-annual")
+if (!file.exists(file.path(VRA, "vri_year_source.csv"))) {
+  suppressPackageStartupMessages({library(terra); library(sf)})
+  dir.create(VRA, showWarnings = FALSE)
+  HOST <- c("BASAL_AREA", "CROWN_CLOSURE", "VRI_LIVE_STEMS_PER_HA", "QUAD_DIAM_125", "PROJ_AGE_1", "PROJ_HEIGHT_1", "LIVE_STAND_VOLUME_125")
+  msk <- rast(here::here("02.inputs/beetle/study-area/perimeter_mask.tif"))
+  # British Columbia Vegetation Resources Inventory, historical annual releases 2002 to 2024,
+  # https://catalogue.data.gov.bc.ca/dataset/vri-historical-vegetation-resource-inventory-2002-2024-
+  snap <- function(y) {
+    v <- st_read(here::here("02.inputs/beetle/study-area/vri-timeseries", sprintf("vri_%d.gpkg", y)), quiet = TRUE)
+    for (k in HOST) v[[k]] <- if (k %in% names(v)) suppressWarnings(as.numeric(v[[k]])) else NA_real_
+    v
+  }
+  filled <- sapply(c(2005:2011, 2013, 2014), function(y) min(colMeans(!is.na(st_drop_geometry(snap(y))[, HOST]))))
+  have <- c(2005:2011, 2013, 2014)[filled >= 0.2]
+  src <- data.frame(year = c(2005:2011, 2013, 2014))
+  src$vri_year <- sapply(src$year, function(y) if (y %in% have) y else max(have[have < y]))
+  src$substituted <- src$year != src$vri_year
+  for (y in unique(src$vri_year)) {
+    v <- st_transform(snap(y), crs(msk))
+    sp <- grep("^SPECIES_CD_|^SPEC_CD_", names(v), value = TRUE); pc <- grep("^SPECIES_PCT_|^SPEC_PCT_", names(v), value = TRUE)
+    v$PinePct <- 0
+    for (k in seq_len(min(length(sp), length(pc)))) {
+      add <- suppressWarnings(as.numeric(v[[pc[k]]])); add[is.na(add)] <- 0
+      v$PinePct <- v$PinePct + ifelse(grepl("^PL", as.character(v[[sp[k]]])), add, 0)
+    }
+    v$PINE_BA <- v$BASAL_AREA * v$PinePct / 100
+    r <- rast(lapply(c(HOST, "PinePct", "PINE_BA"), function(k) rasterize(vect(v), msk, field = k)))
+    names(r) <- c(HOST, "PinePct", "PINE_BA")
+    writeRaster(mask(r, msk), file.path(VRA, sprintf("vri_%d.tif", y)), overwrite = TRUE, gdal = "COMPRESS=DEFLATE")
+  }
+  write.csv(src, file.path(VRA, "vri_year_source.csv"), row.names = FALSE)
+}
+```
+
+```{r}
+#| label: wind-direction-value
+WDIR <- as.numeric(readLines(file.path(BC, "covariates", "wind_direction_pooled.txt")))
+```
+
+```{r}
+#| label: 51-flight-window-climate
+if (!file.exists(here::here("02.inputs/beetle/covariates/flight-window/hourly_climate.csv"))) {
+
+## Hourly station climate through the flight season, for the flight-window figure.
+##
+## Why this exists. The manuscript restricts the flight window to 1 July to 15 August and
+## to the hours 12:00 to 17:00, citing a thermal gate of 19 to 41 degrees C and a flight
+## peak "in the early to mid afternoon" (Safranyik and Carroll 2006). Those are numbers
+## from the literature applied to this landscape without ever showing the reader the
+## landscape's own climate. A figure can show it: where the window sits inside the season,
+## how much of the season clears the thermal gate, and whether the afternoon really is when
+## it clears.
+##
+## The window is not fitted to these data. It comes from the bionomics and is held fixed;
+## this is the check on whether it is reasonable here, and it can fail.
+##
+## 30-wind-hourly-metrics.R fetches June to August and keeps only summary metrics, so
+## nothing on disk carries the within-season shape. This pulls May to September so the
+## window has season on both sides of it, and keeps the hourly records.
+##
+## Writes: covariates/flight-window/hourly_climate.csv   year, date, doy, hour, temp, wind
+##         covariates/flight-window/daily_climate.csv    per year and day of year
+##
+## Run:  /usr/local/bin/Rscript 02.inputs/beetle/51-flight-window-climate.R
+
+suppressPackageStartupMessages({
+  library(sf); library(terra); library(dplyr); library(weathercan)
+})
+
+ROOT <- here::here("02.inputs", "beetle")
+OUT  <- file.path(ROOT, "covariates", "flight-window")
+dir.create(OUT, recursive = TRUE, showWarnings = FALSE)
+
+YEARS <- c(2005:2011, 2013, 2014)
+## The flight envelope and the window the manuscript uses, stated once here so the figure
+## and the methods cannot disagree.
+T_MIN <- 19; T_MAX <- 41          # flight is gated between these, after Carroll et al.
+T_PEAK <- c(22, 32)               # most flight occurs in this narrower band
+HR <- c(12, 17)                   # the afternoon hours the window restricts to
+WIN <- c("07-01", "08-15")        # the flight window itself
+
+per <- st_read(file.path(ROOT, "study-area", "study_perimeter.gpkg"), quiet = TRUE)
+ctr <- st_transform(st_centroid(st_union(per)), 4326)
+cc  <- st_coordinates(ctr)
+sl  <- stations_search(coords = c(cc[2], cc[1]), interval = "hour", dist = 150)
+sl  <- sl[!is.na(sl$start) & sl$start <= 2014 & !is.na(sl$end) & sl$end >= 2005, ]
+ids <- unique(sl$station_id)
+cat(sprintf("hourly stations within 150 km overlapping 2005-2014: %d\n", length(ids)))
+
+all <- list()
+for (y in YEARS) {
+  w <- try(weather_dl(station_ids = ids, interval = "hour",
+                      start = sprintf("%d-05-01", y), end = sprintf("%d-09-30", y)),
+           silent = TRUE)
+  if (inherits(w, "try-error") || !nrow(w)) { cat(sprintf("  %d unavailable\n", y)); next }
+  w <- w |>
+    transmute(year = y,
+              date = as.Date(date),
+              doy  = as.integer(format(as.Date(date), "%j")),
+              hour = as.integer(substr(time, 12, 13)),
+              temp = temp,
+              wind = wind_spd) |>
+    filter(!is.na(temp) | !is.na(wind))
+  cat(sprintf("  %d: %d hourly records, %d days\n", y, nrow(w), length(unique(w$doy))))
+  all[[as.character(y)]] <- w
+}
+h <- bind_rows(all)
+if (!nrow(h)) stop("no hourly records returned")
+write.csv(h, file.path(OUT, "hourly_climate.csv"), row.names = FALSE)
+
+## Daily summary, with the two quantities the window turns on: how warm the afternoon gets,
+## and what share of afternoon hours actually sit inside the flight envelope.
+d <- h |>
+  group_by(year, doy) |>
+  summarise(
+    temp_mean = mean(temp, na.rm = TRUE),
+    temp_max  = suppressWarnings(max(temp, na.rm = TRUE)),
+    pm_temp   = mean(temp[hour >= HR[1] & hour <= HR[2]], na.rm = TRUE),
+    pm_in_gate  = mean(temp[hour >= HR[1] & hour <= HR[2]] >= T_MIN &
+                       temp[hour >= HR[1] & hour <= HR[2]] <= T_MAX, na.rm = TRUE),
+    pm_in_peak  = mean(temp[hour >= HR[1] & hour <= HR[2]] >= T_PEAK[1] &
+                       temp[hour >= HR[1] & hour <= HR[2]] <= T_PEAK[2], na.rm = TRUE),
+    wind_mean = mean(wind, na.rm = TRUE),
+    pm_wind   = mean(wind[hour >= HR[1] & hour <= HR[2]], na.rm = TRUE),
+    .groups = "drop") |>
+  mutate(across(where(is.numeric), ~ ifelse(is.finite(.x), .x, NA_real_)))
+write.csv(d, file.path(OUT, "daily_climate.csv"), row.names = FALSE)
+
+## The numbers the manuscript can quote about its own window, computed rather than asserted.
+wdoy <- function(y) as.integer(format(as.Date(sprintf("%d-%s", y, WIN)), "%j"))
+inwin <- d |> rowwise() |> mutate(inw = doy >= wdoy(year)[1] & doy <= wdoy(year)[2]) |> ungroup()
+s <- inwin |> group_by(inw) |>
+  summarise(days = dplyr::n(),
+            pm_temp = mean(pm_temp, na.rm = TRUE),
+            pm_in_gate = mean(pm_in_gate, na.rm = TRUE),
+            pm_in_peak = mean(pm_in_peak, na.rm = TRUE), .groups = "drop")
+cat("\nafternoon hours inside the 19-41 C flight gate:\n")
+print(as.data.frame(s), row.names = FALSE, digits = 3)
+
+## in_gate is computed BEFORE the mean that shares its name. summarise() evaluates its
+## arguments in order and later ones see the columns the earlier ones created, so
+## `mean(temp >= T_MIN)` written after `temp = mean(temp)` tests the single hourly mean
+## and returns 0 or 1 rather than a share. The first build of this file did exactly that.
+by_hour <- h |> group_by(hour) |>
+  summarise(in_gate = mean(temp >= T_MIN & temp <= T_MAX, na.rm = TRUE),
+            in_peak = mean(temp >= T_PEAK[1] & temp <= T_PEAK[2], na.rm = TRUE),
+            wind    = mean(wind, na.rm = TRUE),
+            temp    = mean(temp, na.rm = TRUE),
+            .groups = "drop") |>
+  filter(!is.na(hour))
+write.csv(by_hour, file.path(OUT, "diurnal_climate.csv"), row.names = FALSE)
+cat(sprintf("\nwarmest hour of the day: %02d:00 at %.1f C; gate cleared most often at %02d:00\n",
+            by_hour$hour[which.max(by_hour$temp)], max(by_hour$temp, na.rm = TRUE),
+            by_hour$hour[which.max(by_hour$in_gate)]))
+cat(sprintf("wrote %s\n", OUT))
+}
+```
+
+```{r}
+#| label: flight-window-climate
+## The flight window is fixed a priori from the bionomics. These are the numbers that
+## check it against this landscape's own climate, from 51-flight-window-climate.R. If the
+## window were arbitrary here they would say so: the comparison is between afternoon hours
+## inside the window and afternoon hours in the rest of the May-to-September season.
+FW <- file.path(BC, "covariates", "flight-window")
+clim_h <- read.csv(file.path(FW, "hourly_climate.csv"))
+clim_d <- read.csv(file.path(FW, "daily_climate.csv"))
+clim_x <- read.csv(file.path(FW, "diurnal_climate.csv"))
+
+T_GATE <- c(19, 41); T_PEAK <- c(22, 32); FW_HR <- c(12, 17)
+win_doy <- function(y) as.integer(format(as.Date(sprintf("%d-%s", y, c("07-01","08-15"))), "%j"))
+clim_d$inwin <- mapply(function(y, d) {
+  w <- win_doy(y); d >= w[1] && d <= w[2] }, clim_d$year, clim_d$doy)
+
+CLIM_N     <- nrow(clim_h)
+CLIM_IN    <- mean(clim_d$pm_in_gate[clim_d$inwin],  na.rm = TRUE)
+CLIM_OUT   <- mean(clim_d$pm_in_gate[!clim_d$inwin], na.rm = TRUE)
+CLIM_T_IN  <- mean(clim_d$pm_temp[clim_d$inwin],  na.rm = TRUE)
+CLIM_T_OUT <- mean(clim_d$pm_temp[!clim_d$inwin], na.rm = TRUE)
+CLIM_W_MAX <- max(clim_x$wind, na.rm = TRUE)
+CLIM_W_MIN <- min(clim_x$wind, na.rm = TRUE)
+CLIM_HR_PK <- clim_x$hour[which.max(clim_x$temp)]
+CLIM_YRS   <- length(unique(clim_h$year))
+```
+
+```{r}
+#| label: micromet-wind
+## MicroMet terrain weighting, equations 12 to 18 of Liston and Elder (2006), on the context grid
+WW <- here::here("02.inputs/beetle/covariates/micromet-context/wind_weight_by_direction.tif")
+if (!file.exists(WW)) {
+  suppressPackageStartupMessages(library(terra))
+  dir.create(dirname(WW), recursive = TRUE, showWarnings = FALSE)
+  # Natural Resources Canada High Resolution Digital Elevation Model, 30 m, reprojected in chunk pipeline-47,
+  # https://open.canada.ca/data/en/dataset/957782bf-847c-4644-a757-e383c0057995
+  dem <- rast(here::here("02.inputs/beetle/study-area/dem_context.tif"))
+  msk <- rast(here::here("02.inputs/beetle/study-area/perimeter_mask.tif"))
+  g <- terrain(dem, v = c("slope", "aspect"), unit = "radians", neighbors = 8)
+  shift <- function(r, dx, dy) { m <- as.matrix(r, wide = TRUE); o <- matrix(NA_real_, nrow(m), ncol(m))
+    ri <- seq_len(nrow(m)) - dy; ci <- seq_len(ncol(m)) + dx; kr <- ri >= 1 & ri <= nrow(m); kc <- ci >= 1 & ci <= ncol(m)
+    o[kr, kc] <- m[ri[kr], ci[kc]]; setValues(rast(r), o) }
+  prof <- sapply(1:40, function(k) { a <- values(dem); b <- values(shift(dem, k, 0)); ok <- !is.na(a) & !is.na(b); cor(a[ok], b[ok]) })
+  k <- which(prof < 0.5)[1]; if (is.na(k)) k <- 20L
+  eta <- k * res(dem)[1]
+  lines <- rast(list(
+    (dem - 0.5 * (shift(dem, -k, 0) + shift(dem, k, 0))) / (2 * eta),
+    (dem - 0.5 * (shift(dem, 0, -k) + shift(dem, 0, k))) / (2 * eta),
+    (dem - 0.5 * (shift(dem, -k, -k) + shift(dem, k, k))) / (2 * sqrt(2) * eta),
+    (dem - 0.5 * (shift(dem, -k, k) + shift(dem, k, -k))) / (2 * sqrt(2) * eta)))
+  oc <- mean(lines, na.rm = TRUE)
+  s05 <- function(r) r / (2 * max(abs(values(r)), na.rm = TRUE))
+  OC <- s05(oc)
+  bins <- (0:15) * 22.5
+  Ww <- rast(lapply(bins, function(b) 1 + 0.5 * s05(g[["slope"]] * cos(b * pi / 180 - g[["aspect"]])) + 0.5 * OC))
+  Ww <- mask(crop(Ww, msk), msk); names(Ww) <- sprintf("bin_%03.0f", bins)
+  writeRaster(Ww, WW, overwrite = TRUE, datatype = "FLT4S", gdal = "COMPRESS=DEFLATE")
+  writeLines(sprintf("curvature length scale %d cells, %.0f m", k, eta), file.path(dirname(WW), "curvature_length_scale.txt"))
+}
+
+## hourly station wind by epoch, flight hours 12:00 to 17:00 and all hours, weighted by the terrain surface of each hour's sector
+EWS <- here::here("02.inputs/beetle/covariates/wind-epoch-context/epoch_wind_summary.csv")
+if (!file.exists(EWS)) {
+  suppressPackageStartupMessages({library(terra); library(sf); library(dplyr); library(weathercan)})
+  dir.create(dirname(EWS), recursive = TRUE, showWarnings = FALSE)
+  Ww <- rast(WW); msk <- rast(here::here("02.inputs/beetle/study-area/perimeter_mask.tif"))
+  cells <- !is.na(values(msk)); wv <- lapply(1:16, function(b) values(Ww[[b]])[cells])
+  put <- function(v) { r <- msk; r[cells] <- v; r }
+  ctr <- st_coordinates(st_transform(st_sfc(st_point(c(mean(ext(msk)[1:2]), mean(ext(msk)[3:4]))), crs = crs(msk)), 4326))
+  # Environment and Climate Change Canada hourly climate observations, retrieved with weathercan,
+  # https://api.weather.gc.ca/collections/climate-hourly/items
+  sl <- stations_search(coords = c(ctr[2], ctr[1]), interval = "hour", dist = 150)
+  ids <- unique(sl$station_id[!is.na(sl$start) & sl$start <= 2014 & !is.na(sl$end) & sl$end >= 2005])
+  ep <- read.csv(here::here("02.inputs/beetle/epoch-redstage/epoch_summary.csv"))
+  acc_field <- function(h) {
+    acc <- rep(0, sum(cells)); calm <- acc
+    for (b in sort(unique(h$bin))) { sp <- sort(h$W[h$bin == b]); acc <- acc + wv[[b]] * sum(sp); calm <- calm + findInterval(5 / wv[[b]], sp) }
+    c(put(acc / nrow(h)), put(calm / nrow(h)))
+  }
+  rows <- list()
+  for (i in seq_len(nrow(ep))) {
+    w <- weather_dl(station_ids = ids, interval = "hour", start = ep$start[i], end = ep$end[i])
+    h <- w |> filter(!is.na(wind_spd), !is.na(wind_dir)) |>
+      mutate(th = wind_dir * 10 * pi / 180, u = -wind_spd * sin(th), v = -wind_spd * cos(th), hr = as.integer(format(time, "%H"))) |>
+      group_by(time, hr) |> summarise(u = mean(u), v = mean(v), .groups = "drop") |>
+      mutate(W = sqrt(u^2 + v^2), bin = (round(((atan2(-u, -v) * 180 / pi) %% 360) / 22.5) %% 16) + 1L)
+    fl <- h[h$hr >= 12 & h$hr < 17, ]
+    s <- c(acc_field(fl), acc_field(h))
+    names(s) <- c("ep_wind_flight", "ep_calm_flight", "ep_wind_all", "ep_calm_all")
+    writeRaster(s, file.path(dirname(EWS), sprintf("wind_%d_e%02d.tif", ep$year[i], ep$epoch[i])), overwrite = TRUE,
+                datatype = "FLT4S", gdal = "COMPRESS=DEFLATE")
+    rows[[i]] <- data.frame(year = ep$year[i], epoch = ep$epoch[i], hours_all = nrow(h), hours_flight = nrow(fl), stations = length(unique(w$station_id[!is.na(w$wind_spd)])),
+                            wind_flight = global(s[[1]], "mean", na.rm = TRUE)[[1]], wind_flight_range = diff(as.numeric(global(s[[1]], "range", na.rm = TRUE))),
+                            calm_flight = global(s[[2]], "mean", na.rm = TRUE)[[1]], wind_all = global(s[[3]], "mean", na.rm = TRUE)[[1]])
+  }
+  write.csv(do.call(rbind, rows), EWS, row.names = FALSE)
+}
+```
+
+The response was red-stage attack in each sixteen-day period, the Landsat revisit interval, from 1 May to 22 September of 2006 to 2014, excluding 2012, when Landsat 7 was the only sensor and its scan-line corrector had failed. The index and baseline followed @murphy2026, who mapped red-stage mortality on this ground as the fall in the normalised difference moisture index (NDMI), an index used to detect forest disturbance in Landsat time series [@jin2005], against 2005, and validated the map against 28 field plots of 20 by 20 m in which beetle-killed pine was confirmed from pitch tubes, frass and gallery architecture. NDMI was the median of the cloud-masked Collection 2 Level-2 scenes in each period, from Landsat 5 for 2005 to 2011 and Landsat 8 for 2013 and 2014 after the band-pass adjustment of @roy2016, differenced against the same period of 2005 so that the seasonal course of leaf moisture did not enter the difference.
+
+The fall in NDMI that counted as attack was set by a classifier trained on the four pixels nearest the centre of each field plot, `r fmt(sum(PIXC$class == "redstage"))` pixels, against the 84 points of undisturbed forest that @murphy2026 digitised on the 2020 Landsat 8 scene, which fell in `r fmt(sum(PIXC$class == "undisturbed"))` distinct cells. Each pixel entered with its deepest annual fall in NDMI against 2005. Random forest, a radial support vector machine and gradient boosting were compared over `r fmt(CB$n_splits)` random splits, each holding out a quarter of the field plots and of the 100 m blocks of undisturbed pixels, so that neighbouring pixels never fell on both sides of a split. The model with the highest mean kappa set the cut, the fall in NDMI at which its prediction changed class. Periods in which the imagery saw less than a tenth of the perimeter were dropped, which left `r N_EP` periods over `r spellnum(EP_YRS)` years (Table S2). The undisturbed pixels came from one patch of about 230 by 455 m, so the cross-validation measured separation of the plots from that patch rather than from undisturbed forest across the landscape.
+
+Wind was summarised over the flight hours of 12:00 to 17:00, following the flight period @safranyik2006chap1 give for this region, where "peak flight is in the early to mid afternoon", and the 11:00 to 14:00 emergence peak of @gray1972. In `r fmt(CLIM_N)` hourly station records from May to September, `r num(100*CLIM_IN, "%.1f")` per cent of afternoon hours inside the flight window fell within the 19 to 41 degrees C flight range against `r num(100*CLIM_OUT, "%.1f")` per cent outside it (Figure S1). Hourly speed and direction from Environment and Climate Change Canada stations within 150 km were combined as vector components and adjusted for terrain with the MicroMet model of @liston2006, which weights each observation by the slope in the wind direction and the curvature of the ground. The adjustment depends on direction and not on speed, so it was computed once for each of 16 sectors of 22.5 degrees over an elevation model extending beyond the perimeter, with a curvature length scale of `r sub(".*cells, ", "", readLines(file.path(BC, "covariates/micromet-context/curvature_length_scale.txt")))`. Each period was summarised by its mean flight-hour wind and its share of flight hours below 5 km/h. Mean flight-hour wind ran from `r num(min(EW$wind_flight), "%.1f")` to `r num(max(EW$wind_flight), "%.1f")` km/h between periods and varied by up to `r num(max(EW$wind_flight_range), "%.1f")` km/h across the grid within a period.
+
+*@fig-spread near here*
+
+## Model design
 
 ```{r}
 #| label: point-patterns
@@ -2295,10 +2279,6 @@ if (!file.exists(PPT)) {
   file.rename(part, PPT)
 }
 ```
-
-Spatial pattern was described before any model was fitted, with the point pattern methods of @murphy2026. In each period the attacked cells were treated as a point pattern inside the window of cells the imagery saw. Clustering was tested against random relabelling, in which the same number of cells was drawn at random from the cells seen in that period, 999 times, because the cells sit on a 30 m grid inside a window with holes and a continuous null would misstate distances on it. Three statistics were compared with that null, the Clark-Evans aggregation index [@clark1954distance], the mean nearest-neighbour distance and the L function, the variance-stabilised form of Ripley's K [@ripley1977], against a global envelope [@baddeley2015]. The largest distance at which the observed L function lay above the envelope was taken as the clustering range of that period. The kernel bandwidth of each period was chosen by likelihood cross-validation over 20 to 300 m [@vanes1991], the procedure @murphy2026 used to set the bandwidth of their Cox process model. Both distances were estimated before any model was fitted and both entered the models, the bandwidth as the scale of a neighbourhood term and the clustering range as the range of the latent spatial field.
-
-## Model building
 
 ```{r}
 #| label: model-table
@@ -2640,13 +2620,15 @@ ob <- function(v) num(ONE$estimate[ONE$variable == v], "%+.3f")
 gr <- function(v, g, col = "estimate") { x <- GRT[GRT$term == v & GRT$grain_m == g & GRT$dependence, col]; if (col == "p") pthr(x) else num(x, "%+.3f") }
 ```
 
-Models were built in the order of @aukema2008, who "determined an appropriate spatial neighborhood structure(s) and time lag(s) to account for spatial and temporal dependencies" before any environmental variable entered, then tested each environmental variable alone beside those terms and built the full model by backward elimination. Every model was a logistic regression of attack in a cell and period with a fixed effect for each period. Within each period the model table took every attacked cell up to 2,000 and the same number of unattacked cells, so that the period effect absorbed the sampling rate and every other coefficient was unaffected by it.
+Spatial pattern was described before any model was fitted, with the point pattern methods of @murphy2026. In each period the attacked cells were a point pattern inside the window of cells the imagery saw, and clustering was tested against 999 random relabellings of those cells, because the cells sit on a 30 m grid inside a window with holes. The Clark-Evans index [@clark1954distance], the mean nearest-neighbour distance and the L function, the variance-stabilised form of Ripley's K [@ripley1977], were compared with that null, the last against a global envelope [@baddeley2015], and the largest distance at which the L function lay above the envelope was the clustering range. The kernel bandwidth of each period was chosen by likelihood cross-validation over 20 to 300 m [@vanes1991], as @murphy2026 set the bandwidth of their Cox process model. The bandwidth then set the scale of a neighbourhood term and the clustering range the range of the latent spatial field.
 
-The dependence terms were the cell's own state in the previous period of the same season and in the same period of the previous outbreak year, and the share of cells attacked around it in each. That share was measured two ways, within a fixed radius of 42, 90, 150, 210, 510 or 1,050 m, and weighted by a Gaussian kernel whose standard deviation was the likelihood cross-validated bandwidth of the period the share was taken from. All candidates were compared on AIC, so that the bandwidth was tested against the fixed radii rather than assumed. The environmental variables were then entered one at a time beside the chosen dependence terms, each standardised so that its coefficient was the change in log-odds per standard deviation, and tested against the dependence-only model by likelihood ratio, the screen @murphy2026 used against the intercept-only model. Variables that passed at p < 0.05 were grouped where their absolute correlation reached 0.75, keeping the member with the largest likelihood-ratio statistic, and removed one at a time until every variance inflation factor was below 5. An elastic net with the dependence terms unpenalised [@zou2005; @friedman2010] was fitted beside the elimination and is reported with it (Table S4), and the final model was reached by removing terms one at a time while AIC fell.
+Models were built in the order of @aukema2008, who "determined an appropriate spatial neighborhood structure(s) and time lag(s) to account for spatial and temporal dependencies" before any environmental variable entered, then tested each variable alone and built the full model by backward elimination. Every model was a logistic regression of attack in a cell and period with a fixed effect for each period. Each period contributed every attacked cell up to 2,000 and the same number of unattacked cells, so the period effect absorbed the sampling rate.
 
-The three questions were tested as additions to the final model. The mechanisms of @krawchuk2020 were tested term by term, stand density as live stems, standing volume and basal area, large hosts as quadratic mean diameter, and shading as growing-season radiation and northness. Plume disruption was tested as the interactions of stem density and standing volume with mean flight-hour wind. Calm share correlated `r num(WIND_R, "%.2f")` with mean wind, so by the correlation rule of the screen only the mean entered. Deposition was tested as the main effects of the wind shelter index of @plattner2004 and sky view, with their interactions with density tested next. Each set was compared with the model without it by likelihood ratio, and each interaction was read as the slope of one term at one standard deviation below and above the mean of the other.
+The dependence terms were the cell's own state in the previous period of the season and in the same period of the previous year, and the share of cells attacked around it in each, measured within fixed radii of 42, 90, 150, 210, 510 and 1,050 m and by a Gaussian kernel at the bandwidth of the period the share came from. All were compared on AIC, so the bandwidth was tested against the fixed radii rather than assumed. Each standardised environmental variable was then entered alone beside the chosen dependence terms and tested by likelihood ratio, the screen @murphy2026 applied against the intercept-only model. Variables passing at p < 0.05 were grouped where their absolute correlation reached 0.75, keeping the member with the largest statistic, and removed until every variance inflation factor was below 5. The final model was reached by removing terms one at a time while AIC fell, with an elastic net fitted alongside [@zou2005; @friedman2010] (Table S4).
 
-Two checks tested the scale of the inference. The final model was refitted with a Gaussian process smooth of easting and northing, a latent spatial field of the kind the Cox process model of @murphy2026 carried [@wood2017], with a Matérn correlation whose range was set to the median clustering range of the L functions, `r fmt(median(PP$cluster_range_m[PP$clustered]))` m, and Moran's I [@moran1950] of the deviance residuals was computed within each period on the eight nearest sampled cells, with and without the field. The final model's environmental terms were also refitted with the cell coarsened from 30 m to 90, 270 and 990 m, a coarse cell being attacked if any 30 m cell inside it was, the definition of presence @aukema2008 used on 12 km cells, with the dependence terms rebuilt at each grain from the cell's own state and the share of its eight neighbours attacked.
+The questions were tested as additions to the final model, each compared with the model without it by likelihood ratio. The mechanisms of @krawchuk2020 were tested term by term, density as live stems, standing volume and basal area, large hosts as quadratic mean diameter, and shading as growing-season radiation and northness. Plume disruption was tested as the interactions of stems and standing volume with mean flight-hour wind, which correlated `r num(WIND_R, "%.2f")` with calm share, so only the mean entered. Deposition was tested as the main effects of the wind shelter index and sky view, then their interactions with density. Each interaction was read as the slope of one term at one standard deviation either side of the mean of the other.
+
+Two checks tested the scale of the inference. The final model was refitted with a Gaussian process smooth of easting and northing [@wood2017], a latent spatial field of the kind the Cox process model of @murphy2026 carried, with a Matérn range set to the median clustering range, `r fmt(median(PP$cluster_range_m[PP$clustered]))` m, and Moran's I [@moran1950] of the deviance residuals was computed within each period on the eight nearest sampled cells with and without the field. The environmental terms were also refitted with the cell coarsened to 90, 270 and 990 m, a coarse cell being attacked if any 30 m cell inside it was, the definition @aukema2008 used on 12 km cells, with the dependence terms rebuilt at each grain from the cell's own state and its eight neighbours.
 
 # Results {#sec-results}
 
