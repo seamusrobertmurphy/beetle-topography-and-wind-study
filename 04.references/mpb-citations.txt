@@ -1,0 +1,139 @@
+Agee, J., 1998. The Landscape Ecology of Western Forest Fire Regimes. Northwest Sci. 72, 24–34.
+Agee, J., 1996. Fire Ecology of Pacific Northwest Forests. Bark Beetles Fuels Fire Bibliogr.
+Agovino, M., Cerciello, M., Ferraro, A., Garofalo, A., 2021. Spatial analysis of wildfire incidence in the USA: The role of climatic spillovers. Environ. Dev. Sustain. 23, 6084–6105.
+Allen, G.S., Owens, J.N., others, 1972. The life history of Douglas Fir. Life Hist. Douglas Fir.
+Amman, G.D., 1983. Mountain Pine Beetle Dynamics in Lodgepole Pine Forests: Population Dynamics. US Department of Agriculture, Forest Service, Intermountain Forest and Range ….
+Amman, G.D., 1982. Mountain pine beetle--identification, biology, causes of outbreaks, and entomological research needs. BC-X - Can. For. Serv. Pac. For. Res. Cent.
+Baddeley, A., Rubak, E., Turner, R., 2015. Spatial Point Patterns: Methodology and Applications with R, 1st edition. ed. Chapman and Hall/CRC, Boca Raton ; London ; New York.
+Badger, J., Frank, H., Hahmann, A.N., Giebel, G., 2014. Wind-Climate Estimation Based on Mesoscale and Microscale Modeling: Statistical-Dynamical Downscaling for Wind Energy Applications. J. Appl. Meteorol. Climatol. 53, 1901–1919. https://doi.org/10.1175/JAMC-D-13-0147.1
+Barton, G.J., Moran, E.H., Berenbrock, C., 2004. Surveying Cross Sections of the Kootenai River Between Libby Dam, Montana, and Kootenay Lake, British Columbia, Canada (USGS Numbered Series No. 2004–1045), Surveying Cross Sections of the Kootenai River Between Libby Dam, Montana, and Kootenay Lake, British Columbia, Canada, Open-File Report. U.S. Geological Survey, Reston, VA. https://doi.org/10.3133/ofr20041045
+Beaudoin, A., Bernier, P.Y., Villemaire, P., Guindon, L., Guo, X.J., 2018. Tracking forest attributes across Canada between 2001 and 2011 using a k nearest neighbors mapping approach applied to MODIS imagery. Can. J. For. Res. 48, 85–93. https://doi.org/10.1139/cjfr-2017-0184
+Bell, D.M., Bradford, J.B., Lauenroth, W.K., 2014. Early indicators of change: divergent climate envelopes between tree life stages imply range shifts in the western United States. Glob. Ecol. Biogeogr. 23, 168–180. https://doi.org/10.1111/geb.12109
+Bigler, C., Kulakowski, D., Veblen, T.T., 2005. Multiple disturbance interactions and drought influence fire severity in Rocky Mountain subalpine forests. Ecology 86, 3018–3029.
+Buma, B., 2015. Disturbance interactions: characterization, prediction, and the potential for cascading effects. Ecosphere 6, 1–15.
+Buma, B., Wessman, C.A., 2011. Disturbance interactions can impact resilience mechanisms of forests. Ecosphere 2, 1–13.
+Burton, P.J., Jentsch, A., Walker, L.R., 2020. The ecology of disturbance interactions. BioScience 70, 854–870.
+Buston, K., Maclachlan, L., 2018. Overview of forest health conditions in southern british columbia.
+Carlson, A.R., Sibold, J.S., Assal, T.J., Negrón, J.F., 2017. Evidence of compounded disturbance effects on vegetation recovery following high-severity wildfire and spruce beetle outbreak. PLOS ONE 12, e0181778. https://doi.org/10.1371/journal.pone.0181778
+Carroll, A.L., Taylor, S.W., Régnière, J., Safranyik, L., 2003. Effects of Climate Change on Range Expansion by the Mountain Pine Beetle in British Columbia 10.
+Chambers, M.E., Fornwalt, P.J., Malone, S.L., Battaglia, M.A., 2016. Patterns of conifer regeneration following high severity wildfire in ponderosa pine – dominated forests of the Colorado Front Range. For. Ecol. Manag. 378, 57–67. https://doi.org/10.1016/j.foreco.2016.07.001
+Cochrane, J.D., 2007. Characteristics of historical forest fires in complex mixed-conifer forests of southeastern British Columbia. University of British Columbia. https://doi.org/10.14288/1.0100776
+Cohen, W.B., Fiorella, M., Gray, J., Helmer, E., Anderson, K., 1998. An efficient and accurate method for mapping forest clearcuts in the Pacific Northwest using Landsat imagery. Photogramm. Eng. Remote Sens. 64, 293–299.
+Collins, J.B., Woodcock, C.E., 1996. An assessment of several linear change detection techniques for mapping forest mortality using multitemporal Landsat TM data. Remote Sens. Environ. 56, 66–77.
+Collins, L., Griffioen, P., Newell, G., Mellor, A., 2018. The utility of Random Forests for wildfire severity mapping. Remote Sens. Environ. 216, 374–384. https://doi.org/10.1016/j.rse.2018.07.005
+Dale, V.H., Joyce, L.A., McNulty, S., Neilson, R.P., Ayres, M.P., Flannigan, M.D., Hanson, P.J., Irland, L.C., Lugo, A.E., Peterson, C.J., Simberloff, D., Swanson, F.J., Stocks, B.J., Wotton, B.M., 2001. Climate Change and Forest Disturbances: Climate change can affect forests by altering the frequency, intensity, duration, and timing of fire, drought, introduced species, insect and pathogen outbreaks, hurricanes, windstorms, ice storms, or landslides. BioScience 51, 723–734. https://doi.org/10.1641/0006-3568(2001)051%255B0723:CCAFD%255D2.0.CO;2
+Daly, C., Bryant, K., 2025. The Climate Data Guide, in: PRISM High-Resolution Spatial Climate Data for the United States: Max/Min Temp, Dewpoint, Precipitation. National Center for Atmospheric Research Staff, Corvallis, OR.
+Daniels, L.D., Gray, R.W., Burton, P., 2020. 2017 Megafires in British Columbia-Urgent need to adapt and improve resilience to wildfire. Proc. Fire Contin. Future Wildland Fire Eds SM Hood Drury T Steelman R Steffens Fort Collins CO Rocky Mt. Res. Stn.
+Despain, D.G., Clark, D.L., Reardon, J.J., 1996. Simulation of crown fire effects on canopy seed bank in lodgepole pine. Int. J. Wildland Fire 6, 45–49.
+Dobrowski, S.Z., Swanson, A.K., Abatzoglou, J.T., Holden, Z.A., Safford, H.D., Schwartz, M.K., Gavin, D.G., 2015. Forest structure and species traits mediate projected recruitment declines in western US tree species. Glob. Ecol. Biogeogr. 24, 917–927. https://doi.org/10.1111/geb.12302
+Donato, D.C., Harvey, B.J., Romme, W.H., Simard, M., Turner, M.G., 2013. Bark beetle effects on fuel profiles across a range of stand structures in Douglas-fir forests of Greater Yellowstone. Ecol. Appl. 23, 3–20.
+Filipponi, F., 2018. BAIS2: Burned Area Index for Sentinel-2. Proceedings 2, 364. https://doi.org/10.3390/ecrs-2-05177
+Filmon, G., 2004. Firestorm 2003. Provincial review of the 2003 fire season.
+Fonti, V., Belitser, E., 2017. Feature selection using lasso. VU Amst. Res. Pap. Bus. Anal. 30, 1–25.
+Franklin, S.E., 2001. Remote sensing for sustainable forest management. CRC press.
+Franklin, S.E., Lavigne, M.B., Wulder, M.A., Stenhouse, G.B., 2002. Change detection and landscape structure mapping using remote sensing. For. Chron. 78, 618–625.
+Gao, B., 1996. NDWI—A normalized difference water index for remote sensing of vegetation liquid water from space. Remote Sens. Environ. 58, 257–266. https://doi.org/10.1016/S0034-4257(96)00067-3
+Glenn-Lewin, D.C., Peet, R.K., Veblen, T.T., 1992. Plant Succession: Theory and prediction. Springer Science & Business Media.
+Grossnickle, S.C., Russell, J.H., 2010. Physiological variation among western redcedar (Thuja plicata Donn ex D. Don) populations in response to short-term drought. Ann. For. Sci. 67, 506–506. https://doi.org/10.1051/forest/2010008
+GWA, 2022. Global Wind Atlas.
+Hadley, K.S., 1994. The Role of Disturbance, Topography, and Forest Structure in the Development of a Montane Forest Landscape. Bull. Torrey Bot. Club 121, 47–61. https://doi.org/10.2307/2996883
+Hagle, S.K., Gibson, K.E., Tunnock, S., 2003. Field guide to diseases and insect pests of northern and central Rocky Mountain conifers. U.S. Department of Agriculture, Forest Service, State and Private Forestry, Northern and Intermountain Regions; Missoula, Montana, and Ogden, Utah.
+Hamann, A., Wang, T., 2006. Potential effects of climate change on ecosystem and tree species distribution in British Columbia. Ecology 87, 2773–2786. https://doi.org/10.1890/0012-9658(2006)87%255B2773:peocco%255D2.0.co;2
+Hansen, M., Franklin, S., Woudsma, C., Peterson, M., 2001. Forest structure classification in the North Columbia mountains using the Landsat TM Tasseled Cap wetness component. Can. J. Remote Sens. 27, 20–32.
+Harvey, B.J., Donato, D.C., Romme, W.H., Turner, M.G., 2014. Fire severity and tree regeneration following bark beetle outbreaks: the role of outbreak stage and burning conditions. Ecol. Appl. 24, 1608–1625.
+Harvey, B.J., Donato, D.C., Turner, M.G., 2016. High and dry: Post-fire tree seedling establishment in subalpine forests decreases with post-fire drought and large stand-replacing burn patches. Glob. Ecol. Biogeogr. 25, 655–669.
+Henigman, J., Ebata, T., Allen, E., Holt, J., Pollard, A., 1999. Field guide to forest damage in British Columbia. Field Guide For. Damage Br. Columbia.
+Hicke, J.A., Johnson, M.C., Hayes, J.L., Preisler, H.K., 2012. Effects of bark beetle-caused tree mortality on wildfire. For. Ecol. Manag. 271, 81–90.
+Hoecker, T.J., Hansen, W.D., Turner, M.G., 2020. Topographic position amplifies consequences of short-interval stand-replacing fires on postfire tree establishment in subalpine conifer forests. For. Ecol. Manag. 478, 118523.
+Holden, Z.A., Morgan, P., Smith, A.M.S., Rollins, M., Gessler, P.E., 2005. Evaluation of novel thermally enhanced spectral indices for mapping fire perimeters and comparisons with fire atlas data. Int. J. Remote Sens. Vol 26 No 21 4801-¬4808. https://doi.org/10.1080/01431160500239008
+Hope, G., Jordan, P., Winkler, R., Giles, T., Curran, M., Soneff, K., Chapman, B., 2016. Post-wildfire Natural Hazards Risk Analysis in British Columbia. Prov. B.C.
+Illian, J.B., Sørbye, S.H., Rue, H., 2012. A toolbox for fitting complex spatial point process models using integrated nested Laplace approximation (INLA).
+Jenkins, M.J., Page, W.G., Hebertson, E.G., Alexander, M.E., 2012. Fuels and fire behavior dynamics in bark beetle-attacked forests in Western North America and implications for fire management. For. Ecol. Manag. 275, 23–34.
+Jia, K., Liang, S., Gu, X., Baret, F., Wei, X., Wang, X., Yao, Y., Yang, L., Li, Y., 2016. Fractional vegetation cover estimation algorithm for Chinese GF-1 wide field view data. Remote Sens. Environ. C, 184–191. https://doi.org/10.1016/j.rse.2016.02.019
+Jin, S., Sader, S.A., 2005. Comparison of time series tasseled cap wetness and the normalized difference moisture index in detecting forest disturbances. Remote Sens. Environ. 94, 364–372.
+Jolly, W.M., Parsons, R.A., Hadlow, A.M., Cohn, G.M., McAllister, S.S., Popp, J.B., Hubbard, R.M., Negron, J.F., 2012. Relationships between moisture, chemistry, and ignition of Pinus contorta needles during the early stages of mountain pine beetle attack. For. Ecol. Manag. 269, 52–59.
+Key, C., Benson, N., 2005. Landscape assessment: remote sensing of severity, the normalized burn ratio and ground measure of severity, the composite burn index. FIREMON Fire Eff. Monit. Inventory Syst. Ogden Utah USDA For. Serv. Rocky Mt. Res Stn.
+Klippel, A., Hardisty, F., Li, R., 2011. Interpreting spatial patterns: An inquiry into formal and cognitive aspects of Tobler’s first law of geography. Ann. Assoc. Am. Geogr. 101, 1011–1031.
+Kolotelo, D., 1997. Anatomy and Morphology of Conifer Tree Seed Forest Nursery Technical Series 1.1. BC Minist. For. Surrey BC Can. 60.
+Kozlowski, T.T., 1972. Seed biology: importance, development, and germination. Elsevier.
+Kulakowski, D., Matthews, C., Jarvis, D., Veblen, T.T., 2013. Compounded disturbances in sub-alpine forests in western Colorado favour future dominance by quaking aspen (Populus tremuloides). J. Veg. Sci. 24, 168–176. https://doi.org/10.1111/j.1654-1103.2012.01437.x
+Lamont, B.B., Le Maitre, D., Cowling, R., Enright, N., 1991. Canopy seed storage in woody plants. Bot. Rev. 57, 277–317.
+Larson, A.J., Churchill, D., 2012. Tree spatial patterns in fire-frequent forests of western North America, including mechanisms of pattern formation and implications for designing fuel reduction and restoration treatments. For. Ecol. Manag. 267, 74–92. https://doi.org/10.1016/j.foreco.2011.11.038
+Lentile*, L.B., Holden*, Z.A., Smith*, A.M.S., Falkowski, M.J., Hudak, A.T., Morgan, P., Lewis, S.A., Gessler, P.E., Benson, N.C., Lentile*, L.B., Holden*, Z.A., Smith*, A.M.S., Falkowski, M.J., Hudak, A.T., Morgan, P., Lewis, S.A., Gessler, P.E., Benson, N.C., 2006. Remote sensing techniques to assess active fire characteristics and post-fire effects. Int. J. Wildland Fire 15, 319–345. https://doi.org/10.1071/WF05097
+Lerch, A.P., Pfammatter, J.A., Bentz, B.J., Raffa, K.F., 2016. Mountain Pine Beetle Dynamics and Reproductive Success in Post-Fire Lodgepole and Ponderosa Pine Forests in Northeastern Utah. PLOS ONE 11, e0164738. https://doi.org/10.1371/journal.pone.0164738
+Littell, J.S., McKenzie, D., Peterson, D.L., Westerling, A.L., 2009. Climate and wildfire area burned in western U.S. ecoprovinces, 1916–2003. Ecol. Appl. 19, 1003–1021. https://doi.org/10.1890/07-1183.1
+Littlefield, C.E., 2019. Topography and post-fire climatic conditions shape spatio-temporal patterns of conifer establishment and growth. Fire Ecol. 15, 34. https://doi.org/10.1186/s42408-019-0047-7
+Loehman, R.A., Clark, J.A., Keane, R.E., 2011. Modeling Effects of Climate Change and Fire Management on Western White Pine (Pinus monticola) in the Northern Rocky Mountains, USA. Forests 2, 832–860. https://doi.org/10.3390/f2040832
+MacKillop, D., 2018. A field guide to ecosystem classification and identification for Southeast British Columbia: the East Kootenay, Land management handbook. British Columbia, Victoria, B.C.
+Malone, S.L., Fornwalt, P.J., Battaglia, M.A., Chambers, M.E., Iniguez, J.M., Sieg, C.H., 2018. Mixed-Severity Fire Fosters Heterogeneous Spatial Patterns of Conifer Regeneration in a Dry Conifer Forest. Forests 9, 45. https://doi.org/10.3390/f9010045
+Martin, J., Eugenio, F., Marcello, J., Medina, A., 2016. Automatic Sun Glint Removal of Multispectral High-Resolution Worldview-2 Imagery for Retrieving Coastal Shallow Water Parameters. Remote Sens. 8, 37. https://doi.org/10.3390/rs8010037
+Mathys, A.S., Coops, N.C., Simard, S.W., Waring, R.H., Aitken, S.N., 2018. Diverging distribution of seedlings and mature trees reflects recent climate change in British Columbia. Ecol. Model. 384, 145–153. https://doi.org/10.1016/j.ecolmodel.2018.06.008
+McCullough, D.G., Werner, R.A., Neumann, D., 1998. Fire and Insects in Northern and Boreal Forest Ecosystems of North America. Annu. Rev. Entomol. 43, 107–127. https://doi.org/10.1146/annurev.ento.43.1.107
+McIntosh, R.P., 1980. The background and some current problems of theoretical ecology. Synthese 43, 195–255.
+Meddens, A.J.H., Hicke, J.A., Ferguson, C.A., 2012. Spatiotemporal patterns of observed bark beetle-caused tree mortality in British Columbia and the western United States. Ecol. Appl. Publ. Ecol. Soc. Am. 22, 1876–1891. https://doi.org/10.1890/11-1785.1
+Meddens, A.J.H., Hicke, J.A., Vierling, L.A., Hudak, A.T., 2013. Evaluating methods to detect bark beetle-caused tree mortality using single-date and multi-date Landsat imagery. Remote Sens. Environ. 132, 49–58. https://doi.org/10.1016/j.rse.2013.01.002
+Meidinger, D.V., Pojar, J. (Eds.), 1991. Ecosystems of British Columbia, Special report series. Research Branch, Ministry of Forests, Victoria, B.C.
+MFLNRO, B., 2015. Mt. Midgeley Wildfire - Post-Wildfire Risk Analysis - Preliminary Report (Public Wildfire Assessment REport No. 15 N70624).
+Mobley, C.D., 2015. Polarized reflectance and transmittance properties of windblown sea surfaces. Appl. Opt. 54, 4828–4849. https://doi.org/10.1364/AO.54.004828
+Natural Resources Canada, 2017. High Resolution Digital Elevation Model (HRDEM).
+Oswald, B.P., Neuenschwander, L.F., 1995. Microsite characteristics and safe site description for western larch germination and initial seedling establishment. U.S. Dept. of Agriculture, Forest Service, Intermountain Research Station.
+Owens, J.N., 2005. The reproductive biology of western white pine. Forest Renewal BC.
+Owens, J.N., Molder, M., 1977. Seed-cone differentiation and sexual reproduction in western white pine (Pinus monticola). Can. J. Bot. 55, 2574–2590.
+Page, W.G., Jenkins, M.J., Alexander, M.E., 2013. Foliar moisture content variations in lodgepole pine over the diurnal cycle during the red stage of mountain pine beetle attack. Environ. Model. Softw. 49, 98–102.
+Paine, R.T., Tegner, M.J., Johnson, E.A., 1998. Compounded Perturbations Yield Ecological Surprises. Ecosystems 1, 535–545. https://doi.org/10.1007/s100219900049
+Perrakis, D.D.B., Lanoville, R.A., Taylor, S.W., Hicks, D., 2014. Modeling Wildfire Spread in Mountain Pine Beetle-Affected Forest Stands, British Columbia, Canada. Fire Ecol. 10, 10–35. https://doi.org/10.4996/fireecology.1002010
+Pickett, S.T.A., White, P.S. (Eds.), 1987. The Ecology of Natural Disturbance and Patch Dynamics, 1st edition. ed. Academic Press, San Diego.
+Pielou, E., 1962. The use of plant-to-neighbour distances for the detection of competition. J. Ecol. 357–367.
+Raffa, K.F., Aukema, B.H., Bentz, B.J., Carroll, A.L., Hicke, J.A., Turner, M.G., Romme, W.H., 2008. Cross-scale Drivers of Natural Disturbances Prone to Anthropogenic Amplification: The Dynamics of Bark Beetle Eruptions. BioScience 58, 501–517. https://doi.org/10.1641/B580607
+Renner, I.W., Elith, J., Baddeley, A., Fithian, W., Hastie, T., Phillips, S.J., Popovic, G., Warton, D.I., 2015. Point process models for presence-only analysis. Methods Ecol. Evol. 6, 366–379.
+Rowe, L.S., 1983. Concepts of fire effects on plant individuals and species In Wein RW, & MacLean DA (Eds.), The role of fire in northern circumpolar ecosystems (pp. 135–151).
+Safranyik, L., Wilson, B., Pacific Forestry Centre, 2006. The mountain pine beetle: a synthesis of biology, management, and impacts on lodgepole pine. Canadian Forest Service, Pacific Forestry Centre, Victoria, BC.
+Schepers, L., Haest, B., Veraverbeke, S., Spanhove, T., Vanden Borre, J., Goossens, R., 2014. Burned Area Detection and Burn Severity Assessment of a Heathland Fire in Belgium Using Airborne Imaging Spectroscopy (APEX). Remote Sens. 6, 1803–1826. https://doi.org/10.3390/rs6031803
+Schoennagel, T., Veblen, T.T., Negron, J.F., Smith, J.M., 2012. Effects of mountain pine beetle on fuels and expected fire behavior in lodgepole pine forests, Colorado, USA. PloS One 7, e30002.
+Sieg, C.H., Linn, R.R., Pimont, F., Hoffman, C.M., McMillin, J.D., Winterkamp, J., Baggett, L.S., 2017. Fires Following Bark Beetles: Factors Controlling Severity and Disturbance Interactions in Ponderosa Pine. Fire Ecol. 13, 1–23. https://doi.org/10.4996/fireecology.130300123
+Simard, M., Romme, W.H., Griffin, J.M., Turner, M.G., 2011. Do mountain pine beetle outbreaks change the probability of active crown fire in lodgepole pine forests? Ecol. Monogr. 81, 3–24.
+Singh, H., 1978. Embryology of gymnosperms.
+Smith, A., Drake, N., Wooster, M., Hudak, A., Holden, Z., Gibbons, C., 2007. Production of Landsat ETM+ reference imagery of burned areas within Southern African savannahs: comparison of methods and application to MODIS. Int. J. Remote Sens. 28, 2753–2775.
+Sparks, A.M., Talhelm, A.F., Feltrin, R.P., Smith, A.M.S., Johnson, D.M., Kolden, C.A., Boschetti, L., 2018. An experimental assessment of the impact of drought and fire on western larch injury, mortality and recovery. Int. J. Wildland Fire 27, 490. https://doi.org/10.1071/WF18044
+Stevens-Rumann, C., Morgan, P., Hoffman, C., 2015. Bark beetles and wildfires: How does forest recovery change with repeated disturbances in mixed conifer forests? Ecosphere 6, art100. https://doi.org/10.1890/ES14-00443.1
+Talucci, A.C., Krawchuk, M.A., 2019. Dead forests burning: the influence of beetle outbreaks on fire severity and legacy structure in sub-boreal forests. Ecosphere 10, e02744. https://doi.org/10.1002/ecs2.2744
+Talucci, A.C., Lertzman, K.P., Krawchuk, M.A., 2019a. Drivers of lodgepole pine recruitment across a gradient of bark beetle outbreak and wildfire in British Columbia. For. Ecol. Manag. 451, 117500. https://doi.org/10.1016/j.foreco.2019.117500
+Talucci, A.C., Meigs, G.W., Knudby, A., Krawchuk, M.A., 2019b. The influence of bark beetle outbreaks on burn severity for sub-boreal forests in British Columbia 2019, B53H-2479.
+Tapia-McClung, R., 2006. Detecting hot spots of mountain pine beetle infestations in the forests of British Columbia: An approach using local spatial autocorrelation.
+Taylor, S.W., Carroll, A.L., Alfaro, R.I., Safranyik, L., 2006. Forest, climate and mountain pine beetle outbreak dynamics in western Canada. Mt. Pine Beetle Synth. Biol. Manag. Impacts Lodg. Pine 67–94.
+Teste, F.P., Lieffers, V.J., Landhäusser, S.M., 2011. Seed release in serotinous lodgepole pine forests after mountain pine beetle outbreak. Ecol. Appl. 21, 150–162.
+Toffin, E., Gabriel, E., Louis, M., Deneubourg, J.-L., Grégoire, J.-C., 2018. Colonization of weakened trees by mass-attacking bark beetles: no penalty for pioneers, scattered initial distributions and final regular patterns. R. Soc. Open Sci. 5, 170454. https://doi.org/10.1098/rsos.170454
+Tran, B.N., Tanase, M.A., Bennett, L.T., Aponte, C., 2018. Evaluation of Spectral Indices for Assessing Fire Severity in Australian Temperate Forests. Remote Sens. 10, 1680. https://doi.org/10.3390/rs10111680
+Trigg, S., Flasse, S., 2001. An evaluation of different bi-spectral spaces for discriminating burned shrub-savannah. Int. J. Remote Sens. 22, 2641–2647. https://doi.org/10.1080/01431160110053185
+Van Es, B., 1991. Likelihood cross-validation bandwidth selection for nonparametric kernel density estimators. J. Nonparametric Stat. 1, 83–110. https://doi.org/10.1080/10485259108832513
+Vander Wall, S.B., 2023. Seed Dispersal in Pines (Pinus). Bot. Rev. 1–33.
+Walter, J.A., Platt, R.V., 2013. Multi-temporal analysis reveals that predictors of mountain pine beetle infestation change during outbreak cycles. For. Ecol. Manag. 302, 308–318.
+Waring, R.H., Coops, N.C., 2016. Predicting large wildfires across western North America by modeling seasonal variation in soil water balance. Clim. Change 135, 325–339. https://doi.org/10.1007/s10584-015-1569-x
+West, N.E., 1968. Rodent-influenced establishment of ponderosa pine and bitterbrush seedlings in central Oregon. Ecology 49, 1009–1011.
+Westfall, J., Duthie-Holt, M., 2021. 2021 summary of forest health conditions in British Columbia. Ministry of Forests and Range, Forest Practices Branch.
+Westfall, J., Ebata, T., 2011. 2011 summary of forest health conditions in British Columbia. Ministry of Forests and Range, Forest Practices Branch.
+Westfall, J., Ebata, T., Bains, Babita, 2020. Forest Health Strategy 2019-2020; Arrow & Cascadia Timber Supply Areas (Pest Management Report No. 15), Pest management report series. Ministry of Forests, Lands, Natural Resource Operations  and Rural Development.
+White, J.C., Wulder, M.A., Brooks, D., Reich, R., Wheate, R.D., 2005. Detection of red attack stage mountain pine beetle infestation with high spatial resolution satellite imagery. Remote Sens. Environ. 96, 340–351.
+Wiegand, T., Moloney, K.A., 2013. Handbook of spatial point-pattern analysis in ecology. CRC press.
+Woodward, B.D., Evangelista, P.H., Vorster, A.G., 2018. Mapping progression and severity of a Southern Colorado spruce beetle outbreak using calibrated image composites. Forests 9, 336.
+Wulder, M.A., Dymond, C.C., White, J.C., Leckie, D.G., Carroll, A.L., 2006a. Surveying mountain pine beetle damage of forests: A review of remote sensing opportunities. For. Ecol. Manag. 221, 27–41.
+Wulder, M.A., White, J.C., Bentz, B., Alvarez, M.F., Coops, N.C., 2006b. Estimating the probability of mountain pine beetle red-attack damage. Remote Sens. Environ. 101, 150–166. https://doi.org/10.1016/j.rse.2005.12.010
+Yamada, I., Rogerson, P.A., 2003. An empirical comparison of edge effect correction methods applied to K-function analysis. Geogr. Anal. 35, 97–109.
+Ziegler, J.P., Hoffman, C.M., Fornwalt, P.J., Sieg, C.H., Battaglia, M.A., Chambers, M.E., Iniguez, J.M., 2017. Tree regeneration spatial patterns in ponderosa pine forests following stand-replacing fire: Influence of topography and neighbors. For. 8 391 8, 391. https://doi.org/10.3390/f8100391
+ 
+
+
+
+  - Safranyik et al. 1989, on local dispersal in relation to wind direction and speed.
+  - Chen & Jackson 2017, on the weather conditions for emergence and flight.
+  - Carlson 2017, Lentile 2006, Pawson 2021
+
+  - Host size and phloem: Amman 1972; Cole & Amman 1969.
+  - Host defence and mass attack: Raffa & Berryman 1983; Berryman 1982.
+  - Spatial pattern of attack: Mitchell & Preisler 1991.
+  - Landsat detection of red attack: Meddens et al. 2012 or 2013; Coops et al. 2006; Goodwin et al. 2008.
+  - Climate and range: Carroll et al. 2004; Logan & Powell 2001.
+  - Dispersal: de la Giroday et al. 2012.
+  - Stand structure: Negrón & Popp 2004; Klutsch et al. 2009.
+  - Impacts: Kurz et al. 2008.
+  - BC management: Whitehead & Russo 2005.

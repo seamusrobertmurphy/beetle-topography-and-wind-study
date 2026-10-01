@@ -129,7 +129,10 @@ VRI_LABELS <- c(
   ep_wind_flight = "Flight-hour wind (km/h)", ep_calm_flight = "Flight-hour calm share",
   lag1_self = "Attack in the same cell, previous period", lag1_nbr90 = "Attack within 90 m, previous period",
   lagyr_self = "Attack in the same cell, previous year", lagyr_nbr90 = "Attack within 90 m, previous year",
-  lag1_kern = "Attack nearby at the bandwidth, previous period", lagyr_kern = "Attack nearby at the bandwidth, previous year")
+  lag1_kern = "Attack nearby at the bandwidth, previous period", lagyr_kern = "Attack nearby at the bandwidth, previous year",
+  jul = "July mean wind (km/h)", jun = "June mean wind (km/h)", mm_flight_mean = "Flight-window wind (km/h)", ep_wind_all = "All-hours wind (km/h)",
+  setNames(paste0("Attack within ", c(42, 90, 150, 210, 510, 1050), " m, previous year"), paste0("lagyr_nbr", c(42, 90, 150, 210, 510, 1050))),
+  setNames(paste0("Attack within ", c(42, 90, 150, 210, 510, 1050), " m, previous period"), paste0("lag1_nbr", c(42, 90, 150, 210, 510, 1050))))
 pretty_terms <- function(x) {
   out <- VRI_LABELS[x]; ix <- grepl(":", x, fixed = TRUE)
   if (any(ix)) out[ix] <- vapply(strsplit(x[ix], ":", fixed = TRUE), function(p) {
@@ -221,6 +224,34 @@ DT0 <- if (file.exists(file.path(MD, "model_table_dependence.rds"))) readRDS(fil
 WIND_R <- if (is.null(DT0)) NA else cor(DT0$ep_wind_flight, DT0$ep_calm_flight)
 ob <- function(v) num(ONE$estimate[ONE$variable == v], "%+.3f")
 gr <- function(v, g, col = "estimate") { x <- GRT[GRT$term == v & GRT$grain_m == g & GRT$dependence, col]; if (col == "p") pthr(x) else num(x, "%+.3f") }
+
+AGD   <- file.path(BC, "model-data-annual-grid")
+ARS   <- rd(file.path(BC, "red-stage-annual/redstage_summary.csv"))
+AWIND <- rd(file.path(BC, "covariates/wind-annual-context/annual_wind_summary.csv"))
+ASPT  <- rd(file.path(AGD, "spatial_pattern.csv"));        ADSL  <- rd(file.path(AGD, "dependence_selection.csv"))
+ACOEF <- rd(file.path(AGD, "annual_coefficients.csv"));    AFIT  <- rd(file.path(AGD, "annual_fit.csv"))
+ASLP  <- rd(file.path(AGD, "annual_simple_slopes.csv"));   AMOR  <- rd(file.path(AGD, "annual_residual_moran.csv"))
+ASFR  <- rd(file.path(AGD, "annual_spatial_refit.csv"));   ASMO  <- rd(file.path(AGD, "annual_spatial_moran.csv"))
+AGRT  <- rd(file.path(AGD, "annual_grain_test.csv"));      ADIA  <- rd(file.path(AGD, "annual_diameter.csv"))
+ADIT  <- rd(file.path(AGD, "annual_diameter_tests.csv"))
+W16   <- rd(file.path(BC, "model-data-wind16-grid/wind16_coefficients.csv")); W16S <- rd(file.path(BC, "model-data-wind16-grid/wind16_simple_slopes.csv"))
+acv <- function(term, model = "M3", dep = FALSE, col = "estimate") ACOEF[[col]][ACOEF$model == model & ACOEF$dependence == dep &
+  ACOEF$sample == (if (dep) "with previous year" else "all years") & ACOEF$term == term]
+ac  <- function(term, model = "M3", dep = FALSE, col = "estimate") { x <- acv(term, model, dep, col); if (col == "p") pthr(x) else num(x, "%+.3f") }
+aft <- function(model, dep = FALSE, col = "aic", sample = if (dep) "with previous year" else "all years")
+  AFIT[[col]][AFIT$model == model & AFIT$dependence == dep & AFIT$sample == sample]
+asl <- function(int, focal, at, dep = FALSE, col = "slope") { x <- ASLP[[col]][ASLP$model == "M3" & ASLP$dependence == dep &
+  ASLP$sample == (if (dep) "with previous year" else "all years") & ASLP$interaction == int & ASLP$focal == focal & ASLP$at == at]
+  if (col == "p") pthr(x) else num(x, "%+.3f") }
+afl <- function(term, col = "estimate") { x <- ASFR[[col]][ASFR$model == "with spatial field" & ASFR$term == term]; if (col == "p") pthr(x) else num(x, "%+.3f") }
+agr <- function(term, grain, col = "estimate") { x <- AGRT[[col]][AGRT$term == term & AGRT$grain_m == grain & AGRT$dependence]; if (col == "p") pthr(x) else num(x, "%+.3f") }
+wc  <- function(model, term, col = "estimate") { x <- W16[[col]][W16$model == model & W16$term == term]; if (col == "p") pthr(x) else num(x, "%+.3f") }
+wsl <- function(model, int, at, col = "slope") { x <- W16S[[col]][W16S$model == model & W16S$interaction == int & grepl("wind", W16S$focal) & W16S$at == at]
+  if (col == "p") pthr(x) else num(x, "%+.3f") }
+dia <- function(bin, col = "attacked_pc") num(ADIA[[col]][ADIA$bin == bin], "%.1f")
+A_NB   <- if (is.null(ADSL)) NA else sub(".*nbr", "", ADSL$terms[which.min(ADSL$aic)])
+W16_R1 <- if (is.null(W16)) NA else sub(".*nbr", "", grep("^lag1_nbr", unique(W16$term), value = TRUE)[1])
+SI <- "VRI_LIVE_STEMS_PER_HA:ep_wind_flight"; VI <- "LIVE_STAND_VOLUME_125:ep_wind_flight"
 ```
 :::
 
@@ -247,7 +278,7 @@ ELEV_R  <- as.vector(minmax(elev))
 
 **Running title.** Terrain, wind and mountain pine beetle refugia
 
-**Correspondence.** Seamus Murphy, TÜV SÜD, 2187 Comox Ave, Comox, British Columbia V9M 1P5, Canada. seamusrobertmurphy@gmail.com. ORCID 0000-0002-1792-0351.
+**Correspondence.** Seamus Murphy, TÜV SÜD, 2187 Comox Ave, Comox, British Columbia V9M 1P5, Canada. seamusrobertmurphy\@gmail.com. ORCID 0000-0002-1792-0351.
 
 **Keywords.** Mountain pine beetle, Disturbance refugia, Curculionidae, Scolytinae, British Columbia, thinning, dispersal, topography
 
@@ -261,21 +292,37 @@ ELEV_R  <- as.vector(minmax(elev))
 
 # Abstract {.unnumbered}
 
-1. Disturbance refugia from mountain pine beetle (*Dendroctonus ponderosae*) outbreaks have been proposed in thin stands of small trees, on shaded ground and where wind disrupts the aggregation pheromone, but little is known about how they act together at the interval over which attack and wind vary.
-2. This study mapped red-stage attack in 47 sixteen-day Landsat periods over eight outbreak years across 5,573 ha of the Selkirk Mountains, British Columbia, with a classifier validated on field plots, and modelled it on annual forest inventory, terrain and a terrain-resolved wind field, entering attack nearby and earlier first.
-3. Attack was clustered within a median of 750 m with a median kernel bandwidth of 67 m, and attack nearby in the previous period and year dominated every model.
-4. Beside those terms attack rose with stand basal area (+0.242 log-odds per standard deviation, p < 0.001) and on open ground, while tree diameter and shading had no protective effect. Wind interacted with standing volume in the direction plume disruption predicts, but wind did not lower attack detectably within thin stands.
-5. Refugia here were stands with little host, and terrain and wind added small, scale-dependent modifiers to an outbreak whose spread was mostly contagion.
+1.  Disturbance refugia from mountain pine beetle (*Dendroctonus ponderosae*) outbreaks have been proposed in thin stands of small trees, on shaded ground and where wind disrupts the aggregation pheromone, but little is known about how these mechanisms act together once attack nearby and earlier is taken into account.
+2.  This study mapped red-stage attack in eight outbreak years and 47 sixteen-day Landsat periods across 5,573 ha of the Selkirk Mountains, British Columbia, with a classifier validated on field plots, and modelled it on annual forest inventory, terrain and a terrain-resolved wind field, entering the previous year's attack first.
+3.  Attack was clustered in every year, with positive spatial autocorrelation to a median of 2,610 m, and attack in and around a cell the year before dominated every model.
+4.  Beside those terms attack rose with stand basal area (+0.183 log-odds per standard deviation, p < 0.001) and peaked in stands of 25 to 30 cm mean diameter, and north-facing ground had more attack rather than less. Flight-hour wind did not lower attack where stems were fewer, and the effects of terrain shelter and openness did not survive a latent spatial field.
+5.  Refugia on this landscape were stands with little host, and terrain and wind added small, scale-dependent modifiers to an outbreak whose spread was mostly contagion.
 
 # Introduction
 
-Mountain pine beetle (*Dendroctonus ponderosae* Hopkins [Coleoptera: Curculionidae: Scolytinae]) has impacted more lodgepole pine (*Pinus contorta* Douglas ex Loudon) stands across British Columbia than any other disturbance event on record [@taylor2003; @sambaraju2021], and it turned the forests of the affected region from a small carbon sink into a large source [@kurz2008]. The outbreak was eruptive, in that host defences constrained the beetle while its populations were low and stopped constraining it once stand densities passed a threshold [@boone2011efficacy; @raffa2008cross] and warming raised its survival across the west of the continent [@logan2001; @bentz2010climate; @sambaraju2012climate]. Within a single tree the threshold was about 40 galleries per square metre of bark, beyond which the tree's defensive capacity was exhausted [@raffa1983]. Where the outbreak went once it had erupted has been modelled at the landscape scale for two decades. In British Columbia it began in the west-central interior and spread east, with further eruptions in disjunct areas of the south [@aukema2006landscape]. The presence of outbreaking populations within 18 km in the same year and within 6 km in the two years before explained more of its movement than climate did [@aukema2008]. Dispersal under the canopy over tens of metres carried most of the spread once an area was infested, while transport above the canopy, aided by wind [@chen2017], started infestations in new ground [@robertson2007mountain; @chen2011mountain] and carried the outbreak across the northern Rocky Mountains [@giroday2012]. Within a stand, the direction in which beetles searched for attractive trees followed the wind [@safranyik1989; @safranyik1992]. Models of the same kind in the western United States and in Saskatchewan entered weather, topography, previous attack and stand attributes together [@chapman2012spatiotemporal; @preisler2012climate; @simard2011what; @walter2013; @kunegel2020factors], and stand structure alone mapped susceptibility across the region [@shore2000susceptibility; @hicke2008mapping]. Where elevation entered a model of red attack, its sign followed the host's distribution rather than the beetle's preference [@wulder2006red]. Mortality never fell evenly, and the stands that survive supply the structure and seed from which the next forest develops, and are termed disturbance refugia, places buffered from disturbance over time [@krawchuk2020]. A refugium is explained by a mechanism linking survival to a measurable property of the site [@cartwright2018]. @krawchuk2020 proposed such a mechanism, that refugia could occur "in areas with cooler temperatures (eg from topographic shading) that protect trees from water stress; in areas with lower host density, allowing for greater wind disruption of beetle pheromone communication and more vigorous tree growth and chemical defenses; and in areas with fewer large-diameter host trees" (p. 239). These are three testable claims. Topographic shading reduces attack by relieving water stress on cool ground. Low host density reduces attack by admitting the wind that disperses the aggregation pheromone. A scarcity of large-diameter hosts reduces attack by limiting brood production, because stems under 25 cm in diameter are sinks for the beetle and stems above it are sources [@carroll2004bionomics], and attack cannot occur where the host is absent, so a cell without pine is not a refugium [@cartwright2018]. Two of the three act through terrain. This study fitted the three together on one landscape, following @cartwright2018, who modelled the controls on an insect refugium in stands of low basal area, and @maher2021, who tested refugia from this beetle on transects at alpine treeline.
+Mountain pine beetle (*Dendroctonus ponderosae* Hopkins \[Coleoptera: Curculionidae: Scolytinae\]) affected more lodgepole pine (*Pinus contorta* Douglas ex Loudon) stands across British Columbia than any other disturbance event on record [@taylor2003; @sambaraju2021; @woo2024; @cooke2026mountain]. As less forest burned, the share of the province's pine in the age classes most susceptible to the beetle rose from about 18 per cent in 1910 to 53 per cent in 1990 [@taylor2003]. Extremely low winter temperatures became rarer after 1976, and from 1959 to 2002 the area of pine killed rose with winter minimum temperature over 91.5 per cent of the beetle's range in the province [@maciasfauria2009].
 
-The claim that a thin stand admits wind that disrupts attack is older than the refugia hypothesis and rests on the thinning trials of the 1970s and 1980s. Thinned stands of lodgepole and ponderosa pine lost fewer trees to the beetle wherever the comparison was made [@mitchell1983thinning; @amman1988susceptibility; @fettig2007effectiveness; @hood2016fortifying], and two explanations were offered. @waring1985modifying attributed the effect to vigour, having shown that trees released from competition grew and resisted attack. @bartos1989 attributed it to microclimate, having measured higher wind, light and temperature in a thinned stand before the residual trees could have gained vigour, a pheromone trap catch there of 5 per cent of the adjacent unthinned stand's, and 2 per cent of trees killed against 16. @amman1988susceptibility found the same low infestation in partially cut stands whose residual trees had not grown, while partial cutting warmed the bark by day [@schmid1992bark; @bartos1994effects]. A tracer gas standing in for pheromone diluted fastest in the most open of three canopies [@thistle2004surrogate; @edburg2010simple]. Within a stand the beetle's own behaviour complicated the picture, since wide spacing did not stop attacks switching between trees in thinned plots [@preisler1993colonization], attack probability rose with stocking and tree size [@anhold1987potential; @negron2004; @negron2018biological], and the response to lures depended on population density [@klutsch2020density]. @cartwright2018 and @krawchuk2020 restated the microclimate explanation as a refugia mechanism, and @powell2014 gave its converse as a condition for outbreak. Stand density was therefore kept in every model fitted here, since a model that removes it and then reads a terrain coefficient as a wind effect has removed the pathway it set out to test. On the same reasoning, ground exposed to the wind and periods of stronger flight-period wind should both have less attack [@krawchuk2020; @jones2019]. Two constraints set the interval over which such a wind term can be measured. Flight is confined to a temperature window, between 19 and 41 degrees C, on bright afternoons when "peak flight is in the early to mid-afternoon" [@mccambridge1971; @gray1972; @safranyik2006chap1; @bleiker2016flight]. A daily or monthly mean wind therefore averages across many hours in which no beetle flies, and radiation during the flight window is a different quantity from the season's total, which is the quantity the shading pathway concerns. Mass attack is also a threshold phenomenon, the irruption threshold being "the population density at which endemic populations may transition towards the epidemic state" [@cooke2025; @howe2022; @trzcinski2009intrinsic]. Attack in one year is thus not independent of attack in the year before, which is why previous-year and neighbourhood pressure enter the models, and an environmental variable regulates that threshold rather than adding to attack. A wind effect through the plume is then expected as an interaction with host density and not as a main effect. Shade and vigour both predict less attack on cool ground by routes this design cannot separate, since cool sites slow development [@sambaraju2021] while water stress does not act on defence in one direction [@netherer2021]. Where attack was traced against site moisture and aspect, the beetle reached south-facing and drier ground first [@kaiser2012ecohydrology; @nelson2007environmental].
+Using landing traps in lodgepole pine, @hynum1980 found that the first beetles to reach a stand, known as pioneers, "were unable to distinguish between hosts, dead hosts and nonhosts during landing". Pioneers landed at random and by sight, and judged a tree only after landing, by tasting compounds in its bark [@safranyik2010]. Where they came down could therefore depend on the airflow as much as on the trees below, which was why this study tested whether ground sheltered from the wind received more attack.
 
-Where a dispersing beetle comes down changes what a terrain main effect can mean. @hynum1980 monitored landing on lodgepole pine with landing traps and found that beetles "were unable to distinguish between hosts, dead hosts and nonhosts during landing". Where a beetle lands is decided by its transport rather than by the tree beneath it, and a beetle descending from transport above the canopy arrives as a wind-borne particle, which is how @byers2000 simulated dispersal through a forest. @giroday2011 set out what follows, that landscape features "provide impactive surfaces for interception of insects" and that settlement rises "in areas where wind speed is reduced". The ground where the flow slows, the lee of ridges and sheltered slopes, is where such a beetle should come to rest, which is the pattern the wind shelter index of @plattner2004 was built to predict for snow. Deposition and plume disruption thus make different predictions, and the difference is what this design can test. Deposition acts before any host is chosen and predicts a main effect of terrain shelter that does not depend on stand density, whereas plume disruption acts on an aggregation already under way and predicts an interaction between stand density and wind with no requirement that shelter act alone. A terrain coefficient read without this distinction is assigned to a mechanism it may not belong to. Landform enters for a different reason, in that infested groups are reported in draws and gullies and deep snow insulates overwintering brood [@safranyik2006chap1]. Elevation enters as a composite of temperature, snowpack, season length and host distribution that this design cannot separate [@sambaraju2021; @amman1973population], and its weight among the predictors of attack changed through the course of an outbreak elsewhere [@walter2013].
+A pioneer female that bored into a suitable tree turned α-pinene, a compound in its resin, into the pheromone trans-verbenol [@safranyik2006chap1]. With compounds from the tree, the pheromone drew a mass attack that was usually complete within one to two days [@safranyik2006chap1]. In experimental lodgepole pine stands, a tree contained a few attacking beetles in wounds of dead tissue but died once its bark had more than about 40 beetle tunnels, or galleries, per square metre [@raffa1983]. A beetle caught in a heavy flow of resin also failed to attract others, but the tree's ability to block this signal fell as more beetles attacked at once [@raffa1983]. @boone2011efficacy followed every lodgepole pine in six stands for three to six years and found that tree defences limited attack while beetles were few but made no difference once their numbers passed a critical threshold. Once an outbreak was under way, whether a tree was killed therefore depended more on how many beetles were nearby than on its defences.
 
-This study grew out of a companion study of conifer regeneration after the 2015 Mt Midgeley fire on the same ground [@murphy2026], which fitted point process models of seedling intensity to distance from seed source, burn severity, beetle mortality, aspect, wind and terrain ruggedness. The present study took from it the 28 field plots of 20 by 20 m in which beetle-killed basal area was measured, its 30 m Landsat grid and its perimeter. In that model terrain ruggedness was the largest terrain effect on seedling intensity, +0.626 (P < 0.001), a coefficient that says the shape of the ground governed what survived without saying which property of that shape the beetle responded to. The present study turned the beetle outbreak that model treated as a covariate into the response and replaced the single ruggedness index with the four terrain properties the beetle's biology names, exposure to the prevailing wind, openness to the sky, position on the slope and depth of the valley. The landscape models cited above entered terrain as elevation, slope and aspect and weather as temperature and precipitation. A machine-learning model of the Alberta outbreak entered a July to August mean daily wind speed from stations [@ramazi2021outbreaks], and the transport models of the beetle's flight above the canopy resolved the wind over terrain without the stand beneath it [@jackson2008; @ainslie2010]. This study entered a terrain-resolved wind field at the sixteen-day interval of the response together with stand density, so that a terrain main effect could be told apart from a density by wind interaction, which are the two signatures deposition and plume disruption predict.
+Populations that bred mostly in weakened, injured and small trees grew into an outbreak once they could kill the average large tree in a stand [@jarvis2015; @shore2006]. This followed drought, several generations of favourable weather or the arrival of beetles from elsewhere [@shore2006]. As beetle numbers rose, they chose ever larger trees [@boone2011efficacy], whose thicker phloem, the inner bark on which the larvae fed, was better food [@safranyik2010]. On average, lodgepole pines more than 25 cm in diameter produced more beetles than attacked them, while smaller pines produced fewer [@carroll2004bionomics]. For that reason this study measured the amount of pine in each stand and the size of its trees.
+
+When marked beetles were released in a mature lodgepole pine stand, most were caught 3 m above the ground, catches fell sharply with distance, and only 0.2 per cent of the beetles rose above the canopy [@safranyik1992]. Within a stand, beetles flew downwind under the crowns until they met the scent of an attacked tree, and then turned upwind towards it [@carroll2004bionomics; @safranyik1989]. Comparing clusters of trees attacked the year before, whose needles had turned red, with clusters attacked that year, whose needles were still green, @robertson2007mountain consistently found dispersal distances of 30 and 50 m. As an infestation grew, these clusters merged [@robertson2007mountain]. In the south of the province, where this study was set, many outbreaks erupted locally, apart from the main front that spread east from the west-central interior [@aukema2006landscape]. In an earlier outbreak on the Chilcotin Plateau, an outbreak in a 12 km cell was best predicted by outbreaks in the neighbouring cells that year or in the same cell in the two years before [@aukema2008]. This study tested the same dependence on cells of 30 m, entering the previous year's attack in each cell and in the cells around it in every model.
+
+The minimum winter temperature determined how many of the brood, the young beetles developing under the bark, survived [@safranyik2010]. Larvae in their last stages, the usual overwintering stage, survived temperatures near minus 40 degrees C in midwinter because they had built up glycerol, a natural antifreeze, through the autumn [@carroll2004bionomics]. Cold early in winter, before the glycerol had built up, or late in winter, after it had been used, killed many larvae, while thick bark and deep snow sheltered the brood [@carroll2004bionomics]. Late-stage larvae also needed more warmth to develop than younger larvae, which kept the brood in step [@carroll2004bionomics]. East of the Rocky Mountains in Canada, the middle 70 per cent of the season's flight lasted 26 days, a synchrony the beetles needed to overwhelm trees by attacking together [@bleiker2016flight]. Where summers were too cool for the brood to develop in one year, as at high elevations, it spent two winters under the bark and mortality was severe [@safranyik2006chap1]. A two-year cycle also spread the emergence of adults over a longer period, which lowered the success of mass attack [@safranyik2006chap1; @logan2001].
+
+Drought lowered the resistance of trees and so raised the frequency of outbreaks [@jarvis2015; @shore2006]. In Colorado and southern Wyoming from 1996 to 2010, the outbreak began in several separate places, which suggested drought as a regional trigger, and years with less precipitation than average helped it spread [@chapman2012spatiotemporal]. In Oregon and Washington over three decades, once beetle numbers nearby were accounted for, winter minimum temperature and drought in the current and previous years had the largest effects on whether an outbreak grew large [@preisler2012climate]. In helicopter surveys of the Morice Timber Supply Area of north-central British Columbia from 1995 to 2002, the most intense infestations were typically found early on warmer slopes facing south and west [@nelson2007environmental]. To represent these differences, this study measured the sun each slope received during the flight period and over the growing season, and how far each slope faced north.
+
+Cypress Hills Interprovincial Park in Saskatchewan was surveyed tree by tree for infestation each year from 2006 to 2018 [@kunegel2020factors]. There, infestations left untreated nearby in the previous year were the most important single predictor of attack in every phase of the outbreak [@kunegel2020factors]. In the Arapaho and Roosevelt National Forests of Colorado, where red attack was mapped from Landsat images for 2003 to 2010, the best predictors of attack changed "from forest susceptibility to dispersal to host availability" as the outbreak grew [@walter2013, p. 317]. Attack there also moved from high to low elevations between 2003 and 2006 [@walter2013]. In the Lolo National Forest of western Montana, the odds of red attack rose with elevation because lodgepole pine grew higher, along ridge tops, than the Douglas-fir that dominated the area [@wulder2006red]. These studies described terrain mainly by elevation, slope and aspect, whose effects followed the phase of the outbreak and where the host grew. This study instead measured properties of terrain that could affect flight and survival, namely shelter from the wind, openness to the sky and the sun a slope received.
+
+@krawchuk2020 defined disturbance refugia as "locations that are disturbed less severely or less frequently than other areas within the surrounding landscape" (p. 235) and noted that "few studies have explicitly identified refugia from insect outbreaks" (p. 238). They proposed that refugia from this beetle could occur "in areas with cooler temperatures (eg from topographic shading) that protect trees from water stress; in areas with lower host density, allowing for greater wind disruption of beetle pheromone communication and more vigorous tree growth and chemical defenses; and in areas with fewer large-diameter host trees" (p. 239). In southern Oregon, where refugia were mapped at 30 m from a Landsat moisture index during a severe outbreak in 2009, they were "associated with topographically shaded slopes, convergent environments such as valleys, areas of relatively low soil bulk density, and in thinner forest stands" [@cartwright2018, p. 1]. This study tested all three mechanisms of @krawchuk2020 in one landscape.
+
+Thinned lodgepole and ponderosa pine stands lost fewer trees to the beetle in trials across the western United States [@mitchell1983thinning; @amman1988susceptibility; @fettig2007effectiveness; @hood2016fortifying]. @mitchell1983thinning and @waring1985modifying attributed this to the greater vigour of the trees left after thinning. In the Uinta Mountains of Utah, @bartos1989 proposed microclimate instead, having measured more light, warmth and wind in a thinned stand than in the unthinned stand beside it. The difference in wind was 3.2 km/h or more between 4 and 6 p.m., when most beetles flew, and the thinned stand lost 2 per cent of its trees against 16 per cent [@bartos1989]. In central Oregon, thinned plots at first attracted few beetles, but once attack began, trees near attacked trees were more likely to be attacked in thinned plots than in unthinned ones [@preisler1993colonization]. The authors concluded that wide spacing did not seem to stop attacks moving from tree to tree [@preisler1993colonization]. In a survey of 94 unmanaged lodgepole pine stands in the western United States, mortality in stands of more than 80 per cent pine was low where the stand density index, a measure of crowding, was below 125, much greater between 125 and 250, and lower again above 250 [@anhold1987potential].
+
+Wind could lower attack by breaking up the pheromone plume, the trail of scent downwind of an attacked tree, which @krawchuk2020 called "wind disruption of beetle pheromone communication" (p. 239). This predicted that wind would lower attack most in thin stands. Wind could also concentrate attack through deposition, meaning beetles settling out of the air where it slowed. @giroday2011 noted that "alterations in wind speed may cause increased settlement in areas where wind speed is reduced" (p. 1098). During the beetle's range expansion in the Peace River region of western Canada, they found that infestations established first in canyons and valleys before moving onto more open slopes [@giroday2011]. Because pioneers could not choose a host until they had landed, deposition predicted more attack on ground sheltered from the wind, whatever the stand. Both effects could act only during flight, which needed air temperatures of 19 to 41 degrees C [@mccambridge1971] and stopped in winds above about 2 metres per second, the beetle's top flying speed [@carroll2004bionomics]. Flight peaked in the early to mid afternoon [@safranyik2006chap1] during a season that began in July [@bleiker2016flight], and this study measured wind only in the afternoon hours of the flight season.
+
+This study grew out of a study of conifer regeneration after the 2015 Mt Midgeley fire on the same ground [@murphy2026], and it used that study's 28 field plots and 30 m Landsat grid. In that study, terrain ruggedness had the largest coefficient of any variable on seedling density, +0.626 (p < 0.001), but ruggedness combined several properties of the ground and could not show which one mattered. Earlier work described wind by a seasonal station mean, as in a machine-learning model of the outbreak in the Cypress Hills [@ramazi2021outbreaks], or above the canopy rather than within the stand [@jackson2008; @ainslie2010]. This study mapped red-stage attack, meaning trees whose needles had turned red in the year after they were attacked, at 30 m across part of the Selkirk Mountains of southeastern British Columbia. Attack was mapped once a year to test the refugia mechanisms and every sixteen days to test wind, using a wind field adjusted for terrain. The study asked three questions. The first was whether stand density, shading by terrain and the scarcity of large trees predicted attack once attack nearby was in the model. The second was whether wind during flight lowered attack more in thin stands than in dense ones, as disruption of the pheromone plume predicted. The third was whether ground sheltered from the wind had more attack whatever the stand, as deposition predicted.
 
 
 ::: {.cell}
@@ -746,9 +793,9 @@ review2_counts <- tibble::tibble(
 :::
 
 
-The literature above was assembled under a written protocol, frozen before the first search, from two indexes, the author's reading store and one round of citation chasing, which returned 1,257 unique records, of which 198 were retained and 35 read in full. The study addressed three questions. Do the three mechanisms @krawchuk2020 named, stand density, topographic shading and the scarcity of large hosts, predict red-stage attack once host, terrain and previous attack are in the model? Does wind act on attack through stand density, which is the form plume disruption takes, and only where wind varies in time? Does terrain shelter act as a main effect, which is what deposition of wind-borne beetles predicts, or only through stand density, which is what plume disruption predicts?
-
 # Methods
+
+The literature in the Introduction was assembled under a written protocol, frozen before the first search, from two indexes, the author's reading store and one round of citation chasing, which returned 1,257 unique records, of which 198 were retained and 35 read in full.
 
 ## Site terrain
 
@@ -1766,15 +1813,15 @@ GEO_R <- as.data.frame(global(mask(rast(file.path(BC, "geomorphometry/geomorphom
 :::
 
 
-The study area covered 5,573 ha of the Selkirk Mountains in southeastern British Columbia, 61,923 cells of 30 m from 830 to 1,744 m in elevation, on the grid of @murphy2026 so that the results compared directly with theirs. It was centred on their site, the 2015 Mt Midgeley fire, and extended beyond its 480 ha of burned area by a 5 km buffer cut to the elevation band of that site, which took in the range of stand density the pheromone mechanism needed while keeping the added ground comparable. The response was measured every sixteen days, the inventory once a year, the station winds every hour and the terrain once (Table S1).
+The study area covered 5,573 ha of the Selkirk Mountains in southeastern British Columbia, 61,923 cells of 30 m from 830 to 1,744 m in elevation, on the grid of @murphy2026 so that the results compared directly with theirs. It was centred on their site, the 2015 Mt Midgeley fire, and extended beyond its 480 ha of burned area by a 5 km buffer cut to the elevation band of that site, which took in the range of stand density the pheromone mechanism needed while keeping the added ground comparable. Attack was mapped once a year for the questions on refugia and every sixteen days for the wind test, the inventory once a year, the station winds every hour and the terrain once (Table S1).
 
 Stand structure came from the provincial Vegetation Resources Inventory, taking for each study year the snapshot the province published for that year, rasterised to the 30 m grid (@tbl-vri). The attributes were basal area, crown closure, live stems per hectare, quadratic mean diameter of stems of 12.5 cm and larger, stand age, stand height, standing volume and susceptible pine basal area, the product of basal area and pine cover. The 2007 snapshot omitted basal area and live stems, so the 2006 snapshot stood in for it. The inventory is a projection rather than a census, and polygons interpreted from late-outbreak photography described stands the beetle had already attacked.
 
-Terrain surfaces were computed with SAGA GIS over an elevation model extending beyond the perimeter, so that search radii near the edge fell on measured ground. They separated the ruggedness index of @murphy2026 into the properties the beetle's biology points to, with ruggedness kept as a candidate so that the separation was tested rather than assumed. Exposure entered as the windward-leeward index, effective air flow height, the wind exposition index and the wind shelter index of @plattner2004, "the maximum gradient within a given radius in upwind direction", together with topographic openness and sky view. Shape entered as ruggedness, topographic position, convergence, slope, curvature and geomorphon class, and landform as wetness, valley depth and height above the valley floor, because infested groups are reported in draws and gullies and deep snow insulates overwintering brood [@safranyik2006chap1; @kautz2023]. Aspect entered as northness, eastness and the heat load index of @mccune2002. Radiation was computed twice, because flight and shading depend on different quantities, once over the flight window of 1 July to 15 August from 12:00 to 17:00 and once over the whole growing season from 1 May to 30 September, the quantity the shading mechanism of @krawchuk2020 concerns. The first varied 15-fold across the ground and the second 2.9-fold. Every candidate is listed in Table S3.
+Terrain surfaces were computed with SAGA GIS over an elevation model extending beyond the perimeter, so that search radii near the edge fell on measured ground. They separated the ruggedness index of @murphy2026 into the properties the beetle's biology points to, with ruggedness kept as a candidate so that the separation was tested rather than assumed. Exposure entered as the windward-leeward index, effective air flow height, the wind exposition index and the wind shelter index of @plattner2004, "the maximum gradient within a given radius in upwind direction", together with topographic openness and sky view. Shape entered as ruggedness, topographic position, convergence, slope, curvature and geomorphon class, and landform as wetness, valley depth and height above the valley floor, because infested groups are reported in draws and gullies and deep snow insulates overwintering brood [@safranyik2006chap1; @kautz2023]. Aspect entered as northness, eastness and the heat load index of @mccune2002. Radiation was computed twice, because flight and shading depend on different quantities, once over the flight window of 1 July to 15 August from 12:00 to 17:00 and once over the whole growing season from 1 May to 30 September, the quantity the shading mechanism of @krawchuk2020 concerns. The first varied 15-fold across the ground and the second 2.9-fold. Temperature differences between slopes at the same elevation were represented by these radiation surfaces and by northness rather than modelled, since @running1987 found that closed forest canopies "may exhibit virtually no slope related differences in surface temperature when the surface is an actively transpiring canopy" (p. 475). The variables that entered the models are listed with their mechanisms in Table S3.
 
-*@fig-study-area near here*
+@fig-study-area *near here*
 
-*@tbl-vri near here*
+@tbl-vri *near here*
 
 ## Beetle outbreak
 
@@ -2117,6 +2164,35 @@ if (!file.exists(file.path(VRA, "vri_year_source.csv"))) {
 ::: {.cell}
 
 ```{.r .cell-code}
+## annual red-stage maps, the fall in annual NDMI against 2005 at the classifier's cut, water masked, on the perimeter grid
+RSA <- here::here("02.inputs/beetle/red-stage-annual/redstage_summary.csv")
+if (!file.exists(RSA)) {
+  suppressPackageStartupMessages({library(terra); library(sf)})
+  dir.create(dirname(RSA), showWarnings = FALSE)
+  cut_at <- with(read.csv(here::here("02.inputs/beetle/red-stage-darkwoods/classifier_blocked_mccv.csv")), cut_dndmi[chosen])
+  msk <- rast(here::here("02.inputs/beetle/study-area/perimeter_mask.tif"))
+  # British Columbia Freshwater Atlas lakes and rivers, WHSE_BASEMAPPING.FWA_LAKES_POLY and FWA_RIVERS_POLY,
+  # https://openmaps.gov.bc.ca/geo/pub/WHSE_BASEMAPPING.FWA_LAKES_POLY/ows
+  wat <- vect(st_transform(st_read(here::here("02.inputs/beetle/study-area/basemap_water.geojson"), quiet = TRUE), 3153))
+  # Landsat Collection 2 Level-2 surface reflectance, annual NDMI built in chunk 17-ndmi-annual-darkwoods,
+  # https://www.usgs.gov/landsat-missions/landsat-collection-2-level-2-science-products
+  nd <- function(y) rast(here::here("02.inputs/beetle/ndmi-darkwoods", sprintf("ndmi_%d.tif", y)))
+  rs <- do.call(rbind, lapply(c(2006:2011, 2013, 2014), function(y) {
+    b <- mask(mask(ifel(project(nd(y) - nd(2005), msk, method = "near") <= cut_at, 1, 0), msk), wat, inverse = TRUE)
+    writeRaster(b, file.path(dirname(RSA), sprintf("redstage_%d.tif", y)), overwrite = TRUE, datatype = "INT1U", gdal = "COMPRESS=DEFLATE")
+    data.frame(year = y, dndmi_cut = cut_at, valid_cells = global(!is.na(b), "sum")[[1]], attacked = global(b, "sum", na.rm = TRUE)[[1]])
+  }))
+  rs$prevalence <- rs$attacked / rs$valid_cells
+  write.csv(rs, RSA, row.names = FALSE)
+}
+```
+:::
+
+
+
+::: {.cell}
+
+```{.r .cell-code}
 WDIR <- as.numeric(readLines(file.path(BC, "covariates", "wind_direction_pooled.txt")))
 ```
 :::
@@ -2280,6 +2356,48 @@ CLIM_YRS   <- length(unique(clim_h$year))
 ::: {.cell}
 
 ```{.r .cell-code}
+## station wind interpolated to the grid by inverse distance weighting, monthly means for June to August and flight-window metrics for 1 July to 15 August
+WHS <- here::here("02.inputs/beetle/covariates/wind-hourly/wind_hourly_summary.csv")
+if (!file.exists(WHS)) {
+  suppressPackageStartupMessages({library(weathercan); library(gstat); library(sf); library(terra); library(dplyr)})
+  g <- rast(here::here("02.inputs/beetle/ndmi-darkwoods/analysis_grid.tif"))
+  ctr <- st_coordinates(st_transform(st_sfc(st_point(c(mean(ext(g)[1:2]), mean(ext(g)[3:4]))), crs = 32611), 4326))
+  sl <- stations_search(coords = c(ctr[2], ctr[1]), interval = "hour", dist = 150)
+  ids <- unique(sl$station_id[!is.na(sl$start) & sl$start <= 2014 & !is.na(sl$end) & sl$end >= 2005])
+  idw <- function(df, col) {
+    p <- st_transform(st_as_sf(df, coords = c("lon", "lat"), crs = 4326), 32611)
+    xy <- cbind(as.data.frame(st_coordinates(p)), v = p[[col]]); xy <- xy[!is.na(xy$v), ]
+    if (nrow(xy) < 4) return(NULL)
+    interpolate(g, gstat(formula = v ~ 1, locations = ~X + Y, data = xy, nmax = 8, set = list(idp = 2)), xyNames = c("X", "Y"))[[1]]
+  }
+  vars <- c("jun", "jul", "aug", "flight_mean", "flight_p95", "flight_calm", "flight_windy")
+  summ <- list()
+  for (y in c(2005:2011, 2013, 2014)) {
+    # Environment and Climate Change Canada hourly climate observations, retrieved with weathercan,
+    # https://api.weather.gc.ca/collections/climate-hourly/items
+    w <- weather_dl(station_ids = ids, interval = "hour", start = sprintf("%d-06-01", y), end = sprintf("%d-08-31", y)) |>
+      filter(!is.na(wind_spd), !is.na(lat), !is.na(lon)) |>
+      mutate(mon = as.integer(format(as.Date(date), "%m")), fl = as.Date(date) >= as.Date(sprintf("%d-07-01", y)) & as.Date(date) <= as.Date(sprintf("%d-08-15", y)))
+    st <- w |> group_by(station_id, lat, lon) |>
+      summarise(hours = n(), jun = mean(wind_spd[mon == 6]), jul = mean(wind_spd[mon == 7]), aug = mean(wind_spd[mon == 8]),
+                flight_mean = mean(wind_spd[fl]), flight_p95 = as.numeric(quantile(wind_spd[fl], 0.95)), flight_calm = mean(wind_spd[fl] < 5),
+                flight_windy = mean(wind_spd[fl] > 15), flight_hours = sum(fl), .groups = "drop") |>
+      filter(hours >= 500, flight_hours >= 200)
+    if (nrow(st) < 4) next
+    rs <- rast(Filter(Negate(is.null), lapply(vars, function(v) { r <- idw(st, v); if (!is.null(r)) names(r) <- v; r })))
+    writeRaster(rs, file.path(dirname(WHS), sprintf("wind_metrics_%d.tif", y)), overwrite = TRUE, datatype = "FLT4S", gdal = c("COMPRESS=DEFLATE", "PREDICTOR=3"))
+    summ[[length(summ) + 1]] <- data.frame(year = y, stations = nrow(st), hours = sum(st$hours), t(colMeans(st[, vars], na.rm = TRUE)))
+  }
+  write.csv(do.call(rbind, summ), WHS, row.names = FALSE)
+}
+```
+:::
+
+
+
+::: {.cell}
+
+```{.r .cell-code}
 ## MicroMet terrain weighting, equations 12 to 18 of Liston and Elder (2006), on the context grid
 WW <- here::here("02.inputs/beetle/covariates/micromet-context/wind_weight_by_direction.tif")
 if (!file.exists(WW)) {
@@ -2348,17 +2466,87 @@ if (!file.exists(EWS)) {
   }
   write.csv(do.call(rbind, rows), EWS, row.names = FALSE)
 }
+
+## hourly station wind in the flight window, 1 July to 15 August and 12:00 to 17:00, weighted by the terrain surface of each hour's sector, one field per outbreak year
+AWS <- here::here("02.inputs/beetle/covariates/wind-annual-context/annual_wind_summary.csv")
+if (!file.exists(AWS)) {
+  suppressPackageStartupMessages({library(terra); library(sf); library(dplyr); library(weathercan)})
+  dir.create(dirname(AWS), recursive = TRUE, showWarnings = FALSE)
+  Ww <- rast(WW); msk <- rast(here::here("02.inputs/beetle/study-area/perimeter_mask.tif"))
+  cells <- !is.na(values(msk)); wv <- lapply(1:16, function(b) values(Ww[[b]])[cells])
+  put <- function(v) { r <- msk; r[cells] <- v; r }
+  ctr <- st_coordinates(st_transform(st_sfc(st_point(c(mean(ext(msk)[1:2]), mean(ext(msk)[3:4]))), crs = crs(msk)), 4326))
+  sl <- stations_search(coords = c(ctr[2], ctr[1]), interval = "hour", dist = 150)
+  ids <- unique(sl$station_id[!is.na(sl$start) & sl$start <= 2014 & !is.na(sl$end) & sl$end >= 2005])
+  rows <- list()
+  for (y in c(2006:2011, 2013, 2014)) {
+    # Environment and Climate Change Canada hourly climate observations, retrieved with weathercan,
+    # https://api.weather.gc.ca/collections/climate-hourly/items
+    w <- weather_dl(station_ids = ids, interval = "hour", start = sprintf("%d-07-01", y), end = sprintf("%d-08-15", y))
+    h <- w |> filter(!is.na(wind_spd), !is.na(wind_dir)) |>
+      mutate(th = wind_dir * 10 * pi / 180, u = -wind_spd * sin(th), v = -wind_spd * cos(th), hr = as.integer(format(time, "%H"))) |>
+      filter(hr >= 12, hr < 17) |> group_by(time) |> summarise(u = mean(u), v = mean(v), .groups = "drop") |>
+      mutate(W = sqrt(u^2 + v^2), bin = (round(((atan2(-u, -v) * 180 / pi) %% 360) / 22.5) %% 16) + 1L)
+    acc <- rep(0, sum(cells)); calm <- acc
+    for (b in sort(unique(h$bin))) { sp <- sort(h$W[h$bin == b]); acc <- acc + wv[[b]] * sum(sp); calm <- calm + findInterval(5 / wv[[b]], sp) }
+    s <- c(put(acc / nrow(h)), put(calm / nrow(h))); names(s) <- c("mm_flight_mean", "mm_flight_calm")
+    writeRaster(s, file.path(dirname(AWS), sprintf("wind_%d.tif", y)), overwrite = TRUE, datatype = "FLT4S", gdal = "COMPRESS=DEFLATE")
+    rows[[length(rows) + 1]] <- data.frame(year = y, hours = nrow(h), stations = length(unique(w$station_id[!is.na(w$wind_spd)])),
+                                           cells = global(!is.na(s[[1]]), "sum")[[1]], wind_mean = global(s[[1]], "mean", na.rm = TRUE)[[1]],
+                                           wind_range = diff(as.numeric(global(s[[1]], "range", na.rm = TRUE))), calm_mean = global(s[[2]], "mean", na.rm = TRUE)[[1]])
+  }
+  write.csv(do.call(rbind, rows), AWS, row.names = FALSE)
+}
 ```
 :::
 
 
-The response was red-stage attack in each sixteen-day period, the Landsat revisit interval, from 1 May to 22 September of 2006 to 2014, excluding 2012, when Landsat 7 was the only sensor and its scan-line corrector had failed. The index and baseline followed @murphy2026, who mapped red-stage mortality on this ground as the fall in the normalised difference moisture index (NDMI), an index used to detect forest disturbance in Landsat time series [@jin2005], against 2005, and validated the map against 28 field plots of 20 by 20 m in which beetle-killed pine was confirmed from pitch tubes, frass and gallery architecture. NDMI was the median of the cloud-masked Collection 2 Level-2 scenes in each period, from Landsat 5 for 2005 to 2011 and Landsat 8 for 2013 and 2014 after the band-pass adjustment of @roy2016, differenced against the same period of 2005 so that the seasonal course of leaf moisture did not enter the difference.
 
-The fall in NDMI that counted as attack was set by a classifier trained on the four pixels nearest the centre of each field plot, 112 pixels, against the 84 points of undisturbed forest that @murphy2026 digitised on the 2020 Landsat 8 scene, which fell in 68 distinct cells. Each pixel entered with its deepest annual fall in NDMI against 2005. Random forest, a radial support vector machine and gradient boosting were compared over 100 random splits, each holding out a quarter of the field plots and of the 100 m blocks of undisturbed pixels, so that neighbouring pixels never fell on both sides of a split. The model with the highest mean kappa set the cut, the fall in NDMI at which its prediction changed class. Periods in which the imagery saw less than a tenth of the perimeter were dropped, which left 47 periods over eight years (Table S2). The undisturbed pixels came from one patch of about 230 by 455 m, so the cross-validation measured separation of the plots from that patch rather than from undisturbed forest across the landscape.
+::: {.cell}
 
-Wind was summarised over the flight hours of 12:00 to 17:00, following the flight period @safranyik2006chap1 give for this region, where "peak flight is in the early to mid afternoon", and the 11:00 to 14:00 emergence peak of @gray1972. In 236,079 hourly station records from May to September, 89.5 per cent of afternoon hours inside the flight window fell within the 19 to 41 degrees C flight range against 51.4 per cent outside it (Figure S1). Hourly speed and direction from Environment and Climate Change Canada stations within 150 km were combined as vector components and adjusted for terrain with the MicroMet model of @liston2006, which weights each observation by the slope in the wind direction and the curvature of the ground. The adjustment depends on direction and not on speed, so it was computed once for each of 16 sectors of 22.5 degrees over an elevation model extending beyond the perimeter, with a curvature length scale of 600 m. Each period was summarised by its mean flight-hour wind and its share of flight hours below 5 km/h. Mean flight-hour wind ran from 4.0 to 8.6 km/h between periods and varied by up to 5.1 km/h across the grid within a period.
+```{.r .cell-code}
+## degree-days above 5.5 degrees C from August of the previous year to July of the map's year, the heat sum of Aukema et al. (2008), at each 30 m cell,
+## from the daily mean temperature of the stations moved to the cell's elevation at the lapse rate the stations gave within each day
+DDS <- here::here("02.inputs/beetle/covariates/degree-days/degree_day_summary.csv")
+if (!file.exists(DDS)) {
+  suppressPackageStartupMessages({library(terra); library(sf); library(dplyr); library(weathercan)})
+  dir.create(dirname(DDS), recursive = TRUE, showWarnings = FALSE)
+  msk <- rast(here::here("02.inputs/beetle/study-area/perimeter_mask.tif"))
+  z <- values(mask(rast(here::here("02.inputs/beetle/study-area/elevation.tif")), msk))[, 1]; ok <- which(!is.na(z)); zc <- z[ok]
+  ctr <- st_coordinates(st_transform(st_sfc(st_point(c(mean(ext(msk)[1:2]), mean(ext(msk)[3:4]))), crs = crs(msk)), 4326))
+  sl <- stations_search(coords = c(ctr[2], ctr[1]), interval = "day", dist = 150)
+  ids <- unique(sl$station_id[!is.na(sl$start) & sl$start <= 2014 & !is.na(sl$end) & sl$end >= 2005])
+  # Environment and Climate Change Canada daily climate observations, retrieved with weathercan,
+  # https://api.weather.gc.ca/collections/climate-daily/items
+  w <- weather_dl(station_ids = ids, interval = "day", start = "2005-08-01", end = "2014-07-31") |> filter(!is.na(mean_temp), !is.na(elev)) |>
+    group_by(date) |> filter(n() >= 3) |> mutate(tc = mean_temp - mean(mean_temp), ec = elev - mean(elev)) |> ungroup()
+  lapse <- coef(lm(tc ~ 0 + ec, data = w))[["ec"]]
+  t0 <- w |> group_by(date) |> summarise(t0 = mean(mean_temp - lapse * elev), stations = n(), .groups = "drop")
+  rows <- list()
+  for (y in c(2006:2011, 2013, 2014)) {
+    d <- t0[t0$date >= as.Date(sprintf("%d-08-01", y - 1)) & t0$date <= as.Date(sprintf("%d-07-31", y)), ]
+    dd <- Reduce(`+`, lapply(d$t0, function(tt) pmax(tt + lapse * zc - 5.5, 0)))
+    r <- rast(msk); r[ok] <- dd; names(r) <- "degree_days"
+    writeRaster(r, file.path(dirname(DDS), sprintf("dd_%d.tif", y)), overwrite = TRUE, datatype = "FLT4S", gdal = "COMPRESS=DEFLATE")
+    rows[[length(rows) + 1]] <- data.frame(year = y, days = nrow(d), stations_median = median(d$stations), stations = length(unique(w$station_id)),
+                                           lapse_c_per_km = 1000 * lapse, station_elev_min = min(w$elev), station_elev_max = max(w$elev),
+                                           dd_min = min(dd), dd_max = max(dd), below_833 = mean(dd < 833))
+  }
+  write.csv(do.call(rbind, rows), DDS, row.names = FALSE)
+}
+```
+:::
 
-*@fig-spread near here*
+
+The response for the first and third questions was red-stage attack in each of eight outbreak years, 2006 to 2011, 2013 and 2014, excluding 2012, when Landsat 7 was the only sensor and its scan-line corrector had failed. The index and baseline followed @murphy2026, who mapped red-stage mortality on this ground as the fall in the normalised difference moisture index (NDMI), an index used to detect forest disturbance in Landsat time series [@jin2005], against 2005, and validated the map against 28 field plots of 20 by 20 m in which beetle-killed pine was confirmed from pitch tubes, frass and gallery architecture. Each annual image was the median of the cloud-masked Collection 2 Level-2 scenes from 1 June to 31 August, from Landsat 5 for 2005 to 2011 and Landsat 8 for 2013 and 2014, the Landsat 8 years adjusted by the band-pass coefficients of @roy2016 and then matched to the Landsat 5 range over forest that showed no attack. Each year was mapped on its own with lakes and rivers masked, and attack covered from 9.9 to 20.7 per cent of the perimeter by year (Table S2, @fig-spread).
+
+The response for the second question was red-stage attack in each sixteen-day period, the Landsat revisit interval, from 1 May to 22 September of the same years, NDMI being the median of the scenes in each period differenced against the same period of 2005 so that the seasonal course of leaf moisture did not enter the difference. Periods in which the imagery saw less than a tenth of the perimeter were dropped, which left 47 periods over eight years.
+
+The fall in NDMI that counted as attack was set by a classifier trained on the four pixels nearest the centre of each field plot, 112 pixels, against the 84 points of undisturbed forest that @murphy2026 digitised on the 2020 Landsat 8 scene, which fell in 68 distinct cells. Each pixel entered with its deepest annual fall in NDMI against 2005. Random forest, a radial support vector machine and gradient boosting were compared over 100 random splits, each holding out a quarter of the field plots and of the 100 m blocks of undisturbed pixels, so that neighbouring pixels never fell on both sides of a split. The radial support vector machine classified most accurately, with kappa 0.859 ± 0.081 (95 per cent interval 0.682 to 1.000) and overall accuracy 0.934 ± 0.037, the three models differing by less than one standard deviation of the splits (@tbl-classifier). Its prediction changed class at a fall in NDMI of 0.0616 against 2005, and that cut was applied to the annual and the sixteen-day differences. The undisturbed pixels came from one patch of about 230 by 455 m, so the cross-validation measured separation of the plots from that patch rather than from undisturbed forest across the landscape.
+
+Wind was summarised over the flight hours of 12:00 to 17:00, following the flight period @safranyik2006chap1 give for this region, where "peak flight is in the early to mid afternoon", and the 11:00 to 14:00 emergence peak of @gray1972. In 236,079 hourly station records from May to September, 89.5 per cent of afternoon hours inside the flight window fell within the 19 to 41 degrees C flight range against 51.4 per cent outside it (Figure S1). Hourly speed and direction from Environment and Climate Change Canada stations within 150 km were combined as vector components and adjusted for terrain with the MicroMet model of @liston2006, which weights each observation by the slope in the wind direction and the curvature of the ground. The adjustment depends on direction and not on speed, so it was computed once for each of 16 sectors of 22.5 degrees over an elevation model extending beyond the perimeter, with a curvature length scale of 600 m. Each period was summarised by its mean flight-hour wind and its share of flight hours below 5 km/h. Mean flight-hour wind ran from 4.0 to 8.6 km/h between periods and varied by up to 5.1 km/h across the grid within a period. The annual models took the same terrain-adjusted wind over the flight hours of 1 July to 15 August of each year, 230 hours from 6 to 9 stations a year, and the mean station wind of June and of July, interpolated to the grid by inverse distance weighting, as the wind that varied between years.
+
+@fig-spread *near here*
 
 ## Model design
 
@@ -2401,6 +2589,51 @@ if (!file.exists(PPT)) {
   }
   file.rename(envf, file.path(MD, "l_envelopes.csv"))
   file.rename(part, PPT)
+}
+```
+:::
+
+
+
+::: {.cell}
+
+```{.r .cell-code}
+## spatial pattern of attack on each annual map, the join count of attacked cells adjacent to attacked cells among the eight neighbours and
+## Moran's I in 60 m distance classes to 6 km, both against 999 random relabellings of the cells the map covers. Every pair of cells is
+## counted at once by a fast Fourier transform of the grid, whose lags are the distances between cells.
+MA <- here::here("02.inputs/beetle/model-data-annual-grid")
+ASP <- file.path(MA, "spatial_pattern.csv")
+if (!file.exists(ASP)) {
+  suppressPackageStartupMessages(library(terra))
+  dir.create(MA, showWarnings = FALSE)
+  EDGE <- seq(0, 6000, 60)
+  grid_pattern <- function(x) {
+    ok <- !is.na(x); nr <- nrow(x); nc <- ncol(x); L <- ceiling(max(EDGE) / 30); P1 <- nextn(nr + L); P2 <- nextn(nc + L)
+    xc <- function(m) { o <- matrix(0, P1, P2); o[1:nr, 1:nc] <- m; f <- fft(o); Re(fft(f * Conj(f), inverse = TRUE)) / (P1 * P2) }
+    lag <- function(P) ((seq_len(P) - 1 + P %/% 2) %% P) - P %/% 2
+    d <- 30 * sqrt(outer(lag(P1)^2, lag(P2)^2, "+")); keep <- d > 0 & d <= max(EDGE)
+    band <- findInterval(d[keep], EDGE, left.open = TRUE); queen <- d[keep] <= 30 * sqrt(2) + 1e-6
+    W <- rowsum(xc(ok * 1)[keep], band)[, 1]
+    function(v) { z <- matrix(0, nr, nc); z[ok] <- v - mean(v); b <- matrix(0, nr, nc); b[ok] <- v
+      c(round(sum(xc(b)[keep][queen]) / 2), rowsum(xc(z)[keep], band)[, 1] / W * length(v) / sum((v - mean(v))^2)) }
+  }
+  rows <- list(); cg <- list()
+  for (y in c(2006:2011, 2013, 2014)) {
+    set.seed(123)
+    x <- as.matrix(rast(here::here("02.inputs/beetle/red-stage-annual", sprintf("redstage_%d.tif", y))), wide = TRUE)
+    v <- x[!is.na(x)]; stat <- grid_pattern(x)
+    obs <- stat(v); sim <- t(replicate(999, stat(sample(v))))
+    p <- (1 + colSums(sim >= rep(obs, each = 999))) / 1000
+    mi <- obs[-1]; mp <- p[-1]; lo <- EDGE[-length(EDGE)]
+    rows[[length(rows) + 1]] <- data.frame(year = y, cells = length(v), attacked = sum(v), joins_bb = obs[1], joins_bb_null = mean(sim[, 1]),
+                                           joins_bb_z = (obs[1] - mean(sim[, 1])) / sd(sim[, 1]), joins_bb_p = p[1],
+                                           moran_60 = mi[1], range_m = if (all(mp <= 0.05)) max(EDGE) else lo[which(mp > 0.05)[1]],
+                                           zero_m = if (all(mi > 0)) max(EDGE) else lo[which(mi <= 0)[1]])
+    cg[[length(cg) + 1]] <- data.frame(year = y, from_m = lo, to_m = EDGE[-1], moran_i = mi, null_lo = apply(sim[, -1], 2, quantile, 0.025),
+                                       null_hi = apply(sim[, -1], 2, quantile, 0.975), p = mp)
+  }
+  write.csv(do.call(rbind, cg), file.path(MA, "correlogram.csv"), row.names = FALSE)
+  write.csv(do.call(rbind, rows), ASP, row.names = FALSE)
 }
 ```
 :::
@@ -2468,6 +2701,37 @@ if (!file.exists(EMT)) {
     rows[[length(rows) + 1]] <- dd
   }
   saveRDS(do.call(rbind, rows), EMT)
+}
+
+## the annual model table, one row per cell and year, with the cell's own state and the share attacked within fixed radii around it in the previous outbreak year
+AMT <- file.path(MA, "annual_model_table.rds")
+if (!file.exists(AMT)) {
+  suppressPackageStartupMessages(library(terra))
+  YRS <- c(2006:2011, 2013, 2014); RADII <- c(42, 90, 150, 210, 510, 1050)
+  msk <- rast(here::here("02.inputs/beetle/study-area/perimeter_mask.tif"))
+  src <- read.csv(file.path(VRA, "vri_year_source.csv"))
+  # Natural Resources Canada High Resolution Digital Elevation Model and its SAGA derivatives from chunk 37-geomorphometry,
+  # https://open.canada.ca/data/en/dataset/957782bf-847c-4644-a757-e383c0057995
+  static <- c(rast(here::here("02.inputs/beetle/study-area/elevation.tif")), rast(here::here("02.inputs/beetle/geomorphometry/geomorphometry.tif")))
+  mp <- function(y) rast(here::here("02.inputs/beetle/red-stage-annual", sprintf("redstage_%d.tif", y)))
+  share <- function(r, rad) { w <- focalMat(r, rad, "circle"); w[w > 0] <- 1; w[ceiling(nrow(w) / 2), ceiling(ncol(w) / 2)] <- 0; focal(r, w, fun = "mean", na.rm = TRUE) }
+  rows <- lapply(seq_along(YRS), function(i) {
+    y <- YRS[i]; yp <- if (i > 1) YRS[i - 1] else NA
+    lag <- if (is.na(yp)) { z <- rep(msk, 1 + length(RADII)); values(z) <- NA; z } else { p <- mp(yp); c(p, rast(lapply(RADII, function(rad) share(p, rad)))) }
+    names(lag) <- paste0("lagyr", c("_self", paste0("_nbr", RADII)))
+    # Environment and Climate Change Canada hourly station wind, interpolated in chunk 30-wind-hourly-metrics and terrain-resolved in chunk micromet-wind,
+    # https://api.weather.gc.ca/collections/climate-hourly/items
+    st <- project(rast(here::here("02.inputs/beetle/covariates/wind-hourly", sprintf("wind_metrics_%d.tif", y))), msk, method = "bilinear")
+    mm <- rast(here::here("02.inputs/beetle/covariates/wind-annual-context", sprintf("wind_%d.tif", y)))
+    # British Columbia Vegetation Resources Inventory, historical annual releases, rasterised in chunk period-maps,
+    # https://catalogue.data.gov.bc.ca/dataset/vri-historical-vegetation-resource-inventory-2002-2024-
+    vri <- rast(file.path(VRA, sprintf("vri_%d.tif", src$vri_year[src$year == y])))
+    d <- as.data.frame(mask(c(setNames(mp(y), "modhigh"), static, vri, st, mm, lag), msk), xy = TRUE, na.rm = FALSE)
+    d <- d[!is.na(d$modhigh), ]; d$year <- y; d$lag_from <- yp; d
+  })
+  d <- do.call(rbind, rows)
+  env <- setdiff(names(d), c(grep("^lagyr", names(d), value = TRUE), "lag_from"))
+  saveRDS(d[stats::complete.cases(d[, env]), ], AMT)
 }
 ```
 :::
@@ -2719,6 +2983,250 @@ if (!file.exists(GRT)) {
 ::: {.cell}
 
 ```{.r .cell-code}
+## the annual models in the submitted order, M0 host size, shading and landform, M1 stand density, M2 terrain and flight-window radiation,
+## M3 the interactions, on the variables the submitted selection kept, of which terrain-resolved wind entered none of M0 to M3
+SUB <- list(hostsize = c("PINE_BA", "PROJ_AGE_1", "QUAD_DIAM_125"), shading = c("sky_view", "northness"), landform = "elevation", density = "BASAL_AREA",
+            wind_geo = "wind_shelter", shape = c("tpi", "convergence", "curv_prof"), flightsun = "solar_flight_direct", wind_t = c("jul", "jun"))
+M_TERMS <- with(SUB, list(
+  M0 = c(hostsize, shading, landform),
+  M1 = c(hostsize, shading, landform, density),
+  M2 = c(hostsize, shading, landform, density, wind_geo, shape, flightsun),
+  M3 = c(hostsize, shading, landform, density, wind_geo, shape, flightsun, wind_t, "BASAL_AREA:wind_shelter", "BASAL_AREA:jul", "BASAL_AREA:solar_flight_direct"),
+  `M3 without radiation` = c(hostsize, shading, landform, density, wind_geo, shape, wind_t, "BASAL_AREA:wind_shelter", "BASAL_AREA:jul")))
+GEO_LAB <- c("flat", "peak", "ridge", "shoulder", "spur", "slope", "hollow", "footslope", "valley", "pit")
+geo_factor <- function(x) { g <- factor(GEO_LAB[round(x)], levels = GEO_LAB); levels(g)[levels(g) == "shoulder"] <- "ridge"
+  g <- droplevels(g); relevel(g, ref = names(which.max(table(g)))) }
+simple_slopes <- function(m, ints) { b <- coef(m); V <- vcov(m)
+  do.call(rbind, lapply(ints, function(k) { p <- strsplit(k, ":")[[1]]; kk <- intersect(c(k, paste(rev(p), collapse = ":")), names(b))[1]
+    do.call(rbind, lapply(1:2, function(j) do.call(rbind, lapply(c(-1, 1), function(z) {
+      f <- p[j]; s <- b[f] + z * b[kk]; se <- sqrt(V[f, f] + z^2 * V[kk, kk] + 2 * z * V[f, kk])
+      data.frame(interaction = k, focal = f, moderator = p[3 - j], at = z, slope = unname(s), se = unname(se), p = unname(2 * pnorm(-abs(s / se)))) })))) })) }
+
+## 4,000 cells of each class in each year, the submitted balance
+ASM <- file.path(MA, "annual_sample.rds")
+if (!file.exists(ASM)) {
+  set.seed(42)
+  d <- readRDS(AMT)
+  saveRDS(do.call(rbind, lapply(split(d, list(d$year, d$modhigh)), function(g) g[sample(nrow(g), min(nrow(g), 4000)), ])), ASM)
+}
+
+## dependence terms first, the cell's own state last year with the share attacked within each radius around it, compared on AIC
+ADS <- file.path(MA, "dependence_selection.csv")
+if (!file.exists(ADS)) {
+  b <- readRDS(ASM); b <- b[!is.na(b$lagyr_self), ]
+  fit <- function(tt) { g <- glm(reformulate(if (length(tt)) tt else "1", "modhigh"), data = b, family = binomial)
+    data.frame(terms = paste(c("intercept", tt), collapse = " + "), k = length(coef(g)), aic = AIC(g), deviance = deviance(g)) }
+  res <- rbind(fit(character(0)), fit("lagyr_self"),
+               do.call(rbind, lapply(paste0("lagyr_nbr", c(42, 90, 150, 210, 510, 1050)), function(v) fit(c("lagyr_self", v)))))
+  res$delta_aic <- res$aic - min(res$aic); res$n <- nrow(b)
+  write.csv(res, ADS, row.names = FALSE)
+}
+ADEP <- function() { s <- read.csv(ADS); s <- s[grepl("nbr|kern", s$terms), ]; c("lagyr_self", sub(".*\\+ ", "", s$terms[which.min(s$aic)])) }
+
+## every variable standardised on the whole balanced sample, then the years with a previous map taken from it
+annual_data <- function(sample) {
+  b <- readRDS(ASM); for (v in unlist(SUB)) b[[v]] <- as.numeric(scale(b[[v]]))
+  if (sample != "all years") b <- b[!is.na(b$lagyr_self), ]
+  b$geomorphon <- geo_factor(b$geomorphons); b
+}
+afit <- function(model, dependence, b) glm(reformulate(c(M_TERMS[[model]], "geomorphon", if (dependence) ADEP()), "modhigh"), data = b, family = binomial)
+RUNS <- rbind(data.frame(sample = "all years", dependence = FALSE, model = names(M_TERMS)),
+              expand.grid(sample = "with previous year", dependence = c(FALSE, TRUE), model = names(M_TERMS), stringsAsFactors = FALSE))
+
+ACF <- file.path(MA, "annual_coefficients.csv")
+if (!file.exists(ACF)) {
+  out <- lapply(seq_len(nrow(RUNS)), function(i) {
+    b <- annual_data(RUNS$sample[i]); m <- afit(RUNS$model[i], RUNS$dependence[i], b)
+    cf <- summary(m)$coefficients; p <- fitted(m); y <- m$y; ints <- grep(":", M_TERMS[[RUNS$model[i]]], value = TRUE)
+    list(coef = data.frame(RUNS[i, ], term = rownames(cf), estimate = cf[, 1], se = cf[, 2], z_ratio = cf[, 3], p = cf[, 4], row.names = NULL),
+         fit = data.frame(RUNS[i, ], n = nrow(b), k = length(coef(m)), aic = AIC(m), auc = as.numeric(pROC::auc(pROC::roc(y, p, quiet = TRUE))),
+                          rmse = sqrt(mean((y - p)^2)), mae = mean(abs(y - p)), brier_skill = 1 - mean((y - p)^2) / mean((y - mean(y))^2), row.names = NULL),
+         slopes = if (length(ints)) data.frame(RUNS[i, ], simple_slopes(m, ints), row.names = NULL))
+  })
+  write.csv(do.call(rbind, lapply(out, `[[`, "coef")), ACF, row.names = FALSE)
+  write.csv(do.call(rbind, lapply(out, `[[`, "fit")), file.path(MA, "annual_fit.csv"), row.names = FALSE)
+  write.csv(do.call(rbind, lapply(out, `[[`, "slopes")), file.path(MA, "annual_simple_slopes.csv"), row.names = FALSE)
+}
+```
+:::
+
+
+
+::: {.cell}
+
+```{.r .cell-code}
+## Moran's I of the deviance residuals within each year for every annual model, on the eight nearest sampled cells
+moran_yr <- function(r, b) do.call(rbind, lapply(split(seq_len(nrow(b)), b$year), function(ix) {
+  mt <- spdep::moran.test(r[ix], spdep::nb2listw(spdep::knn2nb(spdep::knearneigh(as.matrix(b[ix, c("x", "y")]), k = 8)), style = "W"), randomisation = TRUE)
+  data.frame(year = b$year[ix[1]], moran_i = unname(mt$estimate[1]), p = mt$p.value) }))
+AMO <- file.path(MA, "annual_residual_moran.csv")
+if (!file.exists(AMO)) {
+  write.csv(do.call(rbind, lapply(seq_len(nrow(RUNS)), function(i) { b <- annual_data(RUNS$sample[i])
+    data.frame(RUNS[i, ], moran_yr(residuals(afit(RUNS$model[i], RUNS$dependence[i], b), type = "deviance"), b), row.names = NULL) })), AMO, row.names = FALSE)
+}
+
+## M3 with the dependence terms refitted with a latent Gaussian field whose Matern range is the median distance at which Moran's I stopped being significant
+ASF <- file.path(MA, "annual_spatial_refit.csv")
+if (!file.exists(ASF)) {
+  suppressPackageStartupMessages(library(mgcv))
+  b <- annual_data("with previous year")
+  RANGE <- median(read.csv(ASP)$range_m)
+  f0 <- reformulate(c(M_TERMS$M3, "geomorphon", ADEP()), "modhigh")
+  g0 <- bam(f0, data = b, family = binomial, discrete = TRUE)
+  g1 <- bam(update(f0, . ~ . + s(x, y, bs = "gp", k = 200, m = c(3, RANGE))), data = b, family = binomial, discrete = TRUE)
+  cf <- function(m, lab) { s <- summary(m)$p.table
+    data.frame(model = lab, term = rownames(s), estimate = s[, 1], se = s[, 2], z_ratio = s[, 3], p = s[, 4], aic = AIC(m), row.names = NULL) }
+  out <- rbind(cf(g0, "without spatial field"), cf(g1, "with spatial field"))
+  out$edf_field <- sum(g1$edf[grepl("s\\(x,y\\)", names(g1$edf))]); out$field_range_m <- RANGE
+  write.csv(out, ASF, row.names = FALSE)
+  write.csv(rbind(data.frame(model = "without spatial field", moran_yr(residuals(g0, type = "deviance"), b)),
+                  data.frame(model = "with spatial field", moran_yr(residuals(g1, type = "deviance"), b))), file.path(MA, "annual_spatial_moran.csv"), row.names = FALSE)
+}
+```
+:::
+
+
+
+::: {.cell}
+
+```{.r .cell-code}
+## grain test, M3 refitted with the cell coarsened from 30 m to 90, 270 and 990 m, a coarse cell attacked if any 30 m cell inside it was,
+## with the previous year's state and the share of its eight neighbours rebuilt at each grain
+AGR <- file.path(MA, "annual_grain_test.csv")
+if (!file.exists(AGR)) {
+  suppressPackageStartupMessages(library(terra))
+  set.seed(123)
+  YRS <- c(2006:2011, 2013, 2014)
+  msk <- rast(here::here("02.inputs/beetle/study-area/perimeter_mask.tif"))
+  src <- read.csv(file.path(VRA, "vri_year_source.csv"))
+  env <- unique(unlist(strsplit(M_TERMS$M3, ":")))
+  static <- c(rast(here::here("02.inputs/beetle/study-area/elevation.tif")), rast(here::here("02.inputs/beetle/geomorphometry/geomorphometry.tif")))
+  mp <- function(y) rast(here::here("02.inputs/beetle/red-stage-annual", sprintf("redstage_%d.tif", y)))
+  nb8 <- function(r) focal(r, matrix(c(1, 1, 1, 1, 0, 1, 1, 1, 1), 3), fun = "mean", na.rm = TRUE)
+  res <- list()
+  for (f in c(1, 3, 9, 33)) {
+    agg <- function(r, fun) if (f == 1) r else aggregate(r, f, fun = fun, na.rm = TRUE)
+    a <- do.call(rbind, lapply(2:length(YRS), function(i) {
+      y <- YRS[i]; prv <- agg(mp(YRS[i - 1]), "max")
+      cov <- c(static, rast(file.path(VRA, sprintf("vri_%d.tif", src$vri_year[src$year == y]))),
+               project(rast(here::here("02.inputs/beetle/covariates/wind-hourly", sprintf("wind_metrics_%d.tif", y))), msk, method = "bilinear"))
+      dd <- as.data.frame(c(setNames(agg(mp(y), "max"), "modhigh"), setNames(prv, "lagyr_self"), setNames(nb8(prv), "lagyr_nbr"),
+                            agg(cov[[env]], "mean"), agg(cov[["geomorphons"]], "modal")), na.rm = TRUE)
+      if (f <= 3) { k1 <- which(dd$modhigh == 1); k0 <- which(dd$modhigh == 0)
+        dd <- dd[c(k1[sample.int(length(k1), min(length(k1), 4000))], k0[sample.int(length(k0), min(length(k0), 4000))]), ] }
+      dd$year <- y; dd }))
+    for (v in env) a[[v]] <- as.numeric(scale(a[[v]]))
+    a$geomorphon <- geo_factor(a$geomorphons)
+    for (withdep in c(FALSE, TRUE)) {
+      m <- glm(reformulate(c(M_TERMS$M3, "geomorphon", if (withdep) c("lagyr_self", "lagyr_nbr")), "modhigh"), data = a, family = binomial)
+      cf <- summary(m)$coefficients; cf <- cf[rownames(cf) %in% M_TERMS$M3, , drop = FALSE]
+      res[[length(res) + 1]] <- data.frame(grain_m = 30 * f, dependence = withdep, n = nrow(a), prevalence = mean(a$modhigh), term = rownames(cf),
+                                           estimate = cf[, 1], se = cf[, 2], z_ratio = cf[, 3], p = cf[, 4], row.names = NULL)
+    }
+  }
+  write.csv(do.call(rbind, res), AGR, row.names = FALSE)
+}
+```
+:::
+
+
+
+::: {.cell}
+
+```{.r .cell-code}
+## the submitted sixteen-day models on the repaired wind field, E1 without dependence terms, E2 with the previous period's state and the share
+## attacked within the radius AIC chose, E3 adding the same period of the previous year, and E1 again on all-hours wind as the submitted code used
+EMD <- here::here("02.inputs/beetle/model-data-wind16-grid")
+NB <- function(tag) { s <- read.csv(file.path(MD, "dependence_selection.csv")); s <- s[grepl(paste0(tag, "_nbr"), s$terms) & !grepl("kern", s$terms), ]
+  sub(".*\\+ ", "", s$terms[which.min(s$aic)]) }
+ECF <- file.path(EMD, "wind16_coefficients.csv")
+if (!file.exists(ECF)) {
+  dir.create(EMD, showWarnings = FALSE)
+  EV <- c("elevation", "PINE_BA", "LIVE_STAND_VOLUME_125", "VRI_LIVE_STEMS_PER_HA", "QUAD_DIAM_125", "CROWN_CLOSURE", "tri", "vrm", "tpi",
+          "midslope_position", "valley_depth", "curv_prof", "solar_season_direct", "solar_flight_direct", "wind_effect")
+  SPEC <- list(E1 = list(w = "ep_wind_flight", dep = character(0)), `E1 all hours` = list(w = "ep_wind_all", dep = character(0)),
+               E2 = list(w = "ep_wind_flight", dep = c("lag1_self", NB("lag1"))),
+               E3 = list(w = "ep_wind_flight", dep = c("lag1_self", NB("lag1"), "lagyr_self", NB("lagyr"))))
+  d <- readRDS(file.path(MD, "epoch_model_table.rds"))
+  d <- d[stats::complete.cases(d[, c(EV, "ep_wind_flight", "ep_wind_all", "geomorphons")]), ]
+  for (v in c(EV, "ep_wind_flight", "ep_wind_all")) d[[v]] <- as.numeric(scale(d[[v]]))
+  out <- lapply(names(SPEC), function(k) {
+    s <- SPEC[[k]]; b <- d[stats::complete.cases(d[, c("redstage", s$dep)]), ]; b$geomorphon <- geo_factor(b$geomorphons)
+    ints <- paste0(c("VRI_LIVE_STEMS_PER_HA", "LIVE_STAND_VOLUME_125"), ":", s$w)
+    m <- glm(reformulate(c(EV, s$w, "geomorphon", s$dep, ints), "redstage"), data = b, family = binomial)
+    cf <- summary(m)$coefficients
+    list(coef = data.frame(model = k, term = rownames(cf), estimate = cf[, 1], se = cf[, 2], z_ratio = cf[, 3], p = cf[, 4], n = nrow(b), aic = AIC(m),
+                           auc = as.numeric(pROC::auc(pROC::roc(m$y, fitted(m), quiet = TRUE))), row.names = NULL),
+         slopes = data.frame(model = k, simple_slopes(m, ints)))
+  })
+  write.csv(do.call(rbind, lapply(out, `[[`, "coef")), ECF, row.names = FALSE)
+  write.csv(do.call(rbind, lapply(out, `[[`, "slopes")), file.path(EMD, "wind16_simple_slopes.csv"), row.names = FALSE)
+}
+```
+:::
+
+
+
+::: {.cell}
+
+```{.r .cell-code}
+## attack by quadratic mean diameter class on the balanced annual sample, with the test across classes and the step across the 25 cm boundary
+ADM <- file.path(MA, "annual_diameter.csv")
+if (!file.exists(ADM)) {
+  b <- readRDS(ASM)
+  b$bin <- cut(b$QUAD_DIAM_125, c(0, 15, 20, 25, 30, 40, Inf), labels = c("<15", "15-20", "20-25", "25-30", "30-40", ">40"))
+  tab <- do.call(rbind, lapply(split(b, b$bin, drop = TRUE), function(g) { ci <- prop.test(sum(g$modhigh), nrow(g), correct = FALSE)$conf.int
+    data.frame(bin = as.character(g$bin[1]), n = nrow(g), attacked = sum(g$modhigh), attacked_pc = 100 * mean(g$modhigh), ci_lo = 100 * ci[1], ci_hi = 100 * ci[2],
+               pine_ba = mean(g$PINE_BA), basal_area = mean(g$BASAL_AREA)) }))
+  chi <- chisq.test(cbind(tab$attacked, tab$n - tab$attacked))
+  i <- match(c("20-25", "25-30"), tab$bin); step <- prop.test(tab$attacked[i], tab$n[i], correct = FALSE)
+  write.csv(tab, ADM, row.names = FALSE)
+  write.csv(data.frame(chisq = unname(chi$statistic), df = unname(chi$parameter), p = chi$p.value, cramers_v = sqrt(unname(chi$statistic) / sum(tab$n)),
+                       step_from = tab$attacked_pc[i[1]], step_to = tab$attacked_pc[i[2]], step_diff = diff(tab$attacked_pc[i]),
+                       step_ci_lo = -100 * step$conf.int[2], step_ci_hi = -100 * step$conf.int[1], step_p = step$p.value),
+            file.path(MA, "annual_diameter_tests.csv"), row.names = FALSE)
+}
+```
+:::
+
+
+
+::: {.cell}
+
+```{.r .cell-code}
+## degree-days beside M3, in place of elevation and together with it, over all years and with the dependence terms, and attack in the cells
+## below the 833 degree-days that Aukema et al. (2008) took as enough heat for a one-year generation
+ADDM <- file.path(MA, "degree_day_models.csv")
+if (!file.exists(ADDM)) {
+  suppressPackageStartupMessages(library(terra))
+  add_dd <- function(b) { b$degree_days <- NA_real_
+    for (y in unique(b$year)) { ix <- b$year == y
+      b$degree_days[ix] <- terra::extract(rast(here::here("02.inputs/beetle/covariates/degree-days", sprintf("dd_%d.tif", y))), as.matrix(b[ix, c("x", "y")]))[["degree_days"]] }
+    b }
+  res <- list()
+  for (dep in c(FALSE, TRUE)) {
+    b <- add_dd(annual_data(if (dep) "with previous year" else "all years")); r_dd <- cor(b$degree_days, b$elevation); b$degree_days <- as.numeric(scale(b$degree_days))
+    for (v in c("M3", "M3 degree-days for elevation", "M3 with degree-days")) {
+      tt <- switch(v, M3 = M_TERMS$M3, `M3 degree-days for elevation` = sub("^elevation$", "degree_days", M_TERMS$M3), `M3 with degree-days` = c(M_TERMS$M3, "degree_days"))
+      m <- glm(reformulate(c(tt, "geomorphon", if (dep) ADEP()), "modhigh"), data = b, family = binomial); cf <- summary(m)$coefficients
+      res[[length(res) + 1]] <- data.frame(model = v, dependence = dep, term = rownames(cf), estimate = cf[, 1], se = cf[, 2], p = cf[, 4], aic = AIC(m),
+                                           r_dd_elevation = r_dd, row.names = NULL)
+    }
+  }
+  write.csv(do.call(rbind, res), ADDM, row.names = FALSE)
+  d <- add_dd(readRDS(AMT))
+  write.csv(do.call(rbind, lapply(split(d, d$year), function(g) data.frame(year = g$year[1], cells = nrow(g), dd_min = min(g$degree_days), dd_max = max(g$degree_days),
+    below_833 = mean(g$degree_days < 833), attack_below = mean(g$modhigh[g$degree_days < 833]), attack_above = mean(g$modhigh[g$degree_days >= 833]),
+    r_elevation = cor(g$degree_days, g$elevation)))), file.path(MA, "degree_day_attack.csv"), row.names = FALSE)
+}
+```
+:::
+
+
+
+::: {.cell}
+
+```{.r .cell-code}
 CLS  <- rd(file.path(BC, "red-stage-darkwoods/classifier_blocked_mccv.csv"))
 PIXC <- rd(file.path(BC, "red-stage-darkwoods/classifier_pixels.csv"))
 EP   <- rd(file.path(BC, "epoch-redstage/epoch_summary.csv"))
@@ -2757,81 +3265,100 @@ DT0 <- if (file.exists(file.path(MD, "model_table_dependence.rds"))) readRDS(fil
 WIND_R <- if (is.null(DT0)) NA else cor(DT0$ep_wind_flight, DT0$ep_calm_flight)
 ob <- function(v) num(ONE$estimate[ONE$variable == v], "%+.3f")
 gr <- function(v, g, col = "estimate") { x <- GRT[GRT$term == v & GRT$grain_m == g & GRT$dependence, col]; if (col == "p") pthr(x) else num(x, "%+.3f") }
+
+AGD   <- file.path(BC, "model-data-annual-grid")
+ARS   <- rd(file.path(BC, "red-stage-annual/redstage_summary.csv"))
+AWIND <- rd(file.path(BC, "covariates/wind-annual-context/annual_wind_summary.csv"))
+ASPT  <- rd(file.path(AGD, "spatial_pattern.csv"));        ADSL  <- rd(file.path(AGD, "dependence_selection.csv"))
+ACOEF <- rd(file.path(AGD, "annual_coefficients.csv"));    AFIT  <- rd(file.path(AGD, "annual_fit.csv"))
+ASLP  <- rd(file.path(AGD, "annual_simple_slopes.csv"));   AMOR  <- rd(file.path(AGD, "annual_residual_moran.csv"))
+ASFR  <- rd(file.path(AGD, "annual_spatial_refit.csv"));   ASMO  <- rd(file.path(AGD, "annual_spatial_moran.csv"))
+AGRT  <- rd(file.path(AGD, "annual_grain_test.csv"));      ADIA  <- rd(file.path(AGD, "annual_diameter.csv"))
+ADIT  <- rd(file.path(AGD, "annual_diameter_tests.csv"))
+W16   <- rd(file.path(BC, "model-data-wind16-grid/wind16_coefficients.csv")); W16S <- rd(file.path(BC, "model-data-wind16-grid/wind16_simple_slopes.csv"))
+acv <- function(term, model = "M3", dep = FALSE, col = "estimate") ACOEF[[col]][ACOEF$model == model & ACOEF$dependence == dep &
+  ACOEF$sample == (if (dep) "with previous year" else "all years") & ACOEF$term == term]
+ac  <- function(term, model = "M3", dep = FALSE, col = "estimate") { x <- acv(term, model, dep, col); if (col == "p") pthr(x) else num(x, "%+.3f") }
+aft <- function(model, dep = FALSE, col = "aic", sample = if (dep) "with previous year" else "all years")
+  AFIT[[col]][AFIT$model == model & AFIT$dependence == dep & AFIT$sample == sample]
+asl <- function(int, focal, at, dep = FALSE, col = "slope") { x <- ASLP[[col]][ASLP$model == "M3" & ASLP$dependence == dep &
+  ASLP$sample == (if (dep) "with previous year" else "all years") & ASLP$interaction == int & ASLP$focal == focal & ASLP$at == at]
+  if (col == "p") pthr(x) else num(x, "%+.3f") }
+afl <- function(term, col = "estimate") { x <- ASFR[[col]][ASFR$model == "with spatial field" & ASFR$term == term]; if (col == "p") pthr(x) else num(x, "%+.3f") }
+agr <- function(term, grain, col = "estimate") { x <- AGRT[[col]][AGRT$term == term & AGRT$grain_m == grain & AGRT$dependence]; if (col == "p") pthr(x) else num(x, "%+.3f") }
+wc  <- function(model, term, col = "estimate") { x <- W16[[col]][W16$model == model & W16$term == term]; if (col == "p") pthr(x) else num(x, "%+.3f") }
+wsl <- function(model, int, at, col = "slope") { x <- W16S[[col]][W16S$model == model & W16S$interaction == int & grepl("wind", W16S$focal) & W16S$at == at]
+  if (col == "p") pthr(x) else num(x, "%+.3f") }
+dia <- function(bin, col = "attacked_pc") num(ADIA[[col]][ADIA$bin == bin], "%.1f")
+A_NB   <- if (is.null(ADSL)) NA else sub(".*nbr", "", ADSL$terms[which.min(ADSL$aic)])
+W16_R1 <- if (is.null(W16)) NA else sub(".*nbr", "", grep("^lag1_nbr", unique(W16$term), value = TRUE)[1])
+SI <- "VRI_LIVE_STEMS_PER_HA:ep_wind_flight"; VI <- "LIVE_STAND_VOLUME_125:ep_wind_flight"
+STEM16 <- if (is.null(W16)) NULL else { e <- readRDS(file.path(MD, "epoch_model_table.rds")); e <- e[stats::complete.cases(e[, c("elevation", "PINE_BA",
+  "LIVE_STAND_VOLUME_125", "VRI_LIVE_STEMS_PER_HA", "QUAD_DIAM_125", "CROWN_CLOSURE", "tri", "vrm", "tpi", "midslope_position", "valley_depth", "curv_prof",
+  "solar_season_direct", "solar_flight_direct", "wind_effect", "ep_wind_flight", "ep_wind_all", "geomorphons")]), "VRI_LIVE_STEMS_PER_HA"]; mean(e) + c(-1, 1) * sd(e) }
 ```
 :::
 
 
-Spatial pattern was described before any model was fitted, with the point pattern methods of @murphy2026. In each period the attacked cells were a point pattern inside the window of cells the imagery saw, and clustering was tested against 999 random relabellings of those cells, because the cells sit on a 30 m grid inside a window with holes. The Clark-Evans index [@clark1954distance], the mean nearest-neighbour distance and the L function, the variance-stabilised form of Ripley's K [@ripley1977], were compared with that null, the last against a global envelope [@baddeley2015], and the largest distance at which the L function lay above the envelope was the clustering range. The kernel bandwidth of each period was chosen by likelihood cross-validation over 20 to 300 m [@vanes1991], as @murphy2026 set the bandwidth of their Cox process model. The bandwidth then set the scale of a neighbourhood term and the clustering range the range of the latent spatial field.
+The spatial pattern of attack was described on each annual map before any model was fitted, following @aukema2008, who treated attack as its presence or absence in the cells of a grid. The join count [@moran1948] was the number of pairs of attacked cells that were neighbours, counting the eight cells around each, and Moran's I [@moran1950] was computed in distance classes of 60 m out to 6 km as a correlogram [@legendre1989]. Both were compared with 999 random relabellings of the attacked cells among the cells mapped that year, and the range of positive autocorrelation was the first distance class at which Moran's I no longer exceeded the relabellings at p ≤ 0.05.
 
-Models were built in the order of @aukema2008, who "determined an appropriate spatial neighborhood structure(s) and time lag(s) to account for spatial and temporal dependencies" before any environmental variable entered, then tested each variable alone and built the full model by backward elimination. Every model was a logistic regression of attack in a cell and period with a fixed effect for each period. Each period contributed every attacked cell up to 2,000 and the same number of unattacked cells, so the period effect absorbed the sampling rate.
+The annual models were built in the order of @aukema2008, who "determined an appropriate spatial neighborhood structure(s) and time lag(s) to account for spatial and temporal dependencies" before any environmental variable entered. The dependence terms were the cell's own state in the previous outbreak year, 2011 in the case of 2013, and the share of cells attacked around it that year within 42, 90, 150, 210, 510 or 1,050 m, excluding the cell itself, the radius being chosen on AIC (@tbl-dependence). Each year contributed up to 4,000 attacked and 4,000 unattacked cells, because at a landscape prevalence near one cell in ten an unbalanced fit would report its intercept rather than its covariates.
 
-The dependence terms were the cell's own state in the previous period of the season and in the same period of the previous year, and the share of cells attacked around it in each, measured within fixed radii of 42, 90, 150, 210, 510 and 1,050 m and by a Gaussian kernel at the bandwidth of the period the share came from. All were compared on AIC, so the bandwidth was tested against the fixed radii rather than assumed. Each standardised environmental variable was then entered alone beside the chosen dependence terms and tested by likelihood ratio, the screen @murphy2026 applied against the intercept-only model. Variables passing at p < 0.05 were grouped where their absolute correlation reached 0.75, keeping the member with the largest statistic, and removed until every variance inflation factor was below 5. The final model was reached by removing terms one at a time while AIC fell, with an elastic net fitted alongside [@zou2005; @friedman2010] (Table S4).
+The environmental terms were 14 variables grouped by the mechanism each represented (Table S3). Four logistic regressions were fitted in sequence, each adding one mechanism to the one before, M0 host size, shading and landform, M1 stand density as basal area, M2 terrain exposure to wind, terrain shape and flight-window direct radiation, and M3 the interactions of basal area with the wind shelter index, July wind and flight-window radiation. Every model carried the geomorphon class of the cell, and every continuous term was standardised, so that a coefficient was a change in log-odds per standard deviation. The sequence was fitted on all eight years without the dependence terms, and then on the seven years with a previous map, without and with them, so that the change each environmental term underwent once attack nearby and earlier entered could be read directly. The third question compared the main effect of the wind shelter index with its interaction with basal area, in M3 fitted with and without flight-window radiation. Each interaction was read as the slope of one term at one standard deviation either side of the mean of the other. Attack was also tabulated by quadratic mean diameter class, with Wilson intervals, a chi-square test across classes and a two-proportion test across the 25 cm source-sink boundary [@carroll2004bionomics].
 
-The questions were tested as additions to the final model, each compared with the model without it by likelihood ratio. The mechanisms of @krawchuk2020 were tested term by term, density as live stems, standing volume and basal area, large hosts as quadratic mean diameter, and shading as growing-season radiation and northness. Plume disruption was tested as the interactions of stems and standing volume with mean flight-hour wind, which correlated -0.94 with calm share, so only the mean entered. Deposition was tested as the main effects of the wind shelter index and sky view, then their interactions with density. Each interaction was read as the slope of one term at one standard deviation either side of the mean of the other.
+The second question was tested on the sixteen-day maps, where wind varied between periods within a season as well as between years. Attack in a period was regressed on 15 stand and terrain variables, mean flight-hour wind, the geomorphon class and the interactions of wind with live stems and with standing volume, first alone (E1), then with the cell's own state in the previous period and the share attacked within 90 m around it (E2), and then with the same two terms for the same period of the previous year (E3), the radii being chosen on AIC as for the annual models. Each period contributed up to 2,000 cells of each class.
 
-Two checks tested the scale of the inference. The final model was refitted with a Gaussian process smooth of easting and northing [@wood2017], a latent spatial field of the kind the Cox process model of @murphy2026 carried, with a Matérn range set to the median clustering range, 750 m, and Moran's I [@moran1950] of the deviance residuals was computed within each period on the eight nearest sampled cells with and without the field. The environmental terms were also refitted with the cell coarsened to 90, 270 and 990 m, a coarse cell being attacked if any 30 m cell inside it was, the definition @aukema2008 used on 12 km cells, with the dependence terms rebuilt at each grain from the cell's own state and its eight neighbours.
+Three checks tested the scale of the inference. Moran's I of the deviance residuals was computed within each year on the eight nearest sampled cells for every annual model. M3 with the dependence terms was refitted with a Gaussian process smooth of easting and northing [@wood2017], a latent spatial field of the kind the Cox process model of @murphy2026 carried, with its Matérn range set to the median range of positive autocorrelation, 2,610 m. M3 was also refitted with the cell coarsened to 90, 270 and 990 m, a coarse cell counting as attacked if any 30 m cell inside it was, the definition @aukema2008 used on their 12 km cells, with the previous year's state and the share of the eight neighbouring cells rebuilt at each grain.
 
 # Results {#sec-results}
 
-## Classifier accuracy
+Attack was clustered in every year, with 3.2 to 5.3 times as many pairs of neighbouring attacked cells as random relabelling produced and positive autocorrelation to a median of 2,610 m (@fig-clustering). The previous year's attack in the cell and within 150 m, the best of six radii (@tbl-dependence), dominated every model it entered, a cell attacked the year before having 7.6 times the odds of attack, and the two terms raised the AUC of M3 from 0.805 to 0.879.
 
-The radial support vector machine classified red-stage attack most accurately, with kappa 0.859 ± 0.081 (95 per cent interval 0.682 to 1.000) and overall accuracy 0.934 ± 0.037 over 100 splits held out by plot and block (@tbl-classifier). The three models differed by less than one standard deviation of the splits. The cut it set was a fall in NDMI of 0.0616 or more against 2005. The share of cells classed as attacked varied between periods from 5.6 to 57.4 per cent (Table S2, @fig-spread).
+## Refugia mechanisms
 
-## Clustered attack
-
-Attack was clustered in almost every period. The mean distance from an attacked cell to its nearest attacked neighbour was 82 per cent of the random-relabelling expectation in the median period, and shorter than in all 999 relabellings in 46 of 47 periods. The L function lay above its global envelope in 45 periods, to a median distance of 750 m (range 90 to 1,500 m), and the likelihood cross-validated bandwidth had a median of 67 m (@fig-clustering).
-
-## Dependence terms
-
-Attack in a cell depended on attack nearby and before, by a margin that set the scale of everything after it. On the 46,124 cell-periods with a predecessor in the season and in the previous year, AIC fell from 63,232 with the period effect alone to 44,152 with the four dependence terms (@tbl-dependence). The neighbourhood share weighted by a kernel at each period's own bandwidth fitted as well as the best fixed radius within the season and better than every fixed radius between years. Within the season its AIC was 44,555 against 44,556 for the best radius, 90 m, a difference too small to separate them, and between years it was 45,588 against 45,615 for 90 m, so the two kernel shares were the dependence terms carried into every later model. Among the fixed radii the fit worsened as the radius grew beyond 90 m. In the final model the odds of attack were 6.3 times higher in a cell attacked in the same period of the previous year and 2.2 times higher in a cell attacked in the previous period.
-
-## Environmental terms
-
-Beside the dependence terms, 33 of 39 environmental variables improved the fit at p < 0.05 (Table S3). The largest likelihood-ratio statistics were for position in the terrain, with less attack high above the valley floor, -0.201 log-odds per standard deviation, and more at higher elevation, +0.205, followed by sky view, +0.188, crown closure, +0.171, and basal area, +0.160. After the collinearity screen and backward elimination the final model kept 11 environmental terms (@tbl-final). Attack was higher in older stands, +0.118 (p < 0.001), under closed canopy, +0.130 (p < 0.001), with more susceptible pine basal area, +0.064 (p < 0.001), at higher elevation and on wetter ground, and it was lower high above the valley floor, -0.178 (p < 0.001). The environmental terms lowered AIC from 36,822 for the dependence terms alone to 36,250, while AUC rose only from 0.848 to 0.853.
-
-Of the three mechanisms of @krawchuk2020, stand density was supported through the amount of host rather than the number of stems. Added to the final model, basal area entered at +0.242 (p < 0.001) and standing volume at +0.131 (p < 0.001), whereas live stems, +0.026 (p = 0.137), and quadratic mean diameter, +0.015 (p = 0.550), could not be told from zero, so the scarcity of large hosts was not supported. Shading was not supported either. Growing-season radiation entered at -0.001 (p = 0.962), and north-facing ground had more attack rather than less, +0.039 (p = 0.011).
+Stand density was supported through the amount of host, host size acted as a threshold, and shading was not supported. Each step of the model sequence lowered AIC, most when basal area entered, by 459 (@tbl-models). Basal area entered M3 at +0.290 log-odds per standard deviation (p < 0.001) and remained positive with the dependence terms, +0.183, and under the spatial field, +0.181, as did susceptible pine basal area, whereas stand age could not be told from zero under the field (p = 0.157) (@tbl-final). Attack depended on quadratic mean diameter class [χ²(5) = 715.1, p < 0.001, Cramér's V = 0.106], peaking in the 25 to 30 cm class at 55.8 per cent of the balanced sample against 48.2 per cent at 20 to 25 cm and falling in the larger classes, whose stands held less pine (@tbl-diameter). North-facing ground had more attack, +0.112 (p < 0.001), and afternoon sun in the flight window raised attack in stands one standard deviation above the mean basal area, +0.145 (p < 0.001), and not in stands one standard deviation below it, +0.011 (p = 0.547).
 
 ## Wind and density
 
-Stand density and flight-hour wind interacted [likelihood-ratio χ²(2) = 13.18, p = 0.001], through standing volume at +0.041 (p = 0.008) rather than stems at +0.020 (p = 0.154). The direction was the one plume disruption predicts. In stands one standard deviation below the mean of volume, attack fell with flight-hour wind, -0.089 log-odds per standard deviation of wind, while in stands one standard deviation above it the slope was -0.008. Neither slope could be told from zero on its own (p = 0.130 and p = 0.904), so the interaction described a difference between thin and dense stands in how wind acted, not a protective effect of wind that could be shown within thin stands alone (@fig-interaction).
+Flight-hour wind did not lower attack where stems were fewer. In E1 the interaction of wind with live stems was -0.012 (p = 0.034), which meant attack rose with wind at 411 stems per hectare, +0.026 (p = 0.001), and not at 1,077, +0.002 (p = 0.847). With the previous period's attack entered (E2) the interaction became +0.051 (p < 0.001) and wind raised attack at both densities (@fig-interaction). The interaction of wind with standing volume could not be told from zero in either model (p = 0.642 and p = 0.296).
 
 ## Terrain shelter
 
-Terrain openness acted as a main effect and not through density. Added to the final model, the wind shelter index and sky view improved the fit [likelihood-ratio χ²(2) = 10.97, p = 0.004], through sky view at +0.060 (p = 0.002) while the shelter index was +0.026 (p = 0.085), so open, gently sloping ground had more attack. Their interactions with density did not improve the fit [likelihood-ratio χ²(4) = 8.59, p = 0.072], which is the pattern deposition predicts and plume disruption does not.
-
-## Spatial field
-
-A latent spatial field lowered AIC from 36,250 to 35,382 and changed which terrain terms could be told from zero (@tbl-final). Stand age, susceptible pine basal area, crown closure and northness held, whereas height above the valley floor moved from -0.178 to +0.007 and wetness and stand height lost significance, so the valley terms described where attack clustered as much as a property of the ground. The field did not remove the fine-scale dependence among neighbouring cells, since the median Moran's I of the residuals within a period moved only from 0.312 to 0.285, and it remained significant at p < 0.05 in 100 per cent of periods.
-
-## Across grains
-
-The inference held at 90 m and weakened beyond it (@fig-grain). With the dependence terms rebuilt at each grain, elevation, crown closure, susceptible pine basal area and stand age remained positive and significant at 270 m, elevation at +0.239 (p < 0.001), while height above the valley floor lost significance and northness reversed sign to -0.115. At 990 m, 91 per cent of coarse cells held an attacked cell and no environmental term could be told from zero.
+Leeward ground had slightly more attack, and once the previous year's attack was in the model the effect did not depend on density. The wind shelter index, which rose on slopes facing the prevailing wind, entered M3 at -0.066 (p < 0.001) and at -0.040 (p = 0.016) with the dependence terms, when its interaction with basal area was -0.021 (p = 0.110), and sky view entered at +0.327 (p < 0.001). Both terrain terms depended on the grain and the place, since under the spatial field sky view fell to -0.009 (p = 0.799) and the shelter index changed sign to +0.082 (p < 0.001), and the shelter index lost significance at 90 m and sky view at 270 m, while basal area remained positive at 270 m, +0.094 (p = 0.037) (@fig-grain). Residual Moran's I remained significant in every year even with the spatial field, with a median of 0.337.
 
 # Discussion
 
-## Dependence first
+## Contagion first
 
-Attack in a 30 m cell was predicted first by attack in the cells around it, in the previous sixteen-day period and in the same period of the previous year, and every environmental term was read beside those terms rather than instead of them. That order was the one @aukema2008 argued for, having found that outbreaking populations within 18 km in the same year and within 6 km in the two years before explained more of the outbreak's movement across British Columbia than climate did. The scale here was far finer and the pattern the same. Dispersal under the canopy over tens of metres carried most of the spread once a stand was infested [@robertson2007mountain; @chen2011mountain; @safranyik1992], and within a stand the probability that a tree was colonised depended on the trees attacked around it in the same year [@mitchell1991]. The bandwidth of the red-stage cells, a median of 67 m, was the landscape trace of that short-range dispersal, since a neighbourhood term weighted at that bandwidth fitted as well as the best of six fixed radii. Models of the western United States that entered previous attack beside weather and stand attributes found the same ordering [@chapman2012spatiotemporal; @preisler2012climate]. The consequence for every other result was that the environmental terms added little discrimination once dependence was in the model, AUC rising from 0.848 to 0.853, so the refugia mechanisms were tested as small modifiers of an outbreak whose spread was mostly contagion.
+Attack in a 30 m cell was predicted first by attack in and around it the year before, and every environmental term was read beside those terms rather than instead of them. That order was the one @aukema2008 argued for, having found that outbreaking populations within 18 km in the same year and within 6 km in the two years before explained more of the outbreak's movement across British Columbia than climate did. The scale here was far finer and the pattern the same. The share attacked within 150 m the year before fitted better than any wider neighbourhood, close to the 140 m within which previous attack raised the rate of red attack above its background in Colorado [@walter2013], and it matched short-range dispersal, which "takes place under the forest canopy" and is "determined by the relative proximity of brood trees within individual stands" [@safranyik2010, p. 428]. The outbreak was already epidemic in these years, and the dominance of the dependence terms fitted that phase. @walter2013 found that distance to the previous year's infestation "increased in importance relative to other predictors" as an outbreak progressed (p. 315), and @meddens2014 found that late in an outbreak "almost all new mortality was associated with intensification of existing outbreaks, not expansion" (p. 83). The dependence terms raised AUC from 0.805 to 0.879, whereas the whole environmental sequence from M0 to M3 raised it by 0.006, so the refugia mechanisms were tested as modifiers of an outbreak whose spread was mostly contagion.
 
 ## Host and density
 
-Attack rose with the amount of host, basal area, standing volume, susceptible pine basal area and stand age, and not with the number of stems or their diameter. Stands with little host were therefore the refugia this landscape showed, which agrees with the susceptibility rating of @shore2000susceptibility, built on age, density and pine basal area, and with the thinning trials in which stands reduced in basal area lost fewer trees [@mitchell1983thinning; @amman1988susceptibility; @fettig2007effectiveness; @hood2016fortifying]. The absence of a diameter effect did not match the source-sink boundary of @carroll2004bionomics, under which stems below 25 cm produce too few brood to sustain a population, nor the underlying biology, since brood production rose with phloem thickness from an average of 16 to 94 beetles in the range @amman1972 tested, and larger trees were more likely to be colonised while trees of 23 cm and more remained abundant [@mitchell1991]. The inventory records the quadratic mean diameter of a polygon, not the distribution of stem sizes within it, and once populations were eruptive the beetle attacked smaller hosts as well [@boone2011efficacy; @raffa2008cross], so a stand-level mean may be too coarse a measure of that threshold at the height of an outbreak.
+Attack rose with the amount of host, through basal area, susceptible pine basal area and stand age, which are the variables of the stand susceptibility rating used in British Columbia, built on "the percentage of susceptible pine by basal area", pine age and stand density together with climate [@safranyik2010, p. 429; @shore2000susceptibility]. Stands with little host were therefore the refugia this landscape showed, in agreement with the thinning trials in which stands reduced in basal area lost fewer trees [@mitchell1983thinning; @amman1988susceptibility; @fettig2007effectiveness; @hood2016fortifying]. The amount of host is itself a product of forest history. @taylor2003 concluded that within climatically suitable areas "forest age-class structure will be the primary factor influencing host susceptibility and outbreak severity" (p. 42), and the area of mature lodgepole pine in British Columbia had more than tripled over the century of fire control before the outbreak [@shore2006]. Basal area here measured the amount of pine rather than crowding, because dense unmanaged stands have thinner phloem and "beetle production and subsequent tree mortality in dense, unmanaged stands tend to be less than in more open stands" [@shore2006, p. 103]. @walter2013 found red attack moving to less dense stands once an outbreak became epidemic, whereas here it rose with basal area in every model through to 2014.
+
+Attack peaked in stands of 25 to 30 cm quadratic mean diameter. The peak sat at the source-sink boundary of @carroll2004bionomics, above which stems produced enough brood to sustain a population, and brood production rose with phloem thickness from an average of 16 to 94 beetles in the range @amman1972 tested. During epidemics the share of trees killed rises with diameter above about 10 cm [@shore2006], so the fall in attack in stands of larger trees did not reflect the beetle's preference. It reflected composition, since stands of the largest trees here held little pine, and epidemics "often deplete the large diameter pine component of stands" [@shore2006, p. 110], after which smaller trees are attacked in later years [@meddens2014].
+
+## Elevation and climate
+
+Elevation carried the largest coefficient in every model, with more attack on higher ground. That ran against the historical pattern, in which mortality "tends to decline with elevation" because the cool climate of high ground slows development and lowers brood survival [@shore2006, p. 103], and in which cooler summers at high elevation stretch the life cycle over two years, with severe mortality [@safranyik2006chap1]. Three readings fit the result. Host distribution was one, since where elevation entered an earlier model of red attack its sign followed the host's distribution rather than the beetle's preference [@wulder2006red]. Outbreak phase was another, since in Colorado red attack "moved from high elevations to in 2003 to low elevations in 2005 and 2006" [@walter2013, p. 316]. The third was a warming climate, which in British Columbia favoured outbreaks "by reducing the occurrence of extremely low winter temperatures province-wide" [@maciasfauria2009, p. 1] and made climates that had limited epidemics more favourable [@taylor2003]. The design could not separate the three, because on this range the higher ground also held the pine.
+
+## Aspect and sun
+
+North-facing ground had more attack in every model, the reverse of both the shading mechanism of @krawchuk2020 and the association of red attack with southern aspects in Colorado [@walter2013], while where attack has been traced against aspect elsewhere it reached south-facing and drier ground first [@kaiser2012ecohydrology; @nelson2007environmental]. Aspect here more likely measured where lodgepole pine grew on this range than a thermal effect. Afternoon sun in the flight window raised attack only in dense stands, which fitted the biology of flight rather than of host stress. Within the thermal range for flight, "flight propensity increases with increasing light intensity" [@safranyik2006chap1, p. 15], and in the thinned stand of @bartos1989, where more light reached the ground, pheromone traps caught 5 per cent of the beetles trapped in the two stands, which they explained by beetles sensing "the difference in light intensity or the greater air turbulence in thinned stands" and avoiding them (p. 9). Sun on a dense stand therefore helped flight without opening the canopy that holds the aggregation plume.
 
 ## Wind and density
 
-The interaction of standing volume with flight-hour wind took the direction plume disruption predicts, with attack falling as wind rose in stands of low volume and not in dense ones. That was the pattern @bartos1989 measured at the stand scale, where a thinned stand had higher wind and a pheromone trap catch of 5 per cent of the adjacent unthinned stand's, and the one the tracer plumes of @thistle2004surrogate imply, which diluted fastest in the most open canopy. The effect was small, and within thin stands alone wind could not be shown to lower attack. Two features of the design limited what it could detect. The wind field was station wind adjusted for terrain, varying across the grid by a few kilometres per hour, whereas the contrast @bartos1989 measured was inside the canopy between managed and unmanaged stands, a difference the inventory and a terrain model cannot resolve. The timing also did not align, because the foliage of an attacked tree stays green "usually until May and June of the year following attack" [@safranyik2006chap1, p. 11], so red crowns seen in a sixteen-day period recorded the flight of the previous summer. Wind speed may also matter less than its direction. @safranyik1989 found that "wind speed had negligible effect on the fit of the model for relative directional distribution of beetles" within a stand, while wind above the canopy carries beetles into new stands [@jackson2008; @chen2017], which predicts more attack with wind rather than less. The result was consistent with plume disruption and too weak to establish it.
+Flight-hour wind did not lower attack where stems were fewer. The interaction of stems with wind was small, where it could be read it meant more attack in windier periods among the stands with fewer stems, the reverse of plume disruption, and once attack in the previous period entered, wind raised attack at every density. The plume mechanism rests on measurements inside the canopy, where @bartos1989 found a thinned stand windier than an unthinned one by about 1.6 km/h on average and by 3.2 km/h or more in the late afternoon, and argued that in a thinned stand the pheromone "rises through the canopy on convection currents and is dispersed above the canopy" (p. 9), while tracer plumes diluted fastest in the most open of three canopies [@thistle2004surrogate]. A stand one standard deviation below the mean here held 411 stems per hectare, which was not the open canopy those trials created, and neither the inventory nor a terrain model of station wind could resolve a contrast at that scale. Under epidemic pressure the benefit of spacing may also be lost, since in ponderosa pine the influence of pheromones from attacked trees in adjacent unmanaged stands "may override the positive benefits of increased spacing and improved tree growth derived from partial cutting" [@schmid2005, p. 9]. Wind above the canopy carries beetles into new stands [@jackson2008; @chen2017; @safranyik2010], and @safranyik1989 found that "wind speed had negligible effect on the fit of the model for relative directional distribution of beetles" within a stand, both of which predict more attack with wind rather than less, the direction the models with dependence terms showed. The foliage of an attacked tree also stays green "usually until May and June of the year following attack" [@safranyik2006chap1, p. 11], so red crowns seen in a period recorded the flight of the previous summer.
 
-## Terrain and landing
+## Terrain and scale
 
-Open ground had more attack as a main effect, and openness did not act through stand density. Sky view factor, high on gentle, open ground, entered at +0.060, while its interactions with density added nothing. That was the signature deposition predicts, since a beetle descending through slowing air settles where the flow decelerates [@byers2000], and @giroday2011 found landscape features that met the wind acting as surfaces that intercepted dispersing beetles. It was also a pattern that faster development on warm, open ground would produce [@sambaraju2021], and no beetle was tracked to the ground here. Shading was not supported. North-facing ground had more attack at 30 m, the reverse of the prediction that cool ground relieves water stress, and the sign reversed at 270 m, so aspect here measured something other than shade, most likely where lodgepole pine grew on this range [@kaiser2012ecohydrology; @nelson2007environmental]. Attack was highest in valley bottoms, the draws and gullies where infested groups are commonly reported [@safranyik2006chap1], but that term vanished under a spatial field.
-
-## Scale of inference
-
-The environmental results depended on the scale at which they were read, which is the concern @aukema2008 raised in choosing 12 km cells. A latent spatial field removed the valley and wetness terms while the host terms held, so part of what the terrain terms measured was where attack happened to cluster. The field did not remove the fine-scale dependence among neighbouring cells, and the p-values in every model were therefore optimistic. The host terms and elevation held to 270 m, while at about 1 km nearly every cell held an attacked cell and nothing could be told from zero, and @walter2013 found the weight of the predictors of infestation changing through the course of an outbreak. A refugium defined at 30 m and one defined at 1 km were therefore different objects, and this study supported the first mainly through the amount of host.
+Leeward ground had more attack than windward ground at the same elevation and stand structure, and once the previous year's attack entered, the effect did not depend on density, which is the signature deposition predicts, since a beetle descending through slowing air settles where the flow decelerates [@byers2000] and @giroday2011 found landscape features that met the wind acting as surfaces that intercepted dispersing beetles. The effect was small, it was lost at 90 m, and under the spatial field it changed sign, as did the effect of open ground, so both terrain terms described where attack clustered on this range as much as a property of the slope. Pioneer beetles also land at random before choosing a host [@hynum1980; @safranyik2010], which would weaken any deposition pattern. The environmental results depended on the scale at which they were read, the concern @aukema2008 raised in choosing 12 km cells. A latent spatial field removed the terrain terms while basal area, pine basal area, northness and flight-window radiation held, residual autocorrelation remained in every year so that the p-values in every model were optimistic, and basal area held to 270 m while at about 1 km nearly every cell held an attacked cell. Mortality accrues faster in small areas than across large ones [@meddens2014], and the controls on red attack change through an outbreak "from forest susceptibility to dispersal to host availability" [@walter2013, p. 317], so a refugium defined at 30 m and one defined at 1 km were different objects, and this study supported the first mainly through the amount of host.
 
 ## Limits and management
 
-The response was classified rather than observed. The classifier separated the field plots from one patch of undisturbed forest, so its accuracy measured that separation and not agreement with ground mortality across the landscape. Landsat classifications of red stage elsewhere reached kappa of 0.86 to 0.88 against fine-resolution reference imagery [@meddens2013], and high spatial resolution imagery has been assessed for detecting red attack directly [@coops2006], which would give an independent test of these maps. The inventory postdated part of the outbreak, since polygons interpreted after the beetle passed described the stand it left. The study covered one mountain range over eight outbreak years. For management the result gave a narrow answer. Refugia on this landscape were stands with little host, which is the structure thinning produces, and terrain maps alone could not locate them. The field evidence that thinning protects stands during an outbreak is weaker than policy has assumed [@six2014management], and this study added only weak evidence that wind strengthens that protection.
+The response was classified rather than observed. The classifier separated the field plots from one patch of undisturbed forest, so its accuracy measured that separation and not agreement with ground mortality across the landscape. Landsat classifications of red stage elsewhere reached kappa of 0.86 to 0.88 against fine-resolution reference imagery [@meddens2013], and high spatial resolution imagery has been assessed for detecting red attack directly [@coops2006], which would give an independent test of these maps. The inventory postdated part of the outbreak, since polygons interpreted after the beetle passed described the stand it left. Temperature entered the models only through elevation, radiation and aspect, so development and overwinter survival were not measured directly. The study covered one mountain range over eight outbreak years.
+
+For management the result gave a narrow answer. Refugia on this landscape were stands with little host, which is the structure thinning and a younger age structure produce, and terrain maps alone could not locate them. The rating system of @shore2000susceptibility places partially cut lodgepole pine stands in its low susceptibility class [@mata2003], and regularly spaced mature stands of at least 4 by 4 m may lose fewer trees [@shore2006]. The dominance of attack nearby here agreed with the limits found in the field. In ponderosa pine, partial cutting "may be ineffective for partially cut parcels of \<10 acres if the partially cut stands are surrounded by unmanaged susceptible stands" and stands "should be managed on a landscape basis" [@schmid2005], and the field evidence that thinning protects stands during an outbreak is weaker than policy has assumed [@six2014management]. This study found no evidence that flight-period wind strengthens that protection.
 
 # References {.unnumbered}
 
@@ -2851,11 +3378,10 @@ This work used no external funding. Beetle disturbance was classified from Lands
 # Tables {.unnumbered}
 
 
-::: {#tbl-vri .cell tbl-cap='Stand structure over the 173,086 sampled cell-periods, from the annual Vegetation Resources Inventory snapshots. SD was the standard deviation, SE the standard error of the mean, and Skew and Kurt. the bias-corrected skewness and excess kurtosis.'}
+::: {#tbl-vri .cell tbl-cap='Stand structure over the 64,000 sampled cell-years, from the annual Vegetation Resources Inventory snapshots. SD was the standard deviation, SE the standard error of the mean, and Skew and Kurt. the bias-corrected skewness and excess kurtosis.'}
 
 ```{.r .cell-code}
-d_vri <- readRDS(file.path(MD, "epoch_model_table.rds"))
-describe_vars(d_vri, c("BASAL_AREA", "CROWN_CLOSURE", "VRI_LIVE_STEMS_PER_HA", "QUAD_DIAM_125", "PROJ_AGE_1", "PROJ_HEIGHT_1", "LIVE_STAND_VOLUME_125", "PinePct", "PINE_BA")) |>
+describe_vars(readRDS(file.path(AGD, "annual_sample.rds")), c("BASAL_AREA", "CROWN_CLOSURE", "VRI_LIVE_STEMS_PER_HA", "QUAD_DIAM_125", "PROJ_AGE_1", "PROJ_HEIGHT_1", "LIVE_STAND_VOLUME_125", "PinePct", "PINE_BA")) |>
   transmute(Attribute, Mean = sprintf("%.2f", Mean), SD = sprintf("%.2f", SD), SE = sprintf("%.3f", SE), Median = sprintf("%.2f", Median),
             Min = sprintf("%.2f", Min), Max = sprintf("%.2f", Max), Skew = sprintf("%+.2f", Skewness), `Kurt.` = sprintf("%+.2f", Kurtosis)) |>
   save_tbl("table-1-stand-structure") |>
@@ -2865,17 +3391,17 @@ describe_vars(d_vri, c("BASAL_AREA", "CROWN_CLOSURE", "VRI_LIVE_STEMS_PER_HA", "
 ::: {.cell-output-display}
 
 
-|Attribute                             |   Mean|     SD|    SE| Median|   Min|      Max|  Skew|  Kurt.|
-|:-------------------------------------|------:|------:|-----:|------:|-----:|--------:|-----:|------:|
-|Stand basal area (m² ha⁻¹)            |  32.99|  14.23| 0.037|  36.12|  0.00|    93.49| -0.71|  +0.51|
-|Crown closure (%)                     |  47.01|  16.91| 0.043|  50.00|  1.00|    90.00| -1.28|  +0.96|
-|Live stems (n/ha)                     | 818.76| 649.74| 1.661| 770.00|  0.00| 19400.00| +6.68| +72.89|
-|Quadratic mean diameter (cm)          |  26.26|   6.27| 0.016|  25.74| 13.55|    78.78| +1.10|  +2.37|
-|Stand age (years)                     | 107.03|  32.31| 0.082| 108.00|  4.00|   337.00| -0.06|  +4.85|
-|Stand height (m)                      |  24.90|   7.90| 0.020|  25.40|  0.00|    42.30| -0.88|  +1.46|
-|Standing volume (m³ ha⁻¹)             | 251.09| 144.01| 0.374| 250.59|  0.00|   889.64| +0.15|  -0.46|
-|Lodgepole pine cover (%)              |  20.19|  26.35| 0.064|  10.00|  0.00|   100.00| +1.39|  +1.09|
-|Susceptible pine basal area (m² ha⁻¹) |   7.34|   9.87| 0.026|   3.42|  0.00|    48.30| +1.53|  +1.86|
+|Attribute                             |   Mean|     SD|    SE| Median|   Min|     Max|  Skew|  Kurt.|
+|:-------------------------------------|------:|------:|-----:|------:|-----:|-------:|-----:|------:|
+|Stand basal area (m² ha⁻¹)            |  35.07|  12.62| 0.050|  37.57|  0.40|   93.49| -0.78|  +1.59|
+|Crown closure (%)                     |  50.13|  13.35| 0.053|  50.00|  1.00|   90.00| -1.59|  +3.17|
+|Live stems (n/ha)                     | 780.55| 320.62| 1.267| 794.00| 13.00| 5257.00| +1.09| +14.40|
+|Quadratic mean diameter (cm)          |  26.43|   6.14| 0.024|  26.06| 13.55|   78.78| +1.08|  +2.50|
+|Stand age (years)                     | 113.34|  25.69| 0.102| 110.00| 14.00|  337.00| +1.44|  +9.39|
+|Stand height (m)                      |  26.19|   5.99| 0.024|  26.28|  7.00|   42.30| -0.09|  +0.42|
+|Standing volume (m³ ha⁻¹)             | 264.45| 134.29| 0.531| 262.47|  0.69|  889.64| +0.10|  -0.27|
+|Lodgepole pine cover (%)              |  23.56|  27.02| 0.107|  17.40|  0.00|  100.00| +1.12|  +0.38|
+|Susceptible pine basal area (m² ha⁻¹) |   8.24|  10.26| 0.041|   3.96|  0.00|   48.30| +1.36|  +1.37|
 
 
 :::
@@ -2913,11 +3439,11 @@ CLS |>
 {{< pagebreak >}}
 
 
-::: {#tbl-dependence .cell tbl-cap='Dependence terms compared on AIC over 46,124 cell-periods, every model carrying a fixed effect for each period. Previous period meant the preceding sixteen-day period of the same season and previous year the same period of the preceding outbreak year. Delta AIC was the difference from the lowest.'}
+::: {#tbl-dependence .cell tbl-cap='Dependence terms compared on AIC over 55,963 sampled cell-years with a previous map. Own state was attack in the cell in the previous outbreak year, and the share was the proportion of cells attacked within the radius around it that year, excluding the cell. Delta AIC was the difference from the lowest.'}
 
 ```{.r .cell-code}
-SEL |>
-  transmute(Terms = gsub("_", " ", gsub("kern", "within bandwidth", gsub("nbr([0-9]+)", "within \\1 m", gsub("lag1", "previous period", gsub("lagyr", "previous year", terms))))), k, AIC = fmt(aic), `Delta AIC` = fmt(delta_aic, 1)) |>
+ADSL |>
+  transmute(Terms = gsub("lagyr_self", "own state", gsub("lagyr_nbr([0-9]+)", "share within \\1 m", terms)), k, AIC = fmt(aic), `Delta AIC` = fmt(delta_aic, 1)) |>
   save_tbl("table-3-dependence") |>
   kable(booktabs = TRUE, align = "lrrr", row.names = FALSE)
 ```
@@ -2925,27 +3451,16 @@ SEL |>
 ::: {.cell-output-display}
 
 
-|Terms                                                                                                                 |  k|    AIC| Delta AIC|
-|:---------------------------------------------------------------------------------------------------------------------|--:|------:|---------:|
-|epoch                                                                                                                 | 32| 63,232|  19,079.7|
-|epoch + previous period self                                                                                          | 33| 53,602|   9,450.3|
-|epoch + previous year self                                                                                            | 33| 51,494|   7,342.3|
-|epoch + previous period self + previous year self                                                                     | 34| 46,575|   2,423.1|
-|epoch + previous period self + previous year self + previous period within 42 m                                       | 35| 44,848|     696.1|
-|epoch + previous period self + previous year self + previous period within 90 m                                       | 35| 44,556|     404.0|
-|epoch + previous period self + previous year self + previous period within 150 m                                      | 35| 44,751|     598.8|
-|epoch + previous period self + previous year self + previous period within 210 m                                      | 35| 44,975|     823.3|
-|epoch + previous period self + previous year self + previous period within 510 m                                      | 35| 45,726|   1,574.1|
-|epoch + previous period self + previous year self + previous period within 1050 m                                     | 35| 46,152|   1,999.7|
-|epoch + previous period self + previous year self + previous period within bandwidth                                  | 35| 44,555|     402.7|
-|epoch + previous period self + previous year self + previous year within 42 m                                         | 35| 45,942|   1,790.0|
-|epoch + previous period self + previous year self + previous year within 90 m                                         | 35| 45,615|   1,463.4|
-|epoch + previous period self + previous year self + previous year within 150 m                                        | 35| 45,623|   1,471.4|
-|epoch + previous period self + previous year self + previous year within 210 m                                        | 35| 45,696|   1,543.6|
-|epoch + previous period self + previous year self + previous year within 510 m                                        | 35| 46,063|   1,911.5|
-|epoch + previous period self + previous year self + previous year within 1050 m                                       | 35| 46,270|   2,118.2|
-|epoch + previous period self + previous year self + previous year within bandwidth                                    | 35| 45,588|   1,436.2|
-|epoch + previous period self + previous year self + previous period within bandwidth + previous year within bandwidth | 36| 44,152|       0.0|
+|Terms                                       |  k|    AIC| Delta AIC|
+|:-------------------------------------------|--:|------:|---------:|
+|intercept                                   |  1| 77,583|  24,284.1|
+|intercept + own state                       |  2| 57,386|   4,087.3|
+|intercept + own state + share within 42 m   |  3| 54,545|   1,245.5|
+|intercept + own state + share within 90 m   |  3| 53,434|     134.9|
+|intercept + own state + share within 150 m  |  3| 53,299|       0.0|
+|intercept + own state + share within 210 m  |  3| 53,392|      93.3|
+|intercept + own state + share within 510 m  |  3| 54,220|     920.9|
+|intercept + own state + share within 1050 m |  3| 55,029|   1,729.5|
 
 
 :::
@@ -2955,38 +3470,111 @@ SEL |>
 {{< pagebreak >}}
 
 
-::: {#tbl-final .cell tbl-cap='Coefficients of the final model, without and with a latent spatial field. Environmental coefficients were changes in log-odds per standard deviation and dependence coefficients were per unit of the term. Significance was marked * p ≤ 0.05, ** p ≤ 0.01, *** p ≤ 0.001, **** p ≤ 0.0001.'}
+::: {#tbl-models .cell tbl-cap='The annual models, each adding one mechanism to the one before, over all eight years without the dependence terms and over the seven years with a previous map without and with them. M0 held host size, shading and landform, M1 added basal area, M2 terrain exposure, terrain shape and flight-window radiation, and M3 the interactions of basal area with wind shelter, July wind and flight-window radiation. AUC was the area under the receiver operating characteristic curve and Brier skill the reduction in mean squared error of the fitted probabilities against the base rate.'}
 
 ```{.r .cell-code}
-w1 <- SPF[SPF$model == "with spatial field", ]
-FIN |>
-  transmute(Term = pretty_terms(term), Estimate = paste0(sprintf("%+.3f", estimate), stars(p)), SE = sprintf("%.3f", se),
-            `Odds ratio (95% CI)` = sprintf("%.2f (%.2f to %.2f)", odds_ratio, ci_lo, ci_hi),
-            `With spatial field` = paste0(sprintf("%+.3f", w1$estimate[match(term, w1$term)]), stars(w1$p[match(term, w1$term)]))) |>
-  save_tbl("table-4-final-model") |>
-  kable(booktabs = TRUE, align = "lrrrr", row.names = FALSE)
+AFIT |> filter(model != "M3 without radiation") |>
+  transmute(Years = ifelse(sample == "all years", "2006 to 2014", "2007 to 2014"), Dependence = ifelse(dependence, "yes", "no"), Model = model,
+            n = fmt(n), AIC = fmt(aic), AUC = sprintf("%.3f", auc), `Brier skill` = sprintf("%.3f", brier_skill)) |>
+  save_tbl("table-4-models") |>
+  kable(booktabs = TRUE, align = "lllrrrr", row.names = FALSE)
 ```
 
 ::: {.cell-output-display}
 
 
-|Term                                            |   Estimate|    SE|   Odds ratio (95% CI)| With spatial field|
-|:-----------------------------------------------|----------:|-----:|---------------------:|------------------:|
-|Attack in the same cell, previous period        | +0.806****| 0.043|   2.24 (2.06 to 2.44)|         +0.818****|
-|Attack in the same cell, previous year          | +1.846****| 0.043|   6.33 (5.82 to 6.89)|         +1.907****|
-|Attack nearby at the bandwidth, previous period | +2.419****| 0.080| 11.23 (9.59 to 13.15)|         +2.078****|
-|Attack nearby at the bandwidth, previous year   | +1.383****| 0.085|   3.99 (3.37 to 4.71)|         +1.223****|
-|Height above valley floor (m)                   | -0.178****| 0.027|   0.84 (0.79 to 0.88)|             +0.007|
-|Elevation (m)                                   | +0.085****| 0.020|   1.09 (1.05 to 1.13)|            +0.261*|
-|Crown closure (%)                               | +0.130****| 0.018|   1.14 (1.10 to 1.18)|            +0.050*|
-|Susceptible pine basal area (m² ha⁻¹)           |  +0.064***| 0.017|   1.07 (1.03 to 1.10)|         +0.104****|
-|Normalised height                               |     +0.037| 0.021|   1.04 (1.00 to 1.08)|            +0.090*|
-|Stand age (years)                               | +0.118****| 0.016|   1.12 (1.09 to 1.16)|         +0.124****|
-|Live stems (n/ha)                               |     +0.026| 0.017|   1.03 (0.99 to 1.06)|             +0.026|
-|Northness                                       |    +0.039*| 0.015|   1.04 (1.01 to 1.07)|            +0.073*|
-|Stand height (m)                                | -0.067****| 0.016|   0.94 (0.91 to 0.97)|             -0.018|
-|Topographic wetness index                       | +0.087****| 0.021|   1.09 (1.05 to 1.14)|             +0.011|
-|Plan curvature                                  |     +0.026| 0.014|   1.03 (1.00 to 1.05)|             +0.009|
+|Years        |Dependence |Model |      n|    AIC|   AUC| Brier skill|
+|:------------|:----------|:-----|------:|------:|-----:|-----------:|
+|2006 to 2014 |no         |M0    | 64,000| 70,228| 0.795|       0.268|
+|2006 to 2014 |no         |M1    | 64,000| 69,769| 0.799|       0.274|
+|2006 to 2014 |no         |M2    | 64,000| 69,652| 0.800|       0.275|
+|2006 to 2014 |no         |M3    | 64,000| 69,556| 0.801|       0.277|
+|2007 to 2014 |no         |M0    | 55,963| 61,035| 0.799|       0.274|
+|2007 to 2014 |yes        |M0    | 55,963| 49,050| 0.876|       0.431|
+|2007 to 2014 |no         |M1    | 55,963| 60,601| 0.804|       0.280|
+|2007 to 2014 |yes        |M1    | 55,963| 48,904| 0.876|       0.434|
+|2007 to 2014 |no         |M2    | 55,963| 60,493| 0.805|       0.282|
+|2007 to 2014 |yes        |M2    | 55,963| 48,881| 0.877|       0.434|
+|2007 to 2014 |no         |M3    | 55,963| 60,407| 0.805|       0.284|
+|2007 to 2014 |yes        |M3    | 55,963| 48,534| 0.879|       0.439|
+
+
+:::
+:::
+
+
+{{< pagebreak >}}
+
+
+::: {#tbl-final .cell tbl-cap='Coefficients of M3 over all eight years, with the dependence terms over the seven years with a previous map, and with a latent spatial field as well. Continuous terms were changes in log-odds per standard deviation and dependence terms per unit, and the geomorphon classes are not shown. Significance was marked * p ≤ 0.05, ** p ≤ 0.01, *** p ≤ 0.001, **** p ≤ 0.0001.'}
+
+```{.r .cell-code}
+tt <- unique(ACOEF$term[ACOEF$model == "M3" & ACOEF$dependence & !grepl("Intercept|^geomorphon", ACOEF$term)])
+pick <- function(v, dep, col) { x <- acv(v, dep = dep, col = col); if (length(x)) x else NA_real_ }
+cell <- function(e, p) ifelse(is.na(e), "", paste0(sprintf("%+.3f", e), stars(p)))
+fld <- ASFR[ASFR$model == "with spatial field", ]
+data.frame(Term = pretty_terms(tt),
+           `All years` = cell(sapply(tt, pick, FALSE, "estimate"), sapply(tt, pick, FALSE, "p")),
+           `With dependence` = cell(sapply(tt, pick, TRUE, "estimate"), sapply(tt, pick, TRUE, "p")),
+           `With spatial field` = cell(fld$estimate[match(tt, fld$term)], fld$p[match(tt, fld$term)]), check.names = FALSE) |>
+  save_tbl("table-5-m3") |>
+  kable(booktabs = TRUE, align = "lrrr", row.names = FALSE)
+```
+
+::: {.cell-output-display}
+
+
+|Term                                              |  All years| With dependence| With spatial field|
+|:-------------------------------------------------|----------:|---------------:|------------------:|
+|Susceptible pine basal area (m² ha⁻¹)             | +0.162****|      +0.094****|           +0.047**|
+|Stand age (years)                                 | +0.080****|         +0.029*|             +0.022|
+|Quadratic mean diameter (cm)                      | -0.228****|      -0.134****|           -0.060**|
+|Sky view factor                                   | +0.327****|      +0.161****|             -0.009|
+|Northness                                         | +0.112****|      +0.066****|         +0.171****|
+|Elevation (m)                                     | +0.934****|      +0.633****|         +1.164****|
+|Stand basal area (m² ha⁻¹)                        | +0.290****|      +0.183****|         +0.181****|
+|Wind shelter index                                | -0.066****|         -0.040*|          +0.082***|
+|Topographic position index                        |     -0.005|          +0.018|             +0.051|
+|Convergence index                                 | -0.056****|         -0.029*|             -0.015|
+|Profile curvature                                 | -0.070****|        -0.035**|             -0.003|
+|Flight-window direct radiation (kWh/m²)           | +0.078****|      +0.085****|         +0.208****|
+|July mean wind (km/h)                             |  +0.034***|      +0.217****|         +0.192****|
+|June mean wind (km/h)                             | +0.057****|        +0.042**|            +0.035*|
+|Attack in the same cell, previous year            |           |      +2.033****|         +2.129****|
+|Attack within 150 m, previous year                |           |      +2.186****|         +0.827****|
+|Stand basal area x Wind shelter index             | -0.044****|          -0.021|             +0.009|
+|Stand basal area x July mean wind                 |     -0.014|          +0.022|             +0.013|
+|Stand basal area x Flight-window direct radiation | +0.067****|      +0.054****|             -0.016|
+
+
+:::
+:::
+
+
+{{< pagebreak >}}
+
+
+::: {#tbl-diameter .cell tbl-cap='Red-stage attack by quadratic mean diameter class on the balanced annual sample, with Wilson 95 per cent intervals and the mean susceptible pine and total basal area of each class. The 25 cm boundary was the source-sink threshold of the species\' bionomics. The sample held equal numbers of attacked and unattacked cells in each year, so the percentages compared classes and were not landscape rates.'}
+
+```{.r .cell-code}
+ADIA |>
+  transmute(`QMD class (cm)` = bin, n = fmt(n), Attacked = fmt(attacked), `Attacked (%)` = sprintf("%.1f", attacked_pc), `95% CI (%)` = sprintf("%.1f to %.1f", ci_lo, ci_hi),
+            `Pine BA (m² ha⁻¹)` = sprintf("%.1f", pine_ba), `BA (m² ha⁻¹)` = sprintf("%.1f", basal_area)) |>
+  save_tbl("table-6-diameter") |>
+  kable(booktabs = TRUE, align = "lrrrrrr", row.names = FALSE)
+```
+
+::: {.cell-output-display}
+
+
+|QMD class (cm) |      n| Attacked| Attacked (%)|   95% CI (%)| Pine BA (m² ha⁻¹)| BA (m² ha⁻¹)|
+|:--------------|------:|--------:|------------:|------------:|-----------------:|------------:|
+|<15            |    611|      193|         31.6| 28.0 to 35.4|               1.1|          3.2|
+|15-20          |  7,026|    3,060|         43.6| 42.4 to 44.7|              10.8|         23.5|
+|20-25          | 18,540|    8,945|         48.2| 47.5 to 49.0|               8.2|         28.6|
+|25-30          | 24,346|   13,580|         55.8| 55.2 to 56.4|               9.7|         39.8|
+|30-40          | 11,118|    5,340|         48.0| 47.1 to 49.0|               5.5|         42.4|
+|>40            |  2,359|      882|         37.4| 35.5 to 39.4|               0.4|         45.2|
 
 
 :::
@@ -3024,20 +3612,19 @@ m <- function(r, title, pal = "viridis") academic_map(r, title, ctx, pal, base_s
 ::: {.cell}
 
 ```{.r .cell-code}
-maps <- lapply(seq_len(nrow(EP)), function(i) rast(file.path(BC, "epoch-redstage", sprintf("redstage_%d_e%02d.tif", EP$year[i], EP$epoch[i]))))
-yrs <- sort(unique(EP$year))
-ever <- rast(lapply(yrs, function(y) max(rast(maps[EP$year == y]), na.rm = TRUE)))
-first <- mask(app(ever, function(v) { i <- which(v == 1)[1]; if (is.na(i)) NA_real_ else yrs[i] }), msk)
+yrs <- ARS$year
+ann <- rast(lapply(yrs, function(y) rast(file.path(BC, "red-stage-annual", sprintf("redstage_%d.tif", y)))))
+first <- mask(app(ann, function(v) { i <- which(v == 1)[1]; if (is.na(i)) NA_real_ else yrs[i] }), msk)
 pa <- academic_map(first, "(a) First year classed as attacked", map_context(per, burn, SA), "viridis", base_size = 8) +
   scale_fill_viridis_c(breaks = yrs, labels = yrs, na.value = "transparent", name = NULL)
-pb <- ggplot(EP, aes(as.Date(start), 100 * prevalence)) + geom_point(aes(size = valid_cells / N_CELL), colour = "grey30", alpha = 0.7) +
-  scale_size_area(max_size = 2.5, name = "Share seen") + labs(x = NULL, y = "Attacked (% of cells seen)", title = "(b) Attack by period") +
-  theme_bw(base_size = 8) + theme(panel.grid.minor = element_blank(), legend.position = "bottom")
+pb <- ggplot() + geom_point(data = EP, aes(as.Date(start), 100 * prevalence), colour = "grey60", size = 0.9) +
+  geom_point(data = ARS, aes(as.Date(sprintf("%d-07-15", year)), 100 * prevalence), size = 1.8) +
+  labs(x = NULL, y = "Attacked (%)", title = "(b) Attack by year and period") + theme_bw(base_size = 8) + theme(panel.grid.minor = element_blank())
 pa + pb + plot_layout(widths = c(2.2, 1.3))
 ```
 
 ::: {.cell-output-display}
-![Red-stage attack across the study perimeter. (a) The first year in which each cell was classed as attacked in any sixteen-day period, over shaded relief with the perimeter in white and the 2015 Mt Midgeley burn in red. The panel combines periods for display only, and every model used each period separately. (b) The share of the cells seen in each period that were classed as attacked, one point per period.](Manuscript_files/figure-html/fig-spread-1.png){#fig-spread width=2250}
+![Red-stage attack across the study perimeter. (a) The first year in which each cell was classed as attacked, over shaded relief with the perimeter in white and the 2015 Mt Midgeley burn in red. (b) The share of the perimeter classed as attacked in each year, black, and of the cells seen in each sixteen-day period, grey.](Manuscript_files/figure-html/fig-spread-1.png){#fig-spread width=2250}
 :::
 :::
 
@@ -3048,20 +3635,17 @@ pa + pb + plot_layout(widths = c(2.2, 1.3))
 ::: {.cell}
 
 ```{.r .cell-code}
-env <- read.csv(file.path(MD, "l_envelopes.csv"))
-top <- head(PP$map[order(-PP$cells_attacked)], 4)
-e4 <- env[env$map %in% top, ]; e4$lab <- sub("redstage_(\\d{4})_e0?(\\d+)\\.tif", "\\1 period \\2", e4$map)
-pa <- ggplot(e4, aes(r)) + geom_ribbon(aes(ymin = L_lo - r, ymax = L_hi - r), fill = "grey80") + geom_hline(yintercept = 0, linetype = 2, linewidth = 0.3) +
-  geom_line(aes(y = L_obs - r), linewidth = 0.6) + facet_wrap(~lab, nrow = 1) + labs(x = "Distance (m)", y = "L(r) - r (m)", title = "(a) L function") +
-  theme_bw(base_size = 8)
-pb <- PP |> transmute(start = as.Date(sprintf("%d-05-01", year)) + (epoch - 1) * 16, `Clustering range` = cluster_range_m, `Bandwidth` = bw_ppl) |>
-  pivot_longer(-start) |> ggplot(aes(start, value, shape = name)) + geom_point(size = 1.4) + scale_y_log10() +
-  labs(x = NULL, y = "Distance (m)", shape = NULL, title = "(b) Range and bandwidth by period") + theme_bw(base_size = 8) + theme(legend.position = "bottom")
-pa / pb
+cg <- read.csv(file.path(AGD, "correlogram.csv"))
+pa <- ggplot(cg, aes((from_m + to_m) / 2)) + geom_ribbon(aes(ymin = null_lo, ymax = null_hi, group = factor(year)), fill = "grey85") +
+  geom_hline(yintercept = 0, linetype = 2, linewidth = 0.3) + geom_line(aes(y = moran_i, colour = factor(year)), linewidth = 0.5) +
+  scale_colour_viridis_d(name = NULL) + labs(x = "Distance (m)", y = "Moran's I", title = "(a) Correlogram") + theme_bw(base_size = 8)
+pb <- ggplot(ASPT, aes(factor(year), joins_bb / joins_bb_null)) + geom_col(fill = "grey40", width = 0.6) +
+  labs(x = NULL, y = "Observed / expected joins", title = "(b) Join count") + theme_bw(base_size = 8)
+pa / pb + plot_layout(heights = c(1.6, 1))
 ```
 
 ::: {.cell-output-display}
-![Clustering of red-stage attack. (a) The L function, as L(r) - r, in the four periods with the most attacked cells, against the global envelope of 999 random relabellings of the cells seen in that period, the grey band. (b) The clustering range, the largest distance at which the observed L function lay above the envelope, and the likelihood cross-validated bandwidth in every period.](Manuscript_files/figure-html/fig-clustering-1.png){#fig-clustering width=2250}
+![Spatial pattern of red-stage attack on the annual maps. (a) Moran's I in distance classes of 60 m, one line per year, against the 2.5th to 97.5th percentiles of 999 random relabellings of the attacked cells, grey. (b) The number of pairs of neighbouring attacked cells divided by its expectation under relabelling.](Manuscript_files/figure-html/fig-clustering-1.png){#fig-clustering width=2250}
 :::
 :::
 
@@ -3072,16 +3656,15 @@ pa / pb
 ::: {.cell}
 
 ```{.r .cell-code}
-cv <- read.csv(file.path(MD, "interaction_curves.csv"))
-cv <- cv[cv$set == "density by wind" & cv$other == "ep_wind_flight", ]
-cv$Density <- factor(ifelse(cv$at < 0, "thin (-1 SD)", "dense (+1 SD)"), levels = c("thin (-1 SD)", "dense (+1 SD)"))
-cv$panel <- ifelse(cv$density == "VRI_LIVE_STEMS_PER_HA", "(a) Live stems", "(b) Standing volume")
-ggplot(cv, aes(x, p_attack, linetype = Density)) + geom_line(linewidth = 0.7) + facet_wrap(~panel) +
-  labs(x = "Flight-hour wind (SD)", y = "Probability of attack", linetype = NULL) + theme_bw(base_size = 9) + theme(legend.position = "bottom")
+W16S |> filter(grepl("wind", focal), grepl("STEMS", interaction)) |>
+  mutate(Model = factor(model, levels = c("E1 all hours", "E1", "E2", "E3")), Stems = factor(ifelse(at < 0, "fewer stems (-1 SD)", "more stems (+1 SD)"))) |>
+  ggplot(aes(Model, slope, shape = Stems)) + geom_hline(yintercept = 0, linetype = 2, linewidth = 0.3) +
+  geom_pointrange(aes(ymin = slope - 1.96 * se, ymax = slope + 1.96 * se), position = position_dodge(width = 0.4), size = 0.3) +
+  scale_shape_manual(values = c(1, 19), name = NULL) + labs(x = NULL, y = "Effect of wind (log-odds per SD)") + theme_bw(base_size = 9) + theme(legend.position = "bottom")
 ```
 
 ::: {.cell-output-display}
-![Predicted probability of attack against flight-hour wind, in standard deviations, at one standard deviation below and above the mean of (a) live stems and (b) standing volume, with every other term at its mean and the period effect at the most sampled period. The model was fitted on equal numbers of attacked and unattacked cells in each period, so the level of the curves is not the landscape probability and only their slopes are read. Plume disruption predicts the lowest attack in thin, windy stands.](Manuscript_files/figure-html/fig-interaction-1.png){#fig-interaction width=2250}
+![The effect of flight-period wind on the log-odds of attack, per standard deviation of wind, in stands one standard deviation below and above the mean of live stems, 411 and 1,077 stems per hectare, in the sixteen-day models, with 95 per cent confidence intervals. E1 all hours used wind averaged over the whole day and the other models the hours of 12:00 to 17:00. E2 added the previous period's attack and E3 the previous year's as well. Plume disruption predicts a negative effect at the lower density.](Manuscript_files/figure-html/fig-interaction-1.png){#fig-interaction width=2250}
 :::
 :::
 
@@ -3092,7 +3675,7 @@ ggplot(cv, aes(x, p_attack, linetype = Density)) + geom_line(linewidth = 0.7) + 
 ::: {.cell}
 
 ```{.r .cell-code}
-GRT |> mutate(label = pretty_terms(term), lo = estimate - 1.96 * se, hi = estimate + 1.96 * se, Dependence = ifelse(dependence, "with", "without")) |>
+AGRT |> mutate(label = pretty_terms(term), lo = estimate - 1.96 * se, hi = estimate + 1.96 * se, Dependence = ifelse(dependence, "with", "without")) |>
   ggplot(aes(factor(grain_m), estimate, shape = Dependence)) + geom_hline(yintercept = 0, linetype = 2, linewidth = 0.3) +
   geom_pointrange(aes(ymin = lo, ymax = hi), position = position_dodge(width = 0.5), size = 0.2) + scale_shape_manual(values = c(with = 19, without = 1)) +
   facet_wrap(~label, scales = "free_y", ncol = 4) + labs(x = "Grain (m)", y = "Log-odds per SD", shape = "Dependence terms") +
@@ -3100,7 +3683,7 @@ GRT |> mutate(label = pretty_terms(term), lo = estimate - 1.96 * se, hi = estima
 ```
 
 ::: {.cell-output-display}
-![The final model's environmental coefficients refitted at four grains, with their 95 per cent confidence intervals, without the dependence terms (open circles) and with them rebuilt at each grain (filled circles).](Manuscript_files/figure-html/fig-grain-1.png){#fig-grain width=2250}
+![The coefficients of M3 refitted at four grains, with their 95 per cent confidence intervals, without the dependence terms, open circles, and with them rebuilt at each grain, filled circles.](Manuscript_files/figure-html/fig-grain-1.png){#fig-grain width=2250}
 :::
 :::
 
@@ -3109,24 +3692,27 @@ GRT |> mutate(label = pretty_terms(term), lo = estimate - 1.96 * se, hi = estima
 ::: {.cell}
 
 ```{.r .cell-code}
-data.frame(Dataset = c("Red-stage attack", "Stand structure", "Terrain", "Station wind", "Terrain-resolved wind", "Model table"),
+data.frame(Dataset = c("Red-stage attack", "Stand structure", "Terrain", "Station wind", "Terrain-resolved wind", "Model tables"),
            Source = c("Landsat 5 and 8 Collection 2 Level-2", "Vegetation Resources Inventory, annual releases", "Natural Resources Canada High Resolution Digital Elevation Model",
                       "Environment and Climate Change Canada hourly stations", "MicroMet terrain adjustment of station wind", "Rows joined from the above"),
            Spatial = c("30 m", "30 m, rasterised", "30 m", paste(max(EW$stations), "stations within 150 km"), "30 m", "30 m"),
-           Temporal = c("16 days", "1 year", "static", "1 hour", "16 days", "16 days"),
-           Extent = c(paste(N_EP, "periods"), paste(length(unique(VSRC$vri_year)), "snapshots"), paste(fmt(N_CELL), "cells"),
-                      paste(fmt(sum(EW$hours_all)), "hours"), paste(N_EP, "periods"), paste(fmt(nrow(readRDS(file.path(MD, "epoch_model_table.rds")))), "cell-periods"))) |>
+           Temporal = c("1 year and 16 days", "1 year", "static", "1 hour", "1 year and 16 days", "1 year and 16 days"),
+           Extent = c(paste(nrow(ARS), "years and", N_EP, "periods"), paste(length(unique(VSRC$vri_year)), "snapshots"), paste(fmt(N_CELL), "cells"),
+                      paste(fmt(sum(EW$hours_all)), "hours"), paste(nrow(ARS), "years and", N_EP, "periods"),
+                      paste(fmt(nrow(readRDS(file.path(AGD, "annual_sample.rds")))), "cell-years and", fmt(nrow(readRDS(file.path(MD, "epoch_model_table.rds")))), "cell-periods"))) |>
   save_tbl("table-S1-inventory")
-EP |> left_join(PP, by = c("year", "epoch")) |>
-  transmute(Year = year, Period = epoch, Start = start, `Cells seen` = fmt(valid_cells), `Attacked (%)` = sprintf("%.1f", 100 * prevalence),
-            `Clark-Evans R` = sprintf("%.3f", clark_evans_R), `NN ratio` = sprintf("%.3f", nn_ratio), `Range (m)` = cluster_range_m, `Bandwidth (m)` = sprintf("%.0f", bw_ppl)) |>
-  save_tbl("table-S2-periods")
-ONE |> transmute(Variable = pretty_terms(variable), `LR chi-square` = sprintf("%.2f", lr_chisq), Estimate = paste0(sprintf("%+.3f", estimate), stars(lr_p)),
-                 SE = sprintf("%.3f", se), `Within-period SD share` = sprintf("%.2f", within_epoch_sd_share)) |>
-  save_tbl("table-S3-single-variables")
-SCR |> transmute(Candidate = pretty_terms(candidate), `Elastic net, lambda min` = ifelse(elastic_net_lambda_min, "kept", ""),
-                 `Elastic net, lambda 1SE` = ifelse(elastic_net_lambda_1se, "kept", ""), `Final model` = ifelse(in_final, "kept", "")) |>
-  save_tbl("table-S4-screen")
+ARS |> left_join(ASPT, by = "year") |>
+  transmute(Year = year, `Cells mapped` = fmt(valid_cells), `Attacked (%)` = sprintf("%.1f", 100 * prevalence), `Joins, observed / expected` = sprintf("%.2f", joins_bb / joins_bb_null),
+            `Moran's I, 60 m` = sprintf("%.3f", moran_60), `Range (m)` = fmt(range_m)) |>
+  save_tbl("table-S2-years")
+data.frame(Variable = pretty_terms(unlist(SUB)),
+           Mechanism = rep(c("Host size", "Topographic shading", "Landform", "Stand density", "Terrain exposure to wind", "Terrain shape", "Flight-window radiation", "Station wind"), lengths(SUB))) |>
+  save_tbl("table-S3-variables")
+W16 |> filter(!grepl("Intercept|^geomorphon", term)) |>
+  transmute(Model = model, Term = pretty_terms(term), Estimate = paste0(sprintf("%+.3f", estimate), stars(p)), SE = sprintf("%.3f", se), n = fmt(n), AUC = sprintf("%.3f", auc)) |>
+  save_tbl("table-S4-sixteen-day")
+EP |> transmute(Year = year, Period = epoch, Start = start, `Cells seen` = fmt(valid_cells), `Attacked (%)` = sprintf("%.1f", 100 * prevalence)) |>
+  save_tbl("table-S5-periods")
 saveRDS(list(mm_ww = range(as.vector(minmax(rast(file.path(BC, "covariates/micromet-context/wind_weight_by_direction.tif"))))),
              eta = sub(".*cells, ", "", readLines(file.path(BC, "covariates/micromet-context/curvature_length_scale.txt")))),
         file.path(TBLDIR, "si-values.rds"))

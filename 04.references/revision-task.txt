@@ -1,0 +1,66 @@
+it appears to me that the findings from before our revision that were originally submitted read more interestingly and signficant than the new
+  findings you listed below. I am now concerned that the reviewers did not request any method change to our analysis and will be disappointed when they find
+  that our findings have changed. having read the methods that were employed in the first submission i suspect we may have to revert to this original
+  analysis. However, I would like to explore, without changing the intervals of time series used originally, still integrating the important spatial
+  statistics methods around L-curve,  Moran's I, optimal bandwidth and scale testing, and autoregression modelling. Is this possible?
+
+
+1. Findings that changed (submitted paper against the current render)
+
+┌─────────────────────┬────────────────────────────────────────────────┬────────────────────────────────────────────────────────────────────────────────┐
+│       Finding       │                   Submitted                    │                                    Revised                                     │
+├─────────────────────┼────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────┤
+│ Density by wind     │ Supported. Stems × wind −0.049 (p < 0.001),    │ Weak. The interaction is significant overall (χ²(2) = 13.18, p = 0.001), but   │
+│ (plume disruption)  │ read as "attack fell where a thin stand and    │ only through standing volume, +0.041 (p = 0.008). Within thin stands, wind's   │
+│                     │ strong wind coincided"                         │ slope of −0.089 is not significant (p = 0.13)                                  │
+├─────────────────────┼────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────┤
+│ Terrain shelter     │ Supported. Leeward ground had more attack,     │ Not supported for the shelter index, +0.026 (p = 0.085). Only sky view         │
+│ (deposition)        │ shelter index −0.267                           │ remains, +0.060 (p = 0.002)                                                    │
+├─────────────────────┼────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────┤
+│ Large hosts         │ Supported as a threshold, with attack peaking  │ Not supported. Diameter +0.016 (p = 0.55)                                      │
+│                     │ at 31.5 per cent in the 25 to 30 cm class      │                                                                                │
+├─────────────────────┼────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────┤
+│ Stand density       │ Basal area positive                            │ Basal area +0.242 and volume +0.131 positive, but stems not significant        │
+│                     │                                                │ (+0.026, p = 0.14)                                                             │
+├─────────────────────┼────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────┤
+│ Shading             │ North-facing had more attack, +0.384           │ Same direction, far smaller, +0.039 (p = 0.011), and it reverses sign at 270 m │
+├─────────────────────┼────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────┤
+│ Elevation           │ +0.381, among the largest terms                │ +0.085                                                                         │
+├─────────────────────┼────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────┤
+│ Radiation confound  │ Radiation explained most of an apparent        │ No longer tested                                                               │
+│                     │ shelter × density interaction                  │                                                                                │
+├─────────────────────┼────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────┤
+│ New in revision     │ none                                           │ Attack nearby and earlier dominates every model. The environmental terms raise │
+│                     │                                                │  AUC only from 0.848 to 0.853                                                  │
+└─────────────────────┴────────────────────────────────────────────────┴────────────────────────────────────────────────────────────────────────────────┘
+
+ Yes, it's possible. You can keep the submitted design, annual maps with sixteen-day models for the wind question, and add the spatial statistics on top of it. What you can't do is revert exactly, because the submitted analysis had defects that would carry straight back in.
+
+      Adding the spatial statistics to the submitted design:
+      - Point patterns. Run the L function envelopes, Clark-Evans and the bandwidth on the eight annual maps, and on the sixteen-day maps for the wind models.
+      - Bandwidth and dependence. The submitted annual models already had last year's attack in the same cell and within 90 m. These can be refitted with the neighbourhood term weighted at each year's bandwidth and compared on AIC with the fixed radii, as I did in the revision.
+      - Moran's I. Compute it on the residuals of the annual models M0 to M3 and of the sixteen-day models.
+      - Scale. Add the grain test and the spatial field refit to the annual final model.
+
+      All of this sits beside the submitted models without changing their time intervals.
+
+      What should not be reverted:
+      1. The wind field. The submitted MicroMet field covered only 18,388 of 61,923 cells, and every wind result in the submitted paper, annual and sixteen-day, rests on it. It has to be rebuilt either way.
+      2. The annual classifier. The submitted annual maps came from the 38-plot SVM, kappa 0.475, which you rejected on 16 September. Meanwhile the submitted text describes the method of Murphy et al. (2026), so the code and the prose disagreed.
+      3. The wind interaction's sign. The submitted −0.049 for stems × wind was read as less attack in thin, windy stands. With standardised terms, a negative interaction means more attack there than the main effects alone predict. That needs checking before the finding is reused.
+
+Two cautions:
+- The submitted findings may not survive these fixes, whatever design we use. Adding dependence terms shrank every environmental effect in the revision, and it will do the same to the annual models.
+- Choosing an analysis because its results read more strongly is a risk if a reviewer asks why the design was chosen. The safer defence is your own design statement: annual maps for the three questions and sixteen-day maps for wind, with the defects fixed and the new tests added. Whatever that produces is then the result.
+
+
+
+# ------
+
+
+Still open:
+1. The variable-selection code that chose the 14 variables isn't in the manuscript, so the Methods can't yet say how they were chosen.
+2. The thin-stand classes.
+3. Two stale output folders.
+4. The old sixteen-day model chunks, still in the file but no longer reported.
+5. The letters.
