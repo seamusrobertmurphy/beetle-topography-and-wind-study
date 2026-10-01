@@ -19,6 +19,14 @@
 02.inputs/beetle-classification/model-data/*.csv filter=lfs diff=lfs merge=lfs -text
 02.inputs/beetle-task/** filter=lfs diff=lfs merge=lfs -text
 
+# The same data after the folder was renamed to 02.inputs/beetle, added 2026-10-01
+# when the push of commit 492c7ec drew GitHub's 50 MB warning on eight files, the
+# largest 02.inputs/beetle/model-data-redstage/model_table.csv at 98.3 MB. Only the
+# model tables and the R data files go to LFS. The small results CSVs in the same
+# folders, which the manuscript reads for its numbers, stay as diffable text.
+02.inputs/beetle/**/*.rds  filter=lfs diff=lfs merge=lfs -text
+02.inputs/beetle/model-data*/*model_table*.csv filter=lfs diff=lfs merge=lfs -text
+
 # Source and documentation under 02.inputs must stay diffable text rather than
 # LFS pointers. `text` alone is not enough: the broad rules above set
 # filter=lfs, so these must unset it with `!filter !diff !merge`.
