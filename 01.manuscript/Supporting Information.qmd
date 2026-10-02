@@ -51,10 +51,34 @@ kable(get("table-S1-inventory"), booktabs = TRUE)
 
 # Table S2
 
-Every sixteen-day period used, with the cells the imagery saw, the share classed as attacked, and the point pattern statistics of the attacked cells. NN ratio was the mean nearest-neighbour distance of the attacked cells over its mean under 999 random relabellings of the cells seen, Range the largest distance at which the L function lay above its global envelope, and Bandwidth the likelihood cross-validated kernel bandwidth.
+The yearly red-stage maps, with the cells mapped in each year, the share classed as attacked, the ratio of observed to expected joins between neighbouring attacked cells under 999 random permutations, Moran's I in the first distance class of 60 m, and the range of positive autocorrelation.
 
 ```{r}
-kable(get("table-S2-periods"), booktabs = TRUE)
+kable(get("table-S2-years"), booktabs = TRUE, align = "lrrrrr")
+```
+
+# Table S3
+
+The environmental variables that entered the annual models, grouped by the mechanism each represented. M0 contained host size, shading and landform, M1 added stand density, M2 added terrain exposure to wind, terrain shape and flight-window radiation, and M3 added station wind and the interactions of basal area with the wind shelter index, July wind and flight-window radiation.
+
+```{r}
+kable(get("table-S3-variables"), booktabs = TRUE)
+```
+
+# Table S4
+
+Coefficients of the sixteen-day models. E1 had no dependence terms, E2 added the cell's own state in the previous period and the share attacked around it, and E3 added the same two terms for the same period of the previous year. Estimates are changes in log-odds per standard deviation, with standard errors, the number of cells and the AUC of each model; intercepts and geomorphon classes are not shown. * p ≤ 0.05, ** p ≤ 0.01, *** p ≤ 0.001, **** p ≤ 0.0001.
+
+```{r}
+kable(get("table-S4-sixteen-day"), booktabs = TRUE, align = "llrrrr")
+```
+
+# Table S5
+
+Every sixteen-day period used, with its start date, the cells the imagery saw and the share classed as attacked. Periods in which the imagery saw less than a tenth of the perimeter were dropped.
+
+```{r}
+kable(get("table-S5-periods"), booktabs = TRUE, align = "llrrr")
 ```
 
 # Methods S1
@@ -79,29 +103,13 @@ $$\theta_d = -\tfrac{1}{2}\, \Omega_s \sin\!\left[2(\xi - \theta)\right].$$ {#eq
 
 By @eq-weight, $W_w$ depends on direction and not on speed, so it was computed once for each of 16 wind direction sectors of 22.5 degrees, the sixteen points of the compass, and each hourly observation was multiplied by the surface for its own sector, so that nothing was averaged before the terrain acted on it, and over all sectors $W_w$ ran from `r sprintf("%.2f", V$mm_ww[1])` to `r sprintf("%.2f", V$mm_ww[2])`.
 
-# Table S3
-
-Each environmental variable entered alone beside the dependence terms and tested against the dependence-only model by likelihood ratio, ordered by the test statistic. Estimates were changes in log-odds per standard deviation, and the within-period SD share was the mean standard deviation within a period over the standard deviation across all periods. Significance of the likelihood-ratio test was marked * p ≤ 0.05, ** p ≤ 0.01, *** p ≤ 0.001, **** p ≤ 0.0001.
-
-```{r}
-kable(get("table-S3-single-variables"), booktabs = TRUE, align = "lrrrr")
-```
-
-# Table S4
-
-The candidates that passed the likelihood-ratio screen and the collinearity rule, with whether the elastic net kept each at the penalty of minimum cross-validated deviance and at one standard error above it, and whether backward elimination by AIC kept it in the final model.
-
-```{r}
-kable(get("table-S4-screen"), booktabs = TRUE, align = "lccc")
-```
-
 # Figure S1
-
-The flight window against the landscape's own climate, from hourly Environment and Climate Change Canada station records for May to September of the study years. The shaded band marked the window, 1 July to 15 August, taken from the bionomics and not fitted to these data. (a) Mean afternoon temperature by day of year, with the 19 to 41 degrees C flight range and the 22 to 32 degrees C peak band marked. (b) The share of afternoon hours inside the flight range, day by day. (c) Mean temperature and the share of all hours inside the flight range, by hour, with the 12:00 to 17:00 restriction shaded. (d) Mean wind speed by hour on the same axis, showing that the hours in which the beetle could fly were also the windiest of the day.
 
 ```{r}
 #| out-width: "100%"
 knitr::include_graphics(here::here("03.outputs", "PNG", "FigS1.png"))
 ```
+
+The flight window against the landscape's own climate, from hourly Environment and Climate Change Canada station records for May to September of the study years. The shaded band marked the window, 1 July to 15 August, taken from the bionomics and not fitted to these data. (a) Mean afternoon temperature by day of year, with the 19 to 41 degrees C flight range and the 22 to 32 degrees C peak band marked. (b) The share of afternoon hours inside the flight range, day by day. (c) Mean temperature and the share of all hours inside the flight range, by hour, with the 12:00 to 17:00 restriction shaded. (d) Mean wind speed by hour on the same axis, showing that the hours in which the beetle could fly were also the windiest of the day.
 
 # References

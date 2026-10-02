@@ -2,7 +2,7 @@
 
 Durable memory for `beetle-topography-and-wind-study`, kept under the protocol in the global CLAUDE.md. One line per file. Read this at session start and load the other files only when the work touches it.
 
-- `general.md` — the Forest Science rejection, the stem-diameter result that reframes the central claim, the stage-specific cold thresholds that withdrew an earlier conclusion, the sentence-measurement trap, and the five numbers in the short manuscript that its own model table contradicts.
+- `general.md` — the Forest Science rejection, the stem-diameter result that reframes the central claim, the stage-specific cold thresholds that withdrew an earlier conclusion, the sentence-measurement trap, the five numbers in the short manuscript that its own model table contradicts, and the git hygiene notes, including the 2026-10-01 move of the `02.inputs/beetle` model tables to LFS.
 
 - `domain/parent-study-audit.md` — what the parent study (FORECO-D-26-01171) got wrong about its own sensors, differencing baseline, 2012 gap, NDMI validation statistics and annual rasters, with the corrected numbers.
 
@@ -29,3 +29,4 @@ The full pre-submission audit of 2026-08-28 is in `05.tasks/AUDIT-2026-08-28-sub
 Seeded 2026-08-14. Parent-study audit added 2026-08-19. JAE venue and short manuscript added 2026-08-20. The delivered NDMI workbook audited 2026-08-24. Wide-area rebuild, host controls, hourly wind and the refugia model added 2026-08-25; the manuscript rendered to docx 2026-08-26. On 2026-08-26 the study was rebuilt onto the parent's grid and perimeter, the terrain variables were derived from the biology, and the manuscript was rewritten in journal form: the numbered R1 to R15 review-finding codes were removed entirely and the review folded into the Introduction as prose.
 
 The thread to pick up next is in `CLAUDE.md` under "Where the work stands", which is not committed. If it is missing, `domain/red-stage-classification.md` carries the same ground in dated entries.
+- [Site and wind](domain/site-and-wind.md) — regional setting checked against sources on 2026-10-01, the wind lag and the misread interaction
