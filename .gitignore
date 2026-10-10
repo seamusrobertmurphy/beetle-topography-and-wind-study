@@ -4,6 +4,7 @@
 *.Ruserdata
 *.Rprofile
 *.Rproj
+beetle-topography-and-wind-study.Rproj
 
 # Secrets: keep credentials out of git
 .Renviron
@@ -142,3 +143,4 @@ MESSAGE
 02.inputs/beetle/covariates/wind-ninja/trench1km/*
 !02.inputs/beetle/covariates/wind-ninja/trench1km/era5_flight_hours_trench.csv
 02.inputs/beetle/covariates/lift/mixed-layer/
+.Rproj.user

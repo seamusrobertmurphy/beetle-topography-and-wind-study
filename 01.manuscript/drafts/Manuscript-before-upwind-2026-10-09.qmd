@@ -1,28 +1,6 @@
 ---
 title: "Testing the wind disruption and disturbance refugia hypothesis for mountain pine beetle outbreaks (*Dendroctonus ponderosae*)"
 subtitle: "Terrain, stand density and flight-period wind as controls on attack in the Selkirk Mountains of British Columbia"
-author:
-  - name: Seamus Murphy
-    orcid: 0000-0002-1792-0351
-    email: seamusrobertmurphy@gmail.com
-    corresponding: true
-    affiliations:
-      - name: TÜV SÜD
-        address: 2187 Comox Ave
-        city: Comox
-        postal-code: V9M 1P5
-        region: British Columbia
-        country: Canada
-keywords:
-  - mountain pine beetle
-  - disturbance refugia
-  - Curculionidae
-  - Scolytinae
-  - British Columbia
-  - thinning
-  - dispersal
-  - topography
-
 date: today
 keep-md: true
 
@@ -129,13 +107,7 @@ VRI_LABELS <- c(
   preslag_anom_flight = "Pressure departure, previous summer (kPa)", preslag_tend_flight = "Three-hour pressure change, previous summer (kPa)",
   wnlag_speed = "Modelled wind at 90 m, previous summer (km/h)", wnlag_upslope = "Upslope share of flight hours, previous summer", wnlag_consistency = "Consistency of modelled direction, previous summer",
   wnlag_shelter = "Shelter at the modelled wind direction, previous summer", wnlag_speed30 = "Modelled wind at 30 m, previous summer (km/h)", wnlag_speed10 = "Modelled wind at 10 m, previous summer (km/h)",
-  wnlag_lift = "Convective lift, previous summer (m/s)", wnlag_oro = "Slope updraft of the terrain wind, previous summer (m/s)", srv_all_near = "Surviving sources within 150 m, all directions", srv_all_far = "Surviving sources 150 to 1,050 m, all directions",
-  srv_up_near = "Surviving sources within 150 m, upwind", srv_down_near = "Surviving sources within 150 m, downwind",
-  srv_up_far = "Surviving sources 150 to 1,050 m, upwind", srv_down_far = "Surviving sources 150 to 1,050 m, downwind",
-  red_all_near = "Red crowns within 150 m, all directions", red_all_far = "Red crowns 150 to 1,050 m, all directions",
-  red_up_near = "Red crowns within 150 m, upwind", red_down_near = "Red crowns within 150 m, downwind",
-  red_up_far = "Red crowns 150 to 1,050 m, upwind", red_down_far = "Red crowns 150 to 1,050 m, downwind",
-  mrvbf = "Valley bottom flatness", mrrtf = "Ridge top flatness", coldpool = "Cold-air pooling (°C)", chm_mean = "Canopy height, 2017 lidar (m)", chm_sd = "Canopy height variation, 2017 lidar (m)", chm_cover = "Canopy over 5 m, 2017 lidar", wlag_tmin = "Lowest winter minimum before the flight (°C)", wlag_colddays = "Days at or below -30 °C before the flight", wnlag_rsun = "Cloud-adjusted flight-hour sun, previous summer (kWh/m²)", wnlag_mca = "Slope temperature departure, previous summer (°C)", trjlag_share = "Trajectory endpoints over red attack, previous summer", wnlag_w = "Reanalysis vertical air speed, previous summer (m/s)",
+  wnlag_lift = "Convective lift, previous summer (m/s)", wnlag_oro = "Slope updraft of the terrain wind, previous summer (m/s)", mrvbf = "Valley bottom flatness", mrrtf = "Ridge top flatness", coldpool = "Cold-air pooling (°C)", chm_mean = "Canopy height, 2017 lidar (m)", chm_sd = "Canopy height variation, 2017 lidar (m)", chm_cover = "Canopy over 5 m, 2017 lidar", wlag_tmin = "Lowest winter minimum before the flight (°C)", wlag_colddays = "Days at or below -30 °C before the flight", wnlag_rsun = "Cloud-adjusted flight-hour sun, previous summer (kWh/m²)", wnlag_mca = "Slope temperature departure, previous summer (°C)", trjlag_share = "Trajectory endpoints over red attack, previous summer", wnlag_w = "Reanalysis vertical air speed, previous summer (m/s)",
   ep_wind_flight = "Flight-hour wind (km/h)", ep_calm_flight = "Flight-hour calm share",
   lag1_self = "Attack in the same cell, previous period", lag1_nbr90 = "Attack within 90 m, previous period",
   lagyr_self = "Attack in the same cell, previous year", lagyr_nbr90 = "Attack within 90 m, previous year",
@@ -289,6 +261,8 @@ ELEV_R  <- as.vector(minmax(elev))
 **Correspondence.** Seamus Murphy, TÜV SÜD, 2187 Comox Ave, Comox, British Columbia V9M 1P5, Canada. seamusrobertmurphy\@gmail.com. ORCID 0000-0002-1792-0351.
 
 **Keywords.** Mountain pine beetle, Disturbance refugia, Curculionidae, Scolytinae, British Columbia, thinning, dispersal, topography
+
+keywords: - mountain pine beetle - disturbance refugia - Curculionidae - Scolytinae - British Columbia - thinning - dispersal - topography
 
 **Data availability statement.** Public datasets were used in this analysis. Beetle disturbance was classified from Landsat Collection 2 Level-2 surface reflectance, stand structure was derived from British Columbia's provincial Vegetation Resources Inventory, terrain from the Natural Resources Canada High Resolution Digital Elevation Model [@nrcan2017] and wind from Environment and Climate Change Canada hourly station records. All derived data and the complete analysis code that reproduce every number, table and figure in this article are at <https://github.com/seamusrobertmurphy/beetle-topography-and-wind-study> and will be deposited in the Dryad Digital Repository, with a DOI, with the revised manuscript. The study's classifier was trained on the 28 field plots of beetle-killed basal area established in July and August 2020 in the Darkwoods Conservation Area by Murphy, Leslie, Wilson and Banks [@murphy2026], whose plot locations, killed-basal-area measurements and Landsat classifications of red-stage mortality were used with the permission of those authors; that study and its co-authors, Adrian Leslie, John Wilson and Lauren K. Banks, are acknowledged as the source of the ground truth on which every attack map in this article rests.
 
@@ -4754,9 +4728,7 @@ SUB <- list(hostsize = c("PINE_BA", "PROJ_AGE_1", "QUAD_DIAM_125"), shading = c(
             wind_geo = "wind_shelter", shape = c("tpi", "convergence", "curv_prof"), flightsun = "solar_flight_direct", wind_t = c("jul", "jun"), wind_t_lag = c("jul_lag", "jun_lag"),
             heat = "st_flight_lag", lidar = c("lid_rough_1m", "lid_north_share", "lid_tpi_55m_sd"), closure = "CROWN_CLOSURE",
             wn = c("wnlag_speed", "wnlag_upslope", "wnlag_consistency", "wnlag_shelter", "wnlag_speed30", "wnlag_speed10", "wnlag_lift", "wnlag_oro", "wnlag_rsun", "wnlag_mca"), trj = "trjlag_share", w = "wnlag_w",
-            xt = c("mrvbf", "mrrtf", "coldpool", "chm_mean", "chm_sd", "chm_cover", "wlag_tmin"),
-            upwind = c("srv_all_near", "srv_all_far", "srv_up_near", "srv_down_near", "srv_up_far", "srv_down_far",
-                       "red_all_near", "red_all_far", "red_up_near", "red_down_near", "red_up_far", "red_down_far"))
+            xt = c("mrvbf", "mrrtf", "coldpool", "chm_mean", "chm_sd", "chm_cover", "wlag_tmin"))
 M_TERMS <- with(SUB, list(
   M0 = c(hostsize, shading, landform),
   M1 = c(hostsize, shading, landform, density),
@@ -4798,14 +4770,6 @@ M_TERMS$`M3 canopy height` <- c(M_TERMS$M3, "chm_mean", "chm_sd", "chm_cover")
 M_TERMS$`M3 winter cold` <- c(M_TERMS$M3, "wlag_tmin")
 M_TERMS$`M3 winter cold with year` <- c(M_TERMS$M3, "wlag_tmin", "factor(year)")
 M_TERMS$`M3 all new terrain` <- c(M_TERMS$M3, "mrvbf", "mrrtf", "coldpool", "chm_mean", "chm_sd", "chm_cover", "wlag_tmin")
-## last year's red crowns around each cell as the source of this year's attack, weighted by the share of their brood that survived the
-## winter, chunk cold-survival, and split into the ground upwind and downwind of the cell by the measured flight-hour wind of the summer
-## the brood flew, chunk upwind-sources; then the same with every red crown counted alike. The cell's own previous state enters each
-AUW <- file.path(MA, "annual_upwind.rds")
-M_TERMS$`M3 sources` <- c(M_TERMS$M3, "lagyr_self", "srv_all_near", "srv_all_far")
-M_TERMS$`M3 upwind and downwind sources` <- c(M_TERMS$M3, "lagyr_self", "srv_up_near", "srv_down_near", "srv_up_far", "srv_down_far")
-M_TERMS$`M3 sources, unweighted` <- c(M_TERMS$M3, "lagyr_self", "red_all_near", "red_all_far")
-M_TERMS$`M3 upwind and downwind sources, unweighted` <- c(M_TERMS$M3, "lagyr_self", "red_up_near", "red_down_near", "red_up_far", "red_down_far")
 ## the share of the previous summer's trajectory endpoints over red attack, one value a summer, entered once the trajectories exist
 ## the reanalysis vertical air speed over the site in the previous summer's flight window, one value a summer, entered once it exists
 if (!is.null(NVSUM)) M_TERMS$`M3 vertical air speed` <- with(SUB, c(hostsize, shading, landform, density, wind_geo, shape, flightsun, "wnlag_w", "BASAL_AREA:wind_shelter", "BASAL_AREA:wnlag_w", "BASAL_AREA:solar_flight_direct"))
@@ -4962,200 +4926,6 @@ if (file.exists(XTF) && !file.exists(EEX)) saveRDS(xt_take(readRDS(here::here("0
 Three groups of terms that the earlier models lacked were added beside M3 and E2. Valley bottoms and ridge tops were measured by the multiresolution indices of valley bottom and ridge top flatness [@gallant2003], computed in SAGA GIS on the 30 m elevation model. Canopy height was the 2017 lidar surface model less its bare-earth model at 1 m, summarised to each 30 m cell as its mean, its standard deviation and the share of the cell above 5 m, and because the lidar was flown after the outbreak it measured the canopy that remained. Winter cold was the lowest daily minimum temperature and the number of days at or below -30 °C in the winter, October to April, that ended before the flight behind each map, from the ERA5-Land daily minimum [@munozsabater2021] moved to each cell's elevation at the lapse rate the reanalysis cells gave on that day, with the cooling that cold air draining into the cell would add, from the basins, flow accumulation and drainage model of microclima [@maclean2019microclima], on every day whose night met that package's conditions for cold-air drainage at the site. Over the ten winters the temperature rose with elevation, an inversion, on `r xws("inversion_share", f = "%.2f")` of days, the conditions for drainage held on `r xws("cad_share", f = "%.2f")` of nights, drainage cooled the coldest cells by up to `r xws("coldpool_min", fun = function(x) abs(mean(x)))` °C, and the lowest winter minimum across the study area averaged `r xws("tmin_mean")` °C and fell no lower than `r xws("tmin_low", fun = min)` °C, so that the days at or below -30 °C, `r xws("cold_days_mean", fun = max)` on average in the coldest winter, did not enter the models. The sixteen-day model was also refitted with the terms of the annual model it lacked, northness, sky view, the wind shelter index, convergence and stand age.
 
 ```{r}
-#| label: cold-survival
-## the share of the brood that survived each winter in each 30 m cell, from the cold tolerance model of Regniere and Bentz (2007) as coded
-## in R by Goodsman (2024), run day by day from 1 August to 31 July with the midwinter day at 156, 3 January, after which hardiness may be
-## lost from the intermediate state. Daily minimum and maximum air temperature from ERA5-Land are moved to each cell's elevation by lapse
-## rates fitted across the reanalysis cells on each day, one for the minimum and one for the maximum, and the minimum takes the cooling of
-## cold air draining into the cell, chunk valley-canopy-cold, on days whose night met microclima's conditions for drainage at the site.
-## The hourly series behind those conditions covers October to April, so the nights of August, September and May to July take no
-## drainage. Survival is reported with air temperature converted to phloem temperature by Bolstad et al. (1997), as the code offers, and
-## without the conversion, as the season's cumulative minimum of the daily survival probability, the model's own measure of a winter.
-## Winters are named by the year they end; the winter ending in y - 1 is the one the brood of map y - 1 came through before it flew in
-## summer y - 1 and made the red crowns of map y
-CSD <- here::here("02.inputs/beetle/covariates/cold-survival"); CS_W <- 2006:2013
-CSF <- file.path(CSD, sprintf("survival_%d.tif", CS_W)); CSS <- file.path(CSD, "survival_summary.csv"); CSK <- file.path(CSD, "survival_check.csv")
-if (!all(file.exists(c(CSF, CSS, CSK)))) {
-  suppressPackageStartupMessages({library(terra); library(microclima)})
-  dir.create(CSD, showWarnings = FALSE, recursive = TRUE)
-  msk <- rast(here::here("02.inputs/beetle/study-area/perimeter_mask.tif"))
-  ## 1. the cold tolerance code itself, read from its archive and checked against the archive's checksum, used below to test the port
-  # Goodsman, D. 2024. Test of a mountain pine beetle winter mortality model, Zenodo, MIT licence, file RBMortMod3.R,
-  # https://doi.org/10.5281/zenodo.12627557, https://zenodo.org/api/records/12627557/files/RBMortMod3.R/content
-  RBF <- file.path(CSD, "RBMortMod3.R")
-  if (!file.exists(RBF)) download.file("https://zenodo.org/api/records/12627557/files/RBMortMod3.R/content", RBF, quiet = TRUE, mode = "wb")
-  stopifnot(unname(tools::md5sum(RBF)) == "362938756c46e89851b7445209a2b6c6")
-  RB <- new.env(); sys.source(RBF, envir = RB)
-  ## 2. the same model over every cell at once: the loop runs over days and each step works on the vector of cells. The parameters, the
-  ## order of operations and the phloem conversion are those of RBentzWMort, including its daily mean taken from the unconverted temperatures
-  rb_season <- function(day, nd, bolstad, mid = 156) {
-    a1 <- -9.8; B1 <- 2.26; a2 <- -21.2; B2 <- 1.47; a3 <- -32.3; B3 <- 2.42; rG <- 0.311; sG <- 8.716; muG <- -5.0; kG <- -39.3
-    rL <- 0.791; sL <- 3.251; muL <- 33.9; kL <- -32.7; L0 <- 0.254; L1 <- 0.764
-    for (i in seq_len(nd)) { d <- day(i); tm <- 0.5 * (d$tmin + d$tmax)
-      if (bolstad) { lo <- d$tmin + 1.8; hi <- d$tmax + 3.25 / 24.4 * (d$tmax - d$tmin) } else { lo <- d$tmin; hi <- d$tmax }
-      rg <- hi - lo
-      if (i > 1) { TG <- muG + kG * C; TL <- muL + kL * C } else { TG <- muG; TL <- muL }
-      Gt <- rg * rG * exp(-(tm - TG) / sG) / (sG * (1 + exp(-(tm - TG) / sG))^2)
-      Lt <- rg * rL * exp(-(tm - TL) / sL) / (sL * (1 + exp(-(tm - TL) / sL))^2)
-      C <- if (i > 1) ifelse(i < mid & C < 0.5, C + (1 - C) * Gt, C + (1 - C) * Gt - C * Lt) else Gt
-      p1 <- pmax(0, pmin(1, (0.5 - C) / (0.5 - L0))); p3 <- pmax(0, pmin(1, (C - 0.5) / (L1 - 0.5))); p2 <- 1 - p1 - p3
-      ps <- p1 / (1 + exp(-(lo - a1) / B1)) + p2 / (1 + exp(-(lo - a2) / B2)) + p3 / (1 + exp(-(lo - a3) / B3))
-      S <- if (i > 1) pmin(S, ps) else ps; LO <- if (i > 1) pmin(LO, lo) else lo }
-    list(psurv = S, low = LO) }
-  ## 3. daily minimum and maximum over the box of chunk valley-canopy-cold, 1 August 2005 to 31 July 2013
-  CSE <- file.path(CSD, "era5_daily_minmax.csv")
-  if (!file.exists(CSE)) {
-    Sys.setenv(RETICULATE_PYTHON = path.expand("~/.virtualenvs/rgee/bin/python")); suppressPackageStartupMessages({library(reticulate); library(rgee)})
-    ee_Initialize(project = "murphys-deforisk", drive = FALSE)
-    ## one table per block of days, the date read from the image id, three tries a block
-    cs_blocks <- function(col, geom, scale, d0, d1, step, bands) { parts <- list()
-      for (s0 in as.list(seq(d0, d1 - 1, by = step))) { s1 <- min(s0 + step, d1); g <- NULL
-        for (try_i in 1:3) { g <- tryCatch(col$filterDate(format(s0), format(s1))$getRegion(geom, scale)$getInfo(), error = function(e) NULL); if (!is.null(g)) break }
-        if (is.null(g)) stop("daily block not read after three tries: ", format(s0))
-        hd <- unlist(g[[1]]); gv <- function(k) sapply(g[-1], function(r) { v <- r[[match(k, hd)]]; if (is.null(v)) NA else v })
-        q <- data.frame(lon = as.numeric(gv("longitude")), lat = as.numeric(gv("latitude")), id = gv("id"))
-        for (bb in bands) q[[bb]] <- as.numeric(gv(bb)); parts[[length(parts) + 1]] <- q[complete.cases(q), ] }
-      do.call(rbind, parts) }
-    # ERA5-Land daily aggregates, 0.1 degree, temperature_2m_min and temperature_2m_max,
-    # https://developers.google.com/earth-engine/datasets/catalog/ECMWF_ERA5_LAND_DAILY_AGGR
-    BD <- c("temperature_2m_min", "temperature_2m_max")
-    col <- ee$ImageCollection("ECMWF/ERA5_LAND/DAILY_AGGR")$select(BD); box <- ee$Geometry$Rectangle(c(-117.05, 48.98, -116.50, 49.45))
-    d <- do.call(rbind, lapply(CS_W, function(w) cs_blocks(col, box, 11132, as.Date(sprintf("%d-08-01", w - 1)), as.Date(sprintf("%d-08-01", w)), 31, BD)))
-    d$date <- as.Date(substr(d$id, 1, 8), "%Y%m%d"); write.csv(unique(d), CSE, row.names = FALSE) }
-  ## 4. the nights that met the conditions for cold-air drainage, from the hourly winter series of chunk valley-canopy-cold, by the same
-  ## steps; the hour is read from the image id, because a date-time column written at midnight loses its hours when read back
-  # ERA5 hourly reanalysis at the cell over the site, October to April, pulled in chunk valley-canopy-cold,
-  # https://developers.google.com/earth-engine/datasets/catalog/ECMWF_ERA5_HOURLY
-  sctr <- as.vector(crds(project(centroids(as.polygons(ext(msk), crs = crs(msk))), "EPSG:4326")))
-  wh <- read.csv(file.path(XT, "era5_winter_hours.csv")); wh$t <- as.POSIXct(wh$id, format = "%Y%m%dT%H", tz = "UTC"); wh <- wh[order(wh$t), ]
-  wh$tc <- wh$temperature_2m - 273.15; es <- function(t) 0.6108 * exp(17.27 * t / (t + 237.3))
-  wh$h <- humidityconvert(pmin(100, 100 * es(wh$dewpoint_temperature_2m - 273.15) / es(wh$tc)), intype = "relative", tc = wh$tc, p = wh$surface_pressure)$specific
-  wh$ws <- sqrt(wh$u_component_of_wind_10m^2 + wh$v_component_of_wind_10m^2)
-  wh$winter <- as.integer(format(wh$t, "%Y")) + (as.integer(format(wh$t, "%m")) >= 10); wh$cad <- NA_real_
-  for (y in unique(wh$winter)) { k <- which(wh$winter == y); t0 <- wh$t[k[1]]
-    wh$cad[k] <- cadconditions(wh$h[k], wh$tc[k], wh$total_cloud_cover[k], wh$surface_pressure[k], wh$ws[k], startjul = julday(as.integer(format(t0, "%Y")), as.integer(format(t0, "%m")), as.integer(format(t0, "%d"))),
-      lat = sctr[2], long = sctr[1], starttime = 0, hourint = 1, merid = 0, dst = 0) }
-  lt <- wh$t - 8 * 3600; wh$day <- as.Date(lt + 6 * 3600, tz = "UTC"); wh$night <- as.integer(format(lt, "%H")) %in% c(18:23, 0:8)
-  cadday <- tapply(wh$cad[wh$night] > 0, wh$day[wh$night], any)
-  ## 5. a lapse rate for each day across the reanalysis cells, their elevation the mean of the Copernicus model over each 0.1 degree cell
-  # Copernicus GLO-30 elevation, the six 1 degree tiles of chunk regional-data, https://doi.org/10.5270/ESA-c5d3d65
-  cop <- vrt(list.files(here::here("02.inputs/beetle/study-area/regional"), "^Copernicus_DSM_COG_10_.*_DEM\\.tif$", full.names = TRUE))
-  dd <- read.csv(CSE); dd$date <- as.Date(dd$date); cl <- unique(dd[, c("lon", "lat")])
-  cl$z <- sapply(seq_len(nrow(cl)), function(i) global(crop(cop, ext(cl$lon[i] - 0.05, cl$lon[i] + 0.05, cl$lat[i] - 0.05, cl$lat[i] + 0.05)), "mean", na.rm = TRUE)[[1]])
-  dd$z <- cl$z[match(paste(dd$lon, dd$lat), paste(cl$lon, cl$lat))]; dd$tmin <- dd$temperature_2m_min - 273.15; dd$tmax <- dd$temperature_2m_max - 273.15
-  co <- do.call(rbind, lapply(split(dd, dd$date), function(g) { a <- coef(lm(tmin ~ z, g)); b <- coef(lm(tmax ~ z, g))
-    data.frame(date = g$date[1], cells = nrow(g), a_min = a[1], b_min = a[2], a_max = b[1], b_max = b[2]) }))
-  co <- co[order(co$date), ]; co$cad <- as.logical(cadday[as.character(co$date)]); co$cad[is.na(co$cad)] <- FALSE
-  ## 6. every cell's elevation on the perimeter grid, the context elevation model of chunk 47-context-terrain, and its drainage cooling
-  # Natural Resources Canada High Resolution Digital Elevation Model, the 30 m context grid of chunk 47-context-terrain,
-  # https://open.canada.ca/data/en/dataset/957782bf-847c-4644-a757-e383c0057995
-  zc <- values(mask(project(rast(here::here("02.inputs/beetle/study-area/dem_context.tif")), msk, method = "bilinear"), msk))[, 1]
-  ok <- !is.na(zc); z <- zc[ok]; cpv <- values(rast(XTF)[["coldpool"]])[ok, 1]; cpv[is.na(cpv)] <- 0
-  rows <- list(); chk <- list(); set.seed(42); ck <- sort(sample(sum(ok), 5))
-  for (w in CS_W) { k <- co[co$date >= as.Date(sprintf("%d-08-01", w - 1)) & co$date < as.Date(sprintf("%d-08-01", w)), ]
-    stopifnot(nrow(k) >= 365, !anyNA(k$b_min), !anyNA(k$b_max))
-    day <- function(i) list(tmin = k$a_min[i] + k$b_min[i] * z + if (k$cad[i]) cpv else 0, tmax = k$a_max[i] + k$b_max[i] * z)
-    ph <- rb_season(day, nrow(k), TRUE); ar <- rb_season(day, nrow(k), FALSE)
-    ## the port against the original function on five cells, both with and without the conversion
-    for (j in ck) { tn <- k$a_min + k$b_min * z[j] + ifelse(k$cad, cpv[j], 0); tx <- k$a_max + k$b_max * z[j]
-      chk[[length(chk) + 1]] <- data.frame(winter = w, cell = which(ok)[j],
-        diff_phloem = abs(tail(RB$RBentzWMort(tn, tx, BolstadBentz = TRUE, MidWinter = 156)[, 1], 1) - ph$psurv[j]),
-        diff_air = abs(tail(RB$RBentzWMort(tn, tx, BolstadBentz = FALSE, MidWinter = 156)[, 1], 1) - ar$psurv[j])) }
-    r <- rep(msk, 3); v <- matrix(NA_real_, ncell(msk), 3); v[ok, ] <- cbind(ph$psurv, ar$psurv, ph$low); values(r) <- v; r <- mask(r, msk)
-    names(r) <- c("psurv_phloem", "psurv_air", "phloem_min"); writeRaster(r, file.path(CSD, sprintf("survival_%d.tif", w)), overwrite = TRUE, datatype = "FLT4S", gdal = "COMPRESS=DEFLATE")
-    rows[[length(rows) + 1]] <- data.frame(winter = w, days = nrow(k), cells = min(k$cells), cad_days = sum(k$cad), lapse_min = mean(k$b_min) * 1000, lapse_max = mean(k$b_max) * 1000,
-      phloem_min_low = min(ph$low), psurv_mean = mean(ph$psurv), psurv_min = min(ph$psurv), psurv_max = max(ph$psurv), psurv_below_half = mean(ph$psurv < 0.5),
-      psurv_air_mean = mean(ar$psurv), psurv_air_min = min(ar$psurv), r_elevation = cor(ph$psurv, z)) }
-  ck <- do.call(rbind, chk); write.csv(ck, CSK, row.names = FALSE); stopifnot(max(ck$diff_phloem, ck$diff_air) < 1e-9)
-  write.csv(do.call(rbind, rows), CSS, row.names = FALSE)
-}
-CSSUM <- if (file.exists(CSS)) read.csv(CSS) else NULL; CSCHK <- if (file.exists(CSK)) read.csv(CSK) else NULL
-## a value of the survival summary over the winters, the mean by default
-csu <- function(col, fun = mean, f = "%.2f") if (is.null(CSSUM)) "[pending]" else pv(fun(CSSUM[[col]]), f)
-```
-
-```{r}
-#| label: upwind-sources
-## the attack of map y came from beetles that emerged in summer y - 1 from the red crowns of map y - 1, after their brood came through the
-## winter ending in y - 1, so the source raster for map y is map y - 1 times that winter's survival in each cell, chunk cold-survival.
-## Around every cell the sources are counted in two rings, 30 to 150 m, the best radius of the dependence test, chunk annual-models, and
-## 150 to 1,050 m, the largest radius it tested, each cut into eight compass sectors by the bearing from the cell to the source. Each
-## sector's value is its share of mapped cells that held a source, so that a cell near the perimeter, whose rings reach unmapped ground,
-## is not read as having few sources. The wind rose is the measured flight-hour wind of summer y - 1 at the Akokli Creek fire weather
-## station, the nearest station with hourly direction through 2005 to 2014: 12:00 to 16:59 daylight time, 1 July to 15 August, hours
-## over 5 km/h, the threshold of chunk pcic-stations, as the share of those hours the wind blew from each sector. Upwind pressure weights
-## each sector by the share of hours the wind blew from it, downwind pressure by the share from the opposite sector, and the undirected
-## pressure weights the eight alike, each divided by the weight of the sectors that held mapped ground. A summer with fewer than 100
-## windy hours would take its rose from the bearings of the 6 h HYSPLIT endpoints from 100 m, chunk hysplit-trajectories, instead
-UWD <- here::here("02.inputs/beetle/covariates/upwind"); UW_Y <- 2007:2014; UW_MIN <- 100
-UWF <- file.path(UWD, sprintf("upwind_%d.tif", UW_Y)); UWR <- file.path(UWD, "upwind_rose.csv"); UWS <- file.path(UWD, "upwind_summary.csv")
-UW_LAB <- "Akokli Creek (FLNRO-WMB)"; UW_SEC <- c("N", "NE", "E", "SE", "S", "SW", "W", "NW")
-sector_of <- function(b) floor(((b + 22.5) %% 360) / 45)
-if (!file.exists(UWR)) {
-  dir.create(UWD, showWarnings = FALSE, recursive = TRUE)
-  ## the station's hours on daylight time, chunk pcic-stations, and the 6 h endpoints from 100 m of the same flight windows
-  h <- pc_daylight(); h <- h[h$label == UW_LAB & !is.na(h$dir) & !is.na(h$speed), ]; md <- format(h$date, "%m-%d")
-  h <- h[md >= "07-01" & md <= "08-15" & h$hour %in% 12:16, ]; h$summer <- as.integer(format(h$date, "%Y"))
-  # HYSPLIT back-trajectories on the North American Regional Reanalysis, chunk hysplit-trajectories,
-  # NOAA ARL NARR archive ftp://ftp.arl.noaa.gov/archives/narr/, model https://www.ready.noaa.gov/HYSPLIT_hysplitmac.php
-  e <- read.csv(here::here("02.inputs/beetle/covariates/hysplit/trajectories/endpoints.csv")); e <- e[e$start_agl == 100, ]
-  e0 <- e[e$hour_back == 0, ]; e6 <- e[e$hour_back == 6, ]; e6 <- e6[match(paste(e0$year, e0$date), paste(e6$year, e6$date)), ]
-  rd2 <- pi / 180; dl <- (e6$lon - e0$lon) * rd2
-  e0$bear <- (atan2(sin(dl) * cos(e6$lat * rd2), cos(e0$lat * rd2) * sin(e6$lat * rd2) - sin(e0$lat * rd2) * cos(e6$lat * rd2) * cos(dl)) / rd2) %% 360
-  rose <- function(b) tabulate(sector_of(b) + 1, 8) / length(b)
-  out <- do.call(rbind, lapply(UW_Y - 1, function(s) { g <- h[h$summer == s, ]; wy <- g[g$speed > 5, ]; tj <- e0[e0$year == s & !is.na(e0$bear), ]
-    rbind(data.frame(summer = s, source = "station", hours = nrow(g), windy_hours = nrow(wy), t(setNames(if (nrow(wy)) rose(wy$dir) else rep(NA, 8), UW_SEC))),
-          data.frame(summer = s, source = "trajectories", hours = nrow(tj), windy_hours = nrow(tj), t(setNames(if (nrow(tj)) rose(tj$bear) else rep(NA, 8), UW_SEC)))) }))
-  out$used <- ifelse(out$source == "station", out$windy_hours >= UW_MIN, !(out$summer %in% out$summer[out$source == "station" & out$windy_hours >= UW_MIN]))
-  write.csv(out, UWR, row.names = FALSE)
-}
-if (!all(file.exists(c(UWF, UWS, AUW)))) {
-  suppressPackageStartupMessages(library(terra))
-  msk <- rast(here::here("02.inputs/beetle/study-area/perimeter_mask.tif")); nr <- nrow(msk); nc <- ncol(msk); ROSE <- read.csv(UWR)
-  ## the sixteen kernels, two rings by eight sectors, as offsets in rows and columns from the target cell, northing upward
-  RING <- list(near = c(0, 150), far = c(150, 1050)); L <- 1050 / 30; off <- expand.grid(di = -L:L, dj = -L:L)
-  off$d <- 30 * sqrt(off$di^2 + off$dj^2); off$k <- sector_of(atan2(off$dj, -off$di) * 180 / pi)
-  ## every kernel is applied by a fast Fourier transform of the zero-padded grid, the same device as chunk annual-spatial-pattern, which
-  ## gives each cell the sum over the kernel of the cells at those offsets
-  P1 <- nextn(nr + L); P2 <- nextn(nc + L)
-  KF <- lapply(names(RING), function(rg) lapply(0:7, function(k) { o <- off[off$d > RING[[rg]][1] & off$d <= RING[[rg]][2] & off$k == k, ]
-    K <- matrix(0, P1, P2); K[cbind((o$di %% P1) + 1, (o$dj %% P2) + 1)] <- 1; fft(K) })); names(KF) <- names(RING)
-  ksum <- function(m, kf) { o <- matrix(0, P1, P2); o[1:nr, 1:nc] <- m; Re(fft(fft(o) * Conj(kf), inverse = TRUE))[1:nr, 1:nc] / (P1 * P2) }
-  smp <- readRDS(ASM)[, c("x", "y", "year", "lagyr_nbr150")]; rows <- list(); jn <- list()
-  for (y in UW_Y) {
-    ## the red crowns of map y - 1, and the same weighted by the brood's survival of the winter ending in y - 1
-    # Landsat red-stage map of chunk annual-maps
-    rs <- as.matrix(rast(here::here("02.inputs/beetle/red-stage-annual", sprintf("redstage_%d.tif", y - 1))), wide = TRUE)
-    sv <- as.matrix(rast(file.path(CSD, sprintf("survival_%d.tif", y - 1)))[["psurv_phloem"]], wide = TRUE)
-    seen <- !is.na(rs) & !is.na(sv); srcs <- list(srv = ifelse(seen, rs * sv, 0), red = ifelse(seen, rs, 0))
-    w <- unlist(ROSE[ROSE$summer == y - 1 & ROSE$used, UW_SEC]); W <- list(up = w, down = w[c(5:8, 1:4)], all = rep(1 / 8, 8))
-    lay <- list()
-    for (rg in names(RING)) {
-      n <- sapply(0:7, function(k) ksum(seen * 1, KF[[rg]][[k + 1]])); n[n < 0.5] <- 0
-      for (sn in names(srcs)) { s <- sapply(0:7, function(k) ksum(srcs[[sn]], KF[[rg]][[k + 1]])); dens <- ifelse(n > 0, s / pmax(n, 1), NA)
-        for (wn in names(W)) { ww <- matrix(W[[wn]], nrow(dens), 8, byrow = TRUE) * !is.na(dens)
-          lay[[sprintf("%s_%s_%s", sn, wn, rg)]] <- rowSums(dens * ww, na.rm = TRUE) / rowSums(ww) } } }
-    r <- rep(msk, length(lay)); values(r) <- do.call(cbind, lapply(lay, function(v) as.vector(t(matrix(v, nr, nc))))); names(r) <- names(lay)
-    r <- mask(r, msk); writeRaster(r, file.path(UWD, sprintf("upwind_%d.tif", y)), overwrite = TRUE, datatype = "FLT4S", gdal = "COMPRESS=DEFLATE")
-    ## the pressures at the sampled cells of map y, joined by coordinate so the sample and its seed are untouched
-    xy <- smp[smp$year == y, ]; z <- as.data.frame(r[cellFromXY(r, as.matrix(xy[, c("x", "y")]))]); jn[[length(jn) + 1]] <- cbind(xy[, c("x", "y", "year")], z)
-    rows[[length(rows) + 1]] <- data.frame(year = y, summer = y - 1, rose_source = ROSE$source[ROSE$summer == y - 1 & ROSE$used],
-      windy_hours = ROSE$windy_hours[ROSE$summer == y - 1 & ROSE$used], from_sector = UW_SEC[which.max(w)], from_share = max(w),
-      sources = sum(rs, na.rm = TRUE), survival_at_sources = mean(sv[seen & rs == 1]),
-      r_up_down_srv_near = cor(z$srv_up_near, z$srv_down_near, use = "complete.obs"), r_up_down_srv_far = cor(z$srv_up_far, z$srv_down_far, use = "complete.obs"),
-      r_up_down_red_near = cor(z$red_up_near, z$red_down_near, use = "complete.obs"), r_up_down_red_far = cor(z$red_up_far, z$red_down_far, use = "complete.obs"),
-      r_red_near_nbr150 = cor(z$red_all_near, xy$lagyr_nbr150, use = "complete.obs"))
-  }
-  write.csv(do.call(rbind, rows), UWS, row.names = FALSE); saveRDS(do.call(rbind, jn), AUW)
-}
-UWSUM <- if (file.exists(UWS)) read.csv(UWS) else NULL; UWROSE <- if (file.exists(UWR)) read.csv(UWR) else NULL
-## a value of the source summary over the map years, the mean by default
-uws <- function(col, fun = mean, f = "%.2f") if (is.null(UWSUM)) "[pending]" else pv(fun(UWSUM[[col]]), f)
-```
-
-The source of each year's attack was mapped from the red crowns of the year before, because the trees that turned red in a given year were attacked in the previous summer by beetles that emerged from the trees then red, after their brood had come through the winter. That winter's survival was computed for every 30 m cell with the cold tolerance model of @regniere2007cold, in the R code of @goodsman2024code, which @goodsman2024 evaluated, run daily from 1 August to 31 July with the midwinter day set at 3 January and air temperature converted to phloem temperature by the equations of @bolstad1997modelling. Daily minimum and maximum temperature from ERA5-Land [@munozsabater2021] were moved to each cell's elevation by lapse rates fitted across the `r csu("cells", min, "%.0f")` reanalysis cells on each day, one for each, and the minimum took the cooling of draining cold air on the `r csu("cad_days", f = "%.0f")` nights a winter, on average, that met the conditions for drainage between October and April. The survival of a winter was the lowest daily probability of survival reached by its end, and the vectorised model reproduced the original code on five cells in every winter `r if (is.null(CSCHK)) "[pending]" else if (max(CSCHK$diff_phloem, CSCHK$diff_air) == 0) "exactly" else paste("to within", sprintf("%.0e", max(CSCHK$diff_phloem, CSCHK$diff_air)))`. Around each cell the red crowns of the previous year, weighted by their survival and then unweighted, were counted within 150 m, the best radius of the dependence test, and from 150 to 1,050 m, the largest radius it tested, in eight compass sectors, each as the share of its mapped cells that held a source. The direction of the wind came from the hourly record of the Akokli Creek fire weather station (`r pst(UW_LAB, "elevation")` m), the nearest station with hourly direction through 2005 to 2014, over the flight hours of 12:00 to 16:59 from 1 July to 15 August of the summer the beetles flew, as the share of hours above 5 km/h that the wind blew from each sector, `r uws("windy_hours", min, "%.0f")` to `r uws("windy_hours", max, "%.0f")` hours a summer. Upwind pressure weighted each sector by the share of hours the wind blew from it, downwind pressure by the share from the opposite sector, and the undirected pressure weighted all eight alike. M3 was refitted with the previous year's attack in the cell and the undirected pressures in both rings, and again with the upwind and downwind pressures in place of the undirected ones, each with and without the survival weight. If wind carried the beetles, the upwind pressure would carry more weight than the downwind pressure, and the difference between their coefficients was tested by a Wald test from the coefficients and their covariance, with the directional model compared against the undirected one by AIC on the same rows.
-
-```{r}
 #| label: windninja-join
 ## the terrain wind joined to the sampled cells of both model tables by coordinate, so that the tables and their seed are untouched. Each
 ## sixteen-day row takes the 90 m fields of its own period and of the same period one summer earlier: the speed corrected by the mesh factor,
@@ -5211,7 +4981,6 @@ ADEP <- function() { s <- read.csv(ADS); s <- s[grepl("nbr|kern", s$terms), ]; c
 annual_data <- function(sample) {
   b <- dplyr::left_join(readRDS(ASM), readRDS(AWN), by = c("x", "y", "year"))
   if (file.exists(AEX)) b <- dplyr::left_join(b, readRDS(AEX), by = c("x", "y", "year"))
-if (file.exists(AUW)) b <- dplyr::left_join(b, readRDS(AUW), by = c("x", "y", "year"))
   ft <- if (is.null(TSOURCE)) NULL else TSOURCE[TSOURCE$window == "flight", ]
   b$trjlag_share <- if (is.null(ft)) NA_real_ else ft$share[match(b$year - 1L, ft$year)]
   fw <- if (is.null(NVSUM)) NULL else NVSUM[NVSUM$window == "flight", ]; b$wnlag_w <- if (is.null(fw)) NA_real_ else fw$w_site[match(b$year - 1L, fw$year)]; for (v in unlist(SUB)) b[[v]] <- as.numeric(scale(b[[v]]))
@@ -5236,32 +5005,6 @@ if (!file.exists(ACF)) {
   write.csv(do.call(rbind, lapply(out, `[[`, "fit")), file.path(MA, "annual_fit.csv"), row.names = FALSE)
   write.csv(do.call(rbind, lapply(out, `[[`, "slopes")), file.path(MA, "annual_simple_slopes.csv"), row.names = FALSE)
 }
-```
-
-```{r}
-#| label: upwind-test
-## the test of the wind's direction: within each ring, whether the coefficient of the upwind pressure exceeded that of the downwind
-## pressure, by the Wald test of their difference from the two coefficients and their covariance, and the AIC of the directional model
-## against the undirected one on the same rows, with the survival weight and without it
-UWT <- file.path(MA, "upwind_test.csv")
-if (!file.exists(UWT)) {
-  b <- annual_data("all years")
-  out <- do.call(rbind, lapply(c("", ", unweighted"), function(sfx) { p <- if (sfx == "") "srv" else "red"
-    md <- afit(paste0("M3 upwind and downwind sources", sfx), FALSE, b); mu <- afit(paste0("M3 sources", sfx), FALSE, b)
-    bb <- coef(md); V <- vcov(md)
-    do.call(rbind, lapply(c("near", "far"), function(rg) { u <- sprintf("%s_up_%s", p, rg); d <- sprintf("%s_down_%s", p, rg)
-      df <- bb[u] - bb[d]; se <- sqrt(V[u, u] + V[d, d] - 2 * V[u, d])
-      data.frame(weight = if (sfx == "") "survival" else "none", ring = rg, up = unname(bb[u]), down = unname(bb[d]), difference = unname(df), se = unname(se),
-                 z = unname(df / se), p = unname(2 * pnorm(-abs(df / se))), r_up_down = cor(md$model[[u]], md$model[[d]]),
-                 aic_directional = AIC(md), aic_undirected = AIC(mu), n_directional = length(md$y), n_undirected = length(mu$y)) })) }))
-  write.csv(out, UWT, row.names = FALSE)
-}
-UWTEST <- if (file.exists(UWT)) read.csv(UWT) else NULL
-## one value of the direction test, for a weight and a ring
-uwt <- function(weight, ring, col, f = "%+.3f") { x <- if (is.null(UWTEST)) NULL else UWTEST[[col]][UWTEST$weight == weight & UWTEST$ring == ring]
-  if (col == "p") pthr(x) else pv(x, f) }
-## the AIC of the directional or the undirected model, for a weight
-uwa <- function(weight, col) { x <- if (is.null(UWTEST)) NULL else UWTEST[[col]][UWTEST$weight == weight][1]; if (is.null(x)) "[pending]" else fmt(x) }
 ```
 
 ```{r}
@@ -5622,8 +5365,6 @@ The cloud-adjusted sun and the slope temperature both raised attack in the annua
 ## Valleys and winter
 
 With the previous year's attack and the dependence terms in the annual model, valley bottom flatness entered at `r ac("mrvbf", "M3 valley and ridge flats", dep = TRUE)` (`r ac("mrvbf", "M3 valley and ridge flats", dep = TRUE, col = "p")`) and ridge top flatness at `r ac("mrrtf", "M3 valley and ridge flats", dep = TRUE)` (`r ac("mrrtf", "M3 valley and ridge flats", dep = TRUE, col = "p")`), cold-air pooling at `r ac("coldpool", "M3 cold-air pooling", dep = TRUE)` (`r ac("coldpool", "M3 cold-air pooling", dep = TRUE, col = "p")`), mean canopy height at `r ac("chm_mean", "M3 canopy height", dep = TRUE)` (`r ac("chm_mean", "M3 canopy height", dep = TRUE, col = "p")`), its variation at `r ac("chm_sd", "M3 canopy height", dep = TRUE)` (`r ac("chm_sd", "M3 canopy height", dep = TRUE, col = "p")`) and the share above 5 m at `r ac("chm_cover", "M3 canopy height", dep = TRUE)` (`r ac("chm_cover", "M3 canopy height", dep = TRUE, col = "p")`). The lowest minimum of the winter before the flight entered at `r ac("wlag_tmin", "M3 winter cold", dep = TRUE)` (`r ac("wlag_tmin", "M3 winter cold", dep = TRUE, col = "p")`), and with the summer held at `r ac("wlag_tmin", "M3 winter cold with year", dep = TRUE)` (`r ac("wlag_tmin", "M3 winter cold with year", dep = TRUE, col = "p")`). In the sixteen-day models with the previous period's attack, valley bottom flatness entered at `r wc("E2 valley and ridge flats", "mrvbf")` (`r wc("E2 valley and ridge flats", "mrvbf", "p")`), ridge top flatness at `r wc("E2 valley and ridge flats", "mrrtf")` (`r wc("E2 valley and ridge flats", "mrrtf", "p")`), cold-air pooling at `r wc("E2 cold-air pooling", "coldpool")` (`r wc("E2 cold-air pooling", "coldpool", "p")`), mean canopy height at `r wc("E2 canopy height", "chm_mean")` (`r wc("E2 canopy height", "chm_mean", "p")`) and the winter minimum at `r wc("E2 winter cold", "wlag_tmin")` (`r wc("E2 winter cold", "wlag_tmin", "p")`). With the terms of the annual model added to the sixteen-day model, northness entered at `r wc("E2 annual terms", "northness")` (`r wc("E2 annual terms", "northness", "p")`), sky view at `r wc("E2 annual terms", "sky_view")` (`r wc("E2 annual terms", "sky_view", "p")`), the wind shelter index at `r wc("E2 annual terms", "wind_shelter")` (`r wc("E2 annual terms", "wind_shelter", "p")`), convergence at `r wc("E2 annual terms", "convergence")` (`r wc("E2 annual terms", "convergence", "p")`) and stand age at `r wc("E2 annual terms", "PROJ_AGE_1")` (`r wc("E2 annual terms", "PROJ_AGE_1", "p")`). With the survey south of the border added, the share of the afternoon air's endpoints that lay over red attack of the same summer averaged `r if (is.null(TSOURCE)) "[pending]" else sprintf("%.3f", mean(TSOURCE$share[TSOURCE$window == "flight"]))` over the flight windows, and the source term entered the annual model at `r ac("trjlag_share", "M3 trajectory source", dep = TRUE)` (`r ac("trjlag_share", "M3 trajectory source", dep = TRUE, col = "p")`) and the sixteen-day model at `r wc("E2 trajectory source", "trjlag_share")` (`r wc("E2 trajectory source", "trjlag_share", "p")`).
-
-The brood's survival averaged `r csu("psurv_mean")` over the winters ending in 2006 to 2013, from `r csu("psurv_mean", min)` to `r csu("psurv_mean", max)` by winter, and at most `r csu("psurv_below_half", max, "%.3f")` of the cells of any winter fell below one half; without the phloem conversion it averaged `r csu("psurv_air_mean")`. The flight-hour wind at Akokli Creek blew most often from the `r if (is.null(UWSUM)) "[pending]" else names(which.max(table(UWSUM$from_sector)))` sector, in `r uws("from_share", min)` to `r uws("from_share", max)` of windy hours by summer, and the upwind and downwind pressures correlated at `r uws("r_up_down_srv_near")` within 150 m and `r uws("r_up_down_srv_far")` from 150 to 1,050 m. With the survival weight, the upwind pressure within 150 m entered at `r ac("srv_up_near", "M3 upwind and downwind sources")` (`r ac("srv_up_near", "M3 upwind and downwind sources", col = "p")`) against `r ac("srv_down_near", "M3 upwind and downwind sources")` (`r ac("srv_down_near", "M3 upwind and downwind sources", col = "p")`) for the downwind pressure, a difference of `r uwt("survival", "near", "difference")` \[Wald z = `r uwt("survival", "near", "z", "%.2f")`, `r uwt("survival", "near", "p")`\], and from 150 to 1,050 m at `r ac("srv_up_far", "M3 upwind and downwind sources")` (`r ac("srv_up_far", "M3 upwind and downwind sources", col = "p")`) against `r ac("srv_down_far", "M3 upwind and downwind sources")` (`r ac("srv_down_far", "M3 upwind and downwind sources", col = "p")`), a difference of `r uwt("survival", "far", "difference")` \[Wald z = `r uwt("survival", "far", "z", "%.2f")`, `r uwt("survival", "far", "p")`\]. The undirected pressures entered at `r ac("srv_all_near", "M3 sources")` (`r ac("srv_all_near", "M3 sources", col = "p")`) within 150 m and `r ac("srv_all_far", "M3 sources")` (`r ac("srv_all_far", "M3 sources", col = "p")`) beyond it, and splitting them by the wind moved the AIC from `r uwa("survival", "aic_undirected")` to `r uwa("survival", "aic_directional")` on the same `r uwa("survival", "n_directional")` cell-years. Without the survival weight the differences were `r uwt("none", "near", "difference")` (`r uwt("none", "near", "p")`) within 150 m and `r uwt("none", "far", "difference")` (`r uwt("none", "far", "p")`) beyond it, the AIC moved from `r uwa("none", "aic_undirected")` to `r uwa("none", "aic_directional")`, and the undirected model had an AIC of `r if (is.null(AFIT)) "[pending]" else fmt(aft("M3 sources"))` with the survival weight against `r if (is.null(AFIT)) "[pending]" else fmt(aft("M3 sources, unweighted"))` without it.
 
 ## Fused series
 
@@ -6206,7 +5947,7 @@ ARS |> left_join(ASPT, by = "year") |>
 data.frame(Variable = pretty_terms(unlist(SUB)),
            Mechanism = rep(c("Host size", "Topographic shading", "Landform", "Stand density", "Terrain exposure to wind", "Terrain shape", "Flight-window radiation", "Station wind",
                              "Station wind, previous summer", "Measured surface temperature, previous summer", "Terrain at the scale of single trees", "Stand density",
-                             "Terrain wind model, previous summer", "Air trajectory source, previous summer", "Reanalysis vertical air speed, previous summer", "Valley bottoms, cold air, canopy height and winter cold", "Previous year's sources by wind direction"), lengths(SUB))) |>
+                             "Terrain wind model, previous summer", "Air trajectory source, previous summer", "Reanalysis vertical air speed, previous summer", "Valley bottoms, cold air, canopy height and winter cold"), lengths(SUB))) |>
   save_tbl("table-S3-variables")
 W16 |> filter(!grepl("Intercept|^geomorphon|^period", term)) |>
   transmute(Model = model, Term = pretty_terms(term), Estimate = paste0(sprintf("%+.3f", estimate), stars(p)), SE = sprintf("%.3f", se), n = fmt(n), AUC = sprintf("%.3f", auc)) |>
