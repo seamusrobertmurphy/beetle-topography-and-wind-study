@@ -1,9 +1,9 @@
-.Rproj.user
-.Rhistory
-.RData
-.Ruserdata
-.Rprofile
-.Rproj
+*.Rproj.user
+*.Rhistory
+*.RData
+*.Ruserdata
+*.Rprofile
+*.Rproj
 
 # Secrets: keep credentials out of git
 .Renviron
