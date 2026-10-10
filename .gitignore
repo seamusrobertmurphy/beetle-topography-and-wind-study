@@ -115,6 +115,7 @@ archive/ArcExports -Full Folder/
 # are excluded in their archived copy for the reason given for the live ones above.
 archive/2026-09-02-promotion/stale-knitr-cache/
 archive/full-repo-package/
+archive/
 02.inputs/beetle/red-stage-darkwoods-derived-plots/covariates_by_year.csv
 02.inputs/beetle/red-stage-darkwoods-derived-plots/refugia_model_data.csv
 02.inputs/beetle/red-stage-darkwoods-derived-plots/refugia_wind_data.csv
