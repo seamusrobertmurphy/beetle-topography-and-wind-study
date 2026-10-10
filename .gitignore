@@ -20,6 +20,7 @@ _backups/
 # was tracked until 2026-08-30 and was removed: this repository is public and is cited in
 # the manuscript's data availability statement.
 **/.claude/
+.claude/
 .claudeprism/
 
 # Obsidian vault settings, local to one machine.
@@ -123,3 +124,21 @@ archive/
 
 # knitr cache of the archived draft render, 669 MB with files over 100 MB
 01.manuscript/drafts/Manuscript_cache/
+02.inputs/beetle/covariates/hysplit/narr/
+02.inputs/beetle/covariates/hysplit/trajectories/run/
+02.inputs/aos/
+
+# US Forest Service Insect and Disease Survey download, 192 MB, rebuilt by chunk hysplit-source
+02.inputs/ids-usfs/
+
+archive/
+STARTUP
+WARNING
+MESSAGE
+
+# WindNinja and mixed-layer bulk outputs, 2026-10-09, rebuilt by the manuscript chunks
+02.inputs/beetle/covariates/wind-ninja/tests/
+02.inputs/beetle/covariates/wind-ninja/fine/
+02.inputs/beetle/covariates/wind-ninja/trench1km/*
+!02.inputs/beetle/covariates/wind-ninja/trench1km/era5_flight_hours_trench.csv
+02.inputs/beetle/covariates/lift/mixed-layer/

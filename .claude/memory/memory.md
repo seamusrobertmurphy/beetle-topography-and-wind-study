@@ -30,3 +30,8 @@ Seeded 2026-08-14. Parent-study audit added 2026-08-19. JAE venue and short manu
 
 The thread to pick up next is in `CLAUDE.md` under "Where the work stands", which is not committed. If it is missing, `domain/red-stage-classification.md` carries the same ground in dated entries.
 - [Site and wind](domain/site-and-wind.md) — regional setting checked against sources on 2026-10-01, the wind lag and the misread interaction
+- [WindNinja](tools/windninja.md) — the diurnal slope-wind and stability options read from the repository on 2026-10-03, and where it is not available
+- [PCIC station data](tools/pcic.md) — the working download route for the provincial hourly networks, the one-request limit, the column names by network, and the stations around Kootenay Lake including DARKWOODS from October 2014
+- [ERA5 from Copernicus](tools/era5.md) — the API calls made from R, where the key lives, and the valid_time trap in the new NetCDF
+- [HYSPLIT](tools/hysplit.md) — where 5.4.2 is installed, the working download route and checksum, and how the trajectory program is run
+- [tools/psl-opendap.md](tools/psl-opendap.md) — PSL server drops HTTP/2 transfers; read NARR as OPeNDAP text over HTTP/1.1

@@ -34,3 +34,8 @@
 02.inputs/**/*.md  !filter !diff !merge text
 02.inputs/**/*.txt !filter !diff !merge text
 02.inputs/climate/station-winter-minima.csv !filter !diff !merge text
+
+# ERA5-Land trench pull, 355 MB, over GitHub's 100 MB file limit, added 2026-10-09
+02.inputs/beetle/covariates/wind-ninja/trench1km/era5_flight_hours_trench.csv filter=lfs diff=lfs merge=lfs -text
+02.inputs/beetle/covariates/era5-land/era5_flight_hours.csv filter=lfs diff=lfs merge=lfs -text
+02.inputs/beetle/covariates/lift/era5_lift_hours.csv filter=lfs diff=lfs merge=lfs -text

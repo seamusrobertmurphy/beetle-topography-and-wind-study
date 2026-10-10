@@ -4,4 +4,4 @@
 "Terrain","Natural Resources Canada High Resolution Digital Elevation Model","30 m","static","61,923 cells"
 "Station wind","Environment and Climate Change Canada hourly stations","9 stations within 150 km","1 hour","19,157 hours"
 "Terrain-resolved wind","MicroMet terrain adjustment of station wind","30 m","1 year and 16 days","8 years and 47 periods"
-"Model tables","Rows joined from the above","30 m","1 year and 16 days","64,000 cell-years and 173,086 cell-periods"
+"Model tables","Rows joined from the above","30 m","1 year and 16 days","72,000 cell-years and 173,086 cell-periods"

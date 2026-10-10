@@ -259,6 +259,50 @@ Kootenay Lake, 42,300 ha, sits 1.9 km from the study perimeter, and the Kootenay
 band, so its edge is ragged; with no surrounding feature on the page that raggedness
 reads as a rendering fault rather than as a study boundary.
 
+### 10. Valley wind, provincial hourly station networks
+
+|  |  |
+|------------------------------------|------------------------------------|
+| Source | Pacific Climate Impacts Consortium, BC Station Data (PCDS), https://services.pacificclimate.org/met-data-portal-pcds/ |
+| Metadata | `https://services.pacificclimate.org/met-data-portal-pcds/api/metadata/{stations,networks,variables}?provinces=BC` |
+| Hourly | `https://services.pacificclimate.org/met-data-portal-pcds/api/data/lister/raw/<network>/<native_id>.rsql.csv?station_observations.time>"<from>"&station_observations.time<"<to>"` |
+| Networks | BC Wildfire Service (FLNRO-WMB), Ministry of Transportation and Infrastructure (MoTIe), BC Environment air quality (ENV-AQN) |
+| Licence | Open Government Licence, British Columbia, as distributed by PCIC; confirm on the portal before publication |
+| Retrieved | 2026-10-07 |
+| Chunk | `pcic-stations` in `01.manuscript/Manuscript.qmd` |
+| Local path | `beetle/covariates/pcic/` |
+
+The older lister under `services.pacificclimate.org/data/pcds/lister/raw/` answers with headers
+and no rows for every station, and the server refuses a second concurrent download, so
+requests run one at a time. The station named DARKWOODS, FLNRO-WMB 1203, at 1,657 m on the
+study area's high ground, starts on 15 October 2014, after the study years.
+
+### 11. Trajectories, NARR in HYSPLIT format
+
+|  |  |
+|------------------------------------|------------------------------------|
+| Source | NOAA Air Resources Laboratory, North American Regional Reanalysis in ARL format, ftp://ftp.arl.noaa.gov/archives/narr/ |
+| Files | `NARR<yyyy><mm>`, one a month, about 3.0 GB, July and August 2005 to 2014 |
+| Program | HYSPLIT 5.4.2 trial, https://www.ready.noaa.gov/HYSPLIT_machysplit.php, installed at `~/src/hysplit` |
+| Retrieved | from 2026-10-07 |
+| Chunks | `narr-archive`, `hysplit-trajectories`, `hysplit-corridors`, `hysplit-source` in `01.manuscript/Manuscript.qmd` |
+| Local path | `beetle/covariates/hysplit/narr/` (gitignored), `beetle/covariates/hysplit/trajectories/` |
+
+The FTP route ran at about 1.2 MB/s on 7 October 2026, three times the web route, so the 20 files
+take about 14 hours. The source term reads the aerial overview survey of section 1, downloaded by
+chunk `hysplit-source` to `02.inputs/aos/` when absent.
+
+### 12. Vertical air speed, NARR pressure levels
+
+|  |  |
+|------------------------------------|------------------------------------|
+| Source | NOAA Physical Sciences Laboratory, NCEP North American Regional Reanalysis, https://psl.noaa.gov/data/gridded/data.narr.html |
+| Service | `https://psl.noaa.gov/thredds/dodsC/Datasets/NARR/pressure/{omega,air}.<yyyymm>.nc` (OPeNDAP, read by `ncdf4` without download) |
+| Subset | 850 to 650 hPa, 21:00 and 00:00 UTC, June to August 2005 to 2014, cells within 160 km of the site |
+| Retrieved | from 2026-10-07 |
+| Chunk | `narr-vertical` in `01.manuscript/Manuscript.qmd` |
+| Local path | `beetle/covariates/narr-vertical/` |
+
 ## Ground plots, and what they can and cannot do
 
 `2.ExcelData/2.1.darkwoods_beetle_ground_plots.xlsx` in the companion archive holds 28 plots with the basal area of pine killed by beetle, 0.62 to 47.37 m²/ha, or 1.25 to 94.73 per cent of plot basal area, plus the 2020 Landsat values at each plot. These calibrate the severity scale.

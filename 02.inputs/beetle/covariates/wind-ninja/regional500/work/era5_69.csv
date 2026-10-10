@@ -1,0 +1,6 @@
+"Station_Name","Coord_Sys(PROJCS,GEOGCS)","Datum(WGS84,NAD83,NAD27)","Lat/YCoord","Lon/XCoord","Height","Height_Units(meters,feet)","Speed","Speed_Units(mph,kph,mps,kts)","Direction(degrees)","Temperature","Temperature_Units(F,C)","Cloud_Cover(%)","Radius_of_Influence","Radius_of_Influence_Units(miles,feet,meters,km)","date_time"
+"era5_69","GEOGCS","WGS84",48.9502239110966,-116.950534962263,10,"meters",8.14,"kph",256,12.3,"C",39,-1,"km","2014-08-31T19:00:00Z"
+"era5_69","GEOGCS","WGS84",48.9502239110966,-116.950534962263,10,"meters",9.1,"kph",260,13.1,"C",25,-1,"km","2014-08-31T20:00:00Z"
+"era5_69","GEOGCS","WGS84",48.9502239110966,-116.950534962263,10,"meters",9.56,"kph",256,13,"C",49,-1,"km","2014-08-31T21:00:00Z"
+"era5_69","GEOGCS","WGS84",48.9502239110966,-116.950534962263,10,"meters",9.98,"kph",255,13.2,"C",45,-1,"km","2014-08-31T22:00:00Z"
+"era5_69","GEOGCS","WGS84",48.9502239110966,-116.950534962263,10,"meters",9.94,"kph",258,13.3,"C",38,-1,"km","2014-08-31T23:00:00Z"

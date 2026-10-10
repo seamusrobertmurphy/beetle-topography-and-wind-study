@@ -1,61 +1,1081 @@
 "sample","dependence","model","interaction","focal","moderator","at","slope","se","p"
-"all years",FALSE,"M3","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.333522144158007,0.0185376324429377,2.26611201428257e-72
-"all years",FALSE,"M3","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.245744441134666,0.0169510622360976,1.26030713197834e-47
-"all years",FALSE,"M3","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0220732358941782,0.0175589329671594,0.20871946315062
-"all years",FALSE,"M3","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.109850938917519,0.017500175830996,3.44872088279463e-10
-"all years",FALSE,"M3","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.303588097011564,0.0172307758770458,1.7626059960432e-69
-"all years",FALSE,"M3","BASAL_AREA:jul","BASAL_AREA","jul",1,0.275678488281109,0.0174123816493286,1.86210867315035e-56
-"all years",FALSE,"M3","BASAL_AREA:jul","jul","BASAL_AREA",-1,0.0478290651805573,0.0151342419882796,0.00157595321067628
-"all years",FALSE,"M3","BASAL_AREA:jul","jul","BASAL_AREA",1,0.0199194564501021,0.0136479051642267,0.144420711964066
-"all years",FALSE,"M3","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.222658571656061,0.0173438366608402,1.00555685790923e-37
-"all years",FALSE,"M3","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.356608013636612,0.0183333841518521,2.84178238288113e-84
-"all years",FALSE,"M3","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.0109271549330537,0.0181216973738352,0.546517080541017
-"all years",FALSE,"M3","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.144876596913605,0.0207485920114327,2.90017434243075e-12
-"all years",FALSE,"M3 without radiation","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.292511771853471,0.0171946398290527,6.7142945661257e-65
-"all years",FALSE,"M3 without radiation","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.271429349686473,0.0159933584295635,1.33753581893661e-64
-"all years",FALSE,"M3 without radiation","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0147776924644981,0.0133117160336339,0.266944398505352
-"all years",FALSE,"M3 without radiation","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0358601146314963,0.0138572411346611,0.00965840435379716
-"all years",FALSE,"M3 without radiation","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.295787220098803,0.0171785941568632,1.93390513091071e-66
-"all years",FALSE,"M3 without radiation","BASAL_AREA:jul","BASAL_AREA","jul",1,0.26815390144114,0.0173793935265441,1.03804434271586e-53
-"all years",FALSE,"M3 without radiation","BASAL_AREA:jul","jul","BASAL_AREA",-1,0.0480100796644196,0.015165635192732,0.00154702257144427
-"all years",FALSE,"M3 without radiation","BASAL_AREA:jul","jul","BASAL_AREA",1,0.0203767610067571,0.0136177415259052,0.134565274353627
-"with previous year",FALSE,"M3","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.315895947209864,0.0198060230297453,2.87237361684009e-57
-"with previous year",FALSE,"M3","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.275532962956366,0.018441796511417,1.79140383404164e-50
-"with previous year",FALSE,"M3","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0498224171554163,0.019206860606825,0.00948690621758255
-"with previous year",FALSE,"M3","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0901854014089144,0.0188098768833812,1.6301851326513e-06
-"with previous year",FALSE,"M3","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.307985623301758,0.0208686745056075,2.72155658431516e-49
-"with previous year",FALSE,"M3","BASAL_AREA:jul","BASAL_AREA","jul",1,0.283443286864471,0.0177836669079132,3.42996723181581e-57
-"with previous year",FALSE,"M3","BASAL_AREA:jul","jul","BASAL_AREA",-1,0.0572443382618774,0.0176149704848104,0.00115504474791302
-"with previous year",FALSE,"M3","BASAL_AREA:jul","jul","BASAL_AREA",1,0.0327020018245898,0.0153068488903558,0.0326444306984563
-"with previous year",FALSE,"M3","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.232244354290994,0.0187016062240832,2.07627826791789e-35
-"with previous year",FALSE,"M3","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.359184555875236,0.0194453924069963,3.50553474418059e-76
-"with previous year",FALSE,"M3","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,-0.00725070513748562,0.0193852588216396,0.708380585060509
-"with previous year",FALSE,"M3","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.119689496446756,0.022076639548973,5.90860932504823e-08
-"with previous year",TRUE,"M3","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.2041374814297,0.0219746023178746,1.54722598620005e-20
-"with previous year",TRUE,"M3","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.162664814097681,0.0202029503502591,8.1760298744517e-16
-"with previous year",TRUE,"M3","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0187888740498472,0.0208049563775082,0.366474917038163
-"with previous year",TRUE,"M3","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0602615413818657,0.0209523407557386,0.00402590835707704
-"with previous year",TRUE,"M3","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.16139136693229,0.0235280507493139,6.90875317845068e-12
-"with previous year",TRUE,"M3","BASAL_AREA:jul","BASAL_AREA","jul",1,0.205410928595091,0.0190898956761955,5.30599290961036e-27
-"with previous year",TRUE,"M3","BASAL_AREA:jul","jul","BASAL_AREA",-1,0.194832406532084,0.0192789171664254,5.19717872382482e-24
-"with previous year",TRUE,"M3","BASAL_AREA:jul","jul","BASAL_AREA",1,0.238851968194884,0.0174981800935162,2.01592224817505e-42
-"with previous year",TRUE,"M3","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.129786322627014,0.0207181609729555,3.74324499853866e-10
-"with previous year",TRUE,"M3","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.237015972900368,0.0215190066079252,3.26199453698289e-28
-"with previous year",TRUE,"M3","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.0311322128575468,0.0212022626197464,0.142010833510637
-"with previous year",TRUE,"M3","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.138361863130901,0.024896937218154,2.73846435465393e-08
-"with previous year",FALSE,"M3 without radiation","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.278272799188231,0.0184431649276043,1.93870333113358e-51
-"with previous year",FALSE,"M3 without radiation","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.304213253933138,0.017355169598089,8.65521131193208e-69
-"with previous year",FALSE,"M3 without radiation","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0544058473215059,0.0146768126524879,0.000209790835975258
-"with previous year",FALSE,"M3 without radiation","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0284653925765994,0.0148406353159052,0.0551020060056629
-"with previous year",FALSE,"M3 without radiation","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.305501664403594,0.0208563100798576,1.38893109778636e-48
-"with previous year",FALSE,"M3 without radiation","BASAL_AREA:jul","BASAL_AREA","jul",1,0.276984388717775,0.0177406992727276,5.94383555415041e-55
-"with previous year",FALSE,"M3 without radiation","BASAL_AREA:jul","jul","BASAL_AREA",-1,0.0597094555841302,0.017646819114682,0.000715468969047882
-"with previous year",FALSE,"M3 without radiation","BASAL_AREA:jul","jul","BASAL_AREA",1,0.0311921798983118,0.0152669507178169,0.0410407709023678
-"with previous year",TRUE,"M3 without radiation","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.171903920223457,0.0204765618550816,4.65278188163977e-17
-"with previous year",TRUE,"M3 without radiation","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.182405914117333,0.0189801571663208,7.23042483599894e-22
-"with previous year",TRUE,"M3 without radiation","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,6.84786248316294e-06,0.0158352559797345,0.999654959567025
-"with previous year",TRUE,"M3 without radiation","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,0.0105088417563585,0.0165793819783373,0.526178699610792
-"with previous year",TRUE,"M3 without radiation","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.157038921769226,0.023478746627193,2.25382735436293e-11
-"with previous year",TRUE,"M3 without radiation","BASAL_AREA:jul","BASAL_AREA","jul",1,0.197270912571564,0.0189942209994041,2.87630501724066e-25
-"with previous year",TRUE,"M3 without radiation","BASAL_AREA:jul","jul","BASAL_AREA",-1,0.196892118452078,0.0192816542397971,1.76355743941136e-24
-"with previous year",TRUE,"M3 without radiation","BASAL_AREA:jul","jul","BASAL_AREA",1,0.237124109254416,0.0174488638946996,4.61224604670375e-42
+"all years",FALSE,"M3","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.306207688896853,0.0175425947265507,3.14843558897722e-68
+"all years",FALSE,"M3","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.246564717988855,0.0162033604766332,2.73222919144077e-52
+"all years",FALSE,"M3","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0427496310554516,0.0168766633407435,0.0113071019080553
+"all years",FALSE,"M3","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.10239260196345,0.0167442826336697,9.65094720632587e-10
+"all years",FALSE,"M3","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.272739537221038,0.0169045359488602,1.46924861722094e-58
+"all years",FALSE,"M3","BASAL_AREA:jul","BASAL_AREA","jul",1,0.28003286966467,0.0161785684032098,4.03194114471263e-67
+"all years",FALSE,"M3","BASAL_AREA:jul","jul","BASAL_AREA",-1,0.0608038445756113,0.0142190682898312,1.90094555209352e-05
+"all years",FALSE,"M3","BASAL_AREA:jul","jul","BASAL_AREA",1,0.0680971770192438,0.0127297040676785,8.82119134647598e-08
+"all years",FALSE,"M3","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.210421772997362,0.0164393319984169,1.64166691126417e-37
+"all years",FALSE,"M3","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.342350633888347,0.017325056652242,6.52417596028048e-87
+"all years",FALSE,"M3","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.012456053176359,0.0172843341777687,0.471121402127584
+"all years",FALSE,"M3","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.144384914067344,0.0198230631281297,3.24827035684927e-13
+"all years",FALSE,"M3 lagged wind","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.305679196038437,0.0175096565455141,3.00551713359164e-68
+"all years",FALSE,"M3 lagged wind","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.24700882712392,0.0161897958883103,1.47737681217812e-52
+"all years",FALSE,"M3 lagged wind","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0433668012068279,0.0168637999616225,0.010123232018725
+"all years",FALSE,"M3 lagged wind","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.102037170121344,0.0167408498891325,1.09368408478145e-09
+"all years",FALSE,"M3 lagged wind","BASAL_AREA:jul_lag","BASAL_AREA","jul_lag",-1,0.266071076851523,0.0161970333849139,1.22274540791622e-60
+"all years",FALSE,"M3 lagged wind","BASAL_AREA:jul_lag","BASAL_AREA","jul_lag",1,0.286616946310834,0.0165588103625149,4.02132075677476e-67
+"all years",FALSE,"M3 lagged wind","BASAL_AREA:jul_lag","jul_lag","BASAL_AREA",-1,0.0018680892131537,0.0140424027504869,0.894168056714616
+"all years",FALSE,"M3 lagged wind","BASAL_AREA:jul_lag","jul_lag","BASAL_AREA",1,0.0224139586724643,0.0126126983427919,0.0755526692475183
+"all years",FALSE,"M3 lagged wind","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.211412501310158,0.0164308831243582,6.92316358522995e-38
+"all years",FALSE,"M3 lagged wind","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.341275521852198,0.0172983449785614,1.22042068951698e-86
+"all years",FALSE,"M3 lagged wind","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.0117083524925191,0.0172811223916224,0.498074380140704
+"all years",FALSE,"M3 lagged wind","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.141571373034559,0.0198134266793384,8.98492101959542e-13
+"all years",FALSE,"M3 lagged wind, diameter and closure","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.251543370009525,0.020170738513672,1.07864757978052e-35
+"all years",FALSE,"M3 lagged wind, diameter and closure","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.194270667477477,0.0188464988357113,6.48022742206018e-25
+"all years",FALSE,"M3 lagged wind, diameter and closure","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0448783864215429,0.0169304084075776,0.00803117713016116
+"all years",FALSE,"M3 lagged wind, diameter and closure","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.102151088953591,0.0167354318814285,1.03523209980085e-09
+"all years",FALSE,"M3 lagged wind, diameter and closure","QUAD_DIAM_125:jul_lag","QUAD_DIAM_125","jul_lag",-1,-0.204868430034477,0.0173935961006685,5.04518556919114e-32
+"all years",FALSE,"M3 lagged wind, diameter and closure","QUAD_DIAM_125:jul_lag","QUAD_DIAM_125","jul_lag",1,-0.235655533426676,0.0160117184208034,4.96315033556431e-49
+"all years",FALSE,"M3 lagged wind, diameter and closure","QUAD_DIAM_125:jul_lag","jul_lag","QUAD_DIAM_125",-1,0.0303142702661912,0.013472953572799,0.024448357649367
+"all years",FALSE,"M3 lagged wind, diameter and closure","QUAD_DIAM_125:jul_lag","jul_lag","QUAD_DIAM_125",1,-0.000472833126008217,0.0120220333229116,0.968626853835724
+"all years",FALSE,"M3 lagged wind, diameter and closure","CROWN_CLOSURE:jul_lag","CROWN_CLOSURE","jul_lag",-1,0.0642559340349549,0.0168028373460902,0.000131244181582992
+"all years",FALSE,"M3 lagged wind, diameter and closure","CROWN_CLOSURE:jul_lag","CROWN_CLOSURE","jul_lag",1,0.0820788428416413,0.0170312001093384,1.44046673434617e-06
+"all years",FALSE,"M3 lagged wind, diameter and closure","CROWN_CLOSURE:jul_lag","jul_lag","CROWN_CLOSURE",-1,0.0060092641667483,0.0139191158268448,0.665939525533537
+"all years",FALSE,"M3 lagged wind, diameter and closure","CROWN_CLOSURE:jul_lag","jul_lag","CROWN_CLOSURE",1,0.0238321729734347,0.0133739216703444,0.0747511271342891
+"all years",FALSE,"M3 lagged wind, diameter and closure","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.166537377897026,0.0183173290575604,9.74183566802135e-20
+"all years",FALSE,"M3 lagged wind, diameter and closure","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.279276659589976,0.0207727412086263,3.32171088112734e-41
+"all years",FALSE,"M3 lagged wind, diameter and closure","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.0206504394081489,0.0174094378765436,0.235557745566057
+"all years",FALSE,"M3 lagged wind, diameter and closure","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.133389721101099,0.0198703111395271,1.90641904493348e-11
+"all years",FALSE,"M3 measured heat","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.293932143373766,0.0170559304349618,1.49051260571995e-66
+"all years",FALSE,"M3 measured heat","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.325118895633602,0.0154485900527855,2.52969021860164e-98
+"all years",FALSE,"M3 measured heat","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,0.0689074308764168,0.0133338686652981,2.36802454291501e-07
+"all years",FALSE,"M3 measured heat","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,0.100094183136253,0.0136900185405408,2.64232180230511e-13
+"all years",FALSE,"M3 measured heat","BASAL_AREA:jul_lag","BASAL_AREA","jul_lag",-1,0.308306218931795,0.0165002560785396,6.56582888599924e-78
+"all years",FALSE,"M3 measured heat","BASAL_AREA:jul_lag","BASAL_AREA","jul_lag",1,0.310744820075573,0.0170929365264167,7.4712675541129e-74
+"all years",FALSE,"M3 measured heat","BASAL_AREA:jul_lag","jul_lag","BASAL_AREA",-1,0.0355935002021018,0.014384945713672,0.0133476007841253
+"all years",FALSE,"M3 measured heat","BASAL_AREA:jul_lag","jul_lag","BASAL_AREA",1,0.0380321013458803,0.0130508617043732,0.00356664380748299
+"all years",FALSE,"M3 measured heat","BASAL_AREA:st_flight_lag","BASAL_AREA","st_flight_lag",-1,0.175106518549449,0.0181661857959063,5.46406039717193e-22
+"all years",FALSE,"M3 measured heat","BASAL_AREA:st_flight_lag","BASAL_AREA","st_flight_lag",1,0.443944520457919,0.0163452757336006,1.90737957040754e-162
+"all years",FALSE,"M3 measured heat","BASAL_AREA:st_flight_lag","st_flight_lag","BASAL_AREA",-1,0.425544753236749,0.0156078782025176,1.11137611146138e-163
+"all years",FALSE,"M3 measured heat","BASAL_AREA:st_flight_lag","st_flight_lag","BASAL_AREA",1,0.694382755145219,0.0162302655617055,0
+"all years",FALSE,"M3 lidar","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.300296640005806,0.0176166252484585,3.72964733310535e-65
+"all years",FALSE,"M3 lidar","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.239987572637044,0.0163283593806862,6.6792438324662e-49
+"all years",FALSE,"M3 lidar","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0382690910233161,0.0169325161828777,0.023815370570667
+"all years",FALSE,"M3 lidar","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0985781583920783,0.0167544958697925,4.01233697782839e-09
+"all years",FALSE,"M3 lidar","BASAL_AREA:jul_lag","BASAL_AREA","jul_lag",-1,0.259830281974719,0.0163202396498363,4.5496857475321e-57
+"all years",FALSE,"M3 lidar","BASAL_AREA:jul_lag","BASAL_AREA","jul_lag",1,0.280453930668131,0.0166894585965898,2.27145619781579e-63
+"all years",FALSE,"M3 lidar","BASAL_AREA:jul_lag","jul_lag","BASAL_AREA",-1,0.00156809006900855,0.0140632978321132,0.911218040984506
+"all years",FALSE,"M3 lidar","BASAL_AREA:jul_lag","jul_lag","BASAL_AREA",1,0.0221917387624204,0.0126133468406812,0.0785120635150386
+"all years",FALSE,"M3 lidar","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.208448187676906,0.0164956134955135,1.32696560770015e-36
+"all years",FALSE,"M3 lidar","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.331836024965945,0.0175709519931886,1.50140396817501e-79
+"all years",FALSE,"M3 lidar","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,-0.00724269223533035,0.0186087087540282,0.697120937734707
+"all years",FALSE,"M3 lidar","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.116145145053708,0.0215698379949032,7.26022732514441e-08
+"all years",FALSE,"M3 without radiation","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.266168240475168,0.0162412270657019,2.31336346010413e-60
+"all years",FALSE,"M3 without radiation","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.273592043156629,0.0152762926222214,9.92750668140284e-72
+"all years",FALSE,"M3 without radiation","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.03497652829136,0.0128064440175485,0.00631106175969002
+"all years",FALSE,"M3 without radiation","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.027552725609899,0.0131750070619049,0.0365023130672879
+"all years",FALSE,"M3 without radiation","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.266281243910331,0.016876732176751,4.40871967040621e-56
+"all years",FALSE,"M3 without radiation","BASAL_AREA:jul","BASAL_AREA","jul",1,0.273479039721465,0.0161598635925756,3.02707919837137e-64
+"all years",FALSE,"M3 without radiation","BASAL_AREA:jul","jul","BASAL_AREA",-1,0.0605603469524869,0.0142588122103237,2.1643706326058e-05
+"all years",FALSE,"M3 without radiation","BASAL_AREA:jul","jul","BASAL_AREA",1,0.0677581427636208,0.0126941566577566,9.41108525084487e-08
+"all years",FALSE,"M3 modelled wind","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.280869260457198,0.0182718106284145,2.53330685679136e-53
+"all years",FALSE,"M3 modelled wind","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.248488695670266,0.016196324677613,3.98877397201177e-53
+"all years",FALSE,"M3 modelled wind","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0589915846690729,0.0171727556413862,0.000592150442425311
+"all years",FALSE,"M3 modelled wind","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0913721494560048,0.0169768151602122,7.3592146473971e-08
+"all years",FALSE,"M3 modelled wind","BASAL_AREA:wnlag_speed","BASAL_AREA","wnlag_speed",-1,0.216820550553633,0.0181462768857864,6.61180944190246e-33
+"all years",FALSE,"M3 modelled wind","BASAL_AREA:wnlag_speed","BASAL_AREA","wnlag_speed",1,0.312537405573831,0.015439928233068,4.16559466105828e-91
+"all years",FALSE,"M3 modelled wind","BASAL_AREA:wnlag_speed","wnlag_speed","BASAL_AREA",-1,-0.0657080914751912,0.0156467302716823,2.67531630524125e-05
+"all years",FALSE,"M3 modelled wind","BASAL_AREA:wnlag_speed","wnlag_speed","BASAL_AREA",1,0.0300087635450062,0.0167499797917498,0.073201850748005
+"all years",FALSE,"M3 modelled wind","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.231776605336761,0.0170726473800042,5.5653535392664e-42
+"all years",FALSE,"M3 modelled wind","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.297581350790703,0.0195347243990251,2.12080469614249e-52
+"all years",FALSE,"M3 modelled wind","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.0518521940316909,0.0191563367542656,0.00679370752842717
+"all years",FALSE,"M3 modelled wind","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.117656939485633,0.0214147046294419,3.92457532528614e-08
+"all years",FALSE,"M3 upslope share","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.295724502825897,0.0178454928532273,1.1221430412329e-61
+"all years",FALSE,"M3 upslope share","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.231836257945131,0.0165490773998531,1.37297809340529e-44
+"all years",FALSE,"M3 upslope share","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0414044400663047,0.0169090535991797,0.0143390686001951
+"all years",FALSE,"M3 upslope share","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.105292684947071,0.0167537233407286,3.28416750411625e-10
+"all years",FALSE,"M3 upslope share","BASAL_AREA:wnlag_upslope","BASAL_AREA","wnlag_upslope",-1,0.230342300603141,0.0190193943027338,9.24550251120213e-34
+"all years",FALSE,"M3 upslope share","BASAL_AREA:wnlag_upslope","BASAL_AREA","wnlag_upslope",1,0.297218460167887,0.01499222157898,1.81742285974613e-87
+"all years",FALSE,"M3 upslope share","BASAL_AREA:wnlag_upslope","wnlag_upslope","BASAL_AREA",-1,-0.0931326319203897,0.0154441939291275,1.63687772399503e-09
+"all years",FALSE,"M3 upslope share","BASAL_AREA:wnlag_upslope","wnlag_upslope","BASAL_AREA",1,-0.0262564723556435,0.0144627497032159,0.0694540038213532
+"all years",FALSE,"M3 upslope share","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.216592254917285,0.0165204022034282,2.86353964044439e-39
+"all years",FALSE,"M3 upslope share","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.310968505853743,0.019021291333841,4.46233715720939e-60
+"all years",FALSE,"M3 upslope share","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.0500755659100377,0.0188134665074405,0.00777500579390665
+"all years",FALSE,"M3 upslope share","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.144451816846495,0.0200798999323233,6.298873525665e-13
+"all years",FALSE,"M3 shelter at the modelled wind","BASAL_AREA:wnlag_shelter","BASAL_AREA","wnlag_shelter",-1,0.221278275239089,0.0183338194638164,1.53239974057213e-33
+"all years",FALSE,"M3 shelter at the modelled wind","BASAL_AREA:wnlag_shelter","BASAL_AREA","wnlag_shelter",1,0.303450682126715,0.014890661245194,2.59008599294924e-92
+"all years",FALSE,"M3 shelter at the modelled wind","BASAL_AREA:wnlag_shelter","wnlag_shelter","BASAL_AREA",-1,-0.0877304904857632,0.0141456301152607,5.57678026013895e-10
+"all years",FALSE,"M3 shelter at the modelled wind","BASAL_AREA:wnlag_shelter","wnlag_shelter","BASAL_AREA",1,-0.00555808359813709,0.0130961576905643,0.67126998528295
+"all years",FALSE,"M3 shelter at the modelled wind","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.227102639900804,0.0157450031116635,3.66636294450578e-47
+"all years",FALSE,"M3 shelter at the modelled wind","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.297626317465,0.0165142406537033,1.29970927389082e-72
+"all years",FALSE,"M3 shelter at the modelled wind","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,-0.010097552136225,0.0133798768857577,0.45043981428662
+"all years",FALSE,"M3 shelter at the modelled wind","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.0604261254279713,0.0154499693209842,9.1882865467702e-05
+"all years",FALSE,"M3 modelled wind, diameter and closure","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.243682707123889,0.0207636494210883,8.33109485455367e-32
+"all years",FALSE,"M3 modelled wind, diameter and closure","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.207647009405171,0.0189704210654065,6.95773003451213e-28
+"all years",FALSE,"M3 modelled wind, diameter and closure","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.058639831104572,0.0170944638467351,0.000602824335028572
+"all years",FALSE,"M3 modelled wind, diameter and closure","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0946755288232891,0.0168841674802253,2.05441445700281e-08
+"all years",FALSE,"M3 modelled wind, diameter and closure","QUAD_DIAM_125:wnlag_speed","QUAD_DIAM_125","wnlag_speed",-1,-0.28920648395984,0.0172482259482742,4.23185702874398e-63
+"all years",FALSE,"M3 modelled wind, diameter and closure","QUAD_DIAM_125:wnlag_speed","QUAD_DIAM_125","wnlag_speed",1,-0.163988610275601,0.0155772782184996,6.45776222051561e-26
+"all years",FALSE,"M3 modelled wind, diameter and closure","QUAD_DIAM_125:wnlag_speed","wnlag_speed","QUAD_DIAM_125",-1,-0.0886228371726066,0.0160250384117322,3.19732811149202e-08
+"all years",FALSE,"M3 modelled wind, diameter and closure","QUAD_DIAM_125:wnlag_speed","wnlag_speed","QUAD_DIAM_125",1,0.0365950365116326,0.0145097010098777,0.0116653806411085
+"all years",FALSE,"M3 modelled wind, diameter and closure","CROWN_CLOSURE:wnlag_speed","CROWN_CLOSURE","wnlag_speed",-1,0.0453612211158401,0.0160370727366641,0.00467634133548469
+"all years",FALSE,"M3 modelled wind, diameter and closure","CROWN_CLOSURE:wnlag_speed","CROWN_CLOSURE","wnlag_speed",1,0.0958871084898086,0.0162952172275746,3.99569931579887e-09
+"all years",FALSE,"M3 modelled wind, diameter and closure","CROWN_CLOSURE:wnlag_speed","wnlag_speed","CROWN_CLOSURE",-1,-0.0512768440174713,0.0143331001515082,0.000346879722601542
+"all years",FALSE,"M3 modelled wind, diameter and closure","CROWN_CLOSURE:wnlag_speed","wnlag_speed","CROWN_CLOSURE",1,-0.00075095664350279,0.0168277959675329,0.964405445739153
+"all years",FALSE,"M3 modelled wind, diameter and closure","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.201201858529131,0.01880670087987,1.03535911065081e-26
+"all years",FALSE,"M3 modelled wind, diameter and closure","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.250127857999929,0.0219007363189404,3.28510842850848e-30
+"all years",FALSE,"M3 modelled wind, diameter and closure","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.0642264133759667,0.0186514630521174,0.000574225167763918
+"all years",FALSE,"M3 modelled wind, diameter and closure","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.113152412846764,0.020966220069107,6.78053995240001e-08
+"all years",FALSE,"M3 modelled wind, 30 m","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.304249893836772,0.0186017514728387,3.94306930515835e-60
+"all years",FALSE,"M3 modelled wind, 30 m","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.248936795157897,0.0161974023163332,2.64488067133445e-53
+"all years",FALSE,"M3 modelled wind, 30 m","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0546829248256892,0.0172739915405672,0.00154751838123003
+"all years",FALSE,"M3 modelled wind, 30 m","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.109996023504565,0.0170717652394131,1.17015354337666e-10
+"all years",FALSE,"M3 modelled wind, 30 m","BASAL_AREA:wnlag_speed30","BASAL_AREA","wnlag_speed30",-1,0.275863621791671,0.019030630870079,1.28851913085478e-47
+"all years",FALSE,"M3 modelled wind, 30 m","BASAL_AREA:wnlag_speed30","BASAL_AREA","wnlag_speed30",1,0.277323067202998,0.0153376100320216,4.47864184247395e-73
+"all years",FALSE,"M3 modelled wind, 30 m","BASAL_AREA:wnlag_speed30","wnlag_speed30","BASAL_AREA",-1,-0.0804961878388279,0.015434742411238,1.83560023723887e-07
+"all years",FALSE,"M3 modelled wind, 30 m","BASAL_AREA:wnlag_speed30","wnlag_speed30","BASAL_AREA",1,-0.079036742427501,0.0164549484711978,1.56133942616857e-06
+"all years",FALSE,"M3 modelled wind, 30 m","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.212772779014419,0.0169742919454504,4.8035093558465e-36
+"all years",FALSE,"M3 modelled wind, 30 m","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.34041390998025,0.0200300516457624,8.91883976654887e-65
+"all years",FALSE,"M3 modelled wind, 30 m","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.0494801586746698,0.0194270342913959,0.0108661409572943
+"all years",FALSE,"M3 modelled wind, 30 m","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.177121289640501,0.0217402338870766,3.72552775907257e-16
+"all years",FALSE,"M3 modelled wind, 10 m","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.309191624714637,0.0183963259210532,2.15964912744364e-63
+"all years",FALSE,"M3 modelled wind, 10 m","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.245297867613838,0.0162280741158815,1.27707210006886e-51
+"all years",FALSE,"M3 modelled wind, 10 m","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0395770868097434,0.0174049459495115,0.0229720680706032
+"all years",FALSE,"M3 modelled wind, 10 m","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.103470843910543,0.0170605569040077,1.32022664609283e-09
+"all years",FALSE,"M3 modelled wind, 10 m","BASAL_AREA:wnlag_speed10","BASAL_AREA","wnlag_speed10",-1,0.283173767247807,0.0182035125969096,1.44883935066998e-54
+"all years",FALSE,"M3 modelled wind, 10 m","BASAL_AREA:wnlag_speed10","BASAL_AREA","wnlag_speed10",1,0.271315725080668,0.0154499404939369,4.90422742384884e-69
+"all years",FALSE,"M3 modelled wind, 10 m","BASAL_AREA:wnlag_speed10","wnlag_speed10","BASAL_AREA",-1,0.0133174436738261,0.0144862082305162,0.357928843372247
+"all years",FALSE,"M3 modelled wind, 10 m","BASAL_AREA:wnlag_speed10","wnlag_speed10","BASAL_AREA",1,0.00145940150668691,0.0157326569546696,0.926092196923765
+"all years",FALSE,"M3 modelled wind, 10 m","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.208751056034299,0.0168847222900062,4.12802026928159e-35
+"all years",FALSE,"M3 modelled wind, 10 m","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.345738436294176,0.0192276446450133,2.72915866639381e-72
+"all years",FALSE,"M3 modelled wind, 10 m","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.00428839662376305,0.0189583094397831,0.821044761815032
+"all years",FALSE,"M3 modelled wind, 10 m","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.14127577688364,0.0214088704025946,4.14117552157271e-11
+"all years",FALSE,"M3 lift","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.322732152577586,0.0176520847743927,1.13141449146251e-74
+"all years",FALSE,"M3 lift","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.271878555676033,0.0165815771687528,2.02834331728084e-60
+"all years",FALSE,"M3 lift","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0503632258056623,0.0168399458415336,0.0027833880518967
+"all years",FALSE,"M3 lift","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.101216822707215,0.0168159683913403,1.75400619893972e-09
+"all years",FALSE,"M3 lift","BASAL_AREA:wnlag_lift","BASAL_AREA","wnlag_lift",-1,0.411086524736328,0.0221787140954135,1.07423682452886e-76
+"all years",FALSE,"M3 lift","BASAL_AREA:wnlag_lift","BASAL_AREA","wnlag_lift",1,0.183524183517291,0.0181032381679474,3.76059896605822e-24
+"all years",FALSE,"M3 lift","BASAL_AREA:wnlag_lift","wnlag_lift","BASAL_AREA",-1,0.0406918973547316,0.0217362081369827,0.0611956839836047
+"all years",FALSE,"M3 lift","BASAL_AREA:wnlag_lift","wnlag_lift","BASAL_AREA",1,-0.186870443864305,0.0214919646095414,3.47140956397744e-18
+"all years",FALSE,"M3 lift","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.139119256506899,0.0191920608811081,4.20505204322148e-13
+"all years",FALSE,"M3 lift","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.455491451746719,0.0230636534096599,8.13065766343406e-87
+"all years",FALSE,"M3 lift","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,-0.0254613237175815,0.02562578256995,0.32042626993494
+"all years",FALSE,"M3 lift","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.290910871522238,0.0264131192457278,3.27592791746395e-28
+"all years",FALSE,"M3 lift with year","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.348246983271389,0.0179787969906086,1.38603656509209e-83
+"all years",FALSE,"M3 lift with year","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.2837378624472,0.0168164310270664,7.15070599942219e-64
+"all years",FALSE,"M3 lift with year","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0741720181720963,0.0170550841800202,1.36779563077514e-05
+"all years",FALSE,"M3 lift with year","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.138681138996285,0.0170106584338931,3.5617440051777e-16
+"all years",FALSE,"M3 lift with year","BASAL_AREA:wnlag_lift","BASAL_AREA","wnlag_lift",-1,0.45927174402549,0.0225150257365574,1.72581870636974e-92
+"all years",FALSE,"M3 lift with year","BASAL_AREA:wnlag_lift","BASAL_AREA","wnlag_lift",1,0.1727131016931,0.0183644012269405,5.2140560530885e-21
+"all years",FALSE,"M3 lift with year","BASAL_AREA:wnlag_lift","wnlag_lift","BASAL_AREA",-1,-0.815731539765633,0.0361318152331715,7.36895677162503e-113
+"all years",FALSE,"M3 lift with year","BASAL_AREA:wnlag_lift","wnlag_lift","BASAL_AREA",1,-1.10229018209802,0.0380050243387149,5.89195491893428e-185
+"all years",FALSE,"M3 lift with year","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.141653827901442,0.0193462632521914,2.44256189196715e-13
+"all years",FALSE,"M3 lift with year","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.490331017817148,0.0233589424253422,7.90142233445878e-98
+"all years",FALSE,"M3 lift with year","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.733371306149569,0.0362396785972985,4.65352234344606e-91
+"all years",FALSE,"M3 lift with year","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,1.08204849606527,0.0378513122828903,9.79956453251708e-180
+"all years",FALSE,"M3 lift, 10 m speed and upslope","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.351420117179542,0.0180280427826861,1.25951467050374e-84
+"all years",FALSE,"M3 lift, 10 m speed and upslope","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.280650273599632,0.0168374420394531,2.2312213411441e-62
+"all years",FALSE,"M3 lift, 10 m speed and upslope","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0671760064997864,0.0172581053564178,9.92442041976717e-05
+"all years",FALSE,"M3 lift, 10 m speed and upslope","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.137945850079697,0.0170524965447192,5.99194054535784e-16
+"all years",FALSE,"M3 lift, 10 m speed and upslope","BASAL_AREA:wnlag_lift","BASAL_AREA","wnlag_lift",-1,0.458890052595825,0.0225466067637282,4.3712157438685e-92
+"all years",FALSE,"M3 lift, 10 m speed and upslope","BASAL_AREA:wnlag_lift","BASAL_AREA","wnlag_lift",1,0.17318033818335,0.0183625000626554,4.05439021181012e-21
+"all years",FALSE,"M3 lift, 10 m speed and upslope","BASAL_AREA:wnlag_lift","wnlag_lift","BASAL_AREA",-1,-0.817507927681466,0.0363334558238798,4.1373239142633e-112
+"all years",FALSE,"M3 lift, 10 m speed and upslope","BASAL_AREA:wnlag_lift","wnlag_lift","BASAL_AREA",1,-1.10321764209394,0.0383114399575638,2.4045970255294e-182
+"all years",FALSE,"M3 lift, 10 m speed and upslope","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.144209230924268,0.0193604580723273,9.43018378675026e-14
+"all years",FALSE,"M3 lift, 10 m speed and upslope","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.487861159854906,0.0234030615273615,1.65571151269675e-96
+"all years",FALSE,"M3 lift, 10 m speed and upslope","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.734866167287786,0.0363649754047279,8.31265312756786e-91
+"all years",FALSE,"M3 lift, 10 m speed and upslope","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,1.07851809621842,0.037902635699999,4.23059166113925e-178
+"all years",FALSE,"M3 slope updraft","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.291006707556556,0.0182286840931093,2.26863105729787e-57
+"all years",FALSE,"M3 slope updraft","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.230108663819094,0.0165792319604129,8.45280907025178e-44
+"all years",FALSE,"M3 slope updraft","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0480873821489774,0.0170015457512647,0.00467795074807829
+"all years",FALSE,"M3 slope updraft","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.108985425886439,0.0167580816584857,7.8496037402602e-11
+"all years",FALSE,"M3 slope updraft","BASAL_AREA:wnlag_oro","BASAL_AREA","wnlag_oro",-1,0.235611346626817,0.0191232899497904,7.01274769106791e-35
+"all years",FALSE,"M3 slope updraft","BASAL_AREA:wnlag_oro","BASAL_AREA","wnlag_oro",1,0.285504024748833,0.0144056686361935,2.04666402785487e-87
+"all years",FALSE,"M3 slope updraft","BASAL_AREA:wnlag_oro","wnlag_oro","BASAL_AREA",-1,-0.160368577884942,0.0145274418017849,2.47747226023866e-28
+"all years",FALSE,"M3 slope updraft","BASAL_AREA:wnlag_oro","wnlag_oro","BASAL_AREA",1,-0.110475899762926,0.0170882405232598,1.01282158358345e-10
+"all years",FALSE,"M3 slope updraft","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.223301345235514,0.016622128053468,3.82296723426222e-41
+"all years",FALSE,"M3 slope updraft","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.297814026140137,0.0197984025259483,3.87684702086247e-51
+"all years",FALSE,"M3 slope updraft","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.0974518402941258,0.0196339217682693,6.92545773647359e-07
+"all years",FALSE,"M3 slope updraft","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.171964521198749,0.0204941770059031,4.82448311836376e-17
+"all years",FALSE,"M3 slope updraft at ridges","tpi:wnlag_oro","tpi","wnlag_oro",-1,0.0829009336617751,0.0179573605983616,3.90184546129197e-06
+"all years",FALSE,"M3 slope updraft at ridges","tpi:wnlag_oro","tpi","wnlag_oro",1,-0.00124155017237841,0.0153910230243431,0.935706651330203
+"all years",FALSE,"M3 slope updraft at ridges","tpi:wnlag_oro","wnlag_oro","tpi",-1,-0.0919467583635861,0.0147246273741516,4.25375445356222e-10
+"all years",FALSE,"M3 slope updraft at ridges","tpi:wnlag_oro","wnlag_oro","tpi",1,-0.17608924219774,0.015102063995221,2.04173183928124e-31
+"all years",FALSE,"M3 slope updraft at ridges","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.275326899320763,0.0183369218529002,5.86574254258158e-51
+"all years",FALSE,"M3 slope updraft at ridges","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.234550149893791,0.0166419040551959,4.13760952453511e-45
+"all years",FALSE,"M3 slope updraft at ridges","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0663713951098738,0.017331756300391,0.000128420912126829
+"all years",FALSE,"M3 slope updraft at ridges","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.107148144536846,0.0167436543358286,1.56061750040218e-10
+"all years",FALSE,"M3 slope updraft at ridges","BASAL_AREA:wnlag_oro","BASAL_AREA","wnlag_oro",-1,0.234818962092639,0.0191533920107842,1.48655350278797e-34
+"all years",FALSE,"M3 slope updraft at ridges","BASAL_AREA:wnlag_oro","BASAL_AREA","wnlag_oro",1,0.275058087121915,0.0144210449601564,4.20234639995324e-81
+"all years",FALSE,"M3 slope updraft at ridges","BASAL_AREA:wnlag_oro","wnlag_oro","BASAL_AREA",-1,-0.154137562795301,0.0145936294241874,4.47148794364432e-26
+"all years",FALSE,"M3 slope updraft at ridges","BASAL_AREA:wnlag_oro","wnlag_oro","BASAL_AREA",1,-0.113898437766024,0.0172600505764183,4.14043193875501e-11
+"all years",FALSE,"M3 slope updraft at ridges","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.221499727851855,0.0166681572398493,2.68872612311322e-40
+"all years",FALSE,"M3 slope updraft at ridges","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.288377321362699,0.0198229853291018,6.0467711467489e-48
+"all years",FALSE,"M3 slope updraft at ridges","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.117979700868736,0.0199642259090114,3.4303210876279e-09
+"all years",FALSE,"M3 slope updraft at ridges","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.184857294379579,0.0205914485991948,2.77286492990694e-19
+"all years",FALSE,"M3 cloud-adjusted sun","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.28892252506293,0.0168739824481739,1.01079888154718e-65
+"all years",FALSE,"M3 cloud-adjusted sun","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.25457099886156,0.016028145377276,8.34408532314103e-57
+"all years",FALSE,"M3 cloud-adjusted sun","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0358820585154311,0.0159200482626954,0.024203006184605
+"all years",FALSE,"M3 cloud-adjusted sun","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0702335847168009,0.0157059113201415,7.75664816856973e-06
+"all years",FALSE,"M3 cloud-adjusted sun","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.273086778093069,0.0169400876798516,1.82406763643623e-58
+"all years",FALSE,"M3 cloud-adjusted sun","BASAL_AREA:jul","BASAL_AREA","jul",1,0.27040674583142,0.0162191468358364,2.09222976174122e-62
+"all years",FALSE,"M3 cloud-adjusted sun","BASAL_AREA:jul","jul","BASAL_AREA",-1,0.0629055871950652,0.0143105807492764,1.10396190212322e-05
+"all years",FALSE,"M3 cloud-adjusted sun","BASAL_AREA:jul","jul","BASAL_AREA",1,0.0602255549334158,0.0127898830517791,2.49126513669898e-06
+"all years",FALSE,"M3 cloud-adjusted sun","BASAL_AREA:wnlag_rsun","BASAL_AREA","wnlag_rsun",-1,0.221419228607215,0.0164783788591855,3.6724182947005e-41
+"all years",FALSE,"M3 cloud-adjusted sun","BASAL_AREA:wnlag_rsun","BASAL_AREA","wnlag_rsun",1,0.322074295317274,0.0165077520554633,8.9424717442143e-85
+"all years",FALSE,"M3 cloud-adjusted sun","BASAL_AREA:wnlag_rsun","wnlag_rsun","BASAL_AREA",-1,0.00507456523529715,0.0182381041848441,0.780828336201127
+"all years",FALSE,"M3 cloud-adjusted sun","BASAL_AREA:wnlag_rsun","wnlag_rsun","BASAL_AREA",1,0.105729631945356,0.0209363822814567,4.41710495844654e-07
+"all years",FALSE,"M3 slope temperature","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.291104818659105,0.018045171706867,1.52001967524225e-58
+"all years",FALSE,"M3 slope temperature","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.251263820369331,0.0166213145841356,1.25181668595603e-51
+"all years",FALSE,"M3 slope temperature","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.056318432948787,0.017215165251039,0.00107000131536997
+"all years",FALSE,"M3 slope temperature","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0961594312385612,0.0173510891517208,2.99066318811543e-08
+"all years",FALSE,"M3 slope temperature","BASAL_AREA:wnlag_mca","BASAL_AREA","wnlag_mca",-1,0.165376500819502,0.0310205650463168,9.75717066309503e-08
+"all years",FALSE,"M3 slope temperature","BASAL_AREA:wnlag_mca","BASAL_AREA","wnlag_mca",1,0.376992138208934,0.030384101833713,2.37831185868758e-35
+"all years",FALSE,"M3 slope temperature","BASAL_AREA:wnlag_mca","wnlag_mca","BASAL_AREA",-1,-0.436085377885923,0.0432716784612241,6.92259715787788e-24
+"all years",FALSE,"M3 slope temperature","BASAL_AREA:wnlag_mca","wnlag_mca","BASAL_AREA",1,-0.22446974049649,0.0467558181712373,1.57958638720301e-06
+"all years",FALSE,"M3 slope temperature","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.318970333918078,0.0324131688733217,7.5138318547434e-23
+"all years",FALSE,"M3 slope temperature","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.223398305110358,0.0334647820341755,2.4618225574307e-11
+"all years",FALSE,"M3 slope temperature","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.396072573178172,0.0428960495824528,2.62392488983597e-20
+"all years",FALSE,"M3 slope temperature","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.300500544370451,0.0463706819640023,9.14800696457e-11
+"all years",FALSE,"M3 cloud-adjusted sun with year","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.303639292113131,0.017104771110084,1.67123087100763e-70
+"all years",FALSE,"M3 cloud-adjusted sun with year","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.269707240832963,0.0161774646183487,2.1021555093383e-62
+"all years",FALSE,"M3 cloud-adjusted sun with year","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0326828791703758,0.0161512988216758,0.0430169941076816
+"all years",FALSE,"M3 cloud-adjusted sun with year","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0666149304505441,0.0159765338031914,3.05203840464795e-05
+"all years",FALSE,"M3 cloud-adjusted sun with year","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.284016904613148,0.0171357543735743,1.06509876516294e-61
+"all years",FALSE,"M3 cloud-adjusted sun with year","BASAL_AREA:jul","BASAL_AREA","jul",1,0.289329628332946,0.016460943329964,3.71358374148412e-69
+"all years",FALSE,"M3 cloud-adjusted sun with year","BASAL_AREA:jul","jul","BASAL_AREA",-1,-0.249945696909561,0.197007877993038,0.204544818757163
+"all years",FALSE,"M3 cloud-adjusted sun with year","BASAL_AREA:jul","jul","BASAL_AREA",1,-0.244632973189763,0.19773419473589,0.216019922908771
+"all years",FALSE,"M3 cloud-adjusted sun with year","BASAL_AREA:wnlag_rsun","BASAL_AREA","wnlag_rsun",-1,0.230219530722281,0.0165477670901811,5.32448670017875e-44
+"all years",FALSE,"M3 cloud-adjusted sun with year","BASAL_AREA:wnlag_rsun","BASAL_AREA","wnlag_rsun",1,0.343127002223813,0.0168224557958446,1.77929917170633e-92
+"all years",FALSE,"M3 cloud-adjusted sun with year","BASAL_AREA:wnlag_rsun","wnlag_rsun","BASAL_AREA",-1,0.00102588566259215,0.0188882914541376,0.956685543948146
+"all years",FALSE,"M3 cloud-adjusted sun with year","BASAL_AREA:wnlag_rsun","wnlag_rsun","BASAL_AREA",1,0.113933357164124,0.0220732023464944,2.44829312215984e-07
+"all years",FALSE,"M3 slope temperature with year","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.289832842404407,0.0181124439150544,1.24008438831159e-57
+"all years",FALSE,"M3 slope temperature with year","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.232309524568788,0.0167162013212598,6.58058366608168e-44
+"all years",FALSE,"M3 slope temperature with year","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0552560344856862,0.0173039087214773,0.00140671859494701
+"all years",FALSE,"M3 slope temperature with year","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.112779352321306,0.0173861164952929,8.77089916415309e-11
+"all years",FALSE,"M3 slope temperature with year","BASAL_AREA:wnlag_mca","BASAL_AREA","wnlag_mca",-1,0.202728945560182,0.0311946381302112,8.09419740985134e-11
+"all years",FALSE,"M3 slope temperature with year","BASAL_AREA:wnlag_mca","BASAL_AREA","wnlag_mca",1,0.319413421413013,0.0306042631714258,1.68226692855937e-25
+"all years",FALSE,"M3 slope temperature with year","BASAL_AREA:wnlag_mca","wnlag_mca","BASAL_AREA",-1,-0.811842030613883,0.0487611779214218,3.0589486715634e-62
+"all years",FALSE,"M3 slope temperature with year","BASAL_AREA:wnlag_mca","wnlag_mca","BASAL_AREA",1,-0.695157554761052,0.0540439659746396,7.28732800477905e-38
+"all years",FALSE,"M3 slope temperature with year","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.266534133442208,0.0327372259845965,3.90015877518294e-16
+"all years",FALSE,"M3 slope temperature with year","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.255608233530988,0.0337088282861773,3.38103986559721e-14
+"all years",FALSE,"M3 slope temperature with year","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.710437056588852,0.0470292074507062,1.47187251274847e-51
+"all years",FALSE,"M3 slope temperature with year","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.699511156677632,0.0518120311055439,1.54392214335448e-41
+"all years",FALSE,"M3 slope temperature without sun","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.289862224410541,0.0169454985481337,1.34901369357898e-65
+"all years",FALSE,"M3 slope temperature without sun","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.241503730347839,0.0158224388365996,1.34138969175733e-52
+"all years",FALSE,"M3 slope temperature without sun","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,0.015856331765778,0.0160624665346779,0.323560933268266
+"all years",FALSE,"M3 slope temperature without sun","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0325021622969243,0.0155513080399587,0.0366182127512249
+"all years",FALSE,"M3 slope temperature without sun","BASAL_AREA:wnlag_mca","BASAL_AREA","wnlag_mca",-1,0.205998583078049,0.0160120347097531,7.06271561225161e-38
+"all years",FALSE,"M3 slope temperature without sun","BASAL_AREA:wnlag_mca","BASAL_AREA","wnlag_mca",1,0.325367371680331,0.0166736478233898,8.3701715145573e-85
+"all years",FALSE,"M3 slope temperature without sun","BASAL_AREA:wnlag_mca","wnlag_mca","BASAL_AREA",-1,-0.0944844405834886,0.0181501256306803,1.93247648707992e-07
+"all years",FALSE,"M3 slope temperature without sun","BASAL_AREA:wnlag_mca","wnlag_mca","BASAL_AREA",1,0.0248843480187933,0.0208759376459061,0.233256918806056
+"all years",FALSE,"M3 valley and ridge flats","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.305620594009486,0.0175607427153753,7.74422291001974e-68
+"all years",FALSE,"M3 valley and ridge flats","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.245030909655391,0.0162156164857532,1.3746428294917e-51
+"all years",FALSE,"M3 valley and ridge flats","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0413607000299624,0.016894084879458,0.014355775013457
+"all years",FALSE,"M3 valley and ridge flats","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.101950384384057,0.0167401590368352,1.12792113863502e-09
+"all years",FALSE,"M3 valley and ridge flats","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.271710329622288,0.01691873216473,4.88646244216292e-58
+"all years",FALSE,"M3 valley and ridge flats","BASAL_AREA:jul","BASAL_AREA","jul",1,0.278941174042589,0.0161960296812685,1.79072475081505e-66
+"all years",FALSE,"M3 valley and ridge flats","BASAL_AREA:jul","jul","BASAL_AREA",-1,0.0605405452601462,0.014238738979193,2.12040917354192e-05
+"all years",FALSE,"M3 valley and ridge flats","BASAL_AREA:jul","jul","BASAL_AREA",1,0.0677713896804475,0.012732857391863,1.02317362962711e-07
+"all years",FALSE,"M3 valley and ridge flats","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.208260451321963,0.0164601208750021,1.08473624020929e-36
+"all years",FALSE,"M3 valley and ridge flats","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.342391052342914,0.0173538677886469,1.19273501158622e-86
+"all years",FALSE,"M3 valley and ridge flats","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.012377127333812,0.0173150120387703,0.474719902996674
+"all years",FALSE,"M3 valley and ridge flats","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.146507728354763,0.0198510966664283,1.57892648147053e-13
+"all years",FALSE,"M3 cold-air pooling","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.309779528537042,0.0176136532604026,3.07315755340106e-69
+"all years",FALSE,"M3 cold-air pooling","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.241300365192797,0.0162412590218762,6.24405854801845e-50
+"all years",FALSE,"M3 cold-air pooling","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0532468509365269,0.0169614785922465,0.00169362837410899
+"all years",FALSE,"M3 cold-air pooling","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.121726014280772,0.0168588199757213,5.18667549697232e-13
+"all years",FALSE,"M3 cold-air pooling","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.271962021384166,0.0169621404938222,7.45947189348535e-58
+"all years",FALSE,"M3 cold-air pooling","BASAL_AREA:jul","BASAL_AREA","jul",1,0.279117872345674,0.0162230915595171,2.43685138520162e-66
+"all years",FALSE,"M3 cold-air pooling","BASAL_AREA:jul","jul","BASAL_AREA",-1,0.0609247135727738,0.0142694461766919,1.95830841196346e-05
+"all years",FALSE,"M3 cold-air pooling","BASAL_AREA:jul","jul","BASAL_AREA",1,0.0680805645342817,0.0127373701342952,9.04436608920245e-08
+"all years",FALSE,"M3 cold-air pooling","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.205285277284677,0.0164794963939453,1.28080785939979e-35
+"all years",FALSE,"M3 cold-air pooling","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.345794616445163,0.0173785996844298,4.25812734303865e-88
+"all years",FALSE,"M3 cold-air pooling","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.0285780714711377,0.0174071154898098,0.100642544149013
+"all years",FALSE,"M3 cold-air pooling","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.169087410631623,0.0199861870570287,2.66888331547918e-17
+"all years",FALSE,"M3 canopy height","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.35890948358022,0.0177295759493322,4.04959291406319e-91
+"all years",FALSE,"M3 canopy height","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.248727322130505,0.0163502361150794,2.92345151327741e-52
+"all years",FALSE,"M3 canopy height","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0600829877572319,0.0166498189186349,0.000307821696932117
+"all years",FALSE,"M3 canopy height","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.170265149206947,0.017122310857646,2.67710831129685e-23
+"all years",FALSE,"M3 canopy height","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.299302634265662,0.0171184645362129,1.89051940781217e-68
+"all years",FALSE,"M3 canopy height","BASAL_AREA:jul","BASAL_AREA","jul",1,0.308334171445064,0.0164000808043108,7.44259525364853e-79
+"all years",FALSE,"M3 canopy height","BASAL_AREA:jul","jul","BASAL_AREA",-1,0.0635679520782378,0.0140987860672791,6.52095971815099e-06
+"all years",FALSE,"M3 canopy height","BASAL_AREA:jul","jul","BASAL_AREA",1,0.0725994892576405,0.0130543162539105,2.67711276053686e-08
+"all years",FALSE,"M3 canopy height","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.216241892309367,0.0166699272265765,1.76423300519233e-38
+"all years",FALSE,"M3 canopy height","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.391394913401359,0.0174606065615731,2.75522473690225e-111
+"all years",FALSE,"M3 canopy height","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.182795471971568,0.0173590965014047,6.26737275235795e-26
+"all years",FALSE,"M3 canopy height","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.35794849306356,0.020704390095276,5.73962435288328e-67
+"all years",FALSE,"M3 winter cold","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.304288665047839,0.0175384948733087,1.98072293994385e-67
+"all years",FALSE,"M3 winter cold","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.244398964067215,0.0162070306013684,2.19896350484143e-51
+"all years",FALSE,"M3 winter cold","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0444712303246075,0.0168911158079864,0.00846797606955323
+"all years",FALSE,"M3 winter cold","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.104360931305231,0.0167427060315598,4.56950492437966e-10
+"all years",FALSE,"M3 winter cold","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.268204738051025,0.0169028230487277,1.0647605213823e-56
+"all years",FALSE,"M3 winter cold","BASAL_AREA:jul","BASAL_AREA","jul",1,0.280482891064029,0.01617545091736,2.34592527204937e-67
+"all years",FALSE,"M3 winter cold","BASAL_AREA:jul","jul","BASAL_AREA",-1,0.0847723020894284,0.0146158646446185,6.63071505255803e-09
+"all years",FALSE,"M3 winter cold","BASAL_AREA:jul","jul","BASAL_AREA",1,0.0970504551024322,0.0133730454755706,3.95274844703015e-13
+"all years",FALSE,"M3 winter cold","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.20695720689583,0.0164559172146429,2.8449045363499e-36
+"all years",FALSE,"M3 winter cold","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.341730422219224,0.0173131961659968,1.01428772654173e-86
+"all years",FALSE,"M3 winter cold","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.0171976312280835,0.0173119944005976,0.320517988285099
+"all years",FALSE,"M3 winter cold","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.151970846551477,0.0198484336839796,1.90970329208451e-14
+"all years",FALSE,"M3 winter cold with year","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.323025188529567,0.0177690493640906,7.5574326390234e-74
+"all years",FALSE,"M3 winter cold with year","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.259510992520756,0.0163680274530728,1.30344086653218e-56
+"all years",FALSE,"M3 winter cold with year","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0534569450234212,0.0169756641451677,0.00163811087261893
+"all years",FALSE,"M3 winter cold with year","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.116971141032232,0.0168280191856062,3.62770104596871e-12
+"all years",FALSE,"M3 winter cold with year","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.283288673484415,0.0170849756993431,9.53739307407728e-62
+"all years",FALSE,"M3 winter cold with year","BASAL_AREA:jul","BASAL_AREA","jul",1,0.299247507565907,0.0164521645477472,6.31445064531853e-74
+"all years",FALSE,"M3 winter cold with year","BASAL_AREA:jul","jul","BASAL_AREA",-1,-0.242587949379391,0.197062017300403,0.218314122376204
+"all years",FALSE,"M3 winter cold with year","BASAL_AREA:jul","jul","BASAL_AREA",1,-0.226629115297898,0.197795553992712,0.251888440975729
+"all years",FALSE,"M3 winter cold with year","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.215796624554707,0.0165492263499043,7.27612884295176e-39
+"all years",FALSE,"M3 winter cold with year","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.366739556495616,0.0175610542389703,7.53476311269122e-97
+"all years",FALSE,"M3 winter cold with year","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.0303147989785623,0.0173497466252217,0.0805894431760257
+"all years",FALSE,"M3 winter cold with year","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.181257730919471,0.020033623302985,1.46043489822153e-19
+"all years",FALSE,"M3 all new terrain","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.360483738399938,0.0177913114702784,2.79635461900217e-91
+"all years",FALSE,"M3 all new terrain","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.241415311745961,0.0163940711846216,4.4042832356772e-49
+"all years",FALSE,"M3 all new terrain","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0718555412706005,0.0167647957899987,1.81839598054305e-05
+"all years",FALSE,"M3 all new terrain","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.190923967924577,0.0172439109874938,1.71597304906319e-28
+"all years",FALSE,"M3 all new terrain","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.295240846047133,0.01717149253734,2.96215059243182e-66
+"all years",FALSE,"M3 all new terrain","BASAL_AREA:jul","BASAL_AREA","jul",1,0.306658204098766,0.0164346046734482,1.06113915085345e-77
+"all years",FALSE,"M3 all new terrain","BASAL_AREA:jul","jul","BASAL_AREA",-1,0.079210992361488,0.0146155864235505,5.97242980532606e-08
+"all years",FALSE,"M3 all new terrain","BASAL_AREA:jul","jul","BASAL_AREA",1,0.0906283504131207,0.013747818166786,4.33359759562334e-11
+"all years",FALSE,"M3 all new terrain","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.207835523808109,0.0167113643515648,1.65027995800888e-35
+"all years",FALSE,"M3 all new terrain","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.39406352633779,0.0175083388336508,3.52935911884083e-112
+"all years",FALSE,"M3 all new terrain","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.204495045191543,0.0175337464711987,1.97114820047614e-31
+"all years",FALSE,"M3 all new terrain","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.390723047721224,0.02089519541671,5.02706070682783e-78
+"all years",FALSE,"M3 vertical air speed","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.310515883483928,0.017591916404178,9.98730233094733e-70
+"all years",FALSE,"M3 vertical air speed","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.248207743709228,0.0161988820771478,5.40769982191677e-53
+"all years",FALSE,"M3 vertical air speed","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0407817821525803,0.0168697462485485,0.0156296452851797
+"all years",FALSE,"M3 vertical air speed","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.10308992192728,0.016743952273406,7.42083263704231e-10
+"all years",FALSE,"M3 vertical air speed","BASAL_AREA:wnlag_w","BASAL_AREA","wnlag_w",-1,0.311047958038293,0.0173587069125975,8.40569981683595e-72
+"all years",FALSE,"M3 vertical air speed","BASAL_AREA:wnlag_w","BASAL_AREA","wnlag_w",1,0.247675669154863,0.0159044308249685,1.11514335247061e-54
+"all years",FALSE,"M3 vertical air speed","BASAL_AREA:wnlag_w","wnlag_w","BASAL_AREA",-1,0.0348002901035806,0.0145639465806802,0.0168721446192342
+"all years",FALSE,"M3 vertical air speed","BASAL_AREA:wnlag_w","wnlag_w","BASAL_AREA",1,-0.0285719987798493,0.0125714128167261,0.0230397134766254
+"all years",FALSE,"M3 vertical air speed","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.212638890064954,0.0164454966739344,3.05152185904411e-38
+"all years",FALSE,"M3 vertical air speed","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.346084737128202,0.0173838345052384,3.43970608455547e-88
+"all years",FALSE,"M3 vertical air speed","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.00697663036243076,0.0173314531403805,0.687285501128802
+"all years",FALSE,"M3 vertical air speed","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.140422477425678,0.019815065250339,1.37395014861177e-12
+"all years",FALSE,"M3 trajectory source","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.308739515987077,0.0176280010855173,1.11735722407919e-68
+"all years",FALSE,"M3 trajectory source","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.250257493088119,0.016262258128399,1.94449868650215e-53
+"all years",FALSE,"M3 trajectory source","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0428405826896302,0.0168663582288201,0.0110851852705041
+"all years",FALSE,"M3 trajectory source","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.101322605588588,0.0167386785535766,1.41994462909692e-09
+"all years",FALSE,"M3 trajectory source","BASAL_AREA:trjlag_share","BASAL_AREA","trjlag_share",-1,0.306685380503399,0.0173974225632187,1.49635437391592e-69
+"all years",FALSE,"M3 trajectory source","BASAL_AREA:trjlag_share","BASAL_AREA","trjlag_share",1,0.252311628571797,0.0152817585798185,3.07599091518054e-61
+"all years",FALSE,"M3 trajectory source","BASAL_AREA:trjlag_share","trjlag_share","BASAL_AREA",-1,0.0565376786784018,0.0135877103947455,3.16937187842852e-05
+"all years",FALSE,"M3 trajectory source","BASAL_AREA:trjlag_share","trjlag_share","BASAL_AREA",1,0.00216392674679993,0.0127876138284439,0.865623184680364
+"all years",FALSE,"M3 trajectory source","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.213142085890731,0.0165042177585728,3.73338134346935e-38
+"all years",FALSE,"M3 trajectory source","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.345854923184466,0.0174216842256702,1.05943489967369e-87
+"all years",FALSE,"M3 trajectory source","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.00766312201200954,0.017348787080204,0.658699520013993
+"all years",FALSE,"M3 trajectory source","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.140375959305745,0.0198196308641047,1.41400329714461e-12
+"with previous year",FALSE,"M3","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.286780966148232,0.0186983983944378,4.3144457499143e-53
+"with previous year",FALSE,"M3","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.268965490205309,0.0175758343902503,7.28528639181127e-53
+"with previous year",FALSE,"M3","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0628482348462977,0.0183642813140939,0.000620918341910688
+"with previous year",FALSE,"M3","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0806637107892209,0.0178861369790219,6.48749174999559e-06
+"with previous year",FALSE,"M3","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.272870072917822,0.019331728253127,3.06401851506323e-45
+"with previous year",FALSE,"M3","BASAL_AREA:jul","BASAL_AREA","jul",1,0.282876383435719,0.0163962994877449,1.07248059498474e-66
+"with previous year",FALSE,"M3","BASAL_AREA:jul","jul","BASAL_AREA",-1,0.0722722377556031,0.0156122585151896,3.6708443925023e-06
+"with previous year",FALSE,"M3","BASAL_AREA:jul","jul","BASAL_AREA",1,0.0822785482734999,0.0136300870829552,1.57454995083422e-09
+"with previous year",FALSE,"M3","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.215243208720546,0.017663396581091,3.6985281311236e-34
+"with previous year",FALSE,"M3","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.340503247632995,0.0183500656472797,7.29795933308021e-77
+"with previous year",FALSE,"M3","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,-0.0053888693817253,0.0184245390198635,0.76991715115339
+"with previous year",FALSE,"M3","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.119871169530723,0.0210065660152637,1.15413190200938e-08
+"with previous year",TRUE,"M3","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.166997257245248,0.0210076816147598,1.87503928839028e-15
+"with previous year",TRUE,"M3","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.166087706389034,0.0193599878723928,9.57715239687889e-18
+"with previous year",TRUE,"M3","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0314722598326944,0.0200742028414272,0.116928691561568
+"with previous year",TRUE,"M3","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0323818106889079,0.0201490682678198,0.10802978737144
+"with previous year",TRUE,"M3","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.127566010898483,0.0222389339893722,9.68490444522035e-09
+"with previous year",TRUE,"M3","BASAL_AREA:jul","BASAL_AREA","jul",1,0.2055189527358,0.0179199886277406,1.89486962848896e-30
+"with previous year",TRUE,"M3","BASAL_AREA:jul","jul","BASAL_AREA",-1,0.185052600108149,0.0176318692625924,9.07429218008388e-26
+"with previous year",TRUE,"M3","BASAL_AREA:jul","jul","BASAL_AREA",1,0.263005541945466,0.0159699865031608,6.15396797608307e-61
+"with previous year",TRUE,"M3","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.118355484811024,0.0197010438462666,1.88319506821578e-09
+"with previous year",TRUE,"M3","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.214729478823259,0.0205819691210421,1.75463398254169e-25
+"with previous year",TRUE,"M3","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.0368624191603112,0.0203584221341664,0.070191683439273
+"with previous year",TRUE,"M3","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.133236413172546,0.0239838429678318,2.77203494534959e-08
+"with previous year",FALSE,"M3 lagged wind","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.289142806767971,0.0185379888068567,7.59234498514274e-55
+"with previous year",FALSE,"M3 lagged wind","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.268021559654683,0.017395427591717,1.45546419368156e-53
+"with previous year",FALSE,"M3 lagged wind","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0604030442335466,0.0183326595499211,0.000984803281904941
+"with previous year",FALSE,"M3 lagged wind","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0815242913468345,0.0178892351535674,5.18473821434039e-06
+"with previous year",FALSE,"M3 lagged wind","BASAL_AREA:jul_lag","BASAL_AREA","jul_lag",-1,0.267241675663522,0.01718495571915,1.56864510181479e-54
+"with previous year",FALSE,"M3 lagged wind","BASAL_AREA:jul_lag","BASAL_AREA","jul_lag",1,0.289922690759132,0.016921702614403,8.39289515891147e-66
+"with previous year",FALSE,"M3 lagged wind","BASAL_AREA:jul_lag","jul_lag","BASAL_AREA",-1,-0.00431564552562214,0.014198120113082,0.761159173856422
+"with previous year",FALSE,"M3 lagged wind","BASAL_AREA:jul_lag","jul_lag","BASAL_AREA",1,0.0183653695699875,0.0127629015527762,0.150160418659886
+"with previous year",FALSE,"M3 lagged wind","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.216887329358988,0.0174679992702253,2.13285481175099e-35
+"with previous year",FALSE,"M3 lagged wind","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.340277037063666,0.0182142106657814,6.94310629663163e-78
+"with previous year",FALSE,"M3 lagged wind","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,-0.0076667619146801,0.018405186391308,0.677004347544307
+"with previous year",FALSE,"M3 lagged wind","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.115722945789998,0.020987633555413,3.51040976609335e-08
+"with previous year",TRUE,"M3 lagged wind","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.178744380939016,0.0206838787547602,5.53708379072809e-18
+"with previous year",TRUE,"M3 lagged wind","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.172746102710318,0.018968009071398,8.4508751208281e-20
+"with previous year",TRUE,"M3 lagged wind","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0277978249590493,0.0200124343943925,0.16482433862339
+"with previous year",TRUE,"M3 lagged wind","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.033796103187748,0.0200903587699598,0.092529083202273
+"with previous year",TRUE,"M3 lagged wind","BASAL_AREA:jul_lag","BASAL_AREA","jul_lag",-1,0.164000459404422,0.0188829578219502,3.78394805812934e-18
+"with previous year",TRUE,"M3 lagged wind","BASAL_AREA:jul_lag","BASAL_AREA","jul_lag",1,0.187490024244912,0.0192495064200392,2.03571870862325e-22
+"with previous year",TRUE,"M3 lagged wind","BASAL_AREA:jul_lag","jul_lag","BASAL_AREA",-1,-0.103281099358482,0.0161108704276789,1.4490358383018e-10
+"with previous year",TRUE,"M3 lagged wind","BASAL_AREA:jul_lag","jul_lag","BASAL_AREA",1,-0.0797915345179929,0.0150980276540833,1.25774891564613e-07
+"with previous year",TRUE,"M3 lagged wind","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.129715015476605,0.0193070624567773,1.83571054138999e-11
+"with previous year",TRUE,"M3 lagged wind","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.221775468172729,0.0202879687715319,8.15991874298725e-28
+"with previous year",TRUE,"M3 lagged wind","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.033392672615246,0.0203203387570956,0.100318232996125
+"with previous year",TRUE,"M3 lagged wind","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.12545312531137,0.0238959111052995,1.52113308610944e-07
+"with previous year",FALSE,"M3 lagged wind, diameter and closure","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.229376679759935,0.0214714297920048,1.22415634228047e-26
+"with previous year",FALSE,"M3 lagged wind, diameter and closure","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.209705170214256,0.0203026391250758,5.21220120067615e-25
+"with previous year",FALSE,"M3 lagged wind, diameter and closure","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0619606886507857,0.0184112154224917,0.000764390229039756
+"with previous year",FALSE,"M3 lagged wind, diameter and closure","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0816321981964655,0.0178779874697904,4.96945465010028e-06
+"with previous year",FALSE,"M3 lagged wind, diameter and closure","QUAD_DIAM_125:jul_lag","QUAD_DIAM_125","jul_lag",-1,-0.227113707863793,0.0179402140214053,9.91590620458897e-37
+"with previous year",FALSE,"M3 lagged wind, diameter and closure","QUAD_DIAM_125:jul_lag","QUAD_DIAM_125","jul_lag",1,-0.243215096667322,0.0164164837704463,1.16670970972791e-49
+"with previous year",FALSE,"M3 lagged wind, diameter and closure","QUAD_DIAM_125:jul_lag","jul_lag","QUAD_DIAM_125",-1,0.0169810181794338,0.0136364432715344,0.213033476794211
+"with previous year",FALSE,"M3 lagged wind, diameter and closure","QUAD_DIAM_125:jul_lag","jul_lag","QUAD_DIAM_125",1,0.000879629375904838,0.0121264093175835,0.942173509751264
+"with previous year",FALSE,"M3 lagged wind, diameter and closure","CROWN_CLOSURE:jul_lag","CROWN_CLOSURE","jul_lag",-1,0.0761728328111042,0.018267604348843,3.04824872216085e-05
+"with previous year",FALSE,"M3 lagged wind, diameter and closure","CROWN_CLOSURE:jul_lag","CROWN_CLOSURE","jul_lag",1,0.0887853720693473,0.0177695998032513,5.83875551442784e-07
+"with previous year",FALSE,"M3 lagged wind, diameter and closure","CROWN_CLOSURE:jul_lag","jul_lag","CROWN_CLOSURE",-1,0.00262405414854775,0.0140852565759727,0.852211130396118
+"with previous year",FALSE,"M3 lagged wind, diameter and closure","CROWN_CLOSURE:jul_lag","jul_lag","CROWN_CLOSURE",1,0.0152365934067909,0.0135648708169819,0.261335956934204
+"with previous year",FALSE,"M3 lagged wind, diameter and closure","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.167288431303511,0.0195718849708961,1.25908904890049e-17
+"with previous year",FALSE,"M3 lagged wind, diameter and closure","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.27179341867068,0.0220355882427289,5.92057526363227e-35
+"with previous year",FALSE,"M3 lagged wind, diameter and closure","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.00249066824921059,0.0185534056675364,0.893210279110638
+"with previous year",FALSE,"M3 lagged wind, diameter and closure","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.10699565561638,0.0210337863153492,3.64065044797431e-07
+"with previous year",TRUE,"M3 lagged wind, diameter and closure","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.070874425208835,0.0240697698309497,0.00323434043321107
+"with previous year",TRUE,"M3 lagged wind, diameter and closure","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.071771635571839,0.0222921818077008,0.00128375062027926
+"with previous year",TRUE,"M3 lagged wind, diameter and closure","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0331090733707646,0.0201541157866046,0.100425429755341
+"with previous year",TRUE,"M3 lagged wind, diameter and closure","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0322118630077607,0.0200815028917376,0.108701623709122
+"with previous year",TRUE,"M3 lagged wind, diameter and closure","QUAD_DIAM_125:jul_lag","QUAD_DIAM_125","jul_lag",-1,-0.0836300655222366,0.0195750956553327,1.93494347972896e-05
+"with previous year",TRUE,"M3 lagged wind, diameter and closure","QUAD_DIAM_125:jul_lag","QUAD_DIAM_125","jul_lag",1,-0.111387883286715,0.0183222656094131,1.20653545138975e-09
+"with previous year",TRUE,"M3 lagged wind, diameter and closure","QUAD_DIAM_125:jul_lag","jul_lag","QUAD_DIAM_125",-1,-0.0748351362639902,0.0160228425831893,3.00426405523044e-06
+"with previous year",TRUE,"M3 lagged wind, diameter and closure","QUAD_DIAM_125:jul_lag","jul_lag","QUAD_DIAM_125",1,-0.102592954028469,0.0139085271839767,1.62794316914856e-13
+"with previous year",TRUE,"M3 lagged wind, diameter and closure","CROWN_CLOSURE:jul_lag","CROWN_CLOSURE","jul_lag",-1,0.13901728570813,0.0200536883541251,4.14183841137556e-12
+"with previous year",TRUE,"M3 lagged wind, diameter and closure","CROWN_CLOSURE:jul_lag","CROWN_CLOSURE","jul_lag",1,0.143934738748099,0.0199333218882517,5.1678650427444e-13
+"with previous year",TRUE,"M3 lagged wind, diameter and closure","CROWN_CLOSURE:jul_lag","jul_lag","CROWN_CLOSURE",-1,-0.0911727716662137,0.0158842014686821,9.47661579772245e-09
+"with previous year",TRUE,"M3 lagged wind, diameter and closure","CROWN_CLOSURE:jul_lag","jul_lag","CROWN_CLOSURE",1,-0.086255318626245,0.0158440484492882,5.20913307801336e-08
+"with previous year",TRUE,"M3 lagged wind, diameter and closure","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.0432458812337996,0.0216647834213348,0.0459189852356184
+"with previous year",TRUE,"M3 lagged wind, diameter and closure","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.0994001795468744,0.0246814496655356,5.64154138415009e-05
+"with previous year",TRUE,"M3 lagged wind, diameter and closure","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.0495105690183496,0.0205139793644956,0.0157999591786222
+"with previous year",TRUE,"M3 lagged wind, diameter and closure","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.105664867331424,0.0239588800344246,1.03247035049493e-05
+"with previous year",FALSE,"M3 measured heat","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.28308504758062,0.0182973425279918,5.41382080256714e-54
+"with previous year",FALSE,"M3 measured heat","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.345897238925076,0.0165076241125258,1.7328794746585e-97
+"with previous year",FALSE,"M3 measured heat","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,0.0596122742933995,0.0145763217283031,4.31996477030219e-05
+"with previous year",FALSE,"M3 measured heat","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,0.122424465637856,0.014596953078734,4.98757245961217e-17
+"with previous year",FALSE,"M3 measured heat","BASAL_AREA:jul_lag","BASAL_AREA","jul_lag",-1,0.310882516245949,0.0176658446106749,2.55437092911234e-69
+"with previous year",FALSE,"M3 measured heat","BASAL_AREA:jul_lag","BASAL_AREA","jul_lag",1,0.318099770259747,0.0175462426619703,1.87383492647463e-73
+"with previous year",FALSE,"M3 measured heat","BASAL_AREA:jul_lag","jul_lag","BASAL_AREA",-1,0.0356428555314336,0.0145283637692878,0.0141540834563168
+"with previous year",FALSE,"M3 measured heat","BASAL_AREA:jul_lag","jul_lag","BASAL_AREA",1,0.0428601095452312,0.0132081838980992,0.00117464589291938
+"with previous year",FALSE,"M3 measured heat","BASAL_AREA:st_flight_lag","BASAL_AREA","st_flight_lag",-1,0.182906696995628,0.0195983648994397,1.03156111423763e-20
+"with previous year",FALSE,"M3 measured heat","BASAL_AREA:st_flight_lag","BASAL_AREA","st_flight_lag",1,0.446075589510068,0.016859119972146,2.87410664475443e-154
+"with previous year",FALSE,"M3 measured heat","BASAL_AREA:st_flight_lag","st_flight_lag","BASAL_AREA",-1,0.477143519385643,0.0163651685190012,7.00364949806796e-187
+"with previous year",FALSE,"M3 measured heat","BASAL_AREA:st_flight_lag","st_flight_lag","BASAL_AREA",1,0.740312411900083,0.016929168225248,0
+"with previous year",TRUE,"M3 measured heat","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.166773860830818,0.0198325649934866,4.13197420914943e-17
+"with previous year",TRUE,"M3 measured heat","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.219434953642697,0.0179718171431853,2.75064755678303e-34
+"with previous year",TRUE,"M3 measured heat","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,0.023238311576416,0.0156806835197898,0.13834812450596
+"with previous year",TRUE,"M3 measured heat","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,0.0758994043882957,0.0161051725630295,2.4441440871072e-06
+"with previous year",TRUE,"M3 measured heat","BASAL_AREA:jul_lag","BASAL_AREA","jul_lag",-1,0.182276093359871,0.0191522553131045,1.77885673036691e-21
+"with previous year",TRUE,"M3 measured heat","BASAL_AREA:jul_lag","BASAL_AREA","jul_lag",1,0.203932721113644,0.0194974699552273,1.32629783577514e-25
+"with previous year",TRUE,"M3 measured heat","BASAL_AREA:jul_lag","jul_lag","BASAL_AREA",-1,-0.0857065922644935,0.016256126790668,1.34751044942484e-07
+"with previous year",TRUE,"M3 measured heat","BASAL_AREA:jul_lag","jul_lag","BASAL_AREA",1,-0.0640499645107204,0.0151947196112768,2.49470892671782e-05
+"with previous year",TRUE,"M3 measured heat","BASAL_AREA:st_flight_lag","BASAL_AREA","st_flight_lag",-1,0.125726797169547,0.0214556667796664,4.63310396873354e-09
+"with previous year",TRUE,"M3 measured heat","BASAL_AREA:st_flight_lag","BASAL_AREA","st_flight_lag",1,0.260482017303968,0.0195283685453761,1.3794009267282e-40
+"with previous year",TRUE,"M3 measured heat","BASAL_AREA:st_flight_lag","st_flight_lag","BASAL_AREA",-1,0.150502955186674,0.0196079479052015,1.64633689838632e-14
+"with previous year",TRUE,"M3 measured heat","BASAL_AREA:st_flight_lag","st_flight_lag","BASAL_AREA",1,0.285258175321094,0.0205341375893685,7.09290481349576e-44
+"with previous year",FALSE,"M3 lidar","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.288330888112263,0.0186554784486224,6.92062476077764e-54
+"with previous year",FALSE,"M3 lidar","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.265895408118931,0.0175454502395568,7.05751171628255e-52
+"with previous year",FALSE,"M3 lidar","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0571219233480643,0.0183841172558586,0.00188910484380276
+"with previous year",FALSE,"M3 lidar","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.079557403341396,0.0179187284591229,8.99997345039012e-06
+"with previous year",FALSE,"M3 lidar","BASAL_AREA:jul_lag","BASAL_AREA","jul_lag",-1,0.265595785406127,0.0173287450194305,5.05614299479744e-53
+"with previous year",FALSE,"M3 lidar","BASAL_AREA:jul_lag","BASAL_AREA","jul_lag",1,0.288630510825067,0.0170592728741902,3.2440503855613e-64
+"with previous year",FALSE,"M3 lidar","BASAL_AREA:jul_lag","jul_lag","BASAL_AREA",-1,-0.00467882411399704,0.0142021778907603,0.741820018094681
+"with previous year",FALSE,"M3 lidar","BASAL_AREA:jul_lag","jul_lag","BASAL_AREA",1,0.0183559013049424,0.0127657950441931,0.150463216399088
+"with previous year",FALSE,"M3 lidar","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.215704372896146,0.0175260029830038,8.23603320841054e-35
+"with previous year",FALSE,"M3 lidar","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.338521923335047,0.0184968518518838,8.03588663386657e-75
+"with previous year",FALSE,"M3 lidar","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,-0.0115320564041263,0.0198269500494993,0.560812280049411
+"with previous year",FALSE,"M3 lidar","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.111285494034775,0.0228115250690522,1.06908278451205e-06
+"with previous year",TRUE,"M3 lidar","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.171325627231756,0.0207944329089362,1.73635390627804e-16
+"with previous year",TRUE,"M3 lidar","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.162636474393568,0.0191615466029153,2.10860007852368e-17
+"with previous year",TRUE,"M3 lidar","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0234064622214191,0.0200927749157843,0.244051641605133
+"with previous year",TRUE,"M3 lidar","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0320956150596073,0.0200939998745524,0.11020473798306
+"with previous year",TRUE,"M3 lidar","BASAL_AREA:jul_lag","BASAL_AREA","jul_lag",-1,0.154868014070181,0.0190579668378664,4.4311819065855e-16
+"with previous year",TRUE,"M3 lidar","BASAL_AREA:jul_lag","BASAL_AREA","jul_lag",1,0.179094087555143,0.0193993065560295,2.65664767996184e-20
+"with previous year",TRUE,"M3 lidar","BASAL_AREA:jul_lag","jul_lag","BASAL_AREA",-1,-0.104126803332388,0.0161427735176782,1.11580083831775e-10
+"with previous year",TRUE,"M3 lidar","BASAL_AREA:jul_lag","jul_lag","BASAL_AREA",1,-0.0799007298474257,0.0151011239702498,1.21619286071663e-07
+"with previous year",TRUE,"M3 lidar","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.124627470574829,0.0194006129983136,1.3283220579266e-10
+"with previous year",TRUE,"M3 lidar","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.209334631050495,0.0206131350325388,3.13521942986188e-24
+"with previous year",TRUE,"M3 lidar","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.00205989685690258,0.0220045939082607,0.925417275340098
+"with previous year",TRUE,"M3 lidar","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.0867670573325686,0.0260184861708156,0.000853535770124421
+"with previous year",FALSE,"M3 without radiation","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.249805989308459,0.0173672328888309,6.54470421998918e-47
+"with previous year",FALSE,"M3 without radiation","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.298633917706135,0.0165406809417104,7.27019929526354e-73
+"with previous year",FALSE,"M3 without radiation","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0667652481095361,0.0140348441125025,1.96387576278197e-06
+"with previous year",FALSE,"M3 without radiation","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.01793731971186,0.0140246840874885,0.20090336423787
+"with previous year",FALSE,"M3 without radiation","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.270481643164785,0.0193386261147931,1.88194183566539e-44
+"with previous year",FALSE,"M3 without radiation","BASAL_AREA:jul","BASAL_AREA","jul",1,0.277958263849809,0.0163780743277612,1.33787688902554e-64
+"with previous year",FALSE,"M3 without radiation","BASAL_AREA:jul","jul","BASAL_AREA",-1,0.0733545705212938,0.0156590474675532,2.80664933982456e-06
+"with previous year",FALSE,"M3 without radiation","BASAL_AREA:jul","jul","BASAL_AREA",1,0.0808311912063183,0.0135893354999599,2.71216201131237e-09
+"with previous year",TRUE,"M3 without radiation","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.138138937436546,0.0194961126793314,1.38582636161849e-12
+"with previous year",TRUE,"M3 without radiation","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.184277282134332,0.0182164731914873,4.69348263090538e-24
+"with previous year",TRUE,"M3 without radiation","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0092680003738289,0.0152735692000755,0.543983709709116
+"with previous year",TRUE,"M3 without radiation","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,0.036870344323957,0.0157976789241362,0.0196004896989996
+"with previous year",TRUE,"M3 without radiation","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.123723490486981,0.0222214270118635,2.58040350366747e-08
+"with previous year",TRUE,"M3 without radiation","BASAL_AREA:jul","BASAL_AREA","jul",1,0.198692729083898,0.0178539383173802,9.08605418081093e-29
+"with previous year",TRUE,"M3 without radiation","BASAL_AREA:jul","jul","BASAL_AREA",-1,0.186527905620088,0.0176542576914523,4.30187757119818e-26
+"with previous year",TRUE,"M3 without radiation","BASAL_AREA:jul","jul","BASAL_AREA",1,0.261497144217005,0.0159328425327885,1.55763660843031e-60
+"with previous year",FALSE,"M3 modelled wind","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.263640390147571,0.0193981432145692,4.5277851944351e-42
+"with previous year",FALSE,"M3 modelled wind","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.270011093918585,0.0173996788124111,2.61418702406899e-54
+"with previous year",FALSE,"M3 modelled wind","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0764320812055645,0.0186531885210177,4.1757416938586e-05
+"with previous year",FALSE,"M3 modelled wind","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0700613774345502,0.0181541483284937,0.000113736041246995
+"with previous year",FALSE,"M3 modelled wind","BASAL_AREA:wnlag_speed","BASAL_AREA","wnlag_speed",-1,0.217716590456591,0.0193015455842574,1.6521660496016e-29
+"with previous year",FALSE,"M3 modelled wind","BASAL_AREA:wnlag_speed","BASAL_AREA","wnlag_speed",1,0.315934893609565,0.0162637563617615,4.67938516588401e-84
+"with previous year",FALSE,"M3 modelled wind","BASAL_AREA:wnlag_speed","wnlag_speed","BASAL_AREA",-1,-0.0653250169783379,0.0166166181166499,8.44855192537262e-05
+"with previous year",FALSE,"M3 modelled wind","BASAL_AREA:wnlag_speed","wnlag_speed","BASAL_AREA",1,0.0328932861746355,0.0177605484572804,0.0640197557728042
+"with previous year",FALSE,"M3 modelled wind","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.238123726491354,0.0181357177779801,2.21373928784558e-39
+"with previous year",FALSE,"M3 modelled wind","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.295527757574802,0.020675295920467,2.39324159939205e-46
+"with previous year",FALSE,"M3 modelled wind","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.0328656398955482,0.0203880605779101,0.106961019223941
+"with previous year",FALSE,"M3 modelled wind","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.0902696709789961,0.02266063533904,6.78946770922776e-05
+"with previous year",TRUE,"M3 modelled wind","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.149008490075033,0.0216892271044963,6.41293220285525e-12
+"with previous year",TRUE,"M3 modelled wind","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.180360421795612,0.019019848840221,2.47674528506721e-21
+"with previous year",TRUE,"M3 modelled wind","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.041152491008952,0.0204946738852315,0.0446475132065694
+"with previous year",TRUE,"M3 modelled wind","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.00980055928837313,0.0203857296294436,0.630690014175825
+"with previous year",TRUE,"M3 modelled wind","BASAL_AREA:wnlag_speed","BASAL_AREA","wnlag_speed",-1,0.107652318929329,0.0212543473732814,4.0849623711913e-07
+"with previous year",TRUE,"M3 modelled wind","BASAL_AREA:wnlag_speed","BASAL_AREA","wnlag_speed",1,0.221716592941317,0.0178972333655514,3.02323102803437e-35
+"with previous year",TRUE,"M3 modelled wind","BASAL_AREA:wnlag_speed","wnlag_speed","BASAL_AREA",-1,0.0204643502921319,0.0183440640217927,0.264600104539769
+"with previous year",TRUE,"M3 modelled wind","BASAL_AREA:wnlag_speed","wnlag_speed","BASAL_AREA",1,0.13452862430412,0.019675835245186,8.07272285209253e-12
+"with previous year",TRUE,"M3 modelled wind","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.15688878241621,0.0200505384912307,5.09003328868743e-15
+"with previous year",TRUE,"M3 modelled wind","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.172480129454436,0.0230266657535558,6.86369405671141e-14
+"with previous year",TRUE,"M3 modelled wind","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.0491313214959055,0.0224238033311732,0.0284493128084214
+"with previous year",TRUE,"M3 modelled wind","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.0647226685341322,0.0257741048216992,0.0120338217721037
+"with previous year",FALSE,"M3 upslope share","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.276053127522671,0.0189994654222134,7.87695625017168e-48
+"with previous year",FALSE,"M3 upslope share","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.251823831069077,0.017834893376281,2.87100107496781e-45
+"with previous year",FALSE,"M3 upslope share","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0594578311444814,0.0183838537003968,0.00121966075860901
+"with previous year",FALSE,"M3 upslope share","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0836871275980748,0.0179030945199864,2.94741834630467e-06
+"with previous year",FALSE,"M3 upslope share","BASAL_AREA:wnlag_upslope","BASAL_AREA","wnlag_upslope",-1,0.223912498391146,0.0204924757385756,8.60381352182142e-28
+"with previous year",FALSE,"M3 upslope share","BASAL_AREA:wnlag_upslope","BASAL_AREA","wnlag_upslope",1,0.303964460200602,0.0157283341823898,3.2516293102275e-83
+"with previous year",FALSE,"M3 upslope share","BASAL_AREA:wnlag_upslope","wnlag_upslope","BASAL_AREA",-1,-0.0796975399805067,0.0165924878901892,1.56126165290621e-06
+"with previous year",FALSE,"M3 upslope share","BASAL_AREA:wnlag_upslope","wnlag_upslope","BASAL_AREA",1,0.000354421828948896,0.0153108905053472,0.981531939494375
+"with previous year",FALSE,"M3 upslope share","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.221774910411236,0.0175558548221253,1.3970794855974e-36
+"with previous year",FALSE,"M3 upslope share","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.306102048180512,0.0202547463361012,1.33739302976544e-51
+"with previous year",FALSE,"M3 upslope share","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.0284016840609501,0.0200728942475168,0.157089841909544
+"with previous year",FALSE,"M3 upslope share","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.112728821830226,0.021265628220247,1.15178199493508e-07
+"with previous year",TRUE,"M3 upslope share","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.15488606102275,0.0212269715518647,2.94992101705435e-13
+"with previous year",TRUE,"M3 upslope share","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.154592865325655,0.0194605785854009,1.95923584233111e-15
+"with previous year",TRUE,"M3 upslope share","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0322778670275949,0.0200709950073766,0.10779473367382
+"with previous year",TRUE,"M3 upslope share","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.03257106272469,0.0200841058250838,0.104860470705955
+"with previous year",TRUE,"M3 upslope share","BASAL_AREA:wnlag_upslope","BASAL_AREA","wnlag_upslope",-1,0.0893806911217681,0.0226818964363337,8.12719338815968e-05
+"with previous year",TRUE,"M3 upslope share","BASAL_AREA:wnlag_upslope","BASAL_AREA","wnlag_upslope",1,0.220098235226637,0.0173443981043177,6.72935262975077e-37
+"with previous year",TRUE,"M3 upslope share","BASAL_AREA:wnlag_upslope","wnlag_upslope","BASAL_AREA",-1,-0.0685888802798219,0.0183120525873732,0.000179992267646141
+"with previous year",TRUE,"M3 upslope share","BASAL_AREA:wnlag_upslope","wnlag_upslope","BASAL_AREA",1,0.0621286638250471,0.017370663829401,0.000348034915682547
+"with previous year",TRUE,"M3 upslope share","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.136842618549894,0.0194090758106126,1.78346694099103e-12
+"with previous year",TRUE,"M3 upslope share","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.172636307798511,0.0225570175573738,1.9583990276702e-14
+"with previous year",TRUE,"M3 upslope share","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.0749314689570191,0.0220869991526314,0.000692427756100354
+"with previous year",TRUE,"M3 upslope share","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.110725158205636,0.0242449664024909,4.94910062358543e-06
+"with previous year",FALSE,"M3 shelter at the modelled wind","BASAL_AREA:wnlag_shelter","BASAL_AREA","wnlag_shelter",-1,0.219659604106668,0.0195774972084962,3.25254398226787e-29
+"with previous year",FALSE,"M3 shelter at the modelled wind","BASAL_AREA:wnlag_shelter","BASAL_AREA","wnlag_shelter",1,0.312173420679996,0.0157573770474198,2.38073667333062e-87
+"with previous year",FALSE,"M3 shelter at the modelled wind","BASAL_AREA:wnlag_shelter","wnlag_shelter","BASAL_AREA",-1,-0.0945860522859648,0.01523500663002,5.3503588832221e-10
+"with previous year",FALSE,"M3 shelter at the modelled wind","BASAL_AREA:wnlag_shelter","wnlag_shelter","BASAL_AREA",1,-0.00207223571263696,0.0139021222921875,0.881507119316308
+"with previous year",FALSE,"M3 shelter at the modelled wind","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.224087756434006,0.016694640336165,4.44974127627053e-41
+"with previous year",FALSE,"M3 shelter at the modelled wind","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.307745268352658,0.0174888020042309,2.6108416478834e-69
+"with previous year",FALSE,"M3 shelter at the modelled wind","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,-0.0365069770729241,0.0143105470887707,0.0107397712592631
+"with previous year",FALSE,"M3 shelter at the modelled wind","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.0471505348457288,0.0163088684813509,0.00383898552392678
+"with previous year",TRUE,"M3 shelter at the modelled wind","BASAL_AREA:wnlag_shelter","BASAL_AREA","wnlag_shelter",-1,0.109840025915625,0.0217020189783473,4.16447937748685e-07
+"with previous year",TRUE,"M3 shelter at the modelled wind","BASAL_AREA:wnlag_shelter","BASAL_AREA","wnlag_shelter",1,0.217923030968616,0.0175636062423079,2.37530343805152e-35
+"with previous year",TRUE,"M3 shelter at the modelled wind","BASAL_AREA:wnlag_shelter","wnlag_shelter","BASAL_AREA",-1,-0.10496414874492,0.0171189072622625,8.7068119859324e-10
+"with previous year",TRUE,"M3 shelter at the modelled wind","BASAL_AREA:wnlag_shelter","wnlag_shelter","BASAL_AREA",1,0.0031188563080712,0.0159355578161872,0.844831837845851
+"with previous year",TRUE,"M3 shelter at the modelled wind","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.130707400448207,0.0185404747688496,1.79122263068601e-12
+"with previous year",TRUE,"M3 shelter at the modelled wind","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.197055656436034,0.019280258605668,1.60358565277476e-24
+"with previous year",TRUE,"M3 shelter at the modelled wind","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.0322823464771401,0.015688227528942,0.039614772964017
+"with previous year",TRUE,"M3 shelter at the modelled wind","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.0986306024649668,0.0185990022973027,1.13911790655377e-07
+"with previous year",FALSE,"M3 modelled wind, diameter and closure","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.223057077269922,0.0221328824903114,6.90587020977067e-24
+"with previous year",FALSE,"M3 modelled wind, diameter and closure","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.222300716261554,0.0204295170021171,1.41452978545406e-27
+"with previous year",FALSE,"M3 modelled wind, diameter and closure","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0746493210539483,0.0185713586854554,5.82985302944704e-05
+"with previous year",FALSE,"M3 modelled wind, diameter and closure","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0754056820623169,0.0180406618235866,2.91813678844468e-05
+"with previous year",FALSE,"M3 modelled wind, diameter and closure","QUAD_DIAM_125:wnlag_speed","QUAD_DIAM_125","wnlag_speed",-1,-0.305266253276272,0.0178434652920353,1.29334765998784e-65
+"with previous year",FALSE,"M3 modelled wind, diameter and closure","QUAD_DIAM_125:wnlag_speed","QUAD_DIAM_125","wnlag_speed",1,-0.178370698685075,0.0161347310296843,2.0715831084891e-28
+"with previous year",FALSE,"M3 modelled wind, diameter and closure","QUAD_DIAM_125:wnlag_speed","wnlag_speed","QUAD_DIAM_125",-1,-0.0912850066166094,0.0170200186034019,8.16741574046063e-08
+"with previous year",FALSE,"M3 modelled wind, diameter and closure","QUAD_DIAM_125:wnlag_speed","wnlag_speed","QUAD_DIAM_125",1,0.0356105479745876,0.0151979654890289,0.0191235987122876
+"with previous year",FALSE,"M3 modelled wind, diameter and closure","CROWN_CLOSURE:wnlag_speed","CROWN_CLOSURE","wnlag_speed",-1,0.0616677583994577,0.0174506441593176,0.000409571238029475
+"with previous year",FALSE,"M3 modelled wind, diameter and closure","CROWN_CLOSURE:wnlag_speed","CROWN_CLOSURE","wnlag_speed",1,0.101230551132593,0.0176703853086503,1.01128450145944e-08
+"with previous year",FALSE,"M3 modelled wind, diameter and closure","CROWN_CLOSURE:wnlag_speed","wnlag_speed","CROWN_CLOSURE",-1,-0.0476186256875787,0.0152279678970544,0.00176569553358642
+"with previous year",FALSE,"M3 modelled wind, diameter and closure","CROWN_CLOSURE:wnlag_speed","wnlag_speed","CROWN_CLOSURE",1,-0.00805583295444307,0.0180128072540609,0.654710398871478
+"with previous year",FALSE,"M3 modelled wind, diameter and closure","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.200389450345565,0.0200571316669249,1.67003075764816e-23
+"with previous year",FALSE,"M3 modelled wind, diameter and closure","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.244968343185911,0.0233184135541403,8.16102884769933e-26
+"with previous year",FALSE,"M3 modelled wind, diameter and closure","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.0443810735810277,0.0198657446892425,0.0254797613065476
+"with previous year",FALSE,"M3 modelled wind, diameter and closure","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.0889599664213733,0.0221684497441695,5.99750966650599e-05
+"with previous year",TRUE,"M3 modelled wind, diameter and closure","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.0674374832157116,0.0248642615152696,0.00668331172758817
+"with previous year",TRUE,"M3 modelled wind, diameter and closure","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.0888647334987248,0.022488726124886,7.76551910243703e-05
+"with previous year",TRUE,"M3 modelled wind, diameter and closure","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0377188869441017,0.0204250560437374,0.0647910864583643
+"with previous year",TRUE,"M3 modelled wind, diameter and closure","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0162916366610885,0.0202437032437806,0.420949234686329
+"with previous year",TRUE,"M3 modelled wind, diameter and closure","QUAD_DIAM_125:wnlag_speed","QUAD_DIAM_125","wnlag_speed",-1,-0.160090735643033,0.0196295914851425,3.4750343459408e-16
+"with previous year",TRUE,"M3 modelled wind, diameter and closure","QUAD_DIAM_125:wnlag_speed","QUAD_DIAM_125","wnlag_speed",1,-0.0682294915191925,0.0172399803558259,7.56965759093083e-05
+"with previous year",TRUE,"M3 modelled wind, diameter and closure","QUAD_DIAM_125:wnlag_speed","wnlag_speed","QUAD_DIAM_125",-1,0.0205834348006898,0.0186173287437384,0.268896988488171
+"with previous year",TRUE,"M3 modelled wind, diameter and closure","QUAD_DIAM_125:wnlag_speed","wnlag_speed","QUAD_DIAM_125",1,0.11244467892453,0.0168078170771764,2.23135878129526e-11
+"with previous year",TRUE,"M3 modelled wind, diameter and closure","CROWN_CLOSURE:wnlag_speed","CROWN_CLOSURE","wnlag_speed",-1,0.113801310636088,0.0191224421365647,2.66197776212595e-09
+"with previous year",TRUE,"M3 modelled wind, diameter and closure","CROWN_CLOSURE:wnlag_speed","CROWN_CLOSURE","wnlag_speed",1,0.161340633526675,0.019571002287084,1.66740060306148e-16
+"with previous year",TRUE,"M3 modelled wind, diameter and closure","CROWN_CLOSURE:wnlag_speed","wnlag_speed","CROWN_CLOSURE",-1,0.042744395417316,0.0169945094707718,0.0118968743941238
+"with previous year",TRUE,"M3 modelled wind, diameter and closure","CROWN_CLOSURE:wnlag_speed","wnlag_speed","CROWN_CLOSURE",1,0.0902837183079038,0.019792222876449,5.0771221385636e-06
+"with previous year",TRUE,"M3 modelled wind, diameter and closure","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.0754561197990804,0.0222718106341859,0.000704131926520374
+"with previous year",TRUE,"M3 modelled wind, diameter and closure","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.080846096915356,0.0260995629936027,0.00195092277391291
+"with previous year",TRUE,"M3 modelled wind, diameter and closure","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.0555011381631803,0.0218881328916913,0.0112231616303709
+"with previous year",TRUE,"M3 modelled wind, diameter and closure","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.0608911152794558,0.0252038267470331,0.015694335912471
+"with previous year",FALSE,"M3 modelled wind, 30 m","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.2891254966815,0.0197063779230264,9.79037269811014e-49
+"with previous year",FALSE,"M3 modelled wind, 30 m","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.271303386528276,0.0174152034656337,1.01859849272265e-54
+"with previous year",FALSE,"M3 modelled wind, 30 m","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0739310280637658,0.0187685391970182,8.17901022656865e-05
+"with previous year",FALSE,"M3 modelled wind, 30 m","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0917531382169898,0.0182516017145956,4.9788001779783e-07
+"with previous year",FALSE,"M3 modelled wind, 30 m","BASAL_AREA:wnlag_speed30","BASAL_AREA","wnlag_speed30",-1,0.280745929289581,0.0201220502989188,3.05248535137034e-44
+"with previous year",FALSE,"M3 modelled wind, 30 m","BASAL_AREA:wnlag_speed30","BASAL_AREA","wnlag_speed30",1,0.279682953920195,0.0162444102976011,1.97369821157031e-66
+"with previous year",FALSE,"M3 modelled wind, 30 m","BASAL_AREA:wnlag_speed30","wnlag_speed30","BASAL_AREA",-1,-0.0970066970324425,0.0164231516765058,3.49019860996391e-09
+"with previous year",FALSE,"M3 modelled wind, 30 m","BASAL_AREA:wnlag_speed30","wnlag_speed30","BASAL_AREA",1,-0.0980696724018283,0.017444659994442,1.89022960410956e-08
+"with previous year",FALSE,"M3 modelled wind, 30 m","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.219221328175825,0.0180797814787632,7.76513838591178e-34
+"with previous year",FALSE,"M3 modelled wind, 30 m","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.34120755503395,0.0211178711700249,1.00901897593224e-58
+"with previous year",FALSE,"M3 modelled wind, 30 m","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.0367915471137748,0.020670352539544,0.0750892661193601
+"with previous year",FALSE,"M3 modelled wind, 30 m","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.1587777739719,0.0229722476390012,4.78807753140527e-12
+"with previous year",TRUE,"M3 modelled wind, 30 m","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.16505999106569,0.0220841798593613,7.77173581809064e-14
+"with previous year",TRUE,"M3 modelled wind, 30 m","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.178768498981275,0.0190064063868526,5.16865019772599e-21
+"with previous year",TRUE,"M3 modelled wind, 30 m","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0362196339390599,0.02063222335488,0.0791757602565037
+"with previous year",TRUE,"M3 modelled wind, 30 m","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0225111260234742,0.0205132199818091,0.272468311259824
+"with previous year",TRUE,"M3 modelled wind, 30 m","BASAL_AREA:wnlag_speed30","BASAL_AREA","wnlag_speed30",-1,0.147209429954427,0.0222461928295303,3.6585220513359e-11
+"with previous year",TRUE,"M3 modelled wind, 30 m","BASAL_AREA:wnlag_speed30","BASAL_AREA","wnlag_speed30",1,0.196619060092538,0.017880700801994,3.98749718053108e-28
+"with previous year",TRUE,"M3 modelled wind, 30 m","BASAL_AREA:wnlag_speed30","wnlag_speed30","BASAL_AREA",-1,-0.01259176873771,0.0180076745635976,0.484399198334568
+"with previous year",TRUE,"M3 modelled wind, 30 m","BASAL_AREA:wnlag_speed30","wnlag_speed30","BASAL_AREA",1,0.0368178614004015,0.0195199030600239,0.059272009463592
+"with previous year",TRUE,"M3 modelled wind, 30 m","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.141553893960007,0.0199391456541455,1.2539412475024e-12
+"with previous year",TRUE,"M3 modelled wind, 30 m","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.202274596086959,0.0235432116278812,8.57430828933355e-18
+"with previous year",TRUE,"M3 modelled wind, 30 m","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.0464714972961956,0.0226848369632225,0.0405040907708741
+"with previous year",TRUE,"M3 modelled wind, 30 m","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.107192199423148,0.0261311186562636,4.09435019056609e-05
+"with previous year",FALSE,"M3 modelled wind, 10 m","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.295927165465479,0.0194566646705305,3.05624487336582e-52
+"with previous year",FALSE,"M3 modelled wind, 10 m","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.266451124286953,0.0174487614830644,1.2026738933044e-52
+"with previous year",FALSE,"M3 modelled wind, 10 m","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0551683637810636,0.0189037550871898,0.00351853900446281
+"with previous year",FALSE,"M3 modelled wind, 10 m","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0846444049595888,0.0182220387184993,3.39802186684131e-06
+"with previous year",FALSE,"M3 modelled wind, 10 m","BASAL_AREA:wnlag_speed10","BASAL_AREA","wnlag_speed10",-1,0.292403542106733,0.0191593245359585,1.37651141607283e-52
+"with previous year",FALSE,"M3 modelled wind, 10 m","BASAL_AREA:wnlag_speed10","BASAL_AREA","wnlag_speed10",1,0.269974747645699,0.0163462562025846,2.81462436303419e-61
+"with previous year",FALSE,"M3 modelled wind, 10 m","BASAL_AREA:wnlag_speed10","wnlag_speed10","BASAL_AREA",-1,0.0160531293630131,0.0153119134075627,0.294450763983814
+"with previous year",FALSE,"M3 modelled wind, 10 m","BASAL_AREA:wnlag_speed10","wnlag_speed10","BASAL_AREA",1,-0.00637566509802167,0.0165919116873211,0.700783200751008
+"with previous year",FALSE,"M3 modelled wind, 10 m","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.212701448310873,0.0179677462679025,2.48424259917112e-32
+"with previous year",FALSE,"M3 modelled wind, 10 m","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.349676841441559,0.0202163507275329,4.97822415990584e-67
+"with previous year",FALSE,"M3 modelled wind, 10 m","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,-0.0171814637112453,0.0201549610851332,0.393954272860897
+"with previous year",FALSE,"M3 modelled wind, 10 m","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.119793929419441,0.0226239382645913,1.19011335130037e-07
+"with previous year",TRUE,"M3 modelled wind, 10 m","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.186131409809318,0.021837064724098,1.5460765335313e-17
+"with previous year",TRUE,"M3 modelled wind, 10 m","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.174960723570536,0.0190633808614824,4.39811162973395e-20
+"with previous year",TRUE,"M3 modelled wind, 10 m","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0118490251660667,0.020756979312176,0.568104477306991
+"with previous year",TRUE,"M3 modelled wind, 10 m","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0230197114048481,0.0205268044680213,0.262097885923278
+"with previous year",TRUE,"M3 modelled wind, 10 m","BASAL_AREA:wnlag_speed10","BASAL_AREA","wnlag_speed10",-1,0.182048781711827,0.021270394993823,1.14061154991447e-17
+"with previous year",TRUE,"M3 modelled wind, 10 m","BASAL_AREA:wnlag_speed10","BASAL_AREA","wnlag_speed10",1,0.179043351668027,0.0179913072289534,2.48014077712582e-23
+"with previous year",TRUE,"M3 modelled wind, 10 m","BASAL_AREA:wnlag_speed10","wnlag_speed10","BASAL_AREA",-1,0.078277692455375,0.0167763453228253,3.07185138110127e-06
+"with previous year",TRUE,"M3 modelled wind, 10 m","BASAL_AREA:wnlag_speed10","wnlag_speed10","BASAL_AREA",1,0.0752722624115747,0.0186287086693656,5.33011758191372e-05
+"with previous year",TRUE,"M3 modelled wind, 10 m","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.132777470355054,0.0198637360337567,2.31847708149738e-11
+"with previous year",TRUE,"M3 modelled wind, 10 m","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.2283146630248,0.0226244633740465,6.02447933145181e-24
+"with previous year",TRUE,"M3 modelled wind, 10 m","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.000953430946700799,0.0222099805769074,0.965758896226218
+"with previous year",TRUE,"M3 modelled wind, 10 m","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.0964906236164469,0.0257663032692664,0.000180510435662131
+"with previous year",FALSE,"M3 lift","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.309996303385427,0.0187372545040972,1.75757989798413e-61
+"with previous year",FALSE,"M3 lift","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.296638753221418,0.0178826848611685,8.50460665958894e-62
+"with previous year",FALSE,"M3 lift","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0671071270882497,0.0182938051517737,0.000244170586669149
+"with previous year",FALSE,"M3 lift","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0804646772522586,0.0179673276023252,7.52085585886975e-06
+"with previous year",FALSE,"M3 lift","BASAL_AREA:wnlag_lift","BASAL_AREA","wnlag_lift",-1,0.415640383817123,0.0233345835405457,5.68264539244683e-71
+"with previous year",FALSE,"M3 lift","BASAL_AREA:wnlag_lift","BASAL_AREA","wnlag_lift",1,0.190994672789721,0.0185218233465788,6.22762204351378e-25
+"with previous year",FALSE,"M3 lift","BASAL_AREA:wnlag_lift","wnlag_lift","BASAL_AREA",-1,0.0452139421566022,0.0222588155518892,0.0422263471352378
+"with previous year",FALSE,"M3 lift","BASAL_AREA:wnlag_lift","wnlag_lift","BASAL_AREA",1,-0.1794317688708,0.0219224763397003,2.72685540311928e-16
+"with previous year",FALSE,"M3 lift","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.148763921137644,0.0200349460451816,1.12590953341624e-13
+"with previous year",FALSE,"M3 lift","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.4578711354692,0.0243705335894534,9.48604014869085e-79
+"with previous year",FALSE,"M3 lift","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,-0.0501556250097441,0.0268799966447394,0.062054112009353
+"with previous year",FALSE,"M3 lift","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.258951589321812,0.0275275828762132,5.10566917583745e-21
+"with previous year",TRUE,"M3 lift","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.184497400462968,0.0210033775137203,1.5751251473079e-18
+"with previous year",TRUE,"M3 lift","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.195423521195823,0.0196730236979103,2.97387775962215e-23
+"with previous year",TRUE,"M3 lift","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.026843627595683,0.0199964909160715,0.179460854051285
+"with previous year",TRUE,"M3 lift","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0159175068628272,0.0201346006265506,0.429203782906121
+"with previous year",TRUE,"M3 lift","BASAL_AREA:wnlag_lift","BASAL_AREA","wnlag_lift",-1,0.250273886616627,0.0265963676147425,4.95770136502265e-21
+"with previous year",TRUE,"M3 lift","BASAL_AREA:wnlag_lift","BASAL_AREA","wnlag_lift",1,0.129647035042164,0.0199523729983388,8.14893263252915e-11
+"with previous year",TRUE,"M3 lift","BASAL_AREA:wnlag_lift","wnlag_lift","BASAL_AREA",-1,0.240219232483395,0.0247231522019198,2.56778765505685e-22
+"with previous year",TRUE,"M3 lift","BASAL_AREA:wnlag_lift","wnlag_lift","BASAL_AREA",1,0.119592380908932,0.0246703119346524,1.24949323644796e-06
+"with previous year",TRUE,"M3 lift","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.0891931448160392,0.021952144856204,4.84310854838667e-05
+"with previous year",TRUE,"M3 lift","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.290727776842752,0.0278882704701042,1.9119533191954e-25
+"with previous year",TRUE,"M3 lift","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,-0.174516517869843,0.0298950203959205,5.29437969205186e-09
+"with previous year",TRUE,"M3 lift","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.0270181141568698,0.0313891751110507,0.389377824995412
+"with previous year",FALSE,"M3 lift with year","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.339843418785282,0.0191092071716116,9.35637541171896e-71
+"with previous year",FALSE,"M3 lift with year","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.311264986120555,0.0181646649312988,8.03236162312281e-66
+"with previous year",FALSE,"M3 lift with year","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0917029183156206,0.0185483518149143,7.653852101324e-07
+"with previous year",FALSE,"M3 lift with year","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.120281350980348,0.0181871926623382,3.75288863358952e-11
+"with previous year",FALSE,"M3 lift with year","BASAL_AREA:wnlag_lift","BASAL_AREA","wnlag_lift",-1,0.46824677788819,0.0237508183654134,1.60397092959057e-86
+"with previous year",FALSE,"M3 lift with year","BASAL_AREA:wnlag_lift","BASAL_AREA","wnlag_lift",1,0.182861627017647,0.0188089680388331,2.42855142402461e-22
+"with previous year",FALSE,"M3 lift with year","BASAL_AREA:wnlag_lift","wnlag_lift","BASAL_AREA",-1,-0.866052587797206,0.0378065880969193,3.91592126087059e-116
+"with previous year",FALSE,"M3 lift with year","BASAL_AREA:wnlag_lift","wnlag_lift","BASAL_AREA",1,-1.15143773866775,0.0397002812874792,5.98463979030321e-185
+"with previous year",FALSE,"M3 lift with year","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.156929474167766,0.0201995773164864,7.91403878149029e-15
+"with previous year",FALSE,"M3 lift with year","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.49417893073807,0.0247140055265377,5.9783280928288e-89
+"with previous year",FALSE,"M3 lift with year","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.763300764741558,0.0383158475294374,2.66095785153127e-88
+"with previous year",FALSE,"M3 lift with year","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,1.10055022131186,0.0397495921355174,9.98980663569721e-169
+"with previous year",TRUE,"M3 lift with year","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.192870845207962,0.0212264086550077,1.02407806817683e-19
+"with previous year",TRUE,"M3 lift with year","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.191031182311573,0.0198338748481961,5.88287046826844e-22
+"with previous year",TRUE,"M3 lift with year","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0419936869710519,0.0201973368041863,0.0376017725461918
+"with previous year",TRUE,"M3 lift with year","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0438333498674413,0.0203323390339301,0.0310958532217561
+"with previous year",TRUE,"M3 lift with year","BASAL_AREA:wnlag_lift","BASAL_AREA","wnlag_lift",-1,0.260882413551203,0.0266668533736295,1.33173650333248e-22
+"with previous year",TRUE,"M3 lift with year","BASAL_AREA:wnlag_lift","BASAL_AREA","wnlag_lift",1,0.123019613968332,0.019975465561197,7.3420723260927e-10
+"with previous year",TRUE,"M3 lift with year","BASAL_AREA:wnlag_lift","wnlag_lift","BASAL_AREA",-1,-0.321539273571233,0.0419635612812232,1.82568760568409e-14
+"with previous year",TRUE,"M3 lift with year","BASAL_AREA:wnlag_lift","wnlag_lift","BASAL_AREA",1,-0.459402073154104,0.044403015768485,4.35468512948346e-25
+"with previous year",TRUE,"M3 lift with year","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.087163167156789,0.021962808251572,7.22744884652976e-05
+"with previous year",TRUE,"M3 lift with year","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.296738860362746,0.0279100046058714,2.1155196229621e-26
+"with previous year",TRUE,"M3 lift with year","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.327026648407572,0.0425504152290974,1.52248699043937e-14
+"with previous year",TRUE,"M3 lift with year","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.536602341613529,0.0449653865774096,7.90062433906514e-33
+"with previous year",FALSE,"M3 lift, 10 m speed and upslope","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.341852487507294,0.0191610546626548,3.39529030044336e-71
+"with previous year",FALSE,"M3 lift, 10 m speed and upslope","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.310276584703493,0.0181919328697302,3.1692213700151e-65
+"with previous year",FALSE,"M3 lift, 10 m speed and upslope","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0875869214201454,0.0187590677770057,3.02603897419574e-06
+"with previous year",FALSE,"M3 lift, 10 m speed and upslope","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.119162824223947,0.0182251000881657,6.21843206966198e-11
+"with previous year",FALSE,"M3 lift, 10 m speed and upslope","BASAL_AREA:wnlag_lift","BASAL_AREA","wnlag_lift",-1,0.469085189455418,0.0237835942991049,1.36710086179248e-86
+"with previous year",FALSE,"M3 lift, 10 m speed and upslope","BASAL_AREA:wnlag_lift","BASAL_AREA","wnlag_lift",1,0.183043882755369,0.0188138777159281,2.26377569757651e-22
+"with previous year",FALSE,"M3 lift, 10 m speed and upslope","BASAL_AREA:wnlag_lift","wnlag_lift","BASAL_AREA",-1,-0.870442011721756,0.0380736907737261,1.10939406442382e-115
+"with previous year",FALSE,"M3 lift, 10 m speed and upslope","BASAL_AREA:wnlag_lift","wnlag_lift","BASAL_AREA",1,-1.1564833184218,0.0400858716429871,5.04529403779663e-183
+"with previous year",FALSE,"M3 lift, 10 m speed and upslope","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.157710855191392,0.0202153002641336,6.11470672003431e-15
+"with previous year",FALSE,"M3 lift, 10 m speed and upslope","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.494418217019395,0.024765814491961,1.13869207158844e-88
+"with previous year",FALSE,"M3 lift, 10 m speed and upslope","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.761271589875976,0.0384381044047482,2.68876955261807e-87
+"with previous year",FALSE,"M3 lift, 10 m speed and upslope","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,1.09797895170398,0.0398002136989739,1.58205255272097e-167
+"with previous year",TRUE,"M3 lift, 10 m speed and upslope","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.195268011507088,0.0212809818026396,4.48629053325415e-20
+"with previous year",TRUE,"M3 lift, 10 m speed and upslope","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.191036018023842,0.0198555519367292,6.50108351214448e-22
+"with previous year",TRUE,"M3 lift, 10 m speed and upslope","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0361296995177418,0.0204521863692738,0.0773045249333798
+"with previous year",TRUE,"M3 lift, 10 m speed and upslope","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0403616930009883,0.0203764986454686,0.0476141225985771
+"with previous year",TRUE,"M3 lift, 10 m speed and upslope","BASAL_AREA:wnlag_lift","BASAL_AREA","wnlag_lift",-1,0.263666314725531,0.0267010603746615,5.35659881178356e-23
+"with previous year",TRUE,"M3 lift, 10 m speed and upslope","BASAL_AREA:wnlag_lift","BASAL_AREA","wnlag_lift",1,0.122637714805399,0.0199952639616782,8.60539755507046e-10
+"with previous year",TRUE,"M3 lift, 10 m speed and upslope","BASAL_AREA:wnlag_lift","wnlag_lift","BASAL_AREA",-1,-0.331822697657848,0.0422326914069853,3.9341004738661e-15
+"with previous year",TRUE,"M3 lift, 10 m speed and upslope","BASAL_AREA:wnlag_lift","wnlag_lift","BASAL_AREA",1,-0.47285129757798,0.044768594519447,4.46459748317833e-26
+"with previous year",TRUE,"M3 lift, 10 m speed and upslope","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.0864192667839449,0.0219989279355835,8.55342568717406e-05
+"with previous year",TRUE,"M3 lift, 10 m speed and upslope","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.299884762746985,0.0279576363923757,7.65202557794928e-27
+"with previous year",TRUE,"M3 lift, 10 m speed and upslope","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.316955551086287,0.0427881624761649,1.28651761709964e-13
+"with previous year",TRUE,"M3 lift, 10 m speed and upslope","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.530421047049327,0.0450614027774834,5.50204147069965e-32
+"with previous year",FALSE,"M3 slope updraft","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.274223494178167,0.0194078966956485,2.49982266903463e-45
+"with previous year",FALSE,"M3 slope updraft","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.251781483530014,0.0178311725279776,2.84781393482966e-45
+"with previous year",FALSE,"M3 slope updraft","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0648385138833783,0.0184767309356775,0.000449459561384695
+"with previous year",FALSE,"M3 slope updraft","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0872805245315312,0.0179046636840476,1.08953572362933e-06
+"with previous year",FALSE,"M3 slope updraft","BASAL_AREA:wnlag_oro","BASAL_AREA","wnlag_oro",-1,0.23637280926823,0.0205430609326949,1.22753019996892e-30
+"with previous year",FALSE,"M3 slope updraft","BASAL_AREA:wnlag_oro","BASAL_AREA","wnlag_oro",1,0.289632168439952,0.0151560257554182,2.08332864328444e-81
+"with previous year",FALSE,"M3 slope updraft","BASAL_AREA:wnlag_oro","wnlag_oro","BASAL_AREA",-1,-0.147771903301544,0.0156260421827051,3.17599194957371e-21
+"with previous year",FALSE,"M3 slope updraft","BASAL_AREA:wnlag_oro","wnlag_oro","BASAL_AREA",1,-0.094512544129821,0.0181667089132232,1.96611319346228e-07
+"with previous year",FALSE,"M3 slope updraft","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.228393885610409,0.0176594517817679,2.92248054824313e-38
+"with previous year",FALSE,"M3 slope updraft","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.297611092097773,0.0210391269139214,1.98811207512817e-45
+"with previous year",FALSE,"M3 slope updraft","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.0718360323000468,0.0209404397349437,0.000602485477974644
+"with previous year",FALSE,"M3 slope updraft","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.141053238787411,0.0216849104098467,7.78628615574413e-11
+"with previous year",TRUE,"M3 slope updraft","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.144104344313486,0.0217821694056742,3.69792342271811e-11
+"with previous year",TRUE,"M3 slope updraft","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.153686587309814,0.0194878879231717,3.11372882585816e-15
+"with previous year",TRUE,"M3 slope updraft","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0400720244361545,0.0202596538264488,0.0479374542027364
+"with previous year",TRUE,"M3 slope updraft","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0304897814398265,0.0201102785056449,0.12948667380959
+"with previous year",TRUE,"M3 slope updraft","BASAL_AREA:wnlag_oro","BASAL_AREA","wnlag_oro",-1,0.0862214966323202,0.0229144313716684,0.000168048722603077
+"with previous year",TRUE,"M3 slope updraft","BASAL_AREA:wnlag_oro","BASAL_AREA","wnlag_oro",1,0.211569434990981,0.0167215854891705,1.0840574964001e-36
+"with previous year",TRUE,"M3 slope updraft","BASAL_AREA:wnlag_oro","wnlag_oro","BASAL_AREA",-1,-0.0921174697668501,0.0173303515491099,1.06432755736292e-07
+"with previous year",TRUE,"M3 slope updraft","BASAL_AREA:wnlag_oro","wnlag_oro","BASAL_AREA",1,0.0332304685918103,0.0205028777513923,0.105066771490551
+"with previous year",TRUE,"M3 slope updraft","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.141313546996205,0.0194989888730161,4.25399016093642e-13
+"with previous year",TRUE,"M3 slope updraft","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.156477384627095,0.0235598120267336,3.10069444579659e-11
+"with previous year",TRUE,"M3 slope updraft","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.0996253200600131,0.0230947873332463,1.60502745726201e-05
+"with previous year",TRUE,"M3 slope updraft","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.114789157690903,0.0247267040559873,3.44526498635715e-06
+"with previous year",FALSE,"M3 slope updraft at ridges","tpi:wnlag_oro","tpi","wnlag_oro",-1,0.098104511844549,0.0192581092918611,3.50231164111403e-07
+"with previous year",FALSE,"M3 slope updraft at ridges","tpi:wnlag_oro","tpi","wnlag_oro",1,-0.00308983471641839,0.0162936384764976,0.849595611680648
+"with previous year",FALSE,"M3 slope updraft at ridges","tpi:wnlag_oro","wnlag_oro","tpi",-1,-0.0659000209839668,0.0157048400163252,2.714785361008e-05
+"with previous year",FALSE,"M3 slope updraft at ridges","tpi:wnlag_oro","wnlag_oro","tpi",1,-0.167094367544934,0.016038066730749,2.03910783627776e-25
+"with previous year",FALSE,"M3 slope updraft at ridges","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.256031493436779,0.019493613779313,2.09913141570622e-39
+"with previous year",FALSE,"M3 slope updraft at ridges","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.259611725752992,0.017936419230226,1.76880365281662e-47
+"with previous year",FALSE,"M3 slope updraft at ridges","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0882815921546827,0.0188505060752183,2.82364737245591e-06
+"with previous year",FALSE,"M3 slope updraft at ridges","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0847013598384704,0.017886482873989,2.18520513127901e-06
+"with previous year",FALSE,"M3 slope updraft at ridges","BASAL_AREA:wnlag_oro","BASAL_AREA","wnlag_oro",-1,0.2380909099387,0.020586998474798,6.19116235733714e-31
+"with previous year",FALSE,"M3 slope updraft at ridges","BASAL_AREA:wnlag_oro","BASAL_AREA","wnlag_oro",1,0.277552309251071,0.0151507207924484,5.79344890505822e-75
+"with previous year",FALSE,"M3 slope updraft at ridges","BASAL_AREA:wnlag_oro","wnlag_oro","BASAL_AREA",-1,-0.136227893920636,0.0156831330309261,3.74541272224888e-18
+"with previous year",FALSE,"M3 slope updraft at ridges","BASAL_AREA:wnlag_oro","wnlag_oro","BASAL_AREA",1,-0.0967664946082651,0.0183395018220541,1.3174842120576e-07
+"with previous year",FALSE,"M3 slope updraft at ridges","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.227601829391245,0.0177241028288242,9.61529088301781e-38
+"with previous year",FALSE,"M3 slope updraft at ridges","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.288041389798526,0.0210519210502867,1.29302294202444e-42
+"with previous year",FALSE,"M3 slope updraft at ridges","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.0952725650115812,0.021305626724205,7.7596933689876e-06
+"with previous year",FALSE,"M3 slope updraft at ridges","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.155712125418862,0.0217930601903228,8.99745364943283e-13
+"with previous year",TRUE,"M3 slope updraft at ridges","tpi:wnlag_oro","tpi","wnlag_oro",-1,0.0447499700262493,0.0217362414323764,0.0395160640807297
+"with previous year",TRUE,"M3 slope updraft at ridges","tpi:wnlag_oro","tpi","wnlag_oro",1,0.0162404744968606,0.0183380451614105,0.37582424296091
+"with previous year",TRUE,"M3 slope updraft at ridges","tpi:wnlag_oro","wnlag_oro","tpi",-1,-0.00112067571337181,0.0173744860501369,0.948571128097365
+"with previous year",TRUE,"M3 slope updraft at ridges","tpi:wnlag_oro","wnlag_oro","tpi",1,-0.0296301712427606,0.0183002797813915,0.105423535920578
+"with previous year",TRUE,"M3 slope updraft at ridges","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.121318243142687,0.0219783412111509,3.39192856104351e-08
+"with previous year",TRUE,"M3 slope updraft at ridges","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.14445200124995,0.0196987762224678,2.24982307698884e-13
+"with previous year",TRUE,"M3 slope updraft at ridges","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0463980385924096,0.020826036337521,0.0258881058228212
+"with previous year",TRUE,"M3 slope updraft at ridges","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0232642804851462,0.020243935802809,0.250474550081309
+"with previous year",TRUE,"M3 slope updraft at ridges","BASAL_AREA:wnlag_oro","BASAL_AREA","wnlag_oro",-1,0.0685471055270374,0.0230754676867184,0.00297255477334229
+"with previous year",TRUE,"M3 slope updraft at ridges","BASAL_AREA:wnlag_oro","BASAL_AREA","wnlag_oro",1,0.1972231388656,0.0167148289949413,3.93611693639884e-32
+"with previous year",TRUE,"M3 slope updraft at ridges","BASAL_AREA:wnlag_oro","wnlag_oro","BASAL_AREA",-1,-0.0797134401473475,0.0174519240438336,4.93336035257749e-06
+"with previous year",TRUE,"M3 slope updraft at ridges","BASAL_AREA:wnlag_oro","wnlag_oro","BASAL_AREA",1,0.0489625931912152,0.0208313418899866,0.0187517772328237
+"with previous year",TRUE,"M3 slope updraft at ridges","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.125806136402596,0.0196735910361983,1.60893704919767e-10
+"with previous year",TRUE,"M3 slope updraft at ridges","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.139964107990041,0.0237025816885857,3.52613981531149e-09
+"with previous year",TRUE,"M3 slope updraft at ridges","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.111902612375729,0.023699341710811,2.3381206842634e-06
+"with previous year",TRUE,"M3 slope updraft at ridges","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.126060583963174,0.025006434322225,4.62800829012637e-07
+"with previous year",FALSE,"M3 cloud-adjusted sun","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.267867019297917,0.0180693459051278,1.01902335669075e-49
+"with previous year",FALSE,"M3 cloud-adjusted sun","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.280763187256862,0.0173131794965803,3.84096863316048e-59
+"with previous year",FALSE,"M3 cloud-adjusted sun","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0534294486875043,0.0174199917095721,0.00216121955385656
+"with previous year",FALSE,"M3 cloud-adjusted sun","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0405332807285598,0.0169344389639145,0.0166865980878269
+"with previous year",FALSE,"M3 cloud-adjusted sun","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.274638338406394,0.0193840030339943,1.43946378488731e-45
+"with previous year",FALSE,"M3 cloud-adjusted sun","BASAL_AREA:jul","BASAL_AREA","jul",1,0.273991868148385,0.0164540201163088,2.92797176084468e-62
+"with previous year",FALSE,"M3 cloud-adjusted sun","BASAL_AREA:jul","jul","BASAL_AREA",-1,0.0759849982436045,0.0158211011885084,1.56491128616269e-06
+"with previous year",FALSE,"M3 cloud-adjusted sun","BASAL_AREA:jul","jul","BASAL_AREA",1,0.0753385279855954,0.0137561174725941,4.33259881487634e-08
+"with previous year",FALSE,"M3 cloud-adjusted sun","BASAL_AREA:wnlag_rsun","BASAL_AREA","wnlag_rsun",-1,0.23506011492271,0.0175916154850243,1.00745392361432e-40
+"with previous year",FALSE,"M3 cloud-adjusted sun","BASAL_AREA:wnlag_rsun","BASAL_AREA","wnlag_rsun",1,0.313570091632068,0.0176650538002749,1.69701471373627e-70
+"with previous year",FALSE,"M3 cloud-adjusted sun","BASAL_AREA:wnlag_rsun","wnlag_rsun","BASAL_AREA",-1,-0.0227420628295836,0.0198286664653102,0.251411169669573
+"with previous year",FALSE,"M3 cloud-adjusted sun","BASAL_AREA:wnlag_rsun","wnlag_rsun","BASAL_AREA",1,0.0557679138797745,0.0227493691854631,0.0142299804163004
+"with previous year",TRUE,"M3 cloud-adjusted sun","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.153295496829525,0.0203253296810087,4.62492935113703e-14
+"with previous year",TRUE,"M3 cloud-adjusted sun","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.175093518446281,0.0190818374852574,4.47711987701115e-20
+"with previous year",TRUE,"M3 cloud-adjusted sun","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0233897915640537,0.0190826870271452,0.220308787456421
+"with previous year",TRUE,"M3 cloud-adjusted sun","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.00159176994729767,0.0190718229388768,0.93348429738536
+"with previous year",TRUE,"M3 cloud-adjusted sun","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.129253168089817,0.0222978465664615,6.76462418500273e-09
+"with previous year",TRUE,"M3 cloud-adjusted sun","BASAL_AREA:jul","BASAL_AREA","jul",1,0.19913584718599,0.0179601653561242,1.44037729554e-28
+"with previous year",TRUE,"M3 cloud-adjusted sun","BASAL_AREA:jul","jul","BASAL_AREA",-1,0.182527618814597,0.017849444157001,1.51724469748476e-24
+"with previous year",TRUE,"M3 cloud-adjusted sun","BASAL_AREA:jul","jul","BASAL_AREA",1,0.25241029791077,0.0161466433470204,4.38199016734898e-55
+"with previous year",TRUE,"M3 cloud-adjusted sun","BASAL_AREA:wnlag_rsun","BASAL_AREA","wnlag_rsun",-1,0.133214192676316,0.0196006760719432,1.07259707201143e-11
+"with previous year",TRUE,"M3 cloud-adjusted sun","BASAL_AREA:wnlag_rsun","BASAL_AREA","wnlag_rsun",1,0.19517482259949,0.0198217951469891,7.09897378190489e-23
+"with previous year",TRUE,"M3 cloud-adjusted sun","BASAL_AREA:wnlag_rsun","wnlag_rsun","BASAL_AREA",-1,0.0319689724908935,0.0220285101987246,0.14670903207487
+"with previous year",TRUE,"M3 cloud-adjusted sun","BASAL_AREA:wnlag_rsun","wnlag_rsun","BASAL_AREA",1,0.0939296024140675,0.025949203328751,0.000294888941085418
+"with previous year",FALSE,"M3 slope temperature","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.280853286932955,0.019050329822693,3.42803611487465e-49
+"with previous year",FALSE,"M3 slope temperature","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.269619974075375,0.0177883307232098,6.79793311477244e-52
+"with previous year",FALSE,"M3 slope temperature","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0677742432758425,0.0186378504846507,0.000276500012690071
+"with previous year",FALSE,"M3 slope temperature","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0790075561334231,0.0184809692500971,1.9107173176089e-05
+"with previous year",FALSE,"M3 slope temperature","BASAL_AREA:wnlag_mca","BASAL_AREA","wnlag_mca",-1,0.201095649913755,0.0326974096058135,7.73846844724019e-10
+"with previous year",FALSE,"M3 slope temperature","BASAL_AREA:wnlag_mca","BASAL_AREA","wnlag_mca",1,0.349377611094575,0.0320126166547231,9.90857777266139e-28
+"with previous year",FALSE,"M3 slope temperature","BASAL_AREA:wnlag_mca","wnlag_mca","BASAL_AREA",-1,-0.333601899899029,0.0453550549748606,1.90440179983092e-13
+"with previous year",FALSE,"M3 slope temperature","BASAL_AREA:wnlag_mca","wnlag_mca","BASAL_AREA",1,-0.185319938718209,0.0487061051757601,0.00014188409551229
+"with previous year",FALSE,"M3 slope temperature","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.29183300757273,0.0340203896618693,9.63864929463307e-18
+"with previous year",FALSE,"M3 slope temperature","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.2586402534356,0.035050355137217,1.59357032562276e-13
+"with previous year",FALSE,"M3 slope temperature","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.28256908982306,0.044904896973851,3.12168103019469e-10
+"with previous year",FALSE,"M3 slope temperature","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.249376335685931,0.0481257119343844,2.19790986244925e-07
+"with previous year",TRUE,"M3 slope temperature","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.168047014738161,0.0212548938150169,2.65207063463312e-15
+"with previous year",TRUE,"M3 slope temperature","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.189285892380971,0.0193761581623855,1.52938440146293e-22
+"with previous year",TRUE,"M3 slope temperature","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0370147462901111,0.0203344138550562,0.0687132359661991
+"with previous year",TRUE,"M3 slope temperature","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.015775868647301,0.0207438529782528,0.446950916935228
+"with previous year",TRUE,"M3 slope temperature","BASAL_AREA:wnlag_mca","BASAL_AREA","wnlag_mca",-1,0.106341333759477,0.0358025506431073,0.00297589747941228
+"with previous year",TRUE,"M3 slope temperature","BASAL_AREA:wnlag_mca","BASAL_AREA","wnlag_mca",1,0.250991573359655,0.0347410962000078,5.02467195038141e-13
+"with previous year",TRUE,"M3 slope temperature","BASAL_AREA:wnlag_mca","wnlag_mca","BASAL_AREA",-1,0.056876202054606,0.0490428312859792,0.246160750510694
+"with previous year",TRUE,"M3 slope temperature","BASAL_AREA:wnlag_mca","wnlag_mca","BASAL_AREA",1,0.201526441654784,0.053767954045037,0.000178195424903691
+"with previous year",TRUE,"M3 slope temperature","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.203745663135809,0.0370715326039761,3.88471626067216e-08
+"with previous year",TRUE,"M3 slope temperature","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.153587243983324,0.0385931491770135,6.90166678711411e-05
+"with previous year",TRUE,"M3 slope temperature","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.00165222972403666,0.0487581589924508,0.972967881371713
+"with previous year",TRUE,"M3 slope temperature","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,-0.0485061894284483,0.0535408269193299,0.364953644819848
+"with previous year",FALSE,"M3 cloud-adjusted sun with year","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.276386689602052,0.0182439353477636,7.63330425110276e-52
+"with previous year",FALSE,"M3 cloud-adjusted sun with year","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.293091798759999,0.0174563708481694,2.89031126862819e-63
+"with previous year",FALSE,"M3 cloud-adjusted sun with year","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0556851728903981,0.0175659028627831,0.00152401286245087
+"with previous year",FALSE,"M3 cloud-adjusted sun with year","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.038980063732451,0.0170582680669585,0.022306224671992
+"with previous year",FALSE,"M3 cloud-adjusted sun with year","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.282020723141878,0.0195613665523709,4.03201914742575e-47
+"with previous year",FALSE,"M3 cloud-adjusted sun with year","BASAL_AREA:jul","BASAL_AREA","jul",1,0.287457765220172,0.0166470437479778,8.2222265219889e-67
+"with previous year",FALSE,"M3 cloud-adjusted sun with year","BASAL_AREA:jul","jul","BASAL_AREA",-1,-1.30033236355006,0.266440113065781,1.05874844789086e-06
+"with previous year",FALSE,"M3 cloud-adjusted sun with year","BASAL_AREA:jul","jul","BASAL_AREA",1,-1.29489532147176,0.266373342458681,1.16673578545767e-06
+"with previous year",FALSE,"M3 cloud-adjusted sun with year","BASAL_AREA:wnlag_rsun","BASAL_AREA","wnlag_rsun",-1,0.241541917969571,0.0176561356362406,1.33071167803742e-42
+"with previous year",FALSE,"M3 cloud-adjusted sun with year","BASAL_AREA:wnlag_rsun","BASAL_AREA","wnlag_rsun",1,0.327936570392479,0.0179253806307353,9.14720460070379e-75
+"with previous year",FALSE,"M3 cloud-adjusted sun with year","BASAL_AREA:wnlag_rsun","wnlag_rsun","BASAL_AREA",-1,-0.0191602565942075,0.0201885379147672,0.34258700341751
+"with previous year",FALSE,"M3 cloud-adjusted sun with year","BASAL_AREA:wnlag_rsun","wnlag_rsun","BASAL_AREA",1,0.0672343958287012,0.0234188328729209,0.00409234855437287
+"with previous year",TRUE,"M3 cloud-adjusted sun with year","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.124045358322192,0.0203512849039549,1.09293775496973e-09
+"with previous year",TRUE,"M3 cloud-adjusted sun with year","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.153283636129648,0.0192009605365066,1.42676215451343e-15
+"with previous year",TRUE,"M3 cloud-adjusted sun with year","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.00375536045508966,0.0193132151534755,0.845827362702946
+"with previous year",TRUE,"M3 cloud-adjusted sun with year","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,0.0254829173523664,0.0193183296708477,0.187133802604306
+"with previous year",TRUE,"M3 cloud-adjusted sun with year","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.0951307779292029,0.0224238221457028,2.21144072161944e-05
+"with previous year",TRUE,"M3 cloud-adjusted sun with year","BASAL_AREA:jul","BASAL_AREA","jul",1,0.182198216522637,0.0180703939551024,6.58955555896384e-24
+"with previous year",TRUE,"M3 cloud-adjusted sun with year","BASAL_AREA:jul","jul","BASAL_AREA",-1,-0.548941576656717,0.320570840547725,0.0868252371899851
+"with previous year",TRUE,"M3 cloud-adjusted sun with year","BASAL_AREA:jul","jul","BASAL_AREA",1,-0.461874138063283,0.320904904691256,0.150069330012242
+"with previous year",TRUE,"M3 cloud-adjusted sun with year","BASAL_AREA:wnlag_rsun","BASAL_AREA","wnlag_rsun",-1,0.115353878832758,0.0197109948570408,4.84935951122537e-09
+"with previous year",TRUE,"M3 cloud-adjusted sun with year","BASAL_AREA:wnlag_rsun","BASAL_AREA","wnlag_rsun",1,0.161975115619082,0.0199315618292611,4.41629860920295e-16
+"with previous year",TRUE,"M3 cloud-adjusted sun with year","BASAL_AREA:wnlag_rsun","wnlag_rsun","BASAL_AREA",-1,0.0136017329098965,0.0225435488280791,0.546273436460077
+"with previous year",TRUE,"M3 cloud-adjusted sun with year","BASAL_AREA:wnlag_rsun","wnlag_rsun","BASAL_AREA",1,0.060222969696221,0.0266579197980913,0.023877017993488
+"with previous year",FALSE,"M3 slope temperature with year","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.280471743476036,0.0191160588750017,9.73606838322122e-49
+"with previous year",FALSE,"M3 slope temperature with year","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.249811768662048,0.0178837944628892,2.42306181523527e-44
+"with previous year",FALSE,"M3 slope temperature with year","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0650491716480984,0.0187285919831104,0.00051418699097629
+"with previous year",FALSE,"M3 slope temperature with year","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0957091464620857,0.0185072962051977,2.32312008190231e-07
+"with previous year",FALSE,"M3 slope temperature with year","BASAL_AREA:wnlag_mca","BASAL_AREA","wnlag_mca",-1,0.238962308191445,0.0328630565096631,3.55630113007461e-13
+"with previous year",FALSE,"M3 slope temperature with year","BASAL_AREA:wnlag_mca","BASAL_AREA","wnlag_mca",1,0.291321203946639,0.0322121716538054,1.51285062289622e-19
+"with previous year",FALSE,"M3 slope temperature with year","BASAL_AREA:wnlag_mca","wnlag_mca","BASAL_AREA",-1,-0.726367812234887,0.0513413770085821,1.92676810987454e-45
+"with previous year",FALSE,"M3 slope temperature with year","BASAL_AREA:wnlag_mca","wnlag_mca","BASAL_AREA",1,-0.674008916479692,0.0564866006432595,8.04281887228261e-33
+"with previous year",FALSE,"M3 slope temperature with year","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.239095005948146,0.0343438490264443,3.35952382017906e-12
+"with previous year",FALSE,"M3 slope temperature with year","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.291188506189939,0.0352953793309662,1.58333451000955e-16
+"with previous year",FALSE,"M3 slope temperature with year","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.608060974172381,0.0493484193832328,6.91403433371755e-35
+"with previous year",FALSE,"M3 slope temperature with year","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.660154474414174,0.0538531759487812,1.51436569587452e-34
+"with previous year",TRUE,"M3 slope temperature with year","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.167286571974423,0.021356262944926,4.75838484355861e-15
+"with previous year",TRUE,"M3 slope temperature with year","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.154077153485218,0.0195166947825377,2.91169456131879e-15
+"with previous year",TRUE,"M3 slope temperature with year","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0287093462006869,0.0204928752719841,0.161231176641322
+"with previous year",TRUE,"M3 slope temperature with year","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0419187646898925,0.0209104620295747,0.044997371996631
+"with previous year",TRUE,"M3 slope temperature with year","BASAL_AREA:wnlag_mca","BASAL_AREA","wnlag_mca",-1,0.174705623112845,0.0358301860837989,1.08294806781477e-06
+"with previous year",TRUE,"M3 slope temperature with year","BASAL_AREA:wnlag_mca","BASAL_AREA","wnlag_mca",1,0.146658102346796,0.0347085430496052,2.38497666867966e-05
+"with previous year",TRUE,"M3 slope temperature with year","BASAL_AREA:wnlag_mca","wnlag_mca","BASAL_AREA",-1,-0.448405417707843,0.0558794361403826,1.01927178491609e-15
+"with previous year",TRUE,"M3 slope temperature with year","BASAL_AREA:wnlag_mca","wnlag_mca","BASAL_AREA",1,-0.476452938473892,0.0631634899759896,4.58682817446561e-14
+"with previous year",TRUE,"M3 slope temperature with year","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.102939188744171,0.0372942785132466,0.0057768255788672
+"with previous year",TRUE,"M3 slope temperature with year","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.21842453671547,0.0387646438472642,1.75431651679582e-08
+"with previous year",TRUE,"M3 slope temperature with year","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.416844023887812,0.0538716149277773,1.01207296645673e-14
+"with previous year",TRUE,"M3 slope temperature with year","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.53232937185911,0.0605748361617119,1.5229716138511e-18
+"with previous year",FALSE,"M3 slope temperature without sun","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.273226602177741,0.017936178370657,2.12690798026595e-52
+"with previous year",FALSE,"M3 slope temperature without sun","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.266259453451667,0.0169893136420559,2.34427562010959e-55
+"with previous year",FALSE,"M3 slope temperature without sun","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.00715312151661,0.0175093490868901,0.682883472783298
+"with previous year",FALSE,"M3 slope temperature without sun","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.014120270242684,0.0165911072127615,0.394727903703584
+"with previous year",FALSE,"M3 slope temperature without sun","BASAL_AREA:wnlag_mca","BASAL_AREA","wnlag_mca",-1,0.216611294602445,0.0170682348224194,6.64164859854487e-37
+"with previous year",FALSE,"M3 slope temperature without sun","BASAL_AREA:wnlag_mca","BASAL_AREA","wnlag_mca",1,0.322874761026963,0.0175789193705818,2.40696646732966e-75
+"with previous year",FALSE,"M3 slope temperature without sun","BASAL_AREA:wnlag_mca","wnlag_mca","BASAL_AREA",-1,-0.106213526681619,0.0194310468567907,4.59847144242825e-08
+"with previous year",FALSE,"M3 slope temperature without sun","BASAL_AREA:wnlag_mca","wnlag_mca","BASAL_AREA",1,4.99397428984499e-05,0.0222380270909092,0.998208199127795
+"with previous year",TRUE,"M3 slope temperature without sun","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.15260378501973,0.0199759342669067,2.18267486830263e-14
+"with previous year",TRUE,"M3 slope temperature without sun","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.170225733694632,0.018592316753849,5.40049293389278e-20
+"with previous year",TRUE,"M3 slope temperature without sun","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,0.0103596420722201,0.0191258764700877,0.588055638531533
+"with previous year",TRUE,"M3 slope temperature without sun","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,0.0279815907471226,0.0186674388045413,0.133886140222578
+"with previous year",TRUE,"M3 slope temperature without sun","BASAL_AREA:wnlag_mca","BASAL_AREA","wnlag_mca",-1,0.123258293003522,0.0189398567531982,7.62193512234636e-11
+"with previous year",TRUE,"M3 slope temperature without sun","BASAL_AREA:wnlag_mca","BASAL_AREA","wnlag_mca",1,0.199571225710841,0.0194399747094739,1.00252793691493e-24
+"with previous year",TRUE,"M3 slope temperature without sun","BASAL_AREA:wnlag_mca","wnlag_mca","BASAL_AREA",-1,-0.0204335848040182,0.0215055232665891,0.34203339747066
+"with previous year",TRUE,"M3 slope temperature without sun","BASAL_AREA:wnlag_mca","wnlag_mca","BASAL_AREA",1,0.0558793479033009,0.0252920005404394,0.0271490240000832
+"with previous year",FALSE,"M3 valley and ridge flats","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.285120544768508,0.0187145966865076,2.06507575030901e-52
+"with previous year",FALSE,"M3 valley and ridge flats","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.267098620922723,0.0175826998822822,4.05744117687987e-52
+"with previous year",FALSE,"M3 valley and ridge flats","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0610161948057383,0.0183768746427885,0.000899302649410988
+"with previous year",FALSE,"M3 valley and ridge flats","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0790381186515235,0.0178764200272249,9.80808375095927e-06
+"with previous year",FALSE,"M3 valley and ridge flats","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.270980211193345,0.0193480523525682,1.44149216381596e-44
+"with previous year",FALSE,"M3 valley and ridge flats","BASAL_AREA:jul","BASAL_AREA","jul",1,0.281238954497886,0.0164108877155604,7.81453800614141e-66
+"with previous year",FALSE,"M3 valley and ridge flats","BASAL_AREA:jul","jul","BASAL_AREA",-1,0.0717962938369648,0.0156346716382334,4.38765201018355e-06
+"with previous year",FALSE,"M3 valley and ridge flats","BASAL_AREA:jul","jul","BASAL_AREA",1,0.0820550371415052,0.0136338470428743,1.76062350830121e-09
+"with previous year",FALSE,"M3 valley and ridge flats","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.212720156920713,0.0176806730582637,2.4352027809403e-33
+"with previous year",FALSE,"M3 valley and ridge flats","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.339499008770518,0.0183762030647462,3.28672013937277e-76
+"with previous year",FALSE,"M3 valley and ridge flats","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,-0.00571498650058801,0.0184508372655929,0.756757685945143
+"with previous year",FALSE,"M3 valley and ridge flats","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.121063865349217,0.0210320523294326,8.60486626065473e-09
+"with previous year",TRUE,"M3 valley and ridge flats","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.165036470044688,0.0210181039533639,4.09094528484882e-15
+"with previous year",TRUE,"M3 valley and ridge flats","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.164294684911277,0.0193629363945593,2.15702482926268e-17
+"with previous year",TRUE,"M3 valley and ridge flats","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0302917336383229,0.0200795502964146,0.131404548198809
+"with previous year",TRUE,"M3 valley and ridge flats","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0310335187717331,0.0201503533854124,0.123536469362866
+"with previous year",TRUE,"M3 valley and ridge flats","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.125694232582538,0.0222501401260728,1.61249291524731e-08
+"with previous year",TRUE,"M3 valley and ridge flats","BASAL_AREA:jul","BASAL_AREA","jul",1,0.203636922373427,0.0179289261095976,6.76684887014017e-30
+"with previous year",TRUE,"M3 valley and ridge flats","BASAL_AREA:jul","jul","BASAL_AREA",-1,0.184860013796471,0.0176456160480736,1.11052001320586e-25
+"with previous year",TRUE,"M3 valley and ridge flats","BASAL_AREA:jul","jul","BASAL_AREA",1,0.26280270358736,0.0159733881742099,8.04322583239392e-61
+"with previous year",TRUE,"M3 valley and ridge flats","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.116294689489643,0.0197150113495538,3.66179435971475e-09
+"with previous year",TRUE,"M3 valley and ridge flats","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.213036465466323,0.0205958688468776,4.47172616497219e-25
+"with previous year",TRUE,"M3 valley and ridge flats","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.0372039225403898,0.020371822711895,0.0678134901392644
+"with previous year",TRUE,"M3 valley and ridge flats","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.13394569851707,0.0240180441579392,2.44873683306493e-08
+"with previous year",FALSE,"M3 cold-air pooling","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.289152334534342,0.0187676951550466,1.47060851234731e-53
+"with previous year",FALSE,"M3 cold-air pooling","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.262647382530748,0.0176191550975067,2.97134666843037e-50
+"with previous year",FALSE,"M3 cold-air pooling","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0727645458141511,0.0184504949020423,8.02099094526712e-05
+"with previous year",FALSE,"M3 cold-air pooling","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0992694978177459,0.01799686466283,3.46934627732722e-08
+"with previous year",FALSE,"M3 cold-air pooling","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.269983239708889,0.0193935876942403,4.70513784433546e-44
+"with previous year",FALSE,"M3 cold-air pooling","BASAL_AREA:jul","BASAL_AREA","jul",1,0.281816477356201,0.0164416605023947,7.41513281939756e-66
+"with previous year",FALSE,"M3 cold-air pooling","BASAL_AREA:jul","jul","BASAL_AREA",-1,0.071312202472762,0.0156679736517759,5.32741656454828e-06
+"with previous year",FALSE,"M3 cold-air pooling","BASAL_AREA:jul","jul","BASAL_AREA",1,0.083145440120075,0.0136384408811559,1.08481316040198e-09
+"with previous year",FALSE,"M3 cold-air pooling","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.209205252610049,0.0177099206042295,3.34870772811778e-32
+"with previous year",FALSE,"M3 cold-air pooling","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.342594464455041,0.0183988016595601,2.19252110623668e-77
+"with previous year",FALSE,"M3 cold-air pooling","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.0106815966742748,0.0185538864021325,0.564813447313009
+"with previous year",FALSE,"M3 cold-air pooling","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.144070808519267,0.0211749982707255,1.01883101825545e-11
+"with previous year",TRUE,"M3 cold-air pooling","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.167156560811824,0.0210283400268894,1.87858154872087e-15
+"with previous year",TRUE,"M3 cold-air pooling","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.163662274158613,0.0193912629106015,3.17335536929176e-17
+"with previous year",TRUE,"M3 cold-air pooling","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0349478096760483,0.0201344609053528,0.0826131516087584
+"with previous year",TRUE,"M3 cold-air pooling","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0384420963292597,0.0202908235673994,0.0581512827174414
+"with previous year",TRUE,"M3 cold-air pooling","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.125997068349768,0.0222647770981396,1.52229877786359e-08
+"with previous year",TRUE,"M3 cold-air pooling","BASAL_AREA:jul","BASAL_AREA","jul",1,0.204821766620669,0.0179330885138564,3.267590426578e-30
+"with previous year",TRUE,"M3 cold-air pooling","BASAL_AREA:jul","jul","BASAL_AREA",-1,0.18458550496566,0.0176458054205841,1.3103956487238e-25
+"with previous year",TRUE,"M3 cold-air pooling","BASAL_AREA:jul","jul","BASAL_AREA",1,0.263410203236562,0.015975669677723,4.45963612384554e-61
+"with previous year",TRUE,"M3 cold-air pooling","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.115914222310447,0.0197295617563452,4.22449323125543e-09
+"with previous year",TRUE,"M3 cold-air pooling","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.214904612659989,0.02059591153391,1.72822020400266e-25
+"with previous year",TRUE,"M3 cold-air pooling","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.0418599163170374,0.0204625772792489,0.0407877144873629
+"with previous year",TRUE,"M3 cold-air pooling","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.14085030666658,0.0241686485322409,5.61592543673442e-09
+"with previous year",FALSE,"M3 canopy height","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.360224780607483,0.0189641823372905,1.87561666379242e-80
+"with previous year",FALSE,"M3 canopy height","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.28620510246783,0.0177770939637765,2.56525640903823e-58
+"with previous year",FALSE,"M3 canopy height","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0835340195916164,0.0181257984318637,4.05446936612387e-06
+"with previous year",FALSE,"M3 canopy height","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.15755369773127,0.0183946479735191,1.0789559523056e-17
+"with previous year",FALSE,"M3 canopy height","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.322886205313535,0.0196390243799255,9.72179104341975e-61
+"with previous year",FALSE,"M3 canopy height","BASAL_AREA:jul","BASAL_AREA","jul",1,0.323543677761778,0.0166754995210116,7.37402937254394e-84
+"with previous year",FALSE,"M3 canopy height","BASAL_AREA:jul","jul","BASAL_AREA",-1,0.0874827298440636,0.015467777578506,1.55117731375783e-08
+"with previous year",FALSE,"M3 canopy height","BASAL_AREA:jul","jul","BASAL_AREA",1,0.0881402022923068,0.0140792785507124,3.842909903499e-10
+"with previous year",FALSE,"M3 canopy height","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.238268448460854,0.0179678146717407,3.90458540288282e-40
+"with previous year",FALSE,"M3 canopy height","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.408161434614459,0.0185618310484219,3.6467049719813e-107
+"with previous year",FALSE,"M3 canopy height","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.187595981138296,0.0185197086540983,4.08600428884867e-24
+"with previous year",FALSE,"M3 canopy height","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.357488967291901,0.0220282554075797,3.1631238179217e-59
+"with previous year",TRUE,"M3 canopy height","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.22330468386728,0.0211604691998863,4.92438494683012e-26
+"with previous year",TRUE,"M3 canopy height","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.196050007919249,0.0195521885913323,1.15974404961027e-23
+"with previous year",TRUE,"M3 canopy height","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0555345077638764,0.0198696614632508,0.00519093794231085
+"with previous year",TRUE,"M3 canopy height","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0827891837119078,0.0203822133868464,4.86885272371397e-05
+"with previous year",TRUE,"M3 canopy height","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.175465147374037,0.0223313536685554,3.9236145225016e-15
+"with previous year",TRUE,"M3 canopy height","BASAL_AREA:jul","BASAL_AREA","jul",1,0.243889544412493,0.0181949721490874,5.71149509982202e-41
+"with previous year",TRUE,"M3 canopy height","BASAL_AREA:jul","jul","BASAL_AREA",-1,0.185854554845182,0.0173780945567383,1.07697819076036e-26
+"with previous year",TRUE,"M3 canopy height","BASAL_AREA:jul","jul","BASAL_AREA",1,0.254278951883638,0.0161316583621985,5.61552400477554e-56
+"with previous year",TRUE,"M3 canopy height","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.148564593924564,0.0199352214155801,9.16799954158449e-14
+"with previous year",TRUE,"M3 canopy height","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.270790097861966,0.0206975510864843,4.10802832639085e-39
+"with previous year",TRUE,"M3 canopy height","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.150579864427007,0.0205067972656806,2.08976397008214e-13
+"with previous year",TRUE,"M3 canopy height","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.272805368364409,0.0247573752940247,3.08943837300402e-28
+"with previous year",FALSE,"M3 winter cold","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.285147351812658,0.0186951127261842,1.58429561064855e-52
+"with previous year",FALSE,"M3 winter cold","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.26663561614836,0.0175787540486434,5.75518911277597e-52
+"with previous year",FALSE,"M3 winter cold","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0635247381786031,0.0183734485893907,0.000545373088914234
+"with previous year",FALSE,"M3 winter cold","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0820364738429018,0.0178845448355262,4.49652653904224e-06
+"with previous year",FALSE,"M3 winter cold","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.268285576043318,0.0193382642627543,9.19450007350247e-44
+"with previous year",FALSE,"M3 winter cold","BASAL_AREA:jul","BASAL_AREA","jul",1,0.2834973919177,0.0163928986175677,5.22782143953774e-67
+"with previous year",FALSE,"M3 winter cold","BASAL_AREA:jul","jul","BASAL_AREA",-1,0.087945712428685,0.0158622097904598,2.95040743282434e-08
+"with previous year",FALSE,"M3 winter cold","BASAL_AREA:jul","jul","BASAL_AREA",1,0.103157528303067,0.0141395883922641,2.97214346736651e-13
+"with previous year",FALSE,"M3 winter cold","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.21220675395139,0.0176757031598032,3.32198676694588e-33
+"with previous year",FALSE,"M3 winter cold","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.339576214009628,0.018341744289618,1.59684340323444e-76
+"with previous year",FALSE,"M3 winter cold","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,-0.00169250027408464,0.0184483465855101,0.92690250743498
+"with previous year",FALSE,"M3 winter cold","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.125676959784154,0.0210275778011786,2.27607599976844e-09
+"with previous year",TRUE,"M3 winter cold","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.158666442486135,0.021010638747884,4.29550075700534e-14
+"with previous year",TRUE,"M3 winter cold","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.153918285288561,0.0193801620274016,1.9886099045199e-15
+"with previous year",TRUE,"M3 winter cold","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0340710374619226,0.0201350465790908,0.090621936588192
+"with previous year",TRUE,"M3 winter cold","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0388191946594971,0.0201877978540861,0.0544921234172124
+"with previous year",TRUE,"M3 winter cold","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.109007217509627,0.0222215159728899,9.31988097223867e-07
+"with previous year",TRUE,"M3 winter cold","BASAL_AREA:jul","BASAL_AREA","jul",1,0.203577510265069,0.0179369898004903,7.45098320530648e-30
+"with previous year",TRUE,"M3 winter cold","BASAL_AREA:jul","jul","BASAL_AREA",-1,0.23507787497624,0.0178945455592759,2.02494503872221e-39
+"with previous year",TRUE,"M3 winter cold","BASAL_AREA:jul","jul","BASAL_AREA",1,0.329648167731683,0.0164724592418578,4.32233886658416e-89
+"with previous year",TRUE,"M3 winter cold","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.103840062230937,0.0197456214906247,1.44927113817228e-07
+"with previous year",TRUE,"M3 winter cold","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.208744665543759,0.0205546157448618,3.1284692300719e-24
+"with previous year",TRUE,"M3 winter cold","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.0510657281819703,0.0204413502032406,0.0124840440658865
+"with previous year",TRUE,"M3 winter cold","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.155970331494793,0.0240551355449141,8.94002505367192e-11
+"with previous year",FALSE,"M3 winter cold with year","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.296433892223478,0.0188829527366876,1.54878856234514e-55
+"with previous year",FALSE,"M3 winter cold with year","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.277758524504067,0.0177346156420624,2.75358281441334e-55
+"with previous year",FALSE,"M3 winter cold with year","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0712075702413243,0.0184454041651497,0.000113178154689806
+"with previous year",FALSE,"M3 winter cold with year","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0898829379607353,0.0179580467272261,5.58149914004402e-07
+"with previous year",FALSE,"M3 winter cold with year","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.278111806090146,0.0194959311693234,3.60968246738843e-46
+"with previous year",FALSE,"M3 winter cold with year","BASAL_AREA:jul","BASAL_AREA","jul",1,0.296080610637399,0.0166202403566665,5.45818726529717e-71
+"with previous year",FALSE,"M3 winter cold with year","BASAL_AREA:jul","jul","BASAL_AREA",-1,-1.32161399056186,0.266502915646665,7.08213531085902e-07
+"with previous year",FALSE,"M3 winter cold with year","BASAL_AREA:jul","jul","BASAL_AREA",1,-1.30364518601461,0.266450546791278,9.94949849059313e-07
+"with previous year",FALSE,"M3 winter cold with year","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.217953793354752,0.0177619576463901,1.29930016551433e-34
+"with previous year",FALSE,"M3 winter cold with year","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.356238623372793,0.018559929909621,4.15690360269658e-82
+"with previous year",FALSE,"M3 winter cold with year","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.00713649547012335,0.0185031886646939,0.699726244364443
+"with previous year",FALSE,"M3 winter cold with year","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.145421325488164,0.0211991790345604,6.89753039529272e-12
+"with previous year",TRUE,"M3 winter cold with year","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.140689745897336,0.0210330837642585,2.24740984254153e-11
+"with previous year",TRUE,"M3 winter cold with year","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.141816597517705,0.0195153348674195,3.67745744039911e-13
+"with previous year",TRUE,"M3 winter cold with year","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0250025088607749,0.0202175364164116,0.216208002156985
+"with previous year",TRUE,"M3 winter cold with year","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0238756572404061,0.0203615734248994,0.240962628784979
+"with previous year",TRUE,"M3 winter cold with year","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.0933095656480699,0.0223629783930928,3.01273334046533e-05
+"with previous year",TRUE,"M3 winter cold with year","BASAL_AREA:jul","BASAL_AREA","jul",1,0.189196777766971,0.0180171050637735,8.55121925208113e-26
+"with previous year",TRUE,"M3 winter cold with year","BASAL_AREA:jul","jul","BASAL_AREA",-1,-0.537976559456659,0.320700977867501,0.0934443418314055
+"with previous year",TRUE,"M3 winter cold with year","BASAL_AREA:jul","jul","BASAL_AREA",1,-0.442089347337758,0.321029257828808,0.16848137471834
+"with previous year",TRUE,"M3 winter cold with year","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.093084757395201,0.019865072725954,2.78799969607652e-06
+"with previous year",TRUE,"M3 winter cold with year","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.18942158601984,0.0206535037168408,4.66906279671652e-20
+"with previous year",TRUE,"M3 winter cold with year","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.0437164980966816,0.0205843273913227,0.0336888885087134
+"with previous year",TRUE,"M3 winter cold with year","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.14005332672132,0.0242787852663874,7.99576643396484e-09
+"with previous year",FALSE,"M3 all new terrain","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.359290450611173,0.0190273944572953,1.57989711193574e-79
+"with previous year",FALSE,"M3 all new terrain","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.276296552090112,0.0178243130339656,3.40975786101363e-54
+"with previous year",FALSE,"M3 all new terrain","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0938476360748088,0.0182385336952662,2.66710949632195e-07
+"with previous year",FALSE,"M3 all new terrain","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.17684153459587,0.0185090260091619,1.24373669392183e-21
+"with previous year",FALSE,"M3 all new terrain","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.315194465466979,0.0197119993401674,1.50080372719346e-57
+"with previous year",FALSE,"M3 all new terrain","BASAL_AREA:jul","BASAL_AREA","jul",1,0.320392537234306,0.0167087498221059,5.97130210960394e-82
+"with previous year",FALSE,"M3 all new terrain","BASAL_AREA:jul","jul","BASAL_AREA",-1,0.0946598885719031,0.0158408990776913,2.29155032622038e-09
+"with previous year",FALSE,"M3 all new terrain","BASAL_AREA:jul","jul","BASAL_AREA",1,0.0998579603392305,0.0146271723742523,8.67808202089398e-12
+"with previous year",FALSE,"M3 all new terrain","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.227903717723954,0.0180104944047232,1.06401818259876e-36
+"with previous year",FALSE,"M3 all new terrain","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.407683284977332,0.0186079519985463,2.12793898934771e-106
+"with previous year",FALSE,"M3 all new terrain","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.208879585156994,0.0186959579097199,5.56274170140871e-29
+"with previous year",FALSE,"M3 all new terrain","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.388659152410372,0.0222231843089887,1.74070714501519e-68
+"with previous year",TRUE,"M3 all new terrain","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.215647780418671,0.0211899872735323,2.51517487597596e-24
+"with previous year",TRUE,"M3 all new terrain","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.185688542347154,0.0195898871175602,2.57234023942551e-21
+"with previous year",TRUE,"M3 all new terrain","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0570367606393643,0.0199964990902652,0.00433990198865159
+"with previous year",TRUE,"M3 all new terrain","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0869959987108812,0.0205811075943678,2.36845206807109e-05
+"with previous year",TRUE,"M3 all new terrain","BASAL_AREA:jul","BASAL_AREA","jul",-1,0.159281743936904,0.0223481935954829,1.0237468177253e-12
+"with previous year",TRUE,"M3 all new terrain","BASAL_AREA:jul","BASAL_AREA","jul",1,0.242054578828921,0.0182116072707891,2.60280052989138e-40
+"with previous year",TRUE,"M3 all new terrain","BASAL_AREA:jul","jul","BASAL_AREA",-1,0.232148333531395,0.0177005489254873,2.6905018152019e-39
+"with previous year",TRUE,"M3 all new terrain","BASAL_AREA:jul","jul","BASAL_AREA",1,0.314921168423412,0.0166686444494287,1.30160736084947e-79
+"with previous year",TRUE,"M3 all new terrain","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.135997116178422,0.0199973498606994,1.04070867193522e-11
+"with previous year",TRUE,"M3 all new terrain","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.265339206587403,0.0206996500120562,1.29115571571973e-37
+"with previous year",TRUE,"M3 all new terrain","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.162956423546609,0.0207156670192185,3.6517520757017e-15
+"with previous year",TRUE,"M3 all new terrain","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.29229851395559,0.0250298222131041,1.65115882072063e-31
+"with previous year",FALSE,"M3 vertical air speed","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.296106267833376,0.0186515999591688,9.34383011230817e-57
+"with previous year",FALSE,"M3 vertical air speed","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.270944909606427,0.0174174357023452,1.44968244697587e-54
+"with previous year",FALSE,"M3 vertical air speed","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0573811888136726,0.018336441068665,0.00175191967352155
+"with previous year",FALSE,"M3 vertical air speed","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0825425470406217,0.0178926772325184,3.96511257149386e-06
+"with previous year",FALSE,"M3 vertical air speed","BASAL_AREA:wnlag_w","BASAL_AREA","wnlag_w",-1,0.317005613073729,0.0181611416860023,3.14501558315327e-68
+"with previous year",FALSE,"M3 vertical air speed","BASAL_AREA:wnlag_w","BASAL_AREA","wnlag_w",1,0.250045564366073,0.0163932122067798,1.572543792442e-52
+"with previous year",FALSE,"M3 vertical air speed","BASAL_AREA:wnlag_w","wnlag_w","BASAL_AREA",-1,0.0348365672840503,0.0146457093211535,0.0173776113487022
+"with previous year",FALSE,"M3 vertical air speed","BASAL_AREA:wnlag_w","wnlag_w","BASAL_AREA",1,-0.0321234814236053,0.012657571936199,0.0111524134612114
+"with previous year",FALSE,"M3 vertical air speed","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.219691325373483,0.0175021203786174,3.8627958475084e-36
+"with previous year",FALSE,"M3 vertical air speed","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.347359852066319,0.0183311788447804,4.48962276391574e-80
+"with previous year",FALSE,"M3 vertical air speed","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,-0.0133734377362016,0.0184670814556028,0.468957007531191
+"with previous year",FALSE,"M3 vertical air speed","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.114295088956634,0.0209923429158405,5.19194455441274e-08
+"with previous year",TRUE,"M3 vertical air speed","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.181771619980211,0.0207766593167741,2.15561458158279e-18
+"with previous year",TRUE,"M3 vertical air speed","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.179629263877443,0.0190180736920525,3.54770009372337e-21
+"with previous year",TRUE,"M3 vertical air speed","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0280480698544453,0.0199927117661937,0.160642267480126
+"with previous year",TRUE,"M3 vertical air speed","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0301904259572133,0.0200618158602659,0.132357488148154
+"with previous year",TRUE,"M3 vertical air speed","BASAL_AREA:wnlag_w","BASAL_AREA","wnlag_w",-1,0.195316982576609,0.0205260050220051,1.80690193330151e-21
+"with previous year",TRUE,"M3 vertical air speed","BASAL_AREA:wnlag_w","BASAL_AREA","wnlag_w",1,0.166083901281044,0.0182303045652517,8.21396282013944e-20
+"with previous year",TRUE,"M3 vertical air speed","BASAL_AREA:wnlag_w","wnlag_w","BASAL_AREA",-1,0.0549943619031373,0.0166744722278286,0.00097335534374093
+"with previous year",TRUE,"M3 vertical air speed","BASAL_AREA:wnlag_w","wnlag_w","BASAL_AREA",1,0.0257612806075721,0.0150785669343879,0.0875491516293683
+"with previous year",TRUE,"M3 vertical air speed","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.132263867597418,0.0193612436922197,8.41060279309112e-12
+"with previous year",TRUE,"M3 vertical air speed","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.229137016260236,0.0203859867908395,2.59595062008642e-29
+"with previous year",TRUE,"M3 vertical air speed","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.032460481521996,0.0203558935400254,0.110791009749473
+"with previous year",TRUE,"M3 vertical air speed","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.129333630184814,0.0238826268333217,6.11568104010997e-08
+"with previous year",FALSE,"M3 trajectory source","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.289446443311707,0.0185475073588262,6.65975616306402e-55
+"with previous year",FALSE,"M3 trajectory source","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.267603453674255,0.0173962037976003,2.13296938564252e-53
+"with previous year",FALSE,"M3 trajectory source","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0583400681471105,0.0183238640971704,0.00145340344085179
+"with previous year",FALSE,"M3 trajectory source","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0801830577845621,0.0178880474028547,7.37758601778067e-06
+"with previous year",FALSE,"M3 trajectory source","BASAL_AREA:trjlag_share","BASAL_AREA","trjlag_share",-1,0.325299479659567,0.0177431957535857,4.45055458691856e-75
+"with previous year",FALSE,"M3 trajectory source","BASAL_AREA:trjlag_share","BASAL_AREA","trjlag_share",1,0.231750417326396,0.0172664499434861,4.49374196963836e-41
+"with previous year",FALSE,"M3 trajectory source","BASAL_AREA:trjlag_share","trjlag_share","BASAL_AREA",-1,0.0954288064513452,0.0152457070275735,3.86489427871093e-10
+"with previous year",FALSE,"M3 trajectory source","BASAL_AREA:trjlag_share","trjlag_share","BASAL_AREA",1,0.00187974411817415,0.0144127193880047,0.896232099024862
+"with previous year",FALSE,"M3 trajectory source","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.213474017187862,0.0174981009088521,3.11438410139826e-34
+"with previous year",FALSE,"M3 trajectory source","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.343575879798101,0.0182171968804957,2.43334419611921e-79
+"with previous year",FALSE,"M3 trajectory source","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,-0.0152907292688725,0.0184921631999788,0.408307245687727
+"with previous year",FALSE,"M3 trajectory source","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.114811133341366,0.0209917336239697,4.51689606604919e-08
+"with previous year",TRUE,"M3 trajectory source","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",-1,0.179425103016664,0.0206363075094814,3.47955170484008e-18
+"with previous year",TRUE,"M3 trajectory source","BASAL_AREA:wind_shelter","BASAL_AREA","wind_shelter",1,0.181276986644792,0.0189794666036273,1.28182685942832e-21
+"with previous year",TRUE,"M3 trajectory source","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",-1,-0.0289376158019196,0.0199782138986721,0.147488835358131
+"with previous year",TRUE,"M3 trajectory source","BASAL_AREA:wind_shelter","wind_shelter","BASAL_AREA",1,-0.0270857321737908,0.0200598083828986,0.176936189908004
+"with previous year",TRUE,"M3 trajectory source","BASAL_AREA:trjlag_share","BASAL_AREA","trjlag_share",-1,0.207426933750491,0.0199079832885949,2.02471461492735e-25
+"with previous year",TRUE,"M3 trajectory source","BASAL_AREA:trjlag_share","BASAL_AREA","trjlag_share",1,0.153275155910965,0.0191231067428894,1.09975217673712e-15
+"with previous year",TRUE,"M3 trajectory source","BASAL_AREA:trjlag_share","trjlag_share","BASAL_AREA",-1,0.117605467076954,0.0170914722425971,5.94571327688726e-12
+"with previous year",TRUE,"M3 trajectory source","BASAL_AREA:trjlag_share","trjlag_share","BASAL_AREA",1,0.0634536892374274,0.0164855143103617,0.00011857326973891
+"with previous year",TRUE,"M3 trajectory source","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",-1,0.130154382756978,0.0193447600832509,1.71837691299162e-11
+"with previous year",TRUE,"M3 trajectory source","BASAL_AREA:solar_flight_direct","BASAL_AREA","solar_flight_direct",1,0.230547706904478,0.0202364322965203,4.54651553579264e-30
+"with previous year",TRUE,"M3 trajectory source","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",-1,0.0301231998101815,0.0203890629994222,0.139563215021752
+"with previous year",TRUE,"M3 trajectory source","BASAL_AREA:solar_flight_direct","solar_flight_direct","BASAL_AREA",1,0.130516523957682,0.023888264038398,4.66507690343705e-08

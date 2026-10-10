@@ -1,111 +1,826 @@
 "sample","dependence","model","year","moran_i","p"
-"all years",FALSE,"M0",2006,0.374718225970175,0
-"all years",FALSE,"M0",2007,0.378902308951332,0
-"all years",FALSE,"M0",2008,0.481672008069061,0
-"all years",FALSE,"M0",2009,0.424924479321526,0
-"all years",FALSE,"M0",2010,0.491157627828837,0
-"all years",FALSE,"M0",2011,0.438008120420381,0
-"all years",FALSE,"M0",2013,0.531717904452459,0
-"all years",FALSE,"M0",2014,0.487960806957438,0
-"all years",FALSE,"M1",2006,0.372419104389633,0
-"all years",FALSE,"M1",2007,0.376388538790837,0
-"all years",FALSE,"M1",2008,0.475910258750977,0
-"all years",FALSE,"M1",2009,0.419664882429373,0
-"all years",FALSE,"M1",2010,0.484105102035394,0
-"all years",FALSE,"M1",2011,0.437353360122285,0
-"all years",FALSE,"M1",2013,0.528219232402188,0
-"all years",FALSE,"M1",2014,0.482216638884021,0
-"all years",FALSE,"M2",2006,0.372706867930192,0
-"all years",FALSE,"M2",2007,0.375984740005259,0
-"all years",FALSE,"M2",2008,0.476328735697512,0
-"all years",FALSE,"M2",2009,0.418724590118316,0
-"all years",FALSE,"M2",2010,0.483467966072168,0
-"all years",FALSE,"M2",2011,0.436589314051668,0
-"all years",FALSE,"M2",2013,0.527937174184697,0
-"all years",FALSE,"M2",2014,0.482069050820738,0
-"all years",FALSE,"M3",2006,0.372124850655404,0
-"all years",FALSE,"M3",2007,0.375453878916407,0
-"all years",FALSE,"M3",2008,0.47571824205831,0
-"all years",FALSE,"M3",2009,0.418359171341823,0
-"all years",FALSE,"M3",2010,0.481826804973601,0
-"all years",FALSE,"M3",2011,0.436504525203027,0
-"all years",FALSE,"M3",2013,0.526796191235904,0
-"all years",FALSE,"M3",2014,0.48061657844679,0
-"all years",FALSE,"M3 without radiation",2006,0.373260954585444,0
-"all years",FALSE,"M3 without radiation",2007,0.375910209673611,0
-"all years",FALSE,"M3 without radiation",2008,0.476270049918702,0
-"all years",FALSE,"M3 without radiation",2009,0.418868861632769,0
-"all years",FALSE,"M3 without radiation",2010,0.481928007438694,0
-"all years",FALSE,"M3 without radiation",2011,0.43609847777774,0
-"all years",FALSE,"M3 without radiation",2013,0.528455210328351,0
-"all years",FALSE,"M3 without radiation",2014,0.481430668888923,0
-"with previous year",FALSE,"M0",2007,0.37853541746366,0
-"with previous year",FALSE,"M0",2008,0.481998737873623,0
-"with previous year",FALSE,"M0",2009,0.422877751913567,0
-"with previous year",FALSE,"M0",2010,0.489153945353299,0
-"with previous year",FALSE,"M0",2011,0.433690369743213,0
-"with previous year",FALSE,"M0",2013,0.530375143091792,0
-"with previous year",FALSE,"M0",2014,0.486346459348343,0
-"with previous year",TRUE,"M0",2007,0.328202285648495,0
-"with previous year",TRUE,"M0",2008,0.431589910010548,0
-"with previous year",TRUE,"M0",2009,0.384880370099512,0
-"with previous year",TRUE,"M0",2010,0.415325505738982,0
-"with previous year",TRUE,"M0",2011,0.347867483201241,0
-"with previous year",TRUE,"M0",2013,0.478311335738791,0
-"with previous year",TRUE,"M0",2014,0.341103403678678,0
-"with previous year",FALSE,"M1",2007,0.375814805348309,0
-"with previous year",FALSE,"M1",2008,0.475935641691414,0
-"with previous year",FALSE,"M1",2009,0.417554546780094,0
-"with previous year",FALSE,"M1",2010,0.481532170404791,0
-"with previous year",FALSE,"M1",2011,0.432662398613923,0
-"with previous year",FALSE,"M1",2013,0.526805928737704,0
-"with previous year",FALSE,"M1",2014,0.480496297818365,0
-"with previous year",TRUE,"M1",2007,0.326988800383825,0
-"with previous year",TRUE,"M1",2008,0.428275223324766,0
-"with previous year",TRUE,"M1",2009,0.385749840313626,0
-"with previous year",TRUE,"M1",2010,0.411597155567791,0
-"with previous year",TRUE,"M1",2011,0.347712983901261,0
-"with previous year",TRUE,"M1",2013,0.475558255330044,0
-"with previous year",TRUE,"M1",2014,0.340317567047617,0
-"with previous year",FALSE,"M2",2007,0.374740828586631,0
-"with previous year",FALSE,"M2",2008,0.475922690423795,0
-"with previous year",FALSE,"M2",2009,0.416261256155169,0
-"with previous year",FALSE,"M2",2010,0.480586271958871,0
-"with previous year",FALSE,"M2",2011,0.431746777414199,0
-"with previous year",FALSE,"M2",2013,0.527496408962495,0
-"with previous year",FALSE,"M2",2014,0.481031378398663,0
-"with previous year",TRUE,"M2",2007,0.3272896995911,0
-"with previous year",TRUE,"M2",2008,0.428673096802114,0
-"with previous year",TRUE,"M2",2009,0.385039135650532,0
-"with previous year",TRUE,"M2",2010,0.411488024516254,0
-"with previous year",TRUE,"M2",2011,0.34677940475471,0
-"with previous year",TRUE,"M2",2013,0.475145314200104,0
-"with previous year",TRUE,"M2",2014,0.339684871912508,0
-"with previous year",FALSE,"M3",2007,0.373915972594901,0
-"with previous year",FALSE,"M3",2008,0.475002047163103,0
-"with previous year",FALSE,"M3",2009,0.416125873627088,0
-"with previous year",FALSE,"M3",2010,0.478405514941352,0
-"with previous year",FALSE,"M3",2011,0.431499569442548,0
-"with previous year",FALSE,"M3",2013,0.525977768761526,0
-"with previous year",FALSE,"M3",2014,0.479659946951772,0
-"with previous year",TRUE,"M3",2007,0.327424991655581,0
-"with previous year",TRUE,"M3",2008,0.426184765079142,0
-"with previous year",TRUE,"M3",2009,0.38479348194048,0
-"with previous year",TRUE,"M3",2010,0.409699236109841,0
-"with previous year",TRUE,"M3",2011,0.345466704820848,0
-"with previous year",TRUE,"M3",2013,0.468667952787516,0
-"with previous year",TRUE,"M3",2014,0.332954007276682,0
-"with previous year",FALSE,"M3 without radiation",2007,0.374435373863918,0
-"with previous year",FALSE,"M3 without radiation",2008,0.475596208808046,0
-"with previous year",FALSE,"M3 without radiation",2009,0.416653345424821,0
-"with previous year",FALSE,"M3 without radiation",2010,0.478574339063164,0
-"with previous year",FALSE,"M3 without radiation",2011,0.430910545686785,0
-"with previous year",FALSE,"M3 without radiation",2013,0.527333344686938,0
-"with previous year",FALSE,"M3 without radiation",2014,0.480224479512538,0
-"with previous year",TRUE,"M3 without radiation",2007,0.327348078294496,0
-"with previous year",TRUE,"M3 without radiation",2008,0.426591820678606,0
-"with previous year",TRUE,"M3 without radiation",2009,0.384908352227061,0
-"with previous year",TRUE,"M3 without radiation",2010,0.409851165867452,0
-"with previous year",TRUE,"M3 without radiation",2011,0.345754089336778,0
-"with previous year",TRUE,"M3 without radiation",2013,0.470560651530999,0
-"with previous year",TRUE,"M3 without radiation",2014,0.334061134341303,0
+"all years",FALSE,"M0",2006,0.367876944006273,0
+"all years",FALSE,"M0",2007,0.385437175518112,0
+"all years",FALSE,"M0",2008,0.46628849518654,0
+"all years",FALSE,"M0",2009,0.415030936760166,0
+"all years",FALSE,"M0",2010,0.499066309813403,0
+"all years",FALSE,"M0",2011,0.432992531982905,0
+"all years",FALSE,"M0",2012,0.526027680576292,0
+"all years",FALSE,"M0",2013,0.495722070681523,0
+"all years",FALSE,"M0",2014,0.479683842214507,0
+"all years",FALSE,"M1",2006,0.364946378376829,0
+"all years",FALSE,"M1",2007,0.382413282138707,0
+"all years",FALSE,"M1",2008,0.460163315883687,0
+"all years",FALSE,"M1",2009,0.410214784174481,0
+"all years",FALSE,"M1",2010,0.492047287158206,0
+"all years",FALSE,"M1",2011,0.432336492414076,0
+"all years",FALSE,"M1",2012,0.523948732763348,0
+"all years",FALSE,"M1",2013,0.491802562453019,0
+"all years",FALSE,"M1",2014,0.476130908782093,0
+"all years",FALSE,"M2",2006,0.365676483135756,0
+"all years",FALSE,"M2",2007,0.381947906064818,0
+"all years",FALSE,"M2",2008,0.46143597332311,0
+"all years",FALSE,"M2",2009,0.409762044029081,0
+"all years",FALSE,"M2",2010,0.491545568518032,0
+"all years",FALSE,"M2",2011,0.431757106593191,0
+"all years",FALSE,"M2",2012,0.523054191180893,0
+"all years",FALSE,"M2",2013,0.492606464674952,0
+"all years",FALSE,"M2",2014,0.475860868480275,0
+"all years",FALSE,"M3",2006,0.366036800653656,0
+"all years",FALSE,"M3",2007,0.381203767893778,0
+"all years",FALSE,"M3",2008,0.460628053281538,0
+"all years",FALSE,"M3",2009,0.409315833124159,0
+"all years",FALSE,"M3",2010,0.490198113232615,0
+"all years",FALSE,"M3",2011,0.431823783204375,0
+"all years",FALSE,"M3",2012,0.522128588866172,0
+"all years",FALSE,"M3",2013,0.49068606093606,0
+"all years",FALSE,"M3",2014,0.474326866716246,0
+"all years",FALSE,"M3 lagged wind",2006,0.365309107299269,0
+"all years",FALSE,"M3 lagged wind",2007,0.381169518634091,0
+"all years",FALSE,"M3 lagged wind",2008,0.46088857603883,0
+"all years",FALSE,"M3 lagged wind",2009,0.408943715138836,0
+"all years",FALSE,"M3 lagged wind",2010,0.49131081546122,0
+"all years",FALSE,"M3 lagged wind",2011,0.432197736552561,0
+"all years",FALSE,"M3 lagged wind",2012,0.522852709312827,0
+"all years",FALSE,"M3 lagged wind",2013,0.492674617392932,0
+"all years",FALSE,"M3 lagged wind",2014,0.474464313256285,0
+"all years",FALSE,"M3 lagged wind, diameter and closure",2006,0.365301375561324,0
+"all years",FALSE,"M3 lagged wind, diameter and closure",2007,0.380832351407769,0
+"all years",FALSE,"M3 lagged wind, diameter and closure",2008,0.460802470537468,0
+"all years",FALSE,"M3 lagged wind, diameter and closure",2009,0.40906190990451,0
+"all years",FALSE,"M3 lagged wind, diameter and closure",2010,0.492905539309731,0
+"all years",FALSE,"M3 lagged wind, diameter and closure",2011,0.431825127311733,0
+"all years",FALSE,"M3 lagged wind, diameter and closure",2012,0.522665886351105,0
+"all years",FALSE,"M3 lagged wind, diameter and closure",2013,0.492254909948314,0
+"all years",FALSE,"M3 lagged wind, diameter and closure",2014,0.473638484724263,0
+"all years",FALSE,"M3 measured heat",2006,0.38261788172286,0
+"all years",FALSE,"M3 measured heat",2007,0.372720517361974,0
+"all years",FALSE,"M3 measured heat",2008,0.445633768165223,0
+"all years",FALSE,"M3 measured heat",2009,0.372888546558003,0
+"all years",FALSE,"M3 measured heat",2010,0.455031103143416,0
+"all years",FALSE,"M3 measured heat",2011,0.403940915370303,0
+"all years",FALSE,"M3 measured heat",2012,0.496310960212986,0
+"all years",FALSE,"M3 measured heat",2013,0.475346604035077,0
+"all years",FALSE,"M3 measured heat",2014,0.443348387864118,0
+"all years",FALSE,"M3 lidar",2006,0.364128356812243,0
+"all years",FALSE,"M3 lidar",2007,0.381498203886004,0
+"all years",FALSE,"M3 lidar",2008,0.461234192953825,0
+"all years",FALSE,"M3 lidar",2009,0.408625283903932,0
+"all years",FALSE,"M3 lidar",2010,0.491704861745305,0
+"all years",FALSE,"M3 lidar",2011,0.432474868209599,0
+"all years",FALSE,"M3 lidar",2012,0.522770825340741,0
+"all years",FALSE,"M3 lidar",2013,0.492482346038148,0
+"all years",FALSE,"M3 lidar",2014,0.474308219167133,0
+"all years",FALSE,"M3 without radiation",2006,0.367167299959245,0
+"all years",FALSE,"M3 without radiation",2007,0.381610072475999,0
+"all years",FALSE,"M3 without radiation",2008,0.460760978826499,0
+"all years",FALSE,"M3 without radiation",2009,0.410031982530503,0
+"all years",FALSE,"M3 without radiation",2010,0.490303190821922,0
+"all years",FALSE,"M3 without radiation",2011,0.431238642118295,0
+"all years",FALSE,"M3 without radiation",2012,0.521972465414485,0
+"all years",FALSE,"M3 without radiation",2013,0.491683196202634,0
+"all years",FALSE,"M3 without radiation",2014,0.475420290644409,0
+"all years",FALSE,"M3 modelled wind",2006,0.36510954381329,0
+"all years",FALSE,"M3 modelled wind",2007,0.381319900397731,0
+"all years",FALSE,"M3 modelled wind",2008,0.461428192714661,0
+"all years",FALSE,"M3 modelled wind",2009,0.408414219834527,0
+"all years",FALSE,"M3 modelled wind",2010,0.492467595378439,0
+"all years",FALSE,"M3 modelled wind",2011,0.431784139471414,0
+"all years",FALSE,"M3 modelled wind",2012,0.52160406292284,0
+"all years",FALSE,"M3 modelled wind",2013,0.491231656763834,0
+"all years",FALSE,"M3 modelled wind",2014,0.474450589393432,0
+"all years",FALSE,"M3 upslope share",2006,0.36352756368091,0
+"all years",FALSE,"M3 upslope share",2007,0.3809309249751,0
+"all years",FALSE,"M3 upslope share",2008,0.461252781382629,0
+"all years",FALSE,"M3 upslope share",2009,0.408895880023639,0
+"all years",FALSE,"M3 upslope share",2010,0.490648077888415,0
+"all years",FALSE,"M3 upslope share",2011,0.432451367049057,0
+"all years",FALSE,"M3 upslope share",2012,0.5222423615547,0
+"all years",FALSE,"M3 upslope share",2013,0.491285026288792,0
+"all years",FALSE,"M3 upslope share",2014,0.475346049761384,0
+"all years",FALSE,"M3 shelter at the modelled wind",2006,0.36561242568647,0
+"all years",FALSE,"M3 shelter at the modelled wind",2007,0.382183495206574,0
+"all years",FALSE,"M3 shelter at the modelled wind",2008,0.462154101350348,0
+"all years",FALSE,"M3 shelter at the modelled wind",2009,0.409590706752147,0
+"all years",FALSE,"M3 shelter at the modelled wind",2010,0.490840059120078,0
+"all years",FALSE,"M3 shelter at the modelled wind",2011,0.431898388571545,0
+"all years",FALSE,"M3 shelter at the modelled wind",2012,0.521268125774827,0
+"all years",FALSE,"M3 shelter at the modelled wind",2013,0.490803273814015,0
+"all years",FALSE,"M3 shelter at the modelled wind",2014,0.47405940016287,0
+"all years",FALSE,"M3 modelled wind, diameter and closure",2006,0.36537426069373,0
+"all years",FALSE,"M3 modelled wind, diameter and closure",2007,0.381312246420825,0
+"all years",FALSE,"M3 modelled wind, diameter and closure",2008,0.461192988121247,0
+"all years",FALSE,"M3 modelled wind, diameter and closure",2009,0.408090505002207,0
+"all years",FALSE,"M3 modelled wind, diameter and closure",2010,0.492917690107227,0
+"all years",FALSE,"M3 modelled wind, diameter and closure",2011,0.430889579463911,0
+"all years",FALSE,"M3 modelled wind, diameter and closure",2012,0.5207230149559,0
+"all years",FALSE,"M3 modelled wind, diameter and closure",2013,0.490275027455256,0
+"all years",FALSE,"M3 modelled wind, diameter and closure",2014,0.472236649495876,0
+"all years",FALSE,"M3 modelled wind, 30 m",2006,0.365819287980365,0
+"all years",FALSE,"M3 modelled wind, 30 m",2007,0.38010854361497,0
+"all years",FALSE,"M3 modelled wind, 30 m",2008,0.462880740576077,0
+"all years",FALSE,"M3 modelled wind, 30 m",2009,0.406736332443183,0
+"all years",FALSE,"M3 modelled wind, 30 m",2010,0.489840119484142,0
+"all years",FALSE,"M3 modelled wind, 30 m",2011,0.431263699986987,0
+"all years",FALSE,"M3 modelled wind, 30 m",2012,0.522458815545407,0
+"all years",FALSE,"M3 modelled wind, 30 m",2013,0.490002979624622,0
+"all years",FALSE,"M3 modelled wind, 30 m",2014,0.474095583946948,0
+"all years",FALSE,"M3 modelled wind, 10 m",2006,0.365179277336546,0
+"all years",FALSE,"M3 modelled wind, 10 m",2007,0.381125857434066,0
+"all years",FALSE,"M3 modelled wind, 10 m",2008,0.460749586849501,0
+"all years",FALSE,"M3 modelled wind, 10 m",2009,0.409056885403716,0
+"all years",FALSE,"M3 modelled wind, 10 m",2010,0.49093842767048,0
+"all years",FALSE,"M3 modelled wind, 10 m",2011,0.432261958639248,0
+"all years",FALSE,"M3 modelled wind, 10 m",2012,0.522892981387824,0
+"all years",FALSE,"M3 modelled wind, 10 m",2013,0.492335910776758,0
+"all years",FALSE,"M3 modelled wind, 10 m",2014,0.475162728256013,0
+"all years",FALSE,"M3 lift",2006,0.364028179412293,0
+"all years",FALSE,"M3 lift",2007,0.380537900984738,0
+"all years",FALSE,"M3 lift",2008,0.461575267520453,0
+"all years",FALSE,"M3 lift",2009,0.40816662317811,0
+"all years",FALSE,"M3 lift",2010,0.487086973833826,0
+"all years",FALSE,"M3 lift",2011,0.429581941613445,0
+"all years",FALSE,"M3 lift",2012,0.520300478964126,0
+"all years",FALSE,"M3 lift",2013,0.490268879618162,0
+"all years",FALSE,"M3 lift",2014,0.477161136143058,0
+"all years",FALSE,"M3 lift with year",2006,0.36310340659407,0
+"all years",FALSE,"M3 lift with year",2007,0.373614501715362,0
+"all years",FALSE,"M3 lift with year",2008,0.445515849578353,0
+"all years",FALSE,"M3 lift with year",2009,0.406539991676126,0
+"all years",FALSE,"M3 lift with year",2010,0.477397498720077,0
+"all years",FALSE,"M3 lift with year",2011,0.417082842793832,0
+"all years",FALSE,"M3 lift with year",2012,0.510698654560556,0
+"all years",FALSE,"M3 lift with year",2013,0.487158029999859,0
+"all years",FALSE,"M3 lift with year",2014,0.479055848015496,0
+"all years",FALSE,"M3 lift, 10 m speed and upslope",2006,0.361837919519307,0
+"all years",FALSE,"M3 lift, 10 m speed and upslope",2007,0.373096955894535,0
+"all years",FALSE,"M3 lift, 10 m speed and upslope",2008,0.444796439202634,0
+"all years",FALSE,"M3 lift, 10 m speed and upslope",2009,0.406933662727651,0
+"all years",FALSE,"M3 lift, 10 m speed and upslope",2010,0.47731215318797,0
+"all years",FALSE,"M3 lift, 10 m speed and upslope",2011,0.417708830393275,0
+"all years",FALSE,"M3 lift, 10 m speed and upslope",2012,0.510826835244781,0
+"all years",FALSE,"M3 lift, 10 m speed and upslope",2013,0.487389393578584,0
+"all years",FALSE,"M3 lift, 10 m speed and upslope",2014,0.479668363117749,0
+"all years",FALSE,"M3 slope updraft",2006,0.361856270904554,0
+"all years",FALSE,"M3 slope updraft",2007,0.380277207381974,0
+"all years",FALSE,"M3 slope updraft",2008,0.461880155521313,0
+"all years",FALSE,"M3 slope updraft",2009,0.407340703164373,0
+"all years",FALSE,"M3 slope updraft",2010,0.490341925149577,0
+"all years",FALSE,"M3 slope updraft",2011,0.43194958114085,0
+"all years",FALSE,"M3 slope updraft",2012,0.521447331835691,0
+"all years",FALSE,"M3 slope updraft",2013,0.488962973656487,0
+"all years",FALSE,"M3 slope updraft",2014,0.473989477626107,0
+"all years",FALSE,"M3 slope updraft at ridges",2006,0.362551401991863,0
+"all years",FALSE,"M3 slope updraft at ridges",2007,0.380944926800851,0
+"all years",FALSE,"M3 slope updraft at ridges",2008,0.461760792887909,0
+"all years",FALSE,"M3 slope updraft at ridges",2009,0.406841886972018,0
+"all years",FALSE,"M3 slope updraft at ridges",2010,0.489320667260249,0
+"all years",FALSE,"M3 slope updraft at ridges",2011,0.430234147408715,0
+"all years",FALSE,"M3 slope updraft at ridges",2012,0.520267921830599,0
+"all years",FALSE,"M3 slope updraft at ridges",2013,0.488311699680862,0
+"all years",FALSE,"M3 slope updraft at ridges",2014,0.472866639974074,0
+"all years",FALSE,"M3 cloud-adjusted sun",2006,0.36589835433508,0
+"all years",FALSE,"M3 cloud-adjusted sun",2007,0.381310490598461,0
+"all years",FALSE,"M3 cloud-adjusted sun",2008,0.460483989888284,0
+"all years",FALSE,"M3 cloud-adjusted sun",2009,0.409254855709633,0
+"all years",FALSE,"M3 cloud-adjusted sun",2010,0.491071891021335,0
+"all years",FALSE,"M3 cloud-adjusted sun",2011,0.432173392480619,0
+"all years",FALSE,"M3 cloud-adjusted sun",2012,0.522017657213399,0
+"all years",FALSE,"M3 cloud-adjusted sun",2013,0.491266144469237,0
+"all years",FALSE,"M3 cloud-adjusted sun",2014,0.474072153039918,0
+"all years",FALSE,"M3 slope temperature",2006,0.363163666254419,0
+"all years",FALSE,"M3 slope temperature",2007,0.38005422942115,0
+"all years",FALSE,"M3 slope temperature",2008,0.460141818133686,0
+"all years",FALSE,"M3 slope temperature",2009,0.406507506562514,0
+"all years",FALSE,"M3 slope temperature",2010,0.492315240925056,0
+"all years",FALSE,"M3 slope temperature",2011,0.432241508982941,0
+"all years",FALSE,"M3 slope temperature",2012,0.520195246705962,0
+"all years",FALSE,"M3 slope temperature",2013,0.489118093059033,0
+"all years",FALSE,"M3 slope temperature",2014,0.474045139908146,0
+"all years",FALSE,"M3 cloud-adjusted sun with year",2006,0.357649141277681,0
+"all years",FALSE,"M3 cloud-adjusted sun with year",2007,0.380992832769081,0
+"all years",FALSE,"M3 cloud-adjusted sun with year",2008,0.459811021433357,0
+"all years",FALSE,"M3 cloud-adjusted sun with year",2009,0.409131636196457,0
+"all years",FALSE,"M3 cloud-adjusted sun with year",2010,0.487523291568378,0
+"all years",FALSE,"M3 cloud-adjusted sun with year",2011,0.430274569298626,0
+"all years",FALSE,"M3 cloud-adjusted sun with year",2012,0.521206839706203,0
+"all years",FALSE,"M3 cloud-adjusted sun with year",2013,0.490662244091282,0
+"all years",FALSE,"M3 cloud-adjusted sun with year",2014,0.474693313470887,0
+"all years",FALSE,"M3 slope temperature with year",2006,0.361492256073686,0
+"all years",FALSE,"M3 slope temperature with year",2007,0.379989295655794,0
+"all years",FALSE,"M3 slope temperature with year",2008,0.459661476335862,0
+"all years",FALSE,"M3 slope temperature with year",2009,0.404931797664375,0
+"all years",FALSE,"M3 slope temperature with year",2010,0.488974513397451,0
+"all years",FALSE,"M3 slope temperature with year",2011,0.430914233441138,0
+"all years",FALSE,"M3 slope temperature with year",2012,0.516980651444748,0
+"all years",FALSE,"M3 slope temperature with year",2013,0.484691284695982,0
+"all years",FALSE,"M3 slope temperature with year",2014,0.472024986959333,0
+"all years",FALSE,"M3 slope temperature without sun",2006,0.366110175406151,0
+"all years",FALSE,"M3 slope temperature without sun",2007,0.381473383001184,0
+"all years",FALSE,"M3 slope temperature without sun",2008,0.459518814408894,0
+"all years",FALSE,"M3 slope temperature without sun",2009,0.408141513087531,0
+"all years",FALSE,"M3 slope temperature without sun",2010,0.490179894624888,0
+"all years",FALSE,"M3 slope temperature without sun",2011,0.431096714780224,0
+"all years",FALSE,"M3 slope temperature without sun",2012,0.520845737097334,0
+"all years",FALSE,"M3 slope temperature without sun",2013,0.49168269381061,0
+"all years",FALSE,"M3 slope temperature without sun",2014,0.474056765865795,0
+"all years",FALSE,"M3 valley and ridge flats",2006,0.36561538510403,0
+"all years",FALSE,"M3 valley and ridge flats",2007,0.380530242004681,0
+"all years",FALSE,"M3 valley and ridge flats",2008,0.460277176461391,0
+"all years",FALSE,"M3 valley and ridge flats",2009,0.409251442085758,0
+"all years",FALSE,"M3 valley and ridge flats",2010,0.489984710708304,0
+"all years",FALSE,"M3 valley and ridge flats",2011,0.43178439207801,0
+"all years",FALSE,"M3 valley and ridge flats",2012,0.5216581117689,0
+"all years",FALSE,"M3 valley and ridge flats",2013,0.490166980312379,0
+"all years",FALSE,"M3 valley and ridge flats",2014,0.473523413448973,0
+"all years",FALSE,"M3 cold-air pooling",2006,0.364803118611461,0
+"all years",FALSE,"M3 cold-air pooling",2007,0.38021858951272,0
+"all years",FALSE,"M3 cold-air pooling",2008,0.46050331352399,0
+"all years",FALSE,"M3 cold-air pooling",2009,0.407356342345291,0
+"all years",FALSE,"M3 cold-air pooling",2010,0.488465352925383,0
+"all years",FALSE,"M3 cold-air pooling",2011,0.429652750726084,0
+"all years",FALSE,"M3 cold-air pooling",2012,0.520449395021021,0
+"all years",FALSE,"M3 cold-air pooling",2013,0.489537339774078,0
+"all years",FALSE,"M3 cold-air pooling",2014,0.47355852251922,0
+"all years",FALSE,"M3 canopy height",2006,0.367901980316111,0
+"all years",FALSE,"M3 canopy height",2007,0.353329798447613,0
+"all years",FALSE,"M3 canopy height",2008,0.447108698304616,0
+"all years",FALSE,"M3 canopy height",2009,0.382556347464627,0
+"all years",FALSE,"M3 canopy height",2010,0.457185469328986,0
+"all years",FALSE,"M3 canopy height",2011,0.405472482000121,0
+"all years",FALSE,"M3 canopy height",2012,0.504902912931659,0
+"all years",FALSE,"M3 canopy height",2013,0.480958247933515,0
+"all years",FALSE,"M3 canopy height",2014,0.456484807895457,0
+"all years",FALSE,"M3 winter cold",2006,0.365095869458624,0
+"all years",FALSE,"M3 winter cold",2007,0.381654699363243,0
+"all years",FALSE,"M3 winter cold",2008,0.460181115755685,0
+"all years",FALSE,"M3 winter cold",2009,0.408547728646623,0
+"all years",FALSE,"M3 winter cold",2010,0.489121025411187,0
+"all years",FALSE,"M3 winter cold",2011,0.432224607596366,0
+"all years",FALSE,"M3 winter cold",2012,0.521928728153326,0
+"all years",FALSE,"M3 winter cold",2013,0.48956079922691,0
+"all years",FALSE,"M3 winter cold",2014,0.474831788385399,0
+"all years",FALSE,"M3 winter cold with year",2006,0.357796287552579,0
+"all years",FALSE,"M3 winter cold with year",2007,0.38134108512341,0
+"all years",FALSE,"M3 winter cold with year",2008,0.459658438505748,0
+"all years",FALSE,"M3 winter cold with year",2009,0.408217916154994,0
+"all years",FALSE,"M3 winter cold with year",2010,0.484214821035169,0
+"all years",FALSE,"M3 winter cold with year",2011,0.431683639650475,0
+"all years",FALSE,"M3 winter cold with year",2012,0.52179791649447,0
+"all years",FALSE,"M3 winter cold with year",2013,0.48667226345831,0
+"all years",FALSE,"M3 winter cold with year",2014,0.475934247587338,0
+"all years",FALSE,"M3 all new terrain",2006,0.365613662456832,0
+"all years",FALSE,"M3 all new terrain",2007,0.351768479446959,0
+"all years",FALSE,"M3 all new terrain",2008,0.446184482430697,0
+"all years",FALSE,"M3 all new terrain",2009,0.379323297228434,0
+"all years",FALSE,"M3 all new terrain",2010,0.453984271794406,0
+"all years",FALSE,"M3 all new terrain",2011,0.403101807139143,0
+"all years",FALSE,"M3 all new terrain",2012,0.502540043633899,0
+"all years",FALSE,"M3 all new terrain",2013,0.47809592711781,0
+"all years",FALSE,"M3 all new terrain",2014,0.454891177726652,0
+"all years",FALSE,"M3 vertical air speed",2006,0.365187650502474,0
+"all years",FALSE,"M3 vertical air speed",2007,0.381129276650888,0
+"all years",FALSE,"M3 vertical air speed",2008,0.461022217027456,0
+"all years",FALSE,"M3 vertical air speed",2009,0.409419624789472,0
+"all years",FALSE,"M3 vertical air speed",2010,0.493009973874755,0
+"all years",FALSE,"M3 vertical air speed",2011,0.432295993985626,0
+"all years",FALSE,"M3 vertical air speed",2012,0.522907317766419,0
+"all years",FALSE,"M3 vertical air speed",2013,0.491415978750026,0
+"all years",FALSE,"M3 vertical air speed",2014,0.473155846289123,0
+"all years",FALSE,"M3 trajectory source",2006,0.365846665739578,0
+"all years",FALSE,"M3 trajectory source",2007,0.381192529454777,0
+"all years",FALSE,"M3 trajectory source",2008,0.461013403150609,0
+"all years",FALSE,"M3 trajectory source",2009,0.410194976397311,0
+"all years",FALSE,"M3 trajectory source",2010,0.491312397575188,0
+"all years",FALSE,"M3 trajectory source",2011,0.431605070247849,0
+"all years",FALSE,"M3 trajectory source",2012,0.522483572520849,0
+"all years",FALSE,"M3 trajectory source",2013,0.491706722329035,0
+"all years",FALSE,"M3 trajectory source",2014,0.474261073128628,0
+"with previous year",FALSE,"M0",2007,0.385401867516467,0
+"with previous year",FALSE,"M0",2008,0.46682406695656,0
+"with previous year",FALSE,"M0",2009,0.41295923533048,0
+"with previous year",FALSE,"M0",2010,0.496923607639508,0
+"with previous year",FALSE,"M0",2011,0.428776451790411,0
+"with previous year",FALSE,"M0",2012,0.521249786247431,0
+"with previous year",FALSE,"M0",2013,0.494456834781711,0
+"with previous year",FALSE,"M0",2014,0.477545470728952,0
+"with previous year",TRUE,"M0",2007,0.333053996180863,0
+"with previous year",TRUE,"M0",2008,0.413297820301013,0
+"with previous year",TRUE,"M0",2009,0.379791077940909,0
+"with previous year",TRUE,"M0",2010,0.420969164091734,0
+"with previous year",TRUE,"M0",2011,0.354457128390937,0
+"with previous year",TRUE,"M0",2012,0.423515293170947,0
+"with previous year",TRUE,"M0",2013,0.428898481176777,0
+"with previous year",TRUE,"M0",2014,0.330619408844449,0
+"with previous year",FALSE,"M1",2007,0.38221351043884,0
+"with previous year",FALSE,"M1",2008,0.46046616406619,0
+"with previous year",FALSE,"M1",2009,0.408207527888261,0
+"with previous year",FALSE,"M1",2010,0.489497611122298,0
+"with previous year",FALSE,"M1",2011,0.427901370308356,0
+"with previous year",FALSE,"M1",2012,0.519182026461413,0
+"with previous year",FALSE,"M1",2013,0.490500679993829,0
+"with previous year",FALSE,"M1",2014,0.473818998034388,0
+"with previous year",TRUE,"M1",2007,0.331795632807458,0
+"with previous year",TRUE,"M1",2008,0.409601006376767,0
+"with previous year",TRUE,"M1",2009,0.380724375135328,0
+"with previous year",TRUE,"M1",2010,0.417653880253317,0
+"with previous year",TRUE,"M1",2011,0.354163296723787,0
+"with previous year",TRUE,"M1",2012,0.422460159996467,0
+"with previous year",TRUE,"M1",2013,0.427085997655941,0
+"with previous year",TRUE,"M1",2014,0.331062253791098,0
+"with previous year",FALSE,"M2",2007,0.381222103682151,0
+"with previous year",FALSE,"M2",2008,0.461379395277111,0
+"with previous year",FALSE,"M2",2009,0.407596078306451,0
+"with previous year",FALSE,"M2",2010,0.488858468642645,0
+"with previous year",FALSE,"M2",2011,0.427198231095071,0
+"with previous year",FALSE,"M2",2012,0.518262901914549,0
+"with previous year",FALSE,"M2",2013,0.492170375841332,0
+"with previous year",FALSE,"M2",2014,0.474144188802869,0
+"with previous year",TRUE,"M2",2007,0.332788580401649,0
+"with previous year",TRUE,"M2",2008,0.410741114619184,0
+"with previous year",TRUE,"M2",2009,0.380161683310843,0
+"with previous year",TRUE,"M2",2010,0.417449822748064,0
+"with previous year",TRUE,"M2",2011,0.353547417090326,0
+"with previous year",TRUE,"M2",2012,0.422684350251582,0
+"with previous year",TRUE,"M2",2013,0.426113050300075,0
+"with previous year",TRUE,"M2",2014,0.329820321928581,0
+"with previous year",FALSE,"M3",2007,0.380264656873764,0
+"with previous year",FALSE,"M3",2008,0.460462865568409,0
+"with previous year",FALSE,"M3",2009,0.407561064857286,0
+"with previous year",FALSE,"M3",2010,0.486744586796843,0
+"with previous year",FALSE,"M3",2011,0.427031551194948,0
+"with previous year",FALSE,"M3",2012,0.516797212062218,0
+"with previous year",FALSE,"M3",2013,0.489817627991637,0
+"with previous year",FALSE,"M3",2014,0.472479543816494,0
+"with previous year",TRUE,"M3",2007,0.333119232700554,0
+"with previous year",TRUE,"M3",2008,0.407658395205916,0
+"with previous year",TRUE,"M3",2009,0.381107312397379,0
+"with previous year",TRUE,"M3",2010,0.415375277004039,0
+"with previous year",TRUE,"M3",2011,0.353177033211722,0
+"with previous year",TRUE,"M3",2012,0.422069734111781,0
+"with previous year",TRUE,"M3",2013,0.41979287913221,0
+"with previous year",TRUE,"M3",2014,0.32464550318791,0
+"with previous year",FALSE,"M3 lagged wind",2007,0.380159617424729,0
+"with previous year",FALSE,"M3 lagged wind",2008,0.460925072945912,0
+"with previous year",FALSE,"M3 lagged wind",2009,0.406831962683954,0
+"with previous year",FALSE,"M3 lagged wind",2010,0.488673024456745,0
+"with previous year",FALSE,"M3 lagged wind",2011,0.427664411036549,0
+"with previous year",FALSE,"M3 lagged wind",2012,0.517845607039609,0
+"with previous year",FALSE,"M3 lagged wind",2013,0.492041343119677,0
+"with previous year",FALSE,"M3 lagged wind",2014,0.472732419909081,0
+"with previous year",TRUE,"M3 lagged wind",2007,0.331587479739742,0
+"with previous year",TRUE,"M3 lagged wind",2008,0.410305531548746,0
+"with previous year",TRUE,"M3 lagged wind",2009,0.380234035805996,0
+"with previous year",TRUE,"M3 lagged wind",2010,0.416982423023994,0
+"with previous year",TRUE,"M3 lagged wind",2011,0.353198383908683,0
+"with previous year",TRUE,"M3 lagged wind",2012,0.421459793227155,0
+"with previous year",TRUE,"M3 lagged wind",2013,0.424050376947558,0
+"with previous year",TRUE,"M3 lagged wind",2014,0.324994560982044,0
+"with previous year",FALSE,"M3 lagged wind, diameter and closure",2007,0.37986200969086,0
+"with previous year",FALSE,"M3 lagged wind, diameter and closure",2008,0.460789969736119,0
+"with previous year",FALSE,"M3 lagged wind, diameter and closure",2009,0.407233739845474,0
+"with previous year",FALSE,"M3 lagged wind, diameter and closure",2010,0.490583214269305,0
+"with previous year",FALSE,"M3 lagged wind, diameter and closure",2011,0.427285189988599,0
+"with previous year",FALSE,"M3 lagged wind, diameter and closure",2012,0.51746361864529,0
+"with previous year",FALSE,"M3 lagged wind, diameter and closure",2013,0.491154891651545,0
+"with previous year",FALSE,"M3 lagged wind, diameter and closure",2014,0.472172557839104,0
+"with previous year",TRUE,"M3 lagged wind, diameter and closure",2007,0.330599709878694,0
+"with previous year",TRUE,"M3 lagged wind, diameter and closure",2008,0.409690579704847,0
+"with previous year",TRUE,"M3 lagged wind, diameter and closure",2009,0.38027002748848,0
+"with previous year",TRUE,"M3 lagged wind, diameter and closure",2010,0.421468076181271,0
+"with previous year",TRUE,"M3 lagged wind, diameter and closure",2011,0.351246047343569,0
+"with previous year",TRUE,"M3 lagged wind, diameter and closure",2012,0.420038683673797,0
+"with previous year",TRUE,"M3 lagged wind, diameter and closure",2013,0.421231815396725,0
+"with previous year",TRUE,"M3 lagged wind, diameter and closure",2014,0.324668594034969,0
+"with previous year",FALSE,"M3 measured heat",2007,0.372202839241373,0
+"with previous year",FALSE,"M3 measured heat",2008,0.44511861874524,0
+"with previous year",FALSE,"M3 measured heat",2009,0.370027602008055,0
+"with previous year",FALSE,"M3 measured heat",2010,0.452683705531097,0
+"with previous year",FALSE,"M3 measured heat",2011,0.399069282684334,0
+"with previous year",FALSE,"M3 measured heat",2012,0.492641982620671,0
+"with previous year",FALSE,"M3 measured heat",2013,0.476299726050857,0
+"with previous year",FALSE,"M3 measured heat",2014,0.44203747934797,0
+"with previous year",TRUE,"M3 measured heat",2007,0.33235485746218,0
+"with previous year",TRUE,"M3 measured heat",2008,0.410178776957554,0
+"with previous year",TRUE,"M3 measured heat",2009,0.380342071899697,0
+"with previous year",TRUE,"M3 measured heat",2010,0.415220698033188,0
+"with previous year",TRUE,"M3 measured heat",2011,0.355363263178433,0
+"with previous year",TRUE,"M3 measured heat",2012,0.4213746058496,0
+"with previous year",TRUE,"M3 measured heat",2013,0.42975135636419,0
+"with previous year",TRUE,"M3 measured heat",2014,0.326551404474008,0
+"with previous year",FALSE,"M3 lidar",2007,0.380231791426698,0
+"with previous year",FALSE,"M3 lidar",2008,0.46135891732007,0
+"with previous year",FALSE,"M3 lidar",2009,0.40657861194108,0
+"with previous year",FALSE,"M3 lidar",2010,0.488544335377338,0
+"with previous year",FALSE,"M3 lidar",2011,0.427778470581672,0
+"with previous year",FALSE,"M3 lidar",2012,0.51790884972596,0
+"with previous year",FALSE,"M3 lidar",2013,0.492084230741002,0
+"with previous year",FALSE,"M3 lidar",2014,0.472679749923502,0
+"with previous year",TRUE,"M3 lidar",2007,0.332961055793536,0
+"with previous year",TRUE,"M3 lidar",2008,0.409755305406112,0
+"with previous year",TRUE,"M3 lidar",2009,0.380093145046398,0
+"with previous year",TRUE,"M3 lidar",2010,0.418734272761564,0
+"with previous year",TRUE,"M3 lidar",2011,0.352111131398237,0
+"with previous year",TRUE,"M3 lidar",2012,0.420363599712451,0
+"with previous year",TRUE,"M3 lidar",2013,0.423124645335831,0
+"with previous year",TRUE,"M3 lidar",2014,0.324304191759937,0
+"with previous year",FALSE,"M3 without radiation",2007,0.380723929316102,0
+"with previous year",FALSE,"M3 without radiation",2008,0.460685126802934,0
+"with previous year",FALSE,"M3 without radiation",2009,0.408297637852847,0
+"with previous year",FALSE,"M3 without radiation",2010,0.486884486927883,0
+"with previous year",FALSE,"M3 without radiation",2011,0.426345687036633,0
+"with previous year",FALSE,"M3 without radiation",2012,0.516652075119322,0
+"with previous year",FALSE,"M3 without radiation",2013,0.490586749207792,0
+"with previous year",FALSE,"M3 without radiation",2014,0.473367323314369,0
+"with previous year",TRUE,"M3 without radiation",2007,0.332839007685837,0
+"with previous year",TRUE,"M3 without radiation",2008,0.407724357681284,0
+"with previous year",TRUE,"M3 without radiation",2009,0.381314712305412,0
+"with previous year",TRUE,"M3 without radiation",2010,0.415497127832681,0
+"with previous year",TRUE,"M3 without radiation",2011,0.353360589667956,0
+"with previous year",TRUE,"M3 without radiation",2012,0.421469492913164,0
+"with previous year",TRUE,"M3 without radiation",2013,0.421260549324745,0
+"with previous year",TRUE,"M3 without radiation",2014,0.325891653907662,0
+"with previous year",FALSE,"M3 modelled wind",2007,0.380272641110119,0
+"with previous year",FALSE,"M3 modelled wind",2008,0.46141352385175,0
+"with previous year",FALSE,"M3 modelled wind",2009,0.406437654907638,0
+"with previous year",FALSE,"M3 modelled wind",2010,0.489936155114387,0
+"with previous year",FALSE,"M3 modelled wind",2011,0.427245342005873,0
+"with previous year",FALSE,"M3 modelled wind",2012,0.51657094046065,0
+"with previous year",FALSE,"M3 modelled wind",2013,0.490561839776639,0
+"with previous year",FALSE,"M3 modelled wind",2014,0.472761570771704,0
+"with previous year",TRUE,"M3 modelled wind",2007,0.332784836002239,0
+"with previous year",TRUE,"M3 modelled wind",2008,0.408318892861618,0
+"with previous year",TRUE,"M3 modelled wind",2009,0.382464110151231,0
+"with previous year",TRUE,"M3 modelled wind",2010,0.419250447769376,0
+"with previous year",TRUE,"M3 modelled wind",2011,0.351945980780702,0
+"with previous year",TRUE,"M3 modelled wind",2012,0.419738129779441,0
+"with previous year",TRUE,"M3 modelled wind",2013,0.426074213139413,0
+"with previous year",TRUE,"M3 modelled wind",2014,0.327789432165756,0
+"with previous year",FALSE,"M3 upslope share",2007,0.380097447592695,0
+"with previous year",FALSE,"M3 upslope share",2008,0.461372968651669,0
+"with previous year",FALSE,"M3 upslope share",2009,0.406885287504309,0
+"with previous year",FALSE,"M3 upslope share",2010,0.488381528137167,0
+"with previous year",FALSE,"M3 upslope share",2011,0.427725790512796,0
+"with previous year",FALSE,"M3 upslope share",2012,0.517201131903525,0
+"with previous year",FALSE,"M3 upslope share",2013,0.490584048011783,0
+"with previous year",FALSE,"M3 upslope share",2014,0.473364666888282,0
+"with previous year",TRUE,"M3 upslope share",2007,0.331788720695936,0
+"with previous year",TRUE,"M3 upslope share",2008,0.410815692260953,0
+"with previous year",TRUE,"M3 upslope share",2009,0.380563637397459,0
+"with previous year",TRUE,"M3 upslope share",2010,0.418003586278382,0
+"with previous year",TRUE,"M3 upslope share",2011,0.352931181390491,0
+"with previous year",TRUE,"M3 upslope share",2012,0.421162195212685,0
+"with previous year",TRUE,"M3 upslope share",2013,0.423444746942264,0
+"with previous year",TRUE,"M3 upslope share",2014,0.328139623902149,0
+"with previous year",FALSE,"M3 shelter at the modelled wind",2007,0.381341393505656,0
+"with previous year",FALSE,"M3 shelter at the modelled wind",2008,0.462086052059044,0
+"with previous year",FALSE,"M3 shelter at the modelled wind",2009,0.407343872966367,0
+"with previous year",FALSE,"M3 shelter at the modelled wind",2010,0.488106806820266,0
+"with previous year",FALSE,"M3 shelter at the modelled wind",2011,0.42730962837996,0
+"with previous year",FALSE,"M3 shelter at the modelled wind",2012,0.516259968851824,0
+"with previous year",FALSE,"M3 shelter at the modelled wind",2013,0.490183673816267,0
+"with previous year",FALSE,"M3 shelter at the modelled wind",2014,0.472133160339887,0
+"with previous year",TRUE,"M3 shelter at the modelled wind",2007,0.332788016107865,0
+"with previous year",TRUE,"M3 shelter at the modelled wind",2008,0.411333784716818,0
+"with previous year",TRUE,"M3 shelter at the modelled wind",2009,0.380637233243895,0
+"with previous year",TRUE,"M3 shelter at the modelled wind",2010,0.415602346102759,0
+"with previous year",TRUE,"M3 shelter at the modelled wind",2011,0.353658659127725,0
+"with previous year",TRUE,"M3 shelter at the modelled wind",2012,0.420453557769653,0
+"with previous year",TRUE,"M3 shelter at the modelled wind",2013,0.423816513672242,0
+"with previous year",TRUE,"M3 shelter at the modelled wind",2014,0.328476096462974,0
+"with previous year",FALSE,"M3 modelled wind, diameter and closure",2007,0.380087119262387,0
+"with previous year",FALSE,"M3 modelled wind, diameter and closure",2008,0.461240957208496,0
+"with previous year",FALSE,"M3 modelled wind, diameter and closure",2009,0.406166657276412,0
+"with previous year",FALSE,"M3 modelled wind, diameter and closure",2010,0.490579408711633,0
+"with previous year",FALSE,"M3 modelled wind, diameter and closure",2011,0.426397760232534,0
+"with previous year",FALSE,"M3 modelled wind, diameter and closure",2012,0.51587678640933,0
+"with previous year",FALSE,"M3 modelled wind, diameter and closure",2013,0.489606053457622,0
+"with previous year",FALSE,"M3 modelled wind, diameter and closure",2014,0.4705822775584,0
+"with previous year",TRUE,"M3 modelled wind, diameter and closure",2007,0.331744366580466,0
+"with previous year",TRUE,"M3 modelled wind, diameter and closure",2008,0.407621119764518,0
+"with previous year",TRUE,"M3 modelled wind, diameter and closure",2009,0.381518291362456,0
+"with previous year",TRUE,"M3 modelled wind, diameter and closure",2010,0.422421611825022,0
+"with previous year",TRUE,"M3 modelled wind, diameter and closure",2011,0.350489572936142,0
+"with previous year",TRUE,"M3 modelled wind, diameter and closure",2012,0.418862405159017,0
+"with previous year",TRUE,"M3 modelled wind, diameter and closure",2013,0.424703059837367,0
+"with previous year",TRUE,"M3 modelled wind, diameter and closure",2014,0.326120095185353,0
+"with previous year",FALSE,"M3 modelled wind, 30 m",2007,0.378797689593722,0
+"with previous year",FALSE,"M3 modelled wind, 30 m",2008,0.463239978600811,0
+"with previous year",FALSE,"M3 modelled wind, 30 m",2009,0.404270024129074,0
+"with previous year",FALSE,"M3 modelled wind, 30 m",2010,0.486861457735093,0
+"with previous year",FALSE,"M3 modelled wind, 30 m",2011,0.426713351649231,0
+"with previous year",FALSE,"M3 modelled wind, 30 m",2012,0.51740975357111,0
+"with previous year",FALSE,"M3 modelled wind, 30 m",2013,0.488931371353726,0
+"with previous year",FALSE,"M3 modelled wind, 30 m",2014,0.472308762691263,0
+"with previous year",TRUE,"M3 modelled wind, 30 m",2007,0.332067590151841,0
+"with previous year",TRUE,"M3 modelled wind, 30 m",2008,0.410286615787757,0
+"with previous year",TRUE,"M3 modelled wind, 30 m",2009,0.38115224584761,0
+"with previous year",TRUE,"M3 modelled wind, 30 m",2010,0.417866176592814,0
+"with previous year",TRUE,"M3 modelled wind, 30 m",2011,0.35332444159359,0
+"with previous year",TRUE,"M3 modelled wind, 30 m",2012,0.421522354749303,0
+"with previous year",TRUE,"M3 modelled wind, 30 m",2013,0.425434218560364,0
+"with previous year",TRUE,"M3 modelled wind, 30 m",2014,0.32906356432872,0
+"with previous year",FALSE,"M3 modelled wind, 10 m",2007,0.380039816362487,0
+"with previous year",FALSE,"M3 modelled wind, 10 m",2008,0.460814429570465,0
+"with previous year",FALSE,"M3 modelled wind, 10 m",2009,0.407000446737442,0
+"with previous year",FALSE,"M3 modelled wind, 10 m",2010,0.488129662120458,0
+"with previous year",FALSE,"M3 modelled wind, 10 m",2011,0.427613145222294,0
+"with previous year",FALSE,"M3 modelled wind, 10 m",2012,0.517978886289635,0
+"with previous year",FALSE,"M3 modelled wind, 10 m",2013,0.491589751228909,0
+"with previous year",FALSE,"M3 modelled wind, 10 m",2014,0.47343599145448,0
+"with previous year",TRUE,"M3 modelled wind, 10 m",2007,0.331770156447703,0
+"with previous year",TRUE,"M3 modelled wind, 10 m",2008,0.408610041843026,0
+"with previous year",TRUE,"M3 modelled wind, 10 m",2009,0.382614069921141,0
+"with previous year",TRUE,"M3 modelled wind, 10 m",2010,0.416830662664791,0
+"with previous year",TRUE,"M3 modelled wind, 10 m",2011,0.353749942481391,0
+"with previous year",TRUE,"M3 modelled wind, 10 m",2012,0.421997550549784,0
+"with previous year",TRUE,"M3 modelled wind, 10 m",2013,0.427104101784294,0
+"with previous year",TRUE,"M3 modelled wind, 10 m",2014,0.328794616365831,0
+"with previous year",FALSE,"M3 lift",2007,0.379481559380292,0
+"with previous year",FALSE,"M3 lift",2008,0.461559014576193,0
+"with previous year",FALSE,"M3 lift",2009,0.406135748375639,0
+"with previous year",FALSE,"M3 lift",2010,0.484465323235414,0
+"with previous year",FALSE,"M3 lift",2011,0.425017683663873,0
+"with previous year",FALSE,"M3 lift",2012,0.515380387545379,0
+"with previous year",FALSE,"M3 lift",2013,0.489595454581877,0
+"with previous year",FALSE,"M3 lift",2014,0.47541930809967,0
+"with previous year",TRUE,"M3 lift",2007,0.334559572925608,0
+"with previous year",TRUE,"M3 lift",2008,0.414662380161631,0
+"with previous year",TRUE,"M3 lift",2009,0.379808166129392,0
+"with previous year",TRUE,"M3 lift",2010,0.415360543307641,0
+"with previous year",TRUE,"M3 lift",2011,0.354387716168368,0
+"with previous year",TRUE,"M3 lift",2012,0.421454497705859,0
+"with previous year",TRUE,"M3 lift",2013,0.423962977974438,0
+"with previous year",TRUE,"M3 lift",2014,0.329149064140706,0
+"with previous year",FALSE,"M3 lift with year",2007,0.372694008423445,0
+"with previous year",FALSE,"M3 lift with year",2008,0.444815225467609,0
+"with previous year",FALSE,"M3 lift with year",2009,0.40491606975675,0
+"with previous year",FALSE,"M3 lift with year",2010,0.474313823852179,0
+"with previous year",FALSE,"M3 lift with year",2011,0.411882052426464,0
+"with previous year",FALSE,"M3 lift with year",2012,0.505256593515584,0
+"with previous year",FALSE,"M3 lift with year",2013,0.486346478586329,0
+"with previous year",FALSE,"M3 lift with year",2014,0.477418696740778,0
+"with previous year",TRUE,"M3 lift with year",2007,0.331661099789236,0
+"with previous year",TRUE,"M3 lift with year",2008,0.400625224149736,0
+"with previous year",TRUE,"M3 lift with year",2009,0.385293162201165,0
+"with previous year",TRUE,"M3 lift with year",2010,0.409330177831164,0
+"with previous year",TRUE,"M3 lift with year",2011,0.346173655605639,0
+"with previous year",TRUE,"M3 lift with year",2012,0.4198227579614,0
+"with previous year",TRUE,"M3 lift with year",2013,0.422293005024094,0
+"with previous year",TRUE,"M3 lift with year",2014,0.321818977468957,0
+"with previous year",FALSE,"M3 lift, 10 m speed and upslope",2007,0.3724662280217,0
+"with previous year",FALSE,"M3 lift, 10 m speed and upslope",2008,0.444225582740354,0
+"with previous year",FALSE,"M3 lift, 10 m speed and upslope",2009,0.405183720984359,0
+"with previous year",FALSE,"M3 lift, 10 m speed and upslope",2010,0.474362425116016,0
+"with previous year",FALSE,"M3 lift, 10 m speed and upslope",2011,0.412104239816148,0
+"with previous year",FALSE,"M3 lift, 10 m speed and upslope",2012,0.505342137174062,0
+"with previous year",FALSE,"M3 lift, 10 m speed and upslope",2013,0.486636375023196,0
+"with previous year",FALSE,"M3 lift, 10 m speed and upslope",2014,0.477670262196876,0
+"with previous year",TRUE,"M3 lift, 10 m speed and upslope",2007,0.331297170497458,0
+"with previous year",TRUE,"M3 lift, 10 m speed and upslope",2008,0.399567492328413,0
+"with previous year",TRUE,"M3 lift, 10 m speed and upslope",2009,0.386055863345091,0
+"with previous year",TRUE,"M3 lift, 10 m speed and upslope",2010,0.409760245138796,0
+"with previous year",TRUE,"M3 lift, 10 m speed and upslope",2011,0.345853260723283,0
+"with previous year",TRUE,"M3 lift, 10 m speed and upslope",2012,0.419771287757988,0
+"with previous year",TRUE,"M3 lift, 10 m speed and upslope",2013,0.423167871426368,0
+"with previous year",TRUE,"M3 lift, 10 m speed and upslope",2014,0.321523897865597,0
+"with previous year",FALSE,"M3 slope updraft",2007,0.379325096932431,0
+"with previous year",FALSE,"M3 slope updraft",2008,0.461717627281041,0
+"with previous year",FALSE,"M3 slope updraft",2009,0.405539467700597,0
+"with previous year",FALSE,"M3 slope updraft",2010,0.487902872079445,0
+"with previous year",FALSE,"M3 slope updraft",2011,0.427496238382825,0
+"with previous year",FALSE,"M3 slope updraft",2012,0.516433879384223,0
+"with previous year",FALSE,"M3 slope updraft",2013,0.488481225705728,0
+"with previous year",FALSE,"M3 slope updraft",2014,0.472342079039272,0
+"with previous year",TRUE,"M3 slope updraft",2007,0.332055509601952,0
+"with previous year",TRUE,"M3 slope updraft",2008,0.411019505537576,0
+"with previous year",TRUE,"M3 slope updraft",2009,0.380312985203993,0
+"with previous year",TRUE,"M3 slope updraft",2010,0.418583333612172,0
+"with previous year",TRUE,"M3 slope updraft",2011,0.352825484395563,0
+"with previous year",TRUE,"M3 slope updraft",2012,0.42059015051001,0
+"with previous year",TRUE,"M3 slope updraft",2013,0.422624061742522,0
+"with previous year",TRUE,"M3 slope updraft",2014,0.328053599698148,0
+"with previous year",FALSE,"M3 slope updraft at ridges",2007,0.380135465906389,0
+"with previous year",FALSE,"M3 slope updraft at ridges",2008,0.461692953750199,0
+"with previous year",FALSE,"M3 slope updraft at ridges",2009,0.404969091053387,0
+"with previous year",FALSE,"M3 slope updraft at ridges",2010,0.486591551860587,0
+"with previous year",FALSE,"M3 slope updraft at ridges",2011,0.425422223789204,0
+"with previous year",FALSE,"M3 slope updraft at ridges",2012,0.514923578475173,0
+"with previous year",FALSE,"M3 slope updraft at ridges",2013,0.487920957413728,0
+"with previous year",FALSE,"M3 slope updraft at ridges",2014,0.471092620390889,0
+"with previous year",TRUE,"M3 slope updraft at ridges",2007,0.334898540285709,0
+"with previous year",TRUE,"M3 slope updraft at ridges",2008,0.407232606570234,0
+"with previous year",TRUE,"M3 slope updraft at ridges",2009,0.382211594024809,0
+"with previous year",TRUE,"M3 slope updraft at ridges",2010,0.416323610076913,0
+"with previous year",TRUE,"M3 slope updraft at ridges",2011,0.350765248609061,0
+"with previous year",TRUE,"M3 slope updraft at ridges",2012,0.418136485586374,0
+"with previous year",TRUE,"M3 slope updraft at ridges",2013,0.418320634657654,0
+"with previous year",TRUE,"M3 slope updraft at ridges",2014,0.316351680296977,0
+"with previous year",FALSE,"M3 cloud-adjusted sun",2007,0.380405139642984,0
+"with previous year",FALSE,"M3 cloud-adjusted sun",2008,0.46030914158112,0
+"with previous year",FALSE,"M3 cloud-adjusted sun",2009,0.407589210682135,0
+"with previous year",FALSE,"M3 cloud-adjusted sun",2010,0.487394917656784,0
+"with previous year",FALSE,"M3 cloud-adjusted sun",2011,0.427133667214167,0
+"with previous year",FALSE,"M3 cloud-adjusted sun",2012,0.516589922996576,0
+"with previous year",FALSE,"M3 cloud-adjusted sun",2013,0.490484301572989,0
+"with previous year",FALSE,"M3 cloud-adjusted sun",2014,0.472508764528668,0
+"with previous year",TRUE,"M3 cloud-adjusted sun",2007,0.332955753579114,0
+"with previous year",TRUE,"M3 cloud-adjusted sun",2008,0.407644321581466,0
+"with previous year",TRUE,"M3 cloud-adjusted sun",2009,0.381087040909689,0
+"with previous year",TRUE,"M3 cloud-adjusted sun",2010,0.416178679993889,0
+"with previous year",TRUE,"M3 cloud-adjusted sun",2011,0.353755432842549,0
+"with previous year",TRUE,"M3 cloud-adjusted sun",2012,0.421809402273328,0
+"with previous year",TRUE,"M3 cloud-adjusted sun",2013,0.420607270852687,0
+"with previous year",TRUE,"M3 cloud-adjusted sun",2014,0.324831436996851,0
+"with previous year",FALSE,"M3 slope temperature",2007,0.379174056424146,0
+"with previous year",FALSE,"M3 slope temperature",2008,0.460124775511275,0
+"with previous year",FALSE,"M3 slope temperature",2009,0.405042544422943,0
+"with previous year",FALSE,"M3 slope temperature",2010,0.489337208245943,0
+"with previous year",FALSE,"M3 slope temperature",2011,0.428051762824118,0
+"with previous year",FALSE,"M3 slope temperature",2012,0.515961272627824,0
+"with previous year",FALSE,"M3 slope temperature",2013,0.489252551182521,0
+"with previous year",FALSE,"M3 slope temperature",2014,0.472772463122522,0
+"with previous year",TRUE,"M3 slope temperature",2007,0.332077261944503,0
+"with previous year",TRUE,"M3 slope temperature",2008,0.410164915345659,0
+"with previous year",TRUE,"M3 slope temperature",2009,0.380767888484026,0
+"with previous year",TRUE,"M3 slope temperature",2010,0.418764093673143,0
+"with previous year",TRUE,"M3 slope temperature",2011,0.353460758250143,0
+"with previous year",TRUE,"M3 slope temperature",2012,0.422462989748595,0
+"with previous year",TRUE,"M3 slope temperature",2013,0.426050397477039,0
+"with previous year",TRUE,"M3 slope temperature",2014,0.328534177794989,0
+"with previous year",FALSE,"M3 cloud-adjusted sun with year",2007,0.380187880218709,0
+"with previous year",FALSE,"M3 cloud-adjusted sun with year",2008,0.460114595777429,0
+"with previous year",FALSE,"M3 cloud-adjusted sun with year",2009,0.407342620369516,0
+"with previous year",FALSE,"M3 cloud-adjusted sun with year",2010,0.484926288385287,0
+"with previous year",FALSE,"M3 cloud-adjusted sun with year",2011,0.422357687683342,0
+"with previous year",FALSE,"M3 cloud-adjusted sun with year",2012,0.517246424178702,0
+"with previous year",FALSE,"M3 cloud-adjusted sun with year",2013,0.488888808701776,0
+"with previous year",FALSE,"M3 cloud-adjusted sun with year",2014,0.473473985708253,0
+"with previous year",TRUE,"M3 cloud-adjusted sun with year",2007,0.333288572011998,0
+"with previous year",TRUE,"M3 cloud-adjusted sun with year",2008,0.405678478841949,0
+"with previous year",TRUE,"M3 cloud-adjusted sun with year",2009,0.381550835513188,0
+"with previous year",TRUE,"M3 cloud-adjusted sun with year",2010,0.418155424203961,0
+"with previous year",TRUE,"M3 cloud-adjusted sun with year",2011,0.35276493591289,0
+"with previous year",TRUE,"M3 cloud-adjusted sun with year",2012,0.419402666645917,0
+"with previous year",TRUE,"M3 cloud-adjusted sun with year",2013,0.418367074949167,0
+"with previous year",TRUE,"M3 cloud-adjusted sun with year",2014,0.316678658372582,0
+"with previous year",FALSE,"M3 slope temperature with year",2007,0.379076293794314,0
+"with previous year",FALSE,"M3 slope temperature with year",2008,0.459284633513525,0
+"with previous year",FALSE,"M3 slope temperature with year",2009,0.403351506712692,0
+"with previous year",FALSE,"M3 slope temperature with year",2010,0.485891239569601,0
+"with previous year",FALSE,"M3 slope temperature with year",2011,0.426935071980985,0
+"with previous year",FALSE,"M3 slope temperature with year",2012,0.512560021721666,0
+"with previous year",FALSE,"M3 slope temperature with year",2013,0.484692041239012,0
+"with previous year",FALSE,"M3 slope temperature with year",2014,0.470852492872853,0
+"with previous year",TRUE,"M3 slope temperature with year",2007,0.334597022065378,0
+"with previous year",TRUE,"M3 slope temperature with year",2008,0.406104331696688,0
+"with previous year",TRUE,"M3 slope temperature with year",2009,0.380037493708626,0
+"with previous year",TRUE,"M3 slope temperature with year",2010,0.412237222138916,0
+"with previous year",TRUE,"M3 slope temperature with year",2011,0.353506884952673,0
+"with previous year",TRUE,"M3 slope temperature with year",2012,0.417101510771057,0
+"with previous year",TRUE,"M3 slope temperature with year",2013,0.415985207592646,0
+"with previous year",TRUE,"M3 slope temperature with year",2014,0.318921046577867,0
+"with previous year",FALSE,"M3 slope temperature without sun",2007,0.380593810793972,0
+"with previous year",FALSE,"M3 slope temperature without sun",2008,0.459591553956447,0
+"with previous year",FALSE,"M3 slope temperature without sun",2009,0.406193259128506,0
+"with previous year",FALSE,"M3 slope temperature without sun",2010,0.487303391014216,0
+"with previous year",FALSE,"M3 slope temperature without sun",2011,0.426367062047465,0
+"with previous year",FALSE,"M3 slope temperature without sun",2012,0.515708136723312,0
+"with previous year",FALSE,"M3 slope temperature without sun",2013,0.490748309372147,0
+"with previous year",FALSE,"M3 slope temperature without sun",2014,0.472253608511699,0
+"with previous year",TRUE,"M3 slope temperature without sun",2007,0.334130453626288,0
+"with previous year",TRUE,"M3 slope temperature without sun",2008,0.406171423598489,0
+"with previous year",TRUE,"M3 slope temperature without sun",2009,0.382224112223524,0
+"with previous year",TRUE,"M3 slope temperature without sun",2010,0.414967387954768,0
+"with previous year",TRUE,"M3 slope temperature without sun",2011,0.35248512966976,0
+"with previous year",TRUE,"M3 slope temperature without sun",2012,0.418959087232006,0
+"with previous year",TRUE,"M3 slope temperature without sun",2013,0.421627952511877,0
+"with previous year",TRUE,"M3 slope temperature without sun",2014,0.318023896420853,0
+"with previous year",FALSE,"M3 valley and ridge flats",2007,0.379595324989087,0
+"with previous year",FALSE,"M3 valley and ridge flats",2008,0.460122039998974,0
+"with previous year",FALSE,"M3 valley and ridge flats",2009,0.407414959300537,0
+"with previous year",FALSE,"M3 valley and ridge flats",2010,0.486500232078015,0
+"with previous year",FALSE,"M3 valley and ridge flats",2011,0.426844294584547,0
+"with previous year",FALSE,"M3 valley and ridge flats",2012,0.516348844927284,0
+"with previous year",FALSE,"M3 valley and ridge flats",2013,0.489331664003676,0
+"with previous year",FALSE,"M3 valley and ridge flats",2014,0.471741701369169,0
+"with previous year",TRUE,"M3 valley and ridge flats",2007,0.332458953650781,0
+"with previous year",TRUE,"M3 valley and ridge flats",2008,0.407441151140886,0
+"with previous year",TRUE,"M3 valley and ridge flats",2009,0.380944287809175,0
+"with previous year",TRUE,"M3 valley and ridge flats",2010,0.415156530751507,0
+"with previous year",TRUE,"M3 valley and ridge flats",2011,0.351588426570499,0
+"with previous year",TRUE,"M3 valley and ridge flats",2012,0.422263137560228,0
+"with previous year",TRUE,"M3 valley and ridge flats",2013,0.419798274964529,0
+"with previous year",TRUE,"M3 valley and ridge flats",2014,0.324224489828551,0
+"with previous year",FALSE,"M3 cold-air pooling",2007,0.37933810347406,0
+"with previous year",FALSE,"M3 cold-air pooling",2008,0.460359752885462,0
+"with previous year",FALSE,"M3 cold-air pooling",2009,0.405663600599301,0
+"with previous year",FALSE,"M3 cold-air pooling",2010,0.485064442531704,0
+"with previous year",FALSE,"M3 cold-air pooling",2011,0.424939658556992,0
+"with previous year",FALSE,"M3 cold-air pooling",2012,0.51514593597269,0
+"with previous year",FALSE,"M3 cold-air pooling",2013,0.488656724951188,0
+"with previous year",FALSE,"M3 cold-air pooling",2014,0.471764100450143,0
+"with previous year",TRUE,"M3 cold-air pooling",2007,0.332947654006452,0
+"with previous year",TRUE,"M3 cold-air pooling",2008,0.407739564323299,0
+"with previous year",TRUE,"M3 cold-air pooling",2009,0.380435302658952,0
+"with previous year",TRUE,"M3 cold-air pooling",2010,0.415108643397608,0
+"with previous year",TRUE,"M3 cold-air pooling",2011,0.35310068755305,0
+"with previous year",TRUE,"M3 cold-air pooling",2012,0.421837916148363,0
+"with previous year",TRUE,"M3 cold-air pooling",2013,0.419724820125616,0
+"with previous year",TRUE,"M3 cold-air pooling",2014,0.324951067055762,0
+"with previous year",FALSE,"M3 canopy height",2007,0.35063921364267,0
+"with previous year",FALSE,"M3 canopy height",2008,0.446187223368034,0
+"with previous year",FALSE,"M3 canopy height",2009,0.37974138248458,0
+"with previous year",FALSE,"M3 canopy height",2010,0.450163972459018,0
+"with previous year",FALSE,"M3 canopy height",2011,0.397252877565453,0
+"with previous year",FALSE,"M3 canopy height",2012,0.497226076773903,0
+"with previous year",FALSE,"M3 canopy height",2013,0.480166908720616,0
+"with previous year",FALSE,"M3 canopy height",2014,0.452353050753373,0
+"with previous year",TRUE,"M3 canopy height",2007,0.315181206864227,0
+"with previous year",TRUE,"M3 canopy height",2008,0.403037412452947,0
+"with previous year",TRUE,"M3 canopy height",2009,0.371507597879081,0
+"with previous year",TRUE,"M3 canopy height",2010,0.400838550008846,0
+"with previous year",TRUE,"M3 canopy height",2011,0.349864046161283,0
+"with previous year",TRUE,"M3 canopy height",2012,0.421450655802629,0
+"with previous year",TRUE,"M3 canopy height",2013,0.424145071487072,0
+"with previous year",TRUE,"M3 canopy height",2014,0.316238026901566,0
+"with previous year",FALSE,"M3 winter cold",2007,0.380667657782491,0
+"with previous year",FALSE,"M3 winter cold",2008,0.460136305194983,0
+"with previous year",FALSE,"M3 winter cold",2009,0.406863846096722,0
+"with previous year",FALSE,"M3 winter cold",2010,0.486060450167586,0
+"with previous year",FALSE,"M3 winter cold",2011,0.42742451670237,0
+"with previous year",FALSE,"M3 winter cold",2012,0.516718434953359,0
+"with previous year",FALSE,"M3 winter cold",2013,0.488950359133972,0
+"with previous year",FALSE,"M3 winter cold",2014,0.472959284007386,0
+"with previous year",TRUE,"M3 winter cold",2007,0.336383979589759,0
+"with previous year",TRUE,"M3 winter cold",2008,0.406074229936631,0
+"with previous year",TRUE,"M3 winter cold",2009,0.381400927174068,0
+"with previous year",TRUE,"M3 winter cold",2010,0.412198101894211,0
+"with previous year",TRUE,"M3 winter cold",2011,0.356022821252233,0
+"with previous year",TRUE,"M3 winter cold",2012,0.421390626585412,0
+"with previous year",TRUE,"M3 winter cold",2013,0.4157766988373,0
+"with previous year",TRUE,"M3 winter cold",2014,0.321356033647823,0
+"with previous year",FALSE,"M3 winter cold with year",2007,0.380339315425249,0
+"with previous year",FALSE,"M3 winter cold with year",2008,0.459881752582209,0
+"with previous year",FALSE,"M3 winter cold with year",2009,0.406382222344631,0
+"with previous year",FALSE,"M3 winter cold with year",2010,0.482142956314888,0
+"with previous year",FALSE,"M3 winter cold with year",2011,0.424037161750173,0
+"with previous year",FALSE,"M3 winter cold with year",2012,0.5181182287288,0
+"with previous year",FALSE,"M3 winter cold with year",2013,0.485287312508648,0
+"with previous year",FALSE,"M3 winter cold with year",2014,0.474864215773572,0
+"with previous year",TRUE,"M3 winter cold with year",2007,0.333778057354789,0
+"with previous year",TRUE,"M3 winter cold with year",2008,0.405770349457793,0
+"with previous year",TRUE,"M3 winter cold with year",2009,0.381134739909113,0
+"with previous year",TRUE,"M3 winter cold with year",2010,0.416550180379487,0
+"with previous year",TRUE,"M3 winter cold with year",2011,0.353507544415526,0
+"with previous year",TRUE,"M3 winter cold with year",2012,0.420199212020371,0
+"with previous year",TRUE,"M3 winter cold with year",2013,0.416008210978385,0
+"with previous year",TRUE,"M3 winter cold with year",2014,0.316983956906024,0
+"with previous year",FALSE,"M3 all new terrain",2007,0.348990376552145,0
+"with previous year",FALSE,"M3 all new terrain",2008,0.445402008859564,0
+"with previous year",FALSE,"M3 all new terrain",2009,0.37666907123149,0
+"with previous year",FALSE,"M3 all new terrain",2010,0.447281327072866,0
+"with previous year",FALSE,"M3 all new terrain",2011,0.394638639828781,0
+"with previous year",FALSE,"M3 all new terrain",2012,0.494850559444451,0
+"with previous year",FALSE,"M3 all new terrain",2013,0.477588677196962,0
+"with previous year",FALSE,"M3 all new terrain",2014,0.45079973983637,0
+"with previous year",TRUE,"M3 all new terrain",2007,0.318003586938946,0
+"with previous year",TRUE,"M3 all new terrain",2008,0.401505000628654,0
+"with previous year",TRUE,"M3 all new terrain",2009,0.371211950856027,0
+"with previous year",TRUE,"M3 all new terrain",2010,0.398111011563448,0
+"with previous year",TRUE,"M3 all new terrain",2011,0.350471073258358,0
+"with previous year",TRUE,"M3 all new terrain",2012,0.420853507361776,0
+"with previous year",TRUE,"M3 all new terrain",2013,0.419938434586886,0
+"with previous year",TRUE,"M3 all new terrain",2014,0.31294158200867,0
+"with previous year",FALSE,"M3 vertical air speed",2007,0.380053976537301,0
+"with previous year",FALSE,"M3 vertical air speed",2008,0.461034222238591,0
+"with previous year",FALSE,"M3 vertical air speed",2009,0.407396621640043,0
+"with previous year",FALSE,"M3 vertical air speed",2010,0.490442494865274,0
+"with previous year",FALSE,"M3 vertical air speed",2011,0.427731809902376,0
+"with previous year",FALSE,"M3 vertical air speed",2012,0.517915884960052,0
+"with previous year",FALSE,"M3 vertical air speed",2013,0.490641474156527,0
+"with previous year",FALSE,"M3 vertical air speed",2014,0.471226938125767,0
+"with previous year",TRUE,"M3 vertical air speed",2007,0.331858810118145,0
+"with previous year",TRUE,"M3 vertical air speed",2008,0.410253276279735,0
+"with previous year",TRUE,"M3 vertical air speed",2009,0.381110800445723,0
+"with previous year",TRUE,"M3 vertical air speed",2010,0.418052323661532,0
+"with previous year",TRUE,"M3 vertical air speed",2011,0.353685928325985,0
+"with previous year",TRUE,"M3 vertical air speed",2012,0.422326484461898,0
+"with previous year",TRUE,"M3 vertical air speed",2013,0.425093543808417,0
+"with previous year",TRUE,"M3 vertical air speed",2014,0.326902302476923,0
+"with previous year",FALSE,"M3 trajectory source",2007,0.38021018598283,0
+"with previous year",FALSE,"M3 trajectory source",2008,0.461273075779217,0
+"with previous year",FALSE,"M3 trajectory source",2009,0.409357326329389,0
+"with previous year",FALSE,"M3 trajectory source",2010,0.489295936514796,0
+"with previous year",FALSE,"M3 trajectory source",2011,0.426662151656842,0
+"with previous year",FALSE,"M3 trajectory source",2012,0.517273226385822,0
+"with previous year",FALSE,"M3 trajectory source",2013,0.49061091443545,0
+"with previous year",FALSE,"M3 trajectory source",2014,0.471965534301766,0
+"with previous year",TRUE,"M3 trajectory source",2007,0.332006360144898,0
+"with previous year",TRUE,"M3 trajectory source",2008,0.410004202272796,0
+"with previous year",TRUE,"M3 trajectory source",2009,0.382171693160214,0
+"with previous year",TRUE,"M3 trajectory source",2010,0.417409930918363,0
+"with previous year",TRUE,"M3 trajectory source",2011,0.353039480513308,0
+"with previous year",TRUE,"M3 trajectory source",2012,0.421998686564106,0
+"with previous year",TRUE,"M3 trajectory source",2013,0.42503373524228,0
+"with previous year",TRUE,"M3 trajectory source",2014,0.327040092854048,0

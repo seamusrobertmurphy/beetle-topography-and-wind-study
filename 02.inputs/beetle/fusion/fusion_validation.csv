@@ -1,0 +1,2 @@
+"q","rL","rmse","bias","r","q_edge","rL_edge","n_cells","steps","landsat_obs","held_out","modis_pairs_median","landsat_share_seen"
+0.001,0.003,0.0983812959613632,-0.000915977964320877,0.830932950538997,TRUE,FALSE,61923,253,6016879,902532,86,0.384059726350187
