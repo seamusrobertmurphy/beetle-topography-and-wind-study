@@ -1,235 +1,107 @@
 #!/usr/bin/env python3
-"""Rebuild the repository README from the rendered manuscript.
+"""Rebuild the repository README from the Word manuscript.
 
-The README carries the abstract and then every rendered output, figures and
-tables interleaved in the order they appear in the manuscript, all taken from
-the current render rather than retyped so the two cannot drift. Rerun after any
-`quarto render`:
+The README carries the title, the abstract and every figure and table of the
+main text in the order they print, all read from 01.manuscript/Manuscript.docx.
+That file takes hand edits after each render, so the README shows the latest
+wording rather than the last render's. Rerun after the Word file changes:
 
-    python3 01.manuscript/_tools/build-readme.py
+    python3 01.manuscript/_hooks/build-readme.py
 
-Two things this script exists to handle:
-
-1. GitHub does not render the Pandoc grid tables Quarto produces, so a paste of
-   the render would print a wall of plus signs. Tables are emitted as raw HTML
-   tables that fill the page column, see html_table(), with column alignment
-   preserved.
-2. Figures are decoded from the HTML render's embedded base64, which keeps them
-   in document order and avoids picking up the Word reference template's own
-   images.
+Tables are written as raw HTML that fills the page column, because GitHub sizes
+a pipe table to its text. Figures link to Fig1.png onwards, which the
+save-figures chunk copies from the render; the script stops if any of them
+differs from the image the Word file holds.
 """
-import base64
 import html
 import re
-import struct
+import subprocess
+import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-# The paper of record is 01.manuscript/Manuscript.qmd, the Journal of Pest Science
-# submission. Until 2026-08-27 this script read the long manuscript, which still
-# describes the design the study abandoned, the aerial survey as the response and the
-# Global Wind Atlas as the wind term, so the README published the opposite of the
-# current finding.
-HTML = ROOT / "01.manuscript" / "Manuscript.html"
-QMD = ROOT / "01.manuscript" / "Manuscript.qmd"
-FIGDIR = ROOT / "03.outputs" / "PNG"
+DOCX = ROOT / "01.manuscript" / "Manuscript.docx"
 OUT = ROOT / "README.md"
-
-MIN_FIG_WIDTH = 1000  # anything narrower is interface furniture, not a figure
-
-
-def clean(s: str) -> str:
-    s = re.sub(r"<[^>]+>", "", s)
-    s = html.unescape(s).replace(" ", " ")
-    return re.sub(r"\s+", " ", s).strip()
-
-
-def front_matter() -> dict:
-    """Pull title, subtitle and abstract from the qmd front matter.
-
-    Read from the source rather than hardcoded, so editing the manuscript's
-    title or framing cannot leave the README asserting the old one.
-    """
-    body = QMD.read_text(encoding="utf8").split("---", 2)[1]
-    out, key, buf = {}, None, []
-    for line in body.splitlines():
-        m = re.match(r"^(title|subtitle|abstract):\s*(.*)$", line)
-        if m:
-            if key:
-                out[key] = " ".join(buf).strip()
-            key, buf = m.group(1), []
-            rest = m.group(2).strip()
-            if rest and rest != ">":
-                buf.append(rest.strip('"').strip("'"))
-            continue
-        if key:
-            if line and not line[0].isspace():
-                out[key] = " ".join(buf).strip()
-                key, buf = None, []
-                continue
-            buf.append(line.strip())
-    if key:
-        out[key] = " ".join(buf).strip()
-    return {k: re.sub(r"\s+", " ", v).strip() for k, v in out.items()}
-
-
-def to_pipe_table(chunk: str) -> tuple[str, str] | None:
-    """Return the pipe table and its footnote, which is empty when there is none.
-
-    A last row whose first cell begins with the # marker and whose other cells are
-    empty is a table footnote, the form set by hand in the Word file on 2026-09-02 and
-    merged across the table by format-tables.py. A pipe table has no merged cells, so
-    left in place the note sits in the first column beside a row of empty cells; it is
-    lifted out and printed under the table instead.
-    """
-    m = re.search(r"<table[^>]*>(.*?)</table>", chunk, re.S)
-    if not m:
-        return None
-    tb = m.group(1)
-    head = re.search(r"<thead>(.*?)</thead>", tb, re.S)
-    body = re.search(r"<tbody>(.*?)</tbody>", tb, re.S)
-    if not head or not body:
-        return None
-    heads = [clean(c) for c in re.findall(r"<th[^>]*>(.*?)</th>", head.group(1), re.S)]
-    aligns = []
-    for attrs in re.findall(r"<th([^>]*)>", head.group(1)):
-        if "text-align: right" in attrs:
-            aligns.append("---:")
-        elif "text-align: center" in attrs:
-            aligns.append(":---:")
-        else:
-            aligns.append(":---")
-    rows = []
-    for tr in re.findall(r"<tr[^>]*>(.*?)</tr>", body.group(1), re.S):
-        cells = [clean(c) for c in re.findall(r"<t[dh][^>]*>(.*?)</t[dh]>", tr, re.S)]
-        if cells:
-            rows.append(cells)
-    if not heads or not rows:
-        return None
-    note = ""
-    last = rows[-1]
-    if last[0].startswith("#") and not any(c.strip() for c in last[1:]):
-        note = last[0].lstrip("#").strip()
-        rows = rows[:-1]
-    while len(aligns) < len(heads):
-        aligns.append(":---")
-    return html_table(heads, aligns[: len(heads)], rows), note
-
-
-# Every README table fills the page column and lets the browser size the cells. A pipe
-# table cannot do that: GitHub's stylesheet sets `width: max-content` on tables, so a
-# pipe table sits at the width of its text and `<table width="100%">` is overruled. The
-# one mechanism that works, measured against GitHub's live stylesheet by the
-# writing-readme skill, is an oversized pixel hint on every header cell,
-# `<th width="2000">`: it pushes the intrinsic width past any viewport and GitHub's
-# `max-width: 100%` clamps the table back to exactly the column, while the browser's
-# automatic layout still shares that width among the columns by their content. The
-# cost is raw HTML in the README instead of a pipe table.
 TH_WIDTH = "2000"
-ALIGN = {":---": "left", "---:": "right", ":---:": "center"}
+EM = "\x01"
 
 
-def html_table(heads: list[str], aligns: list[str], rows: list[list[str]]) -> str:
-    """Emit a full-width GitHub table from parsed header, alignment and body cells."""
-    esc = lambda s: html.escape(s, quote=False)
-    al = [ALIGN.get(a, "left") for a in aligns] + ["left"] * len(heads)
+def text(s: str) -> str:
+    s = re.sub(r"</?em>", EM, s)
+    s = html.unescape(re.sub(r"<[^>]+>", "", s)).replace("\xa0", " ")
+    s = re.sub(r"\s+", " ", s).strip()
+    s = re.sub(r"<(?=[A-Za-z/!?])", "&lt;", s.replace("&", "&amp;"))
+    return s.replace("*", r"\*").replace(EM, "*")
+
+
+def cell(s: str) -> str:
+    s = html.unescape(re.sub(r"<[^>]+>", "", s)).replace("\xa0", " ")
+    return html.escape(re.sub(r"\s+", " ", s).strip(), quote=False)
+
+
+def align(attrs: str) -> str:
+    m = re.search(r"text-align:\s*(left|right|center)", attrs or "")
+    return m.group(1) if m else "left"
+
+
+def html_table(inner: str) -> str:
+    head = re.search(r"<thead>(.*?)</thead>", inner, re.S).group(1)
+    body = re.search(r"<tbody>(.*?)</tbody>", inner, re.S).group(1)
+    ths = re.findall(r"<th(\s[^>]*)?>(.*?)</th>", head, re.S)
+    al = [align(a) for a, _ in ths]
     out = ["<table>", "<thead>", "<tr>"]
-    out += [f'<th width="{TH_WIDTH}" align="{al[i]}">{esc(h)}</th>' for i, h in enumerate(heads)]
+    out += [f'<th width="{TH_WIDTH}" align="{al[i]}">{cell(h)}</th>' for i, (_, h) in enumerate(ths)]
     out += ["</tr>", "</thead>", "<tbody>"]
-    for r in rows:
-        r = (r + [""] * len(heads))[: len(heads)]
-        out.append("<tr>" + "".join(f'<td align="{al[i]}">{esc(c)}</td>' for i, c in enumerate(r)) + "</tr>")
-    out += ["</tbody>", "</table>"]
-    return "\n".join(out)
-
-
-def save_figure(chunk: str, slug: str) -> Path | None:
-    for b64 in re.findall(r'<img[^>]*src="data:image/png;base64,([^"]+)"', chunk):
-        data = base64.b64decode(b64)
-        width = struct.unpack(">I", data[16:20])[0]
-        if width < MIN_FIG_WIDTH:
-            continue
-        FIGDIR.mkdir(parents=True, exist_ok=True)
-        path = FIGDIR / f"{slug}.png"
-        path.write_bytes(data)
-        return path.relative_to(ROOT)
-    return None
-
-
-def abstract_from_render(doc: str) -> str:
-    """Read the Abstract section out of the HTML render.
-
-    The manuscript carries its abstract as a `# Abstract` section rather than as YAML,
-    because the journal wants it in the body, and because every figure in it is an
-    inline expression that has to be evaluated before it can be read.
-    """
-    m = re.search(r'<h1[^>]*>\s*Abstract\s*</h1>(.*?)<h1', doc, re.S)
-    if not m:
-        return ""
-    paras = re.findall(r"<p[^>]*>(.*?)</p>", m.group(1), re.S)
-    return " ".join(clean(p) for p in paras).strip()
+    for tr in re.findall(r"<tr[^>]*>(.*?)</tr>", body, re.S):
+        tds = [cell(c) for c in re.findall(r"<td[^>]*>(.*?)</td>", tr, re.S)]
+        tds = (tds + [""] * len(al))[: len(al)]
+        out.append("<tr>" + "".join(f'<td align="{al[i]}">{c}</td>' for i, c in enumerate(tds)) + "</tr>")
+    return "\n".join(out + ["</tbody>", "</table>"])
 
 
 def main() -> None:
-    doc = HTML.read_text(encoding="utf8")
+    doc = subprocess.run(["pandoc", str(DOCX), "-s", "-t", "html", "--wrap=none"], capture_output=True, text=True, check=True).stdout
+    media = zipfile.ZipFile(DOCX)
 
-    # Every float, in the order it appears in the document.
-    floats = [(m.start(), m.group(1)) for m in
-              re.finditer(r'<div id="((?:tbl|fig)-[^"]+)"', doc)]
-    bounds = [p for p, _ in floats] + [len(doc)]
+    title = text(re.search(r'<h1 class="title">(.*?)</h1>', doc, re.S).group(1))
+    sub = re.search(r'<p class="subtitle">(.*?)</p>', doc, re.S)
+    abstract = re.search(r'<h1 id="abstract">Abstract</h1>(.*?)<h1', doc, re.S).group(1)
+    items = re.findall(r"<li>(.*?)</li>", abstract, re.S)
+    parts = [f"# {title}", ""]
+    if sub:
+        parts += [f"*{text(sub.group(1))}*", ""]
+    parts += ["## Abstract", ""]
+    if items:
+        parts += [f"{i}. {text(t)}" for i, t in enumerate(items, 1)]
+    else:
+        parts += [" ".join(text(p) for p in re.findall(r"<p>(.*?)</p>", abstract, re.S))]
+    parts += ["", "## Figures and tables", "",
+              "Every figure and table of the main text, in the order it appears in the manuscript.", ""]
 
-    fm = front_matter()
-    parts = [
-        f"# {fm.get('title', 'Manuscript')}",
-        "",
-        f"*{fm['subtitle']}*" if fm.get("subtitle") else "",
-        "",
-        "Generated from the rendered manuscript by "
-        "`01.manuscript/_tools/build-readme.py`. Do not edit this file by hand. Edit "
-        f"`01.manuscript/{QMD.name}`, render, then rerun the script.",
-        "",
-        "## Abstract",
-        "",
-        fm.get("abstract") or abstract_from_render(doc),
-        "",
-        "## Results",
-        "",
-        "Every figure and table below is reproduced from the current render, "
-        "in the order it appears in the manuscript.",
-        "",
-    ]
-
-    n_fig = n_tbl = 0
-    for i, (start, slug) in enumerate(floats):
-        chunk = doc[start:bounds[i + 1]]
-        cap = ""
-        for c in re.findall(r"<figcaption[^>]*>(.*?)</figcaption>", chunk, re.S):
-            c = clean(c)
-            if re.match(r"^(Table|Figure) \d+:", c):
-                cap = c
-                break
-        label, _, text = cap.partition(":")
-        label, text = label.strip(), text.strip()
-
-        if slug.startswith("fig-"):
-            path = save_figure(chunk, slug)
-            if not path:
-                continue
-            n_fig += 1
-            parts += [f"### {label or 'Figure'}", "",
-                      f"![{label}]({path.as_posix()})", "", f"*{text}*", ""]
+    n = {"Figure": 0, "Table": 0}
+    for m in re.finditer(r'<span id="((?:fig|tbl)-[^"]+)" class="anchor"></span>', doc):
+        rest = doc[m.end():]
+        if m.group(1).startswith("tbl-"):
+            cap = rest[: rest.index("</p>")]
+            inner = re.search(r"<table[^>]*>(.*?)</table>", rest, re.S).group(1)
         else:
-            got = to_pipe_table(chunk)
-            if not got:
-                continue
-            table, note = got
-            n_tbl += 1
-            parts += [f"### {label or 'Table'}", "", f"*{text}*", "", table, ""]
-            if note:
-                parts += [f"*{note}*", ""]
+            img = re.match(r'\s*<img src="([^"]+)"', rest).group(1)
+            cap = re.search(r"<p>(.*?)</p>", rest, re.S).group(1)
+        kind, num, cap = re.match(r"\s*(Table|Figure)[\s\xa0](\d+):\s*(.*)", cap, re.S).groups()
+        n[kind] += 1
+        if int(num) != n[kind]:
+            raise SystemExit(f"{kind} {num} printed out of order")
+        if kind == "Table":
+            parts += [f"### Table {num}", "", f"*{text(cap)}*", "", html_table(inner), ""]
+        else:
+            fig = ROOT / "01.manuscript" / f"Fig{num}.png"
+            if not fig.exists() or fig.read_bytes() != media.read("word/" + img):
+                raise SystemExit(f"{fig.name} is not the image Figure {num} prints in the Word file")
+            parts += [f"### Figure {num}", "", f"![Figure {num}]({fig.relative_to(ROOT).as_posix()})", "",
+                      f"*{text(cap)}*", ""]
 
     OUT.write_text("\n".join(parts).rstrip() + "\n", encoding="utf8")
-    print(f"wrote {OUT.relative_to(ROOT)}: {n_fig} figures and {n_tbl} tables, in document order")
+    print(f"wrote {OUT.name}: {n['Figure']} figures and {n['Table']} tables from {DOCX.name}")
 
 
 if __name__ == "__main__":
