@@ -1,6 +1,6 @@
 <!-- Draft Results section, written 2026-10-12 for Seamus to paste over the prose of
-     # Results in Manuscript.qmd. The five chunks already in that section stay where
-     they are; each is marked below by its label. Every number is an inline call to the
+     # Results in Manuscript.qmd. The four chunks in that section, Tables 1 and 2 and Figures 2 and 3, stay where
+     they are; each is marked below by its label. Table 3 was merged into Tables 1 and 2 at 10:45. Every number is an inline call to the
      helpers the manuscript defines, so nothing here is typed. -->
 
 # Results {#sec-results}
@@ -31,6 +31,6 @@ The third question asked whether ground sheltered from the afternoon wind, or fa
 
 The terrain wind gave the same direction more strongly. The shelter index at each cell's own modelled wind direction entered at `r ac("wnlag_shelter", "M3 shelter at the modelled wind", dep = TRUE)` (`r ac("wnlag_shelter", "M3 shelter at the modelled wind", dep = TRUE, col = "p")`) in the annual model and `r wc("E2 shelter at the modelled wind", "wnlag_shelter")` (`r wc("E2 shelter at the modelled wind", "wnlag_shelter", "p")`) in the sixteen-day model, the share of flight hours in which the wind blew upslope at `r wc("E2 upslope share", "wnlag_upslope")` (`r wc("E2 upslope share", "wnlag_upslope", "p")`) over sixteen days and `r ac("wnlag_upslope", "M3 upslope share", dep = TRUE)` (`r ac("wnlag_upslope", "M3 upslope share", dep = TRUE, col = "p")`) annually, and the slope updraft, the wind pushed up the face, at `r wc("E2 slope updraft", "wnlag_oro")` (`r wc("E2 slope updraft", "wnlag_oro", "p")`) over sixteen days and `r ac("wnlag_oro", "M3 slope updraft", dep = TRUE)` (`r ac("wnlag_oro", "M3 slope updraft", dep = TRUE, col = "p")`) annually, falling most steeply on ridges and spurs, `r wc("E2 slope updraft at ridges", "tpi:wnlag_oro")` (`r wc("E2 slope updraft at ridges", "tpi:wnlag_oro", "p")`). The faces that met the south-west afternoon wind had the least attack, `r fpa("south")` per cent of cells facing south and `r fpa("south-west")` per cent facing south-west against `r fpa("west")` per cent facing west and `r fpa("north-west")` per cent facing north-west (@fig-flight-paths). Ridges and valleys had less attack than slopes without the dependence terms, `r ac("geomorphonridge")` (`r ac("geomorphonridge", col = "p")`) and `r ac("geomorphonvalley")` (`r ac("geomorphonvalley", col = "p")`), and neither differed from slopes once attack nearby was in the model (`r ac("geomorphonridge", dep = TRUE, col = "p")` and `r ac("geomorphonvalley", dep = TRUE, col = "p")`; @tbl-final).
 
-<!-- chunk tbl-landform stays here, then chunk fig-flight-paths -->
+<!-- chunk fig-flight-paths stays here -->
 
 The remaining terms, surface temperature, the lidar terrain, convective lift, the back-trajectories, pressure, valley and ridge flatness, cold-air pooling, canopy height, winter cold, the upwind sources and the maps of 2012, were fitted beside M3 and E2 and none entered the final models (Tables S11 and S12).
