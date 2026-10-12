@@ -1,0 +1,1 @@
+Spatial pattern of attack on the annual maps. Joins were the pairs of neighbouring attacked cells over their expectation under 999 random relabellings, and the range was the distance to which autocorrelation stayed positive.

@@ -1,0 +1,43 @@
+---
+title: "Tables"
+format:
+  docx:
+    reference-doc: ../04.references/style-formal.docx
+    number-sections: false
+bibliography: ../04.references/references-beetle.bib
+csl: ../04.references/apa.csl
+suppress-bibliography: true
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r}
+library(knitr)
+TBL <- here::here("03.outputs", "TBL")
+get <- function(n) {
+  f <- file.path(TBL, paste0(n, ".csv"))
+  if (!file.exists(f)) stop("missing ", f, ". Render 01.manuscript/Manuscript.qmd first.")
+  read.csv(f, check.names = FALSE)
+}
+cap <- function(n) readLines(file.path(TBL, paste0(n, "-caption.txt")), warn = FALSE)
+```
+
+# Table 1
+
+`r cap("table-4-models")`
+
+```{r}
+kable(get("table-4-models"), booktabs = TRUE, align = "lllrrrr")
+```
+
+{{< pagebreak >}}
+
+# Table 2
+
+`r cap("table-5-m3")`
+
+```{r}
+kable(get("table-5-m3"), booktabs = TRUE, align = "lrrr")
+```

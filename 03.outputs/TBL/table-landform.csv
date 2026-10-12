@@ -1,0 +1,8 @@
+"Landform","Cells","Attacked (%)","All years","With dependence"
+"slope","38,898","14.0","reference","reference"
+"spur","11,796","18.2","-0.011","+0.080*"
+"hollow","8,751","12.3","-0.028","+0.057"
+"valley","1,609","10.7","-0.210**","-0.002"
+"ridge","665","23.9","-0.447****","+0.038"
+"peak","32","41.7","-0.268","+0.063"
+"footslope","1","88.9","not estimated","not estimated"

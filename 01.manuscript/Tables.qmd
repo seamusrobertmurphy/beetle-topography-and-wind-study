@@ -26,38 +26,18 @@ cap <- function(n) readLines(file.path(TBL, paste0(n, "-caption.txt")), warn = F
 
 # Table 1
 
-`r cap("table-1-stand-structure")`
+`r cap("table-variables")`
 
 ```{r}
-kable(get("table-1-stand-structure"), booktabs = TRUE, align = "lrrrrrrrr")
+kable(get("table-variables"), booktabs = TRUE, align = "lrrrrrrr")
 ```
 
 {{< pagebreak >}}
 
 # Table 2
 
-`r cap("table-2-classifier")`
+`r cap("table-5-m3")`
 
 ```{r}
-kable(get("table-2-classifier"), booktabs = TRUE, align = "lrrrrrrl")
-```
-
-{{< pagebreak >}}
-
-# Table 3
-
-`r cap("table-3-dependence")`
-
-```{r}
-kable(get("table-3-dependence"), booktabs = TRUE, align = "lrrr")
-```
-
-{{< pagebreak >}}
-
-# Table 4
-
-`r cap("table-4-final-model")`
-
-```{r}
-kable(get("table-4-final-model"), booktabs = TRUE, align = "lrrrr")
+kable(get("table-5-m3"), booktabs = TRUE, align = "lrrrrrr")
 ```

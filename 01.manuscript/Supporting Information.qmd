@@ -39,6 +39,71 @@ get <- function(n) {
   read.csv(f, check.names = FALSE)
 }
 V <- readRDS(file.path(TBL, "si-values.rds"))
+CAPF <- file.path(TBL, "si-captions.rds")
+CAP <- if (file.exists(CAPF)) readRDS(CAPF) else list()
+cap <- function(k) CAP[[k]] %||% "Caption missing. Render 01.manuscript/Manuscript.qmd first."
+fig <- function(n) knitr::include_graphics(here::here("03.outputs", "PNG", sprintf("FigS%d.png", n)))
+
+## readers and helpers for the Supporting Information text and tables, the same definitions as the manuscript
+BC <- here::here("02.inputs/beetle"); AGD <- file.path(BC, "model-data-annual-grid"); W16D <- file.path(BC, "model-data-wind16-grid")
+rdc <- function(f) if (file.exists(f)) read.csv(f) else NULL
+ACOEF <- rdc(file.path(AGD, "annual_coefficients.csv")); AFIT <- rdc(file.path(AGD, "annual_fit.csv")); W16 <- rdc(file.path(W16D, "wind16_coefficients.csv"))
+XWSUM <- rdc(file.path(BC, "covariates/extra-terrain/winter_summary.csv")); UWTEST <- rdc(file.path(AGD, "upwind_test.csv"))
+STS0 <- rdc(file.path(BC, "covariates/surface-temperature/surface_temperature_summary.csv"))
+STSM <- if (is.null(STS0)) NULL else data.frame(st_north_mean = mean(STS0$st_north), st_south_mean = mean(STS0$st_south), r_northness_mean = mean(STS0$r_northness), r_radiation_mean = mean(STS0$r_radiation), scenes = sum(STS0$scenes))
+fmt <- function(x, d = 0) if (!length(x) || all(is.na(x))) "[pending]" else formatC(x, format = "f", digits = d, big.mark = ",")
+num <- function(x, f = "%.3f") if (!length(x) || all(is.na(x))) "[pending]" else sprintf(f, x)
+pv <- function(x, f = "%.0f") if (is.null(x) || !length(x) || all(is.na(x))) "[pending]" else sprintf(f, x)
+pthr <- function(p) if (!length(p) || is.na(p[1])) "[pending]" else if (p[1] < 0.001) "p < 0.001" else sprintf("p = %.3f", p[1])
+stars <- function(p) ifelse(is.na(p), "", ifelse(p <= 1e-4, "****", ifelse(p <= 0.001, "***", ifelse(p <= 0.01, "**", ifelse(p <= 0.05, "*", "")))))
+acv <- function(term, model = "M3", dep = FALSE, col = "estimate") ACOEF[[col]][ACOEF$model == model & ACOEF$dependence == dep & ACOEF$sample == (if (dep) "with previous year" else "all years") & ACOEF$term == term]
+ac  <- function(term, model = "M3", dep = FALSE, col = "estimate") { x <- acv(term, model, dep, col); if (col == "p") pthr(x) else num(x, "%+.3f") }
+aft <- function(model, dep = FALSE, col = "aic", sample = if (dep) "with previous year" else "all years") AFIT[[col]][AFIT$model == model & AFIT$dependence == dep & AFIT$sample == sample]
+wc  <- function(model, term, col = "estimate") { x <- W16[[col]][W16$model == model & W16$term == term]; if (col == "p") pthr(x) else num(x, "%+.3f") }
+xws <- function(col, fun = mean, f = "%.1f") if (is.null(XWSUM)) "[pending]" else pv(fun(XWSUM[[col]]), f)
+uwt <- function(weight, ring, col, f = "%+.3f") { x <- if (is.null(UWTEST)) NULL else UWTEST[[col]][UWTEST$weight == weight & UWTEST$ring == ring]; if (col == "p") pthr(x) else pv(x, f) }
+uwa <- function(weight, col) { x <- if (is.null(UWTEST)) NULL else UWTEST[[col]][UWTEST$weight == weight][1]; if (is.null(x)) "[pending]" else fmt(x) }
+VRI_LABELS <- c(
+  BASAL_AREA = "Stand basal area (m² ha⁻¹)", CROWN_CLOSURE = "Crown closure (%)",
+  VRI_LIVE_STEMS_PER_HA = "Live stems (n/ha)", QUAD_DIAM_125 = "Quadratic mean diameter (cm)",
+  PROJ_AGE_1 = "Stand age (years)", PROJ_HEIGHT_1 = "Stand height (m)",
+  LIVE_STAND_VOLUME_125 = "Standing volume (m³ ha⁻¹)", PINE_BA = "Susceptible pine basal area (m² ha⁻¹)",
+  PinePct = "Lodgepole pine cover (%)", elevation = "Elevation (m)", tri = "Terrain ruggedness index",
+  vrm = "Vector ruggedness measure", tpi = "Topographic position index", mstpi = "Multi-scale topographic position",
+  twi = "Topographic wetness index", valley_depth = "Valley depth (m)", midslope_position = "Mid-slope position",
+  height_valley_floor = "Height above valley floor (m)", normalised_height = "Normalised height",
+  curv_prof = "Profile curvature", curv_plan = "Plan curvature", convergence = "Convergence index", slope = "Slope (degrees)",
+  northness = "Northness", eastness = "Eastness", heat_load = "Heat load index",
+  wind_effect = "Windward-leeward index", wind_afh = "Effective air flow height", wind_exposition = "Wind exposition index",
+  wind_shelter = "Wind shelter index", openness_pos = "Positive openness", openness_neg = "Negative openness", sky_view = "Sky view factor",
+  solar_flight_direct = "Flight-window direct radiation (kWh/m²)", solar_flight_diffuse = "Flight-window diffuse radiation (kWh/m²)",
+  solar_season_direct = "Growing-season direct radiation (kWh/m²)", solar_season_total = "Growing-season total radiation (kWh/m²)",
+  jul_lag = "July wind, previous summer (km/h)", jun_lag = "June wind, previous summer (km/h)", ep_windlag_flight = "Flight-hour wind, previous summer (km/h)",
+  st_flight = "Surface temperature, flight window (°C)", st_flight_lag = "Surface temperature, previous flight window (°C)",
+  lid_rough_1m = "Ground roughness within the cell at 1 m (m)", lid_north_share = "Share of the cell facing north at 5 m", lid_tpi_55m_sd = "Spread of position at 55 m (m)",
+  preslag_anom_flight = "Pressure departure, previous summer (kPa)", preslag_tend_flight = "Three-hour pressure change, previous summer (kPa)",
+  wnlag_speed = "Modelled wind at 90 m, previous summer (km/h)", wnlag_upslope = "Upslope share of flight hours, previous summer", wnlag_consistency = "Consistency of modelled direction, previous summer",
+  wnlag_shelter = "Shelter at the modelled wind direction, previous summer", wnlag_speed30 = "Modelled wind at 30 m, previous summer (km/h)", wnlag_speed10 = "Modelled wind at 10 m, previous summer (km/h)",
+  wnlag_lift = "Convective lift, previous summer (m/s)", wnlag_oro = "Slope updraft of the terrain wind, previous summer (m/s)", srv_all_near = "Surviving sources within 150 m, all directions", srv_all_far = "Surviving sources 150 to 1,050 m, all directions",
+  srv_up_near = "Surviving sources within 150 m, upwind", srv_down_near = "Surviving sources within 150 m, downwind",
+  srv_up_far = "Surviving sources 150 to 1,050 m, upwind", srv_down_far = "Surviving sources 150 to 1,050 m, downwind",
+  red_all_near = "Red crowns within 150 m, all directions", red_all_far = "Red crowns 150 to 1,050 m, all directions",
+  red_up_near = "Red crowns within 150 m, upwind", red_down_near = "Red crowns within 150 m, downwind",
+  red_up_far = "Red crowns 150 to 1,050 m, upwind", red_down_far = "Red crowns 150 to 1,050 m, downwind",
+  mrvbf = "Valley bottom flatness", mrrtf = "Ridge top flatness", coldpool = "Cold-air pooling (°C)", chm_mean = "Canopy height, 2017 lidar (m)", chm_sd = "Canopy height variation, 2017 lidar (m)", chm_cover = "Canopy over 5 m, 2017 lidar", wlag_tmin = "Lowest winter minimum before the flight (°C)", wlag_colddays = "Days at or below -30 °C before the flight", wnlag_rsun = "Cloud-adjusted flight-hour sun, previous summer (kWh/m²)", wnlag_mca = "Slope temperature departure, previous summer (°C)", trjlag_share = "Trajectory endpoints over red attack, previous summer", wnlag_w = "Reanalysis vertical air speed, previous summer (m/s)",
+  ep_wind_flight = "Flight-hour wind (km/h)", ep_calm_flight = "Flight-hour calm share",
+  lag1_self = "Attack in the same cell, previous period", lag1_nbr90 = "Attack within 90 m, previous period",
+  lagyr_self = "Attack in the same cell, previous year", lagyr_nbr90 = "Attack within 90 m, previous year",
+  lag1_kern = "Attack nearby at the bandwidth, previous period", lagyr_kern = "Attack nearby at the bandwidth, previous year",
+  jul = "July mean wind (km/h)", jun = "June mean wind (km/h)", mm_flight_mean = "Flight-window wind (km/h)", ep_wind_all = "All-hours wind (km/h)",
+  setNames(paste0("Attack within ", c(42, 90, 150, 210, 510, 1050), " m, previous year"), paste0("lagyr_nbr", c(42, 90, 150, 210, 510, 1050))),
+  setNames(paste0("Attack within ", c(42, 90, 150, 210, 510, 1050), " m, previous period"), paste0("lag1_nbr", c(42, 90, 150, 210, 510, 1050))))
+LABX <- c(VRI_LABELS, wnlag_rsun = "Cloud-adjusted flight-hour sun, previous summer (kWh/m²)", wnlag_mca = "Slope air temperature departure, previous summer (°C)",
+          trjlag_share = "Share of back-trajectory endpoints over surveyed attack, previous summer", wnlag_w = "Vertical air speed 850 to 650 hPa, previous summer (m/s)",
+          mrvbf = "Valley bottom flatness", mrrtf = "Ridge top flatness", coldpool = "Cold-air pooling (°C)", chm_mean = "Canopy height, 2017 lidar (m)",
+          chm_sd = "Canopy height variation, 2017 lidar (m)", chm_cover = "Canopy over 5 m, 2017 lidar", wlag_tmin = "Lowest winter minimum before the flight (°C)")
+lab <- function(v) ifelse(is.na(LABX[v]), v, LABX[v])
+
 ```
 
 # Table S1
@@ -81,6 +146,88 @@ Every sixteen-day period used, with its start date, the cells the imagery saw an
 kable(get("table-S5-periods"), booktabs = TRUE, align = "llrrr")
 ```
 
+# Table S6
+
+`r cap("si-tbl-classifier")`
+
+```{r}
+kable(get("table-2-classifier"), booktabs = TRUE, align = "lrrrrrrl")
+```
+
+# Table S7
+
+`r cap("si-tbl-dependence")`
+
+```{r}
+kable(get("table-3-dependence"), booktabs = TRUE, align = "lrrr")
+```
+
+# Table S8
+
+`r cap("si-tbl-diameter")`
+
+```{r}
+kable(get("table-6-diameter"), booktabs = TRUE, align = "lrrrrrr")
+```
+
+# Table S9
+
+`r cap("si-tbl-models")`
+
+```{r}
+kable(get("table-4-models"), booktabs = TRUE)
+```
+
+# Table S10
+
+`r cap("si-tbl-validation")`
+
+```{r}
+kable(get("table-validation"), booktabs = TRUE, align = "llrrrrlr")
+```
+
+# Table S11
+
+Estimates of the terms tested beside M3 in the annual models, each in the specification named, fitted with the dependence terms over the eight years with a previous map. β is the change in log-odds per standard deviation, with its standard error (SE). Specifications marked with year held the summer as a factor. * p ≤ 0.05, ** p ≤ 0.01, *** p ≤ 0.001, **** p ≤ 0.0001.
+
+```{r}
+base <- unique(ACOEF$term[ACOEF$model == "M3" & ACOEF$dependence])
+x <- ACOEF[ACOEF$dependence & ACOEF$model != "M3" & !grepl(":|geomorphon|Intercept|factor", ACOEF$term) & !(ACOEF$term %in% base), ]
+x <- x[order(match(x$model, unique(x$model))), ]
+kable(data.frame(Specification = sub("^M3 ", "", x$model), Term = lab(x$term), `β` = paste0(sprintf("%+.3f", x$estimate), stars(x$p)), SE = sprintf("%.3f", x$se),
+                 p = ifelse(x$p < 0.001, "< 0.001", sprintf("%.3f", x$p)), check.names = FALSE), booktabs = TRUE, align = "llrrr", row.names = FALSE)
+```
+
+{{< pagebreak >}}
+
+# Table S12
+
+Estimates of the terms tested beside E2 in the sixteen-day models, each in the specification named, fitted with the previous period's attack in and around the cell. β is the change in log-odds per standard deviation, with its standard error (SE). Specifications marked with season held the period, or the period of each summer, as a factor. Stand basal area, entered as a control in each of these specifications, is omitted. * p ≤ 0.05, ** p ≤ 0.01, *** p ≤ 0.001, **** p ≤ 0.0001.
+
+```{r}
+s4 <- unique(get("table-S4-sixteen-day")[[1]]); wb <- unique(W16$term[W16$model == "E2"])
+y <- W16[!(W16$model %in% c(s4, "E1", "E2", "E3", "E1 all hours", "E1 lagged", "E2 lagged")) & !grepl(":|geomorphon|Intercept|period", W16$term) & !(W16$term %in% c(wb, "BASAL_AREA")), ]
+y <- y[order(match(y$model, unique(y$model))), ]
+kable(data.frame(Specification = sub("^E2 ", "", y$model), Term = lab(y$term), `β` = paste0(sprintf("%+.3f", y$estimate), stars(y$p)), SE = sprintf("%.3f", y$se),
+                 p = ifelse(y$p < 0.001, "< 0.001", sprintf("%.3f", y$p)), check.names = FALSE), booktabs = TRUE, align = "llrrr", row.names = FALSE)
+```
+
+{{< pagebreak >}}
+
+# Table S13
+
+Screening of every candidate variable of the annual models on the years with a previous map. β is the slope of the variable added alone to the two dependence terms, Deviance the deviance it explained with the p-value of the likelihood ratio test, VIF its variance inflation against the main effects of M3, Elastic net its coefficient in an elastic net that entered every candidate together with the dependence terms unpenalised, and W the Shapiro-Wilk statistic on 5,000 cell-years. In M3 marks the variables of the final model. * p ≤ 0.05, ** p ≤ 0.01, *** p ≤ 0.001, **** p ≤ 0.0001.
+
+```{r}
+sc <- read.csv(file.path(AGD, "variable_screening.csv"))
+kable(data.frame(Variable = lab(sc$variable), `β` = sprintf("%+.4f", sc$beta), Deviance = formatC(sc$lr_chisq, format = "f", digits = 2, big.mark = ","),
+                 p = paste0(ifelse(sc$lr_p < 0.001, "< 0.001", sprintf("%.3f", sc$lr_p)), stars(sc$lr_p)), VIF = sprintf("%.2f", sc$vif),
+                 `Elastic net` = sprintf("%+.4f", sc$enet), W = sprintf("%.3f", sc$sw_w), `In M3` = ifelse(sc$in_m3, "yes", ""), check.names = FALSE),
+      booktabs = TRUE, align = "lrrrrrrl", row.names = FALSE)
+```
+
+{{< pagebreak >}}
+
 # Methods S1
 
 The wind component of the MicroMet model of @liston2006 is seven equations, implemented directly from the source paper with its equation numbers given below.
@@ -103,6 +250,22 @@ $$\theta_d = -\tfrac{1}{2}\, \Omega_s \sin\!\left[2(\xi - \theta)\right].$$ {#eq
 
 By @eq-weight, $W_w$ depends on direction and not on speed, so it was computed once for each of 16 wind direction sectors of 22.5 degrees, the sixteen points of the compass, and each hourly observation was multiplied by the surface for its own sector, so that nothing was averaged before the terrain acted on it, and over all sectors $W_w$ ran from `r sprintf("%.2f", V$mm_ww[1])` to `r sprintf("%.2f", V$mm_ww[2])`.
 
+# Methods S2
+
+The wind and heat terms of section 2.3 of the main text rested on these sources. Convective lift was the velocity scale of @deardorff1970 from the ERA5-Land sensible heat flux [@munozsabater2021] and the ERA5 boundary layer height [@hersbach2020]. Back-trajectories were computed with HYSPLIT [@stein2015] on the North American Regional Reanalysis [@mesinger2006]. Sun on each slope under each hour's cloud came from r.sun in GRASS GIS [@suri2004], and afternoon air temperature from microclima [@maclean2019microclima].
+
+Three groups of terms that the earlier models lacked were added beside M3 and E2. Valley bottoms and ridge tops were measured by the multiresolution indices of valley bottom and ridge top flatness [@gallant2003], computed in SAGA GIS on the 30 m elevation model. Canopy height was the 2017 lidar surface model less its bare-earth model at 1 m, summarised to each 30 m cell as its mean, its standard deviation and the share of the cell above 5 m, and because the lidar was flown after the outbreak it measured the canopy that remained. Winter cold was the lowest daily minimum temperature and the number of days at or below -30 °C in the winter, October to April, that ended before the flight behind each map, from the ERA5-Land daily minimum [@munozsabater2021] moved to each cell's elevation at the lapse rate the reanalysis cells gave on that day, with the cooling that cold air draining into the cell would add, from the basins, flow accumulation and drainage model of microclima [@maclean2019microclima], on every day whose night met that package's conditions for cold-air drainage at the site. Over the ten winters the temperature rose with elevation, an inversion, on `r xws("inversion_share", f = "%.2f")` of days, the conditions for drainage held on `r xws("cad_share", f = "%.2f")` of nights, drainage cooled the coldest cells by up to `r xws("coldpool_min", fun = function(x) abs(mean(x)))` °C, and the lowest winter minimum across the study area averaged `r xws("tmin_mean")` °C and fell no lower than `r xws("tmin_low", fun = min)` °C, so that the days at or below -30 °C, `r xws("cold_days_mean", fun = max)` on average in the coldest winter, did not enter the models. The sixteen-day model was also refitted with the terms of the annual model it lacked, northness, sky view, the wind shelter index, convergence and stand age, and with the station pressure of each period, the flight-hour departure from each station's May to September mean and its three-hour change, for the period and for the same period one year earlier.
+
+The source of each year's attack was the red crowns of the year before, whose brood had come through the winter in those trees. Winter survival was computed for every 30 m cell with the cold tolerance model of @regniere2007cold, in the R code of @goodsman2024code, from ERA5-Land daily temperature [@munozsabater2021] moved to each cell's elevation and converted to phloem temperature [@bolstad1997modelling]. Around each cell the share of cells attacked the previous year, weighted by survival, was computed within 150 m and from 150 to 1,050 m in eight compass sectors. Each sector was weighted by the share of flight hours the wind blew from it at the Akokli Creek station, and the upwind and downwind shares were compared by a Wald test of the difference between their coefficients.
+
+# Results S1
+
+With the previous year's attack and the dependence terms in the annual model, valley bottom flatness entered at `r ac("mrvbf", "M3 valley and ridge flats", dep = TRUE)` (`r ac("mrvbf", "M3 valley and ridge flats", dep = TRUE, col = "p")`) and ridge top flatness at `r ac("mrrtf", "M3 valley and ridge flats", dep = TRUE)` (`r ac("mrrtf", "M3 valley and ridge flats", dep = TRUE, col = "p")`), cold-air pooling at `r ac("coldpool", "M3 cold-air pooling", dep = TRUE)` (`r ac("coldpool", "M3 cold-air pooling", dep = TRUE, col = "p")`), mean canopy height at `r ac("chm_mean", "M3 canopy height", dep = TRUE)` (`r ac("chm_mean", "M3 canopy height", dep = TRUE, col = "p")`), its variation at `r ac("chm_sd", "M3 canopy height", dep = TRUE)` (`r ac("chm_sd", "M3 canopy height", dep = TRUE, col = "p")`) and the share above 5 m at `r ac("chm_cover", "M3 canopy height", dep = TRUE)` (`r ac("chm_cover", "M3 canopy height", dep = TRUE, col = "p")`). The lowest minimum of the winter before the flight entered at `r ac("wlag_tmin", "M3 winter cold", dep = TRUE)` (`r ac("wlag_tmin", "M3 winter cold", dep = TRUE, col = "p")`), and with the summer held at `r ac("wlag_tmin", "M3 winter cold with year", dep = TRUE)` (`r ac("wlag_tmin", "M3 winter cold with year", dep = TRUE, col = "p")`). In the sixteen-day models with the previous period's attack, valley bottom flatness entered at `r wc("E2 valley and ridge flats", "mrvbf")` (`r wc("E2 valley and ridge flats", "mrvbf", "p")`), ridge top flatness at `r wc("E2 valley and ridge flats", "mrrtf")` (`r wc("E2 valley and ridge flats", "mrrtf", "p")`), cold-air pooling at `r wc("E2 cold-air pooling", "coldpool")` (`r wc("E2 cold-air pooling", "coldpool", "p")`), mean canopy height at `r wc("E2 canopy height", "chm_mean")` (`r wc("E2 canopy height", "chm_mean", "p")`) and the winter minimum at `r wc("E2 winter cold", "wlag_tmin")` (`r wc("E2 winter cold", "wlag_tmin", "p")`). With the terms of the annual model added to the sixteen-day model, northness entered at `r wc("E2 annual terms", "northness")` (`r wc("E2 annual terms", "northness", "p")`), sky view at `r wc("E2 annual terms", "sky_view")` (`r wc("E2 annual terms", "sky_view", "p")`), the wind shelter index at `r wc("E2 annual terms", "wind_shelter")` (`r wc("E2 annual terms", "wind_shelter", "p")`), convergence at `r wc("E2 annual terms", "convergence")` (`r wc("E2 annual terms", "convergence", "p")`) and stand age at `r wc("E2 annual terms", "PROJ_AGE_1")` (`r wc("E2 annual terms", "PROJ_AGE_1", "p")`). The pressure departure of the previous summer's period entered the lagged model with dependence terms at `r wc("E2 lagged with pressure", "preslag_anom_flight")` (`r wc("E2 lagged with pressure", "preslag_anom_flight", "p")`) and its three-hour change at `r wc("E2 lagged with pressure", "preslag_tend_flight")` (`r wc("E2 lagged with pressure", "preslag_tend_flight", "p")`).
+
+In the flight window the late-morning surface temperature of north-facing ground was `r num(STSM$st_north_mean, "%.1f")` °C against `r num(STSM$st_south_mean, "%.1f")` °C on south-facing ground, averaged over the ten summers and `r fmt(STSM$scenes)` scenes, and it correlated `r num(STSM$r_northness_mean, "%.2f")` with northness and `r num(STSM$r_radiation_mean, "%.2f")` with modelled flight-window radiation (Figure S14). With the measured temperature of the previous summer in place of modelled radiation, northness entered at `r ac("northness", "M3 measured heat")` (`r ac("northness", "M3 measured heat", col = "p")`) against `r ac("northness", "M3 lagged wind")` (`r ac("northness", "M3 lagged wind", col = "p")`) beside radiation, and temperature itself at `r ac("st_flight_lag", "M3 measured heat")` (`r ac("st_flight_lag", "M3 measured heat", col = "p")`). With the three terms from the 1 m terrain added to the lagged model, ground roughness within the cell entered at `r ac("lid_rough_1m", "M3 lidar")` (`r ac("lid_rough_1m", "M3 lidar", col = "p")`), the share of the cell facing north at `r ac("lid_north_share", "M3 lidar")` (`r ac("lid_north_share", "M3 lidar", col = "p")`) and the spread of crown-scale position at `r ac("lid_tpi_55m_sd", "M3 lidar")` (`r ac("lid_tpi_55m_sd", "M3 lidar", col = "p")`), and the AIC moved from `r num(aft("M3 lagged wind"), "%.0f")` to `r num(aft("M3 lidar"), "%.0f")`.
+
+Attack upwind of a cell did not raise its attack more than attack downwind. In the survival-weighted model the two shares within 150 m did not differ (`r uwt("survival", "near", "p")`), from 150 to 1,050 m the upwind share entered at `r ac("srv_up_far", "M3 upwind and downwind sources")` against `r ac("srv_down_far", "M3 upwind and downwind sources")` downwind, a difference of `r uwt("survival", "far", "difference")` \[Wald z = `r uwt("survival", "far", "z", "%.2f")`, `r uwt("survival", "far", "p")`\], and splitting the shares by wind direction raised the AIC from `r uwa("survival", "aic_undirected")` to `r uwa("survival", "aic_directional")`. Every specification is listed with its estimates in Tables S11 and S12.
+
 # Figure S1
 
 ```{r}
@@ -110,6 +273,159 @@ By @eq-weight, $W_w$ depends on direction and not on speed, so it was computed o
 knitr::include_graphics(here::here("03.outputs", "PNG", "FigS1.png"))
 ```
 
-The flight window against the landscape's own climate, from hourly Environment and Climate Change Canada station records for May to September of the study years. The shaded band marked the window, 1 July to 15 August, taken from the bionomics and not fitted to these data. (a) Mean afternoon temperature by day of year, with the 19 to 41 degrees C flight range and the 22 to 32 degrees C peak band marked. (b) The share of afternoon hours inside the flight range, day by day. (c) Mean temperature and the share of all hours inside the flight range, by hour, with the 12:00 to 17:00 restriction shaded. (d) Mean wind speed by hour on the same axis, showing that the hours in which the beetle could fly were also the windiest of the day.
+`r cap("si-fig-climate")`
+
+# Figure S2
+
+```{r}
+#| out-width: "100%"
+fig(2)
+```
+
+`r cap("si-fig-study-area")`
+
+# Figure S3
+
+```{r}
+#| out-width: "100%"
+fig(3)
+```
+
+`r cap("si-fig-profile")`
+
+# Figure S4
+
+```{r}
+#| out-width: "100%"
+fig(4)
+```
+
+`r cap("si-fig-creston-rhythm")`
+
+# Figure S5
+
+```{r}
+#| out-width: "100%"
+fig(5)
+```
+
+`r cap("si-fig-trench-winds")`
+
+# Figure S6
+
+```{r}
+#| out-width: "100%"
+fig(6)
+```
+
+`r cap("si-fig-wind-validation")`
+
+# Figure S7
+
+```{r}
+#| out-width: "100%"
+fig(7)
+```
+
+`r cap("si-fig-wind-site")`
+
+# Figure S8
+
+```{r}
+#| out-width: "100%"
+fig(8)
+```
+
+`r cap("si-fig-wind-regional")`
+
+# Figure S9
+
+```{r}
+#| out-width: "100%"
+fig(9)
+```
+
+`r cap("si-fig-wind-periods")`
+
+# Figure S10
+
+```{r}
+#| out-width: "100%"
+fig(10)
+```
+
+`r cap("si-fig-wind-micro")`
+
+# Figure S11
+
+```{r}
+#| out-width: "100%"
+fig(11)
+```
+
+`r cap("si-fig-lift")`
+
+# Figure S12
+
+```{r}
+#| out-width: "100%"
+fig(12)
+```
+
+`r cap("si-fig-vertical")`
+
+# Figure S13
+
+```{r}
+#| out-width: "100%"
+fig(13)
+```
+
+`r cap("si-fig-trajectories")`
+
+# Figure S14
+
+```{r}
+#| out-width: "100%"
+fig(14)
+```
+
+`r cap("si-fig-heat")`
+
+# Figure S15
+
+```{r}
+#| out-width: "100%"
+fig(15)
+```
+
+`r cap("si-fig-grain")`
+
+# Figure S16
+
+```{r}
+#| out-width: "100%"
+fig(16)
+```
+
+`r cap("si-fig-interaction")`
+
+# Figure S17
+
+```{r}
+#| out-width: "100%"
+fig(17)
+```
+
+`r cap("si-fig-clustering")`
+
+# Figure S18
+
+```{r}
+#| out-width: "100%"
+fig(18)
+```
+
+`r cap("si-fig-flight-window")`
 
 # References

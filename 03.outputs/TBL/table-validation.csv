@@ -1,0 +1,7 @@
+"Variable","Measured against","n","Bias","RMSE","Theil's U bias","Agreement","Direction error"
+"Red-stage attack, classifier","Field plots and undisturbed points","180","","","","kappa 0.859, accuracy 0.934",""
+"Wind speed (km/h), regional box, 500 m mesh","Creston station","4,251","-3.41","5.74","0.354","r 0.32","61.7"
+"Wind speed (km/h), trench, 1 km mesh","Castlegar station","3,872","-8.63","10.2","0.710","r 0.34","66.1"
+"Wind speed (km/h), trench, 1 km mesh","Creston station","4,251","-3.87","5.99","0.418","r 0.33","60.4"
+"Wind speed (km/h), trench, 1 km mesh","Nelson station","2,260","-8.02","9.47","0.718","r 0.33","82.6"
+"Wind speed (km/h), trench, 1 km mesh","Warfield station","4,110","-4.45","5.92","0.564","r 0.33","81.3"

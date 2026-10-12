@@ -1,0 +1,63 @@
+---
+title: "Tables"
+format:
+  docx:
+    reference-doc: ../04.references/style-formal.docx
+    number-sections: false
+bibliography: ../04.references/references-beetle.bib
+csl: ../04.references/apa.csl
+suppress-bibliography: true
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r}
+library(knitr)
+TBL <- here::here("03.outputs", "TBL")
+get <- function(n) {
+  f <- file.path(TBL, paste0(n, ".csv"))
+  if (!file.exists(f)) stop("missing ", f, ". Render 01.manuscript/Manuscript.qmd first.")
+  read.csv(f, check.names = FALSE)
+}
+cap <- function(n) readLines(file.path(TBL, paste0(n, "-caption.txt")), warn = FALSE)
+```
+
+# Table 1
+
+`r cap("table-1-stand-structure")`
+
+```{r}
+kable(get("table-1-stand-structure"), booktabs = TRUE, align = "lrrrrrrrr")
+```
+
+{{< pagebreak >}}
+
+# Table 2
+
+`r cap("table-2-classifier")`
+
+```{r}
+kable(get("table-2-classifier"), booktabs = TRUE, align = "lrrrrrrl")
+```
+
+{{< pagebreak >}}
+
+# Table 3
+
+`r cap("table-3-dependence")`
+
+```{r}
+kable(get("table-3-dependence"), booktabs = TRUE, align = "lrrr")
+```
+
+{{< pagebreak >}}
+
+# Table 4
+
+`r cap("table-4-final-model")`
+
+```{r}
+kable(get("table-4-final-model"), booktabs = TRUE, align = "lrrrr")
+```

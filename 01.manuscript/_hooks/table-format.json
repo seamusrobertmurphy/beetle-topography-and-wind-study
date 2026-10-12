@@ -1,64 +1,5 @@
 [
  {
-  "table": 2,
-  "caption_key": "Landscape attributes entered in this study, the direction ex",
-  "cols": 3,
-  "tblW": 9354,
-  "grid": [
-   1800,
-   1094,
-   6460
-  ],
-  "header_height": {
-   "val": 397,
-   "hRule": "exact"
-  },
-  "body_height": {
-   "val": 624,
-   "hRule": "exact"
-  },
-  "header_cells": [
-   {
-    "vAlign": "center",
-    "jc": "left",
-    "sz": 16,
-    "bold": true
-   },
-   {
-    "vAlign": "center",
-    "jc": "left",
-    "sz": 16,
-    "bold": true
-   },
-   {
-    "vAlign": "center",
-    "jc": "left",
-    "sz": 16,
-    "bold": true
-   }
-  ],
-  "body_cells": [
-   {
-    "vAlign": "center",
-    "jc": "left",
-    "sz": 16,
-    "bold": false
-   },
-   {
-    "vAlign": "center",
-    "jc": "left",
-    "sz": 16,
-    "bold": false
-   },
-   {
-    "vAlign": null,
-    "jc": "left",
-    "sz": 16,
-    "bold": false
-   }
-  ]
- },
- {
   "table": "S1",
   "caption_key": "The datasets this study combined, with the structure and res",
   "cols": 7,
@@ -936,6 +877,338 @@
     "vAlign": null,
     "jc": "center",
     "sz": 16,
+    "bold": false
+   }
+  ]
+ },
+ {
+  "table": 2,
+  "caption_key": "Regression estimates of red-stage attack by model",
+  "cols": 24,
+  "tblW": 12960,
+  "grid": [
+   1500,
+   498,
+   498,
+   498,
+   498,
+   498,
+   498,
+   498,
+   498,
+   498,
+   498,
+   498,
+   498,
+   498,
+   498,
+   498,
+   498,
+   498,
+   498,
+   498,
+   498,
+   498,
+   498,
+   504
+  ],
+  "header_height": {
+   "val": 420,
+   "hRule": "atLeast"
+  },
+  "body_height": {
+   "val": 260,
+   "hRule": "atLeast"
+  },
+  "header_cells": [
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 13,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": true
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": true
+   }
+  ],
+  "body_cells": [
+   {
+    "vAlign": "center",
+    "jc": "left",
+    "sz": 13,
+    "bold": false
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": false
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": false
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": false
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": false
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": false
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": false
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": false
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": false
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": false
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": false
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": false
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": false
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": false
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": false
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": false
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": false
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": false
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": false
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": false
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": false
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": false
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
+    "bold": false
+   },
+   {
+    "vAlign": "center",
+    "jc": "center",
+    "sz": 13,
     "bold": false
    }
   ]

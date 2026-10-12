@@ -54,6 +54,25 @@ def insert_ordered(parent, tag, order):
     return el
 
 
+def harmonise_sections(root):
+    """A section inserted around a landscape table carries no footer and must not restart the
+    page numbers, so every section takes the last section's header and footer references
+    and only the first keeps a pgNumType."""
+    import copy
+    sects = list(root.iter(w("sectPr")))
+    if len(sects) < 2:
+        return 0
+    refs = [e for e in sects[-1] if e.tag in (w("headerReference"), w("footerReference"))]
+    for i, s in enumerate(sects):
+        if not any(e.tag in (w("headerReference"), w("footerReference")) for e in s):
+            for k, e in enumerate(refs):
+                s.insert(k, copy.deepcopy(e))
+        if i > 0:
+            for pg in s.findall(w("pgNumType")):
+                s.remove(pg)
+    return len(sects)
+
+
 def line_numbers(root):
     n = 0
     for sect in root.iter(w("sectPr")):
@@ -108,6 +127,7 @@ def process(path):
     zin.close()
     doc = etree.fromstring(parts["word/document.xml"])
     sty = etree.fromstring(parts["word/styles.xml"])
+    harmonise_sections(doc)
     sections = line_numbers(doc)
     styled = spacing(sty)
     parts["word/document.xml"] = etree.tostring(doc, xml_declaration=True, encoding="UTF-8", standalone=True)
